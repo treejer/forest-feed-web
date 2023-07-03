@@ -9,8 +9,8 @@ export enum Color {
   red = 'red',
   secondaryGreen = 'secondaryGreen',
   white = 'white',
-  green = 'Green',
-  lightWhite = 'LightWhite',
+  green = 'green',
+  lightWhite = 'lightWhite',
 }
 
 export type Colors = {
@@ -28,6 +28,6 @@ export const colors: Colors = {
   red: '#D78A76',
   secondaryGreen: '#4C9F70',
   white: '#ffffff',
-  Green: '#5A9D79',
-  LightWhite: '#E0E0E0',
+  green: '#5A9D79',
+  lightWhite: '#E0E0E0',
 };

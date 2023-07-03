@@ -25,7 +25,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
       <div className="flex items-end justify-end">
         <Button text="Learn More" />
         <Spacer />
-        <Button variant={ButtonVariant.secondary} text="Proceed" onClick={() => setActiveStep(1)} />
+        <Button variant={ButtonVariant.secondary} text="Approve" onClick={() => setActiveStep(1)} />
       </div>
     </>
   );

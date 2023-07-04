@@ -21,7 +21,7 @@ export default function RootLayout(props: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-primaryBg`}>
-        <AppHeader text="hello" />
+        <AppHeader walletAddress="0x21212121212121212121212" />
         <div>{children}</div>
       </body>
     </html>

@@ -1,26 +1,29 @@
-import React, {Children} from 'react';
-import {Logo} from './Icons/Checkbox/LogoIcon';
-import {AssetIcon} from './Icons/AssetIcon';
-import {Spacer} from './Spacer';
-import {TreeIcon} from './Icons/TreeIcon';
+import React from 'react';
+
+import {Logo} from '@forest-feed/components/kit/Icons/Checkbox/LogoIcon';
+import {AssetIcon} from '@forest-feed/components/kit/Icons/AssetIcon';
+import {TreeIcon} from '@forest-feed/components/kit/Icons/TreeIcon';
+import {shortenedString} from '@forest-feed/utils/string';
 
 export type RootLayoutProps = {
-  text: string;
+  walletAddress: string;
 };
 
 export function AppHeader(props: RootLayoutProps) {
-  const {text} = props;
+  const {walletAddress} = props;
   return (
     <div className="flex items-center justify-between px-10">
       <Logo />
       <div className="flex items-center">
-        <div className="border-2 w-36 h-8 rounded-full border-white flex items-end justify-end -mr-10 pr-20">
-          {text}
+        <div className="border-2 w-36 h-8 rounded-full border-white flex items-center justify-start px-2 -mr-10 text-sm font-semibold">
+          {shortenedString(walletAddress, 14, 4)}
         </div>
         <div className="border-2 w-[42px] h-[42px] rounded-full border-white flex items-end justify-end bg-red mb-30">
           <AssetIcon />
         </div>
-        <TreeIcon />
+        <div className="ml-3">
+          <TreeIcon />
+        </div>
       </div>
     </div>
   );

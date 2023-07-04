@@ -8,6 +8,31 @@
     .counter-icon {
         @apply border rounded-full w-[16px] h-[16px] border-primary flex items-center justify-center text-primary;
     }
+    /*  range slider component style  */
+    .slideContainer {
+        @apply w-full;
+    }
+    .slideContainer .slider {
+        -webkit-appearance: none;
+        transition: opacity 0.2s;
+        -webkit-transition: 0.2s;
+        @apply w-full h-1 outline-none rounded-se bg-secondaryGreen opacity-70;
+    }
+
+    .slideContainer .slider:hover {
+        opacity: 1;
+    }
+    .slideContainer .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        @apply bg-primaryGreen rounded-full w-6 h-6 cursor-pointer;
+    }
+    .slideContainer .slider::-moz-range-thumb {
+        @apply bg-white border-4 rounded-full border-primaryGreen w-6 h-6 cursor-pointer;
+    }
+    .slideContainer .slider::-moz-range-progress {
+        @apply bg-primaryGreen;
+    }
+    /*  range slider component style  */
 }
 
 

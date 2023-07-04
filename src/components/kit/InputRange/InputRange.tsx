@@ -1,7 +1,5 @@
 import React from 'react';
 
-import './InputRange.css';
-
 export type InputRangeProps = {
   value: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

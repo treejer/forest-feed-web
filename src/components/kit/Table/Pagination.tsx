@@ -29,7 +29,9 @@ export function Pagination(props: PaginationProps) {
       {Array(count)
         .fill('')
         .map((page, index) => (
-          <div className={itemClassName}>{index + 1}</div>
+          <div key={page} className={itemClassName}>
+            {index + 1}
+          </div>
         ))}
       {currentPage !== count || !hideNext ? (
         <div className={itemClassName}>

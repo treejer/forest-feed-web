@@ -24,7 +24,7 @@ export default function RootLayout(props: RootLayoutProps) {
   const {text, children} = props;
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-primaryBg`}>
         <AppHeader text="hello" />
         <div>{children}</div>
       </body>

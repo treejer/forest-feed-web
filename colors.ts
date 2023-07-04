@@ -11,6 +11,7 @@ export enum Color {
   white = 'white',
   green = 'green',
   lightWhite = 'lightWhite',
+  primaryBg = 'primaryBg',
 }
 
 export type Colors = {
@@ -30,4 +31,5 @@ export const colors: Colors = {
   white: '#ffffff',
   green: '#5A9D79',
   lightWhite: '#E0E0E0',
+  primaryBg: '#faf8f1',
 };

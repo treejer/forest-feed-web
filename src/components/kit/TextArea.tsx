@@ -20,7 +20,7 @@ export function TextArea(props: TextAreaProps) {
       <textarea
         id={label}
         placeholder={placeholder}
-        className="border border-border w-[100%] h-[157px] p-3 rounded-lg font-normal text-lg"
+        className="border border-border w-[100%] h-[157px] p-3 rounded-lg font-normal text-lg bg-primaryBg outline-none"
         value={value}
         onChange={onChange}
       />

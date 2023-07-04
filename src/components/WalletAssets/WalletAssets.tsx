@@ -1,6 +1,7 @@
 import React from 'react';
-import {Spacer} from './kit/Spacer';
-import {DaiIcon} from './kit/Icons/DaiIcon';
+
+import {Spacer} from '@forest-feed/components/common/Spacer';
+import {DaiIcon} from '@forest-feed/components/kit/Icons/DaiIcon';
 
 export function WalletAssets() {
   return (

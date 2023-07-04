@@ -22,10 +22,10 @@ export function RepostsBadge(props: RepostsBadgeProps) {
   const {text, status} = props;
 
   return (
-    <div
+    <span
       className={`border rounded-md w-[96px] h-[28px] text-lg font-semibold text-white text-center ${className[status]}`}
     >
       {text}
-    </div>
+    </span>
   );
 }

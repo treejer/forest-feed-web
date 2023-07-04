@@ -1,11 +1,23 @@
 @tailwind base;
 @tailwind components;
+
+@layer components {
+    .counter-btn {
+        @apply border rounded-lg w-[48px] h-[48px] flex items-center justify-center;
+    }
+    .counter-icon {
+        @apply border rounded-full w-[16px] h-[16px] border-primary flex items-center justify-center text-primary;
+    }
+}
+
+
+
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+    --foreground-rgb: 0, 0, 0;
+    --background-start-rgb: 214, 219, 220;
+    --background-end-rgb: 255, 255, 255;
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -17,6 +29,6 @@
 } */
 
 body {
-  color: rgb(var(--foreground-rgb));
-  /* background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb)); */
+    color: rgb(var(--foreground-rgb));
+    /* background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb)); */
 }

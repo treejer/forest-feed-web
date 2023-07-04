@@ -1,32 +1,27 @@
 import React, {useState} from 'react';
-import {Button} from '../kit/Button';
-import {Spacer} from '../kit/Spacer';
 
 export type CounterProps = {
-  count: number;
+  defaultCount?: number;
 };
 
-export function Counter() {
-  const [count, setCount] = useState(0);
+export function Counter(props: CounterProps) {
+  const {defaultCount} = props;
 
-  const changeCount = (value: number) => {
-    setCount(count + value);
+  const [count, setCount] = useState(defaultCount || 0);
+
+  const handleChangeCount = (value: number) => {
+    setCount(prevState => (prevState + value >= 0 ? prevState + value : prevState));
   };
 
   return (
     <div className="flex">
-      <div className="border rounded-lg w-[48px] h-[48px] border-LightWhite flex items-center justify-center">
-        <div className="border rounded-full w-[16px] h-[16px] border-primary flex items-center justify-center">
-          <div className="text-primary ">-</div>
-        </div>
-      </div>
-      <Spacer times={2} /> <span className="flex items-center">10</span>
-      <Spacer times={2} />
-      <div className="border rounded-lg w-[48px] h-[48px] border-LightWhite flex items-center justify-center">
-        <div className="border rounded-full w-[16px] h-[16px] border-primary flex items-center justify-center">
-          <div className="text-primary mt-[-2px]">+</div>
-        </div>
-      </div>
+      <button className="counter-btn border-lightWhite" onClick={() => handleChangeCount(-1)}>
+        <span className="counter-icon border-primary">-</span>
+      </button>
+      <span className="flex items-center mx-2">{count}</span>
+      <button className="counter-btn border-lightWhite" onClick={() => handleChangeCount(1)}>
+        <span className="counter-icon  border-primary">+</span>
+      </button>
     </div>
   );
 }

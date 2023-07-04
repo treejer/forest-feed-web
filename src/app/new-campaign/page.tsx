@@ -1,17 +1,22 @@
 'use client';
 
-import {Campaign} from '@forest-feed/components/Campaign';
-import {Spacer} from '@forest-feed/components/kit/Spacer';
+import React, {useCallback, useState} from 'react';
+
+import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
+import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {TextArea} from '@forest-feed/components/kit/TextArea';
-import {Uploader} from '@forest-feed/components/kit/Uploader';
-import {useState} from 'react';
 import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStapper/GeneralInfoStep';
 import {PledgeStep} from '@forest-feed/components/NewCampaignStapper/PledgeStep';
 
 function NewCampaignPage() {
   const [activeStep, setActiveStep] = useState(0);
+
+  const [treeCount, setTreeCount] = useState<number>(1);
+
+  const handleChangeTreeCount = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setTreeCount(+e.target.value);
+  }, []);
 
   return (
     <div className="container mx-auto">
@@ -46,7 +51,7 @@ function NewCampaignPage() {
           />
         </div>
         <div>
-          <Campaign />
+          <TreeCost treeCount={treeCount} onChangeTrees={handleChangeTreeCount} costValue={treeCount * 2} />
         </div>
       </div>
     </div>

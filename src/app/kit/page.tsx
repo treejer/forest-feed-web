@@ -1,7 +1,7 @@
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {TextArea} from '@forest-feed/components/kit/TextArea';
-import {Uploader} from '../../components/kit/Uploader';
-import {Spacer} from '@forest-feed/components/kit/Spacer';
+import {Uploader} from '@forest-feed/components/kit/Uploader';
+import {Spacer} from '@forest-feed/components/common/Spacer';
 
 function KitPage() {
   return (

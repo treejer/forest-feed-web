@@ -1,7 +1,8 @@
+'use client';
+
 import React from 'react';
-import {PaginationComponentProps} from 'react-data-table-component';
+
 import {ChevronIcon, ChevronIconDirection} from '../Icons/ChevronIcon';
-import {Spacer} from '../Spacer';
 
 export type PaginationProps = {
   count: number;
@@ -12,8 +13,8 @@ export type PaginationProps = {
 };
 
 export function Pagination(props: PaginationProps) {
-  console.log(props);
-  const {count, currentPage, disabled, hideNext, hidePrev} = props;
+  const {count, currentPage, hideNext, hidePrev} = props;
+
   const itemClassName =
     'border rounded-full w-[36px] h-[36px] border-border flex items-center justify-center mx-2 first:ml-0 last:mr-0';
 

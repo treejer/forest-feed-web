@@ -1,12 +1,8 @@
 import React from 'react';
-import './globals.css';
-import {Inter, Trirong} from 'next/font/google';
-import {Logo} from '@forest-feed/components/kit/Icons/Checkbox/LogoIcon';
-import {AssetIcon} from '@forest-feed/components/kit/Icons/AssetIcon';
-import {TreeIcon} from '@forest-feed/components/kit/Icons/TreeIcon';
-import {Spacer} from '@forest-feed/components/kit/Spacer';
-import {text} from 'stream/consumers';
+import {Inter} from 'next/font/google';
+
 import {AppHeader} from '@forest-feed/components/kit/AppHeader';
+import './globals.css';
 
 const inter = Inter({subsets: ['latin']});
 

@@ -1,7 +1,8 @@
 'use client';
 
-import React, {useState} from 'react';
-import {Spacer} from './Spacer';
+import React from 'react';
+
+import {Spacer} from '@forest-feed/components/common/Spacer';
 
 export type StepperProps = {
   contents: {title: string; content: JSX.Element}[];
@@ -12,13 +13,11 @@ export type StepperProps = {
 export function Stepper(props: StepperProps) {
   const {contents, activeStep, setActiveStep} = props;
 
-  const colClassName = `grid-cols-4`;
-
   return (
     <div>
-      <div className={`grid ${colClassName}`}>
+      <div className="grid grid-cols-4">
         {contents.map((item, index) => (
-          <div>
+          <div key={`${item.title}-${index}`}>
             <div onClick={() => setActiveStep(index)} className="flex cursor-pointer">
               <div
                 className={`transition-all w-[24px] h-[24px] rounded-[50%] flex items-center justify-center border text-sm font-bold ${

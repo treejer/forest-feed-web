@@ -6,6 +6,7 @@ import {AssetIcon} from '@forest-feed/components/kit/Icons/AssetIcon';
 import {TreeIcon} from '@forest-feed/components/kit/Icons/TreeIcon';
 import {Spacer} from '@forest-feed/components/kit/Spacer';
 import {text} from 'stream/consumers';
+import {AppHeader} from '@forest-feed/components/kit/AppHeader';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -24,19 +25,7 @@ export default function RootLayout(props: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="flex items-center justify-between px-10">
-          <Logo />
-          <div className="flex items-center">
-            <div className="border-2 w-[144px] h-[32px] rounded-full border-white flex items-end justify-end wallet-profile-address">
-              {text}
-            </div>
-            <div className="border-2 w-[42px] h-[42px] rounded-full border-white flex items-end justify-end bg-red">
-              <AssetIcon />
-            </div>
-            <Spacer times={2} />
-            <TreeIcon />
-          </div>
-        </div>
+        <AppHeader text="hello" />
         <div>{children}</div>
       </body>
     </html>

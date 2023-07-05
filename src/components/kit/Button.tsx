@@ -7,6 +7,7 @@ export enum ButtonVariant {
 
 export type ButtonProps = {
   text: string;
+  className?: string;
   variant?: ButtonVariant;
   onClick?: () => void;
 };
@@ -23,10 +24,13 @@ const classNames: VariantClassNames = {
 };
 
 export function Button(props: ButtonProps) {
-  const {variant = ButtonVariant.primary, text, onClick} = props;
+  const {variant = ButtonVariant.primary, text, onClick, className} = props;
 
   return (
-    <button className={`rounded-[8px] flex items-center justify-center ${classNames[variant]}`} onClick={onClick}>
+    <button
+      className={`rounded-[8px] flex items-center justify-center ${classNames[variant]} ${className}`}
+      onClick={onClick}
+    >
       {text}
     </button>
   );

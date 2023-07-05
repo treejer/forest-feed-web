@@ -12,7 +12,7 @@ export type RootLayoutProps = {
 export function AppHeader(props: RootLayoutProps) {
   const {walletAddress} = props;
   return (
-    <div className="flex items-center justify-between px-10">
+    <div className="flex items-center justify-between py-4">
       <Logo />
       <div className="flex items-center">
         <div className="border-2 w-36 h-8 rounded-full border-white flex items-center justify-start px-2 -mr-10 text-sm font-semibold">

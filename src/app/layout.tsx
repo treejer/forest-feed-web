@@ -3,6 +3,7 @@ import {Inter} from 'next/font/google';
 
 import {AppHeader} from '@forest-feed/components/kit/AppHeader';
 import './globals.css';
+import {Navbar} from '@forest-feed/components/Navbar';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -21,8 +22,17 @@ export default function RootLayout(props: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={`${inter.className} bg-primaryBg`}>
-        <AppHeader walletAddress="0x21212121212121212121212" />
-        <div>{children}</div>
+        <div className="container mx-auto">
+          <div className="grid grid-cols-6 gap-20">
+            <div className="grid col-span-6">
+              <AppHeader walletAddress="0x21212121212121212121212" />
+            </div>
+            <div className="col-span-1">
+              <Navbar />
+            </div>
+            <div className="col-span-5">{children}</div>
+          </div>
+        </div>
       </body>
     </html>
   );

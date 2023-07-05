@@ -1,4 +1,5 @@
 import React, {useCallback, useState} from 'react';
+import {useTranslations} from 'use-intl';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {InputRange} from '@forest-feed/components/kit/InputRange/InputRange';
@@ -13,6 +14,8 @@ export function PledgeStep() {
     onlyFollowers: false,
     rewardFollowers: false,
   });
+
+  const t = useTranslations();
 
   const handleChangeCampaignSize = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setCampaignSize(+e.target.value);
@@ -30,18 +33,26 @@ export function PledgeStep() {
 
   return (
     <div>
-      <span className="text-lg font-bold">Campaign Size</span>
+      <span className="text-lg font-bold">{t('newCampaign.campaignSize')}</span>
       <div>
-        <span className="font-semibold text-LightWhite text-lg">How man trees do you want to plant?</span>
+        <span className="font-semibold text-LightWhite text-lg"></span>
       </div>
       <InputRange value={campaignSize} onChange={handleChangeCampaignSize} />
       <div className="flex items-start justify-between text-LightWhite">
-        <span>1 tree</span>
-        <span>1000 trees</span>
+        <span>
+          {t('countTrees', {
+            count: 1,
+          })}
+        </span>
+        <span>
+          {t('countTrees', {
+            count: 1000,
+          })}
+        </span>
       </div>
       <Spacer times={4} />
       <div className="font-bold">
-        <span className="text-xl font-bold">Post Settings</span>
+        <span className="text-xl font-bold">{t('newCampaign.postSettings')}</span>
       </div>
       <Spacer times={2} />
       <div className="flex items-center">
@@ -54,7 +65,7 @@ export function PledgeStep() {
           checked={switches.canCollect}
           onChange={handleChangeSwitches}
         />
-        <span className="text-lg">This post can be collected</span>
+        <span className="text-lg">{t('newCampaign.canBeCollected')}</span>
       </div>
       <Spacer times={2} />
       <div className="flex items-center">
@@ -67,14 +78,14 @@ export function PledgeStep() {
           checked={switches.onlyFollowers}
           onChange={handleChangeSwitches}
         />
-        <span className="text-lg">This post can be collected Only followers </span>
+        <span className="text-lg">{t('newCampaign.collectedOnlyFollowers')}</span>
       </div>
       <Spacer times={4} />
       <div>
-        <span className="text-lg font-bold">Reward Filters</span>
+        <span className="text-lg font-bold">{t('newCampaign.rewardFilters')}</span>
       </div>
       <div className="flex items-center">
-        <span className="text-LightWhite">Chose the minimum number of followers accounts need to have</span>
+        <span className="text-LightWhite">{t('newCampaign.chooseMaxFollowers')}</span>
         <Spacer times={4} />
 
         <Counter />
@@ -89,13 +100,13 @@ export function PledgeStep() {
           checked={switches.rewardFollowers}
           onChange={handleChangeSwitches}
         />
-        <span className="text-lg"> Reward only your followers</span>
+        <span className="text-lg">{t('newCampaign.rewardOnlyYourFollowers')}</span>
       </div>
       <Spacer times={10} />
       <div className="flex items-end justify-end">
-        <Button text="Back" />
+        <Button text={t('back')} />
         <Spacer times={2} />
-        <Button variant={ButtonVariant.secondary} text="Proceed" />
+        <Button variant={ButtonVariant.secondary} text={t('proceed')} />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, {useCallback, useState} from 'react';
+import {useTranslations} from 'use-intl';
 
 import {TextArea} from '@forest-feed/components/kit/TextArea';
 import {Uploader} from '@forest-feed/components/kit/Uploader';
@@ -18,6 +19,8 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [userAgreed, setUserAgreed] = useState<boolean>(false);
 
+  const t = useTranslations();
+
   const handleChangeContent = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   }, []);
@@ -33,21 +36,25 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
   return (
     <>
       <TextArea
-        label={isConfirm ? 'Post Preview' : 'Content'}
+        label={t(isConfirm ? 'newCampaign.postPreview' : 'newCampaign.content')}
         value={content}
-        placeholder="Write your post here..."
+        placeholder={t('newCampaign.placeholder.writePost')}
         onChange={handleChangeContent}
       />
       <Uploader preview={isConfirm} file={uploadedFile} onChange={handleChangeUploadedFile} />
       <Spacer times={4} />
       <div className="flex">
-        <Checkbox text="I agree to terms and conditions." checked={userAgreed} onChange={handleChangeUserAgreed} />
+        <Checkbox
+          text={t('privacyPolicy.agreeAppTermsConditions')}
+          checked={userAgreed}
+          onChange={handleChangeUserAgreed}
+        />
       </div>
       <Spacer times={10} />
       <div className="flex items-end justify-end">
-        <Button text="Learn More" />
+        <Button text={t('learnMore')} />
         <Spacer />
-        <Button variant={ButtonVariant.secondary} text="Approve" onClick={() => setActiveStep(1)} />
+        <Button variant={ButtonVariant.secondary} text={t('approve')} onClick={() => setActiveStep(1)} />
       </div>
     </>
   );

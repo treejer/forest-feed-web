@@ -20,16 +20,16 @@ function KitPage() {
     <div>
       <h1>{t('hello')}</h1>
       <ChangeLanguage />
-      <Button text="Learn More" />
-      <Button variant={ButtonVariant.secondary} text="proceed" />
-      <Button variant={ButtonVariant.menu} text="nemidonm" />
-      <Button variant={ButtonVariant.text} text="nemidonm" />
+      <Button text={t('learnMore')} />
+      <Button variant={ButtonVariant.secondary} text={t('proceed')} />
+      <Button variant={ButtonVariant.menu} text={t('proceed')} />
+      <Button variant={ButtonVariant.text} text={t('proceed')} />
 
       <TextArea
         value={text}
         onChange={e => setText(e.target.value)}
-        label="Content"
-        placeholder="Write your post here..."
+        label={t('newCampaign.content')}
+        placeholder={t('newCampaign.placeholder.writePost')}
       />
 
       <Uploader preview file={file} onChange={e => setFile(e.target?.files?.[0] || null)} />

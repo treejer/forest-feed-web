@@ -1,3 +1,59 @@
 {
-  "hello": "hello world"
+  "hello": "hello world",
+  "proceed": "Proceed",
+  "back": "Back",
+  "value": "Value:",
+  "learnMore": "Learn More",
+  "approve": "Approve",
+  "tree": "Tree",
+  "trees": "Trees",
+  "countTrees": "{count} Trees",
+  "cost": "Cost",
+  "dollarSign": "{value}$",
+  "languages": {
+    "en": "EN",
+    "fa": "FA",
+    "English": "English"
+  },
+  "navbar": {
+    "newCampaign": "NEW CAMPAIGN",
+    "myCampaigns": "MY CAMPAIGNS"
+  },
+  "newCampaign": {
+    "stepper": {
+      "generalInfo": "General Info",
+      "pledge": "Pledge",
+      "confirm": "Confirm",
+      "share": "Share"
+    },
+    "campaignSize": "Campaign Size",
+    "howManyWantsToPlant": "How many trees do you want to plant?",
+    "postSettings": "Post Settings",
+    "canBeCollected": "This post can be collected",
+    "collectedOnlyFollowers": "This post can be collected, Only followers",
+    "rewardFilters": "Reward Filters",
+    "chooseMaxFollowers": "Chose the minimum number of followers accounts need to have",
+    "rewardOnlyYourFollowers": "Reward only your followers",
+    "postPreview": "Post Preview",
+    "content": "Content",
+    "addPhoto": "Add Photo",
+    "attachedPhoto": "Attached Photo",
+    "dropPhoto": "drop it right here",
+    "placeholder": {
+      "writePost": "Write your post here..."
+    },
+    "walletAssets": "Wallet Assets"
+  },
+  "myCampaigns": {
+    "status": "Status",
+    "campaignId": "Campaign ID",
+    "type": "TYPE",
+    "budget": "Budget",
+    "goal": "Goal",
+    "reposts": "Reposts",
+    "creationDate": "Creation Date"
+  },
+  "privacyPolicy": {
+    "agreeAppTermsConditions": "I agree to the terms and conditions."
+  }
 }

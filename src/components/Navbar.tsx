@@ -1,31 +1,39 @@
 'use client';
 
-import React from 'react';
-import {Button, ButtonVariant} from './kit/Button';
-import {Spacer} from './common/Spacer';
+import React, {useMemo} from 'react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
+import {useLocale, useTranslations} from 'use-intl';
 
-export const links = [
-  {
-    href: '/new-campaign',
-    title: 'NEW CAMPAIGN',
-  },
-  {
-    href: '/my-campaigns',
-    title: 'MY CAMPAIGN',
-  },
-];
+import {Button, ButtonVariant} from './kit/Button';
 
 export function Navbar() {
   const pathname = usePathname();
+
+  const t = useTranslations('navbar');
+  const locale = useLocale();
+
+  const links = useMemo(
+    () => [
+      {
+        href: `/${locale}/new-campaign`,
+        name: 'newCampaign',
+      },
+      {
+        href: `/${locale}/my-campaigns`,
+        name: 'myCampaigns',
+      },
+    ],
+    [locale],
+  );
+
   return (
     <div>
       {links.map(link => {
         const isActive = pathname.startsWith(link.href);
         return (
           <Link className="mb-2 last:mb-0" key={link.href} href={link.href}>
-            <Button text={link.title} variant={isActive ? ButtonVariant.menu : ButtonVariant.text} />
+            <Button text={t(link.name)} variant={isActive ? ButtonVariant.menu : ButtonVariant.text} />
           </Link>
         );
       })}

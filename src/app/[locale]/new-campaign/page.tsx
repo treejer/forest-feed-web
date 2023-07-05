@@ -1,11 +1,10 @@
 'use client';
 
 import React, {useCallback, useState} from 'react';
+import {useTranslations} from 'use-intl';
 
 import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
-import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 import {PledgeStep} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 
@@ -14,12 +13,14 @@ function NewCampaignPage() {
 
   const [treeCount, setTreeCount] = useState<number>(1);
 
+  const t = useTranslations('newCampaign.stepper');
+
   const handleChangeTreeCount = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTreeCount(+e.target.value);
   }, []);
 
   return (
-    <div className="grid grid-cols-6 gap-20">
+    <div className="grid grid-cols-6 gap-4">
       <div className="col-span-5">
         <Stepper
           activeStep={activeStep}
@@ -27,19 +28,19 @@ function NewCampaignPage() {
           contents={[
             {
               content: <GeneralInfoStep isConfirm={false} setActiveStep={setActiveStep} />,
-              title: 'General Info',
+              title: t('generalInfo'),
             },
             {
               content: <PledgeStep />,
-              title: 'Pledge',
+              title: t('pledge'),
             },
             {
               content: <GeneralInfoStep isConfirm setActiveStep={setActiveStep} />,
-              title: 'Confirm',
+              title: t('confirm'),
             },
             {
               content: <div>Step 4</div>,
-              title: 'Share',
+              title: t('share'),
             },
           ]}
         />

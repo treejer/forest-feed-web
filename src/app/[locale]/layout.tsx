@@ -3,7 +3,7 @@ import {Inter} from 'next/font/google';
 import {notFound} from 'next/navigation';
 import {NextIntlClientProvider} from 'next-intl';
 
-import {AppHeader} from '@forest-feed/components/kit/AppHeader';
+import {AppHeader} from '@forest-feed/components/layout/AppHeader';
 import './globals.css';
 
 const inter = Inter({subsets: ['latin']});

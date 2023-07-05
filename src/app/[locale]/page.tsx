@@ -2,7 +2,7 @@
 
 import {useTranslations} from 'use-intl';
 
-export default function LocalePage() {
+export default function Home() {
   const t = useTranslations();
   return <div>{t('hello')}</div>;
 }

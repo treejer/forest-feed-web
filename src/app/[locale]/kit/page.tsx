@@ -1,20 +1,25 @@
 'use client';
 
 import {useState} from 'react';
+import {useTranslations} from 'use-intl';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {TextArea} from '@forest-feed/components/kit/TextArea';
 import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
+import {ChangeLanguage} from '@forest-feed/components/kit/ChangeLanguage';
 
 function KitPage() {
   const [text, setText] = useState('');
 
   const [file, setFile] = useState<File | null>(null);
 
+  const t = useTranslations();
+
   return (
     <div>
-      <h1>This is Kit Page</h1>
+      <h1>{t('hello')}</h1>
+      <ChangeLanguage />
       <Button text="Learn More" />
       <Button variant={ButtonVariant.secondary} text="proceed" />
       <Button variant={ButtonVariant.menu} text="nemidonm" />

@@ -15,7 +15,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
   const {setActiveStep, isConfirm} = props;
 
   const [content, setContent] = useState<string>('');
-  const [uploadedFile, setUploadedFile] = useState<File>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [userAgreed, setUserAgreed] = useState<boolean>(false);
 
   const handleChangeContent = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {

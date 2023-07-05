@@ -19,7 +19,7 @@ export const defaultStyles: TableStyles = {
 export type TColumn<T> = {
   name: string;
   selector: (row: T) => string;
-  cell?: (row: T) => React.ReactNode;
+  cell?: (row: T, index: number) => React.ReactNode;
   sortable?: boolean;
 };
 
@@ -32,6 +32,7 @@ export function Table<T>(props: TableProps<T>) {
   const {columns, data} = props;
 
   return (
+    //@ts-ignore TODO
     <DataTable columns={columns} data={data} customStyles={defaultStyles} pagination paginationComponent={Pagination} />
   );
 }

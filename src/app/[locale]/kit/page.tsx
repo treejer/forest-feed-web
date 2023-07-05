@@ -1,9 +1,17 @@
+'use client';
+
+import {useState} from 'react';
+
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {TextArea} from '@forest-feed/components/kit/TextArea';
 import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 
 function KitPage() {
+  const [text, setText] = useState('');
+
+  const [file, setFile] = useState<File | null>(null);
+
   return (
     <div>
       <h1>This is Kit Page</h1>
@@ -12,9 +20,14 @@ function KitPage() {
       <Button variant={ButtonVariant.menu} text="nemidonm" />
       <Button variant={ButtonVariant.text} text="nemidonm" />
 
-      <TextArea label="Content" placeholder="Write your post here..." />
+      <TextArea
+        value={text}
+        onChange={e => setText(e.target.value)}
+        label="Content"
+        placeholder="Write your post here..."
+      />
 
-      <Uploader />
+      <Uploader preview file={file} onChange={e => setFile(e.target?.files?.[0] || null)} />
       <Spacer />
     </div>
   );

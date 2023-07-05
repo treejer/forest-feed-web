@@ -11,7 +11,7 @@ import {colors} from 'colors';
 export type UploaderProps = {
   preview: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  file?: File;
+  file?: File | null;
 };
 
 export function Uploader(props: UploaderProps) {

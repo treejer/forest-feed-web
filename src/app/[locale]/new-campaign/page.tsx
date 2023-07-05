@@ -5,8 +5,8 @@ import {useTranslations} from 'use-intl';
 
 import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
-import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStapper/GeneralInfoStep';
-import {PledgeStep} from '@forest-feed/components/NewCampaignStapper/PledgeStep';
+import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
+import {PledgeStep} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 
 function NewCampaignPage() {
   const [activeStep, setActiveStep] = useState(0);
@@ -21,7 +21,7 @@ function NewCampaignPage() {
 
   return (
     <div className="grid grid-cols-6 gap-4">
-      <div className="col-span-4">
+      <div className="col-span-5">
         <Stepper
           activeStep={activeStep}
           setActiveStep={setActiveStep}
@@ -45,7 +45,7 @@ function NewCampaignPage() {
           ]}
         />
       </div>
-      <div>
+      <div className="col-span-1">
         <TreeCost treeCount={treeCount} onChangeTrees={handleChangeTreeCount} costValue={treeCount * 2} />
       </div>
     </div>

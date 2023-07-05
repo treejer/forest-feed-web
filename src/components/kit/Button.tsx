@@ -24,7 +24,7 @@ const classNames: VariantClassNames = {
 };
 
 export function Button(props: ButtonProps) {
-  const {variant = ButtonVariant.primary, className, text, onClick} = props;
+  const {variant = ButtonVariant.primary, text, onClick, className} = props;
 
   return (
     <button

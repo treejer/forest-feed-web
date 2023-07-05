@@ -5,7 +5,7 @@ import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {InputRange} from '@forest-feed/components/kit/InputRange/InputRange';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
-import {Counter} from '@forest-feed/components/NewCampaignStapper/Counter';
+import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
 
 export function PledgeStep() {
   const [campaignSize, setCampaignSize] = useState<number>(1);

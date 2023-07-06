@@ -5,7 +5,7 @@ import {NextIntlClientProvider, createTranslator} from 'next-intl';
 
 import './globals.css';
 import {AppHeader} from '@forest-feed/components/layout/AppHeader';
-import {Navbar} from '@forest-feed/components/Navbar';
+import {Navbar} from '@forest-feed/components/layout/Navbar';
 
 const inter = Inter({subsets: ['latin']});
 

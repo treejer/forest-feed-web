@@ -20,8 +20,8 @@ type VariantClassNames = {
 const classNames: VariantClassNames = {
   [ButtonVariant.primary]: 'h-14 w-[144px] bg-white border-primary border-2 text-lg font-medium',
   [ButtonVariant.secondary]: 'h-14 w-[160px] bg-primaryGreen text-white text-lg font-medium',
-  [ButtonVariant.menu]: 'h-[48px] w-[100%] bg-activeGray border-activeGray border-2 text-lg font-normal',
-  [ButtonVariant.text]: 'w-[100%] h-14 ext-lg',
+  [ButtonVariant.menu]: 'h-[48px] w-[100%] bg-activeGray border-activeGray border-2 text-sm font-normal',
+  [ButtonVariant.text]: 'w-[100%] h-14 text-sm',
 };
 
 export function Button(props: ButtonProps) {

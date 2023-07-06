@@ -10,6 +10,7 @@ export type ButtonProps = {
   className?: string;
   variant?: ButtonVariant;
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 type VariantClassNames = {
@@ -24,11 +25,12 @@ const classNames: VariantClassNames = {
 };
 
 export function Button(props: ButtonProps) {
-  const {variant = ButtonVariant.primary, text, onClick, className} = props;
+  const {variant = ButtonVariant.primary, text, onClick, className, disabled} = props;
 
   return (
     <button
       className={`rounded-[8px] flex items-center justify-center ${classNames[variant]} ${className}`}
+      disabled={disabled}
       onClick={onClick}
     >
       {text}

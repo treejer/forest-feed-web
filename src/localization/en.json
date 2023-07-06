@@ -1,4 +1,9 @@
 {
+  "metadata": {
+    "root": {
+      "title": "Forest Feed"
+    }
+  },
   "hello": "hello world",
   "proceed": "Proceed",
   "back": "Back",
@@ -55,5 +60,8 @@
   },
   "privacyPolicy": {
     "agreeAppTermsConditions": "I agree to the terms and conditions."
+  },
+  "notFound": {
+    "desc": "This page not exist!"
   }
 }

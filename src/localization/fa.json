@@ -1,4 +1,9 @@
 {
+  "metadata": {
+    "root": {
+      "title": "فارست فید"
+    }
+  },
   "hello": "سلام دنیا",
   "proceed": "ادامه",
   "back": "بازگشت",
@@ -55,5 +60,8 @@
   },
   "privacyPolicy": {
     "agreeAppTermsConditions": ".شرایط را قبول دارم"
+  },
+  "notFound": {
+    "desc": "صفحه مورد نظر یافت نشد"
   }
 }

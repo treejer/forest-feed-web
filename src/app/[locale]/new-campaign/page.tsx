@@ -23,6 +23,7 @@ function NewCampaignPage() {
     <div className="grid grid-cols-6 gap-4">
       <div className="col-span-5">
         <Stepper
+          isDependent
           activeStep={activeStep}
           setActiveStep={setActiveStep}
           contents={[

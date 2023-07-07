@@ -8,9 +8,11 @@ import {TextArea} from '@forest-feed/components/kit/TextArea';
 import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {ChangeLanguage} from '@forest-feed/components/kit/ChangeLanguage';
+import {Modal} from '@forest-feed/components/kit/Modal';
 
 function KitPage() {
   const [text, setText] = useState('');
+  const [show, setShow] = useState(true);
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -33,7 +35,11 @@ function KitPage() {
       />
 
       <Uploader preview file={file} onChange={e => setFile(e.target?.files?.[0] || null)} />
+      <Button text="modal" onClick={() => setShow(true)} />
       <Spacer />
+      <Modal visible={show} onClose={() => setShow(false)}>
+        test
+      </Modal>
     </div>
   );
 }

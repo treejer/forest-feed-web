@@ -12,7 +12,7 @@ import {Modal} from '@forest-feed/components/kit/Modal';
 
 function KitPage() {
   const [text, setText] = useState('');
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -35,7 +35,7 @@ function KitPage() {
       />
 
       <Uploader preview file={file} onChange={e => setFile(e.target?.files?.[0] || null)} />
-      <Button text="modal" onClick={() => setShow(true)} />
+      <Button text={t('learnMore')} onClick={() => setShow(true)} />
       <Spacer />
       <Modal visible={show} onClose={() => setShow(false)}>
         test

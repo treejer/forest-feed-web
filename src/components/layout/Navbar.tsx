@@ -1,31 +1,27 @@
 'use client';
 
-import React, {useMemo} from 'react';
+import React from 'react';
 import Link from 'next/link';
-import {usePathname} from 'next/navigation';
-import {useLocale, useTranslations} from 'use-intl';
+import {useTranslations} from 'use-intl';
+import {usePathname} from 'next-intl/client';
 
-import {Button, ButtonVariant} from './kit/Button';
+import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
+
+const links = [
+  {
+    href: `/new-campaign`,
+    name: 'newCampaign',
+  },
+  {
+    href: `/my-campaigns`,
+    name: 'myCampaigns',
+  },
+];
 
 export function Navbar() {
   const pathname = usePathname();
 
   const t = useTranslations('navbar');
-  const locale = useLocale();
-
-  const links = useMemo(
-    () => [
-      {
-        href: `/${locale}/new-campaign`,
-        name: 'newCampaign',
-      },
-      {
-        href: `/${locale}/my-campaigns`,
-        name: 'myCampaigns',
-      },
-    ],
-    [locale],
-  );
 
   return (
     <div>

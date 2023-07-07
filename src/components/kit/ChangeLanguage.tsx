@@ -1,32 +1,41 @@
-import React from 'react';
-import {usePathname} from 'next/navigation';
-import Link from 'next/link';
+import React, {useCallback, useTransition} from 'react';
+import {useRouter} from 'next/navigation';
+import {usePathname} from 'next-intl/client';
+import {useLocale} from 'use-intl';
 
-import {languages} from '@forest-feed/languages';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
+import {languages} from '@forest-feed/languages';
 
 export function ChangeLanguage() {
+  const [isPending, startTransition] = useTransition();
+
+  const locale = useLocale();
+  const router = useRouter();
   const pathname = usePathname();
+
+  const handleChangeLanguage = useCallback(
+    (locale: string) => {
+      startTransition(() => {
+        router.replace(`/${locale}${pathname}`);
+      });
+    },
+    [pathname, router],
+  );
 
   return (
     <div className="flex items-center">
       {languages.map(language => {
-        const arrayPathname = pathname?.split('/');
-        const isActive = arrayPathname.includes(language.locale);
-        const currentPath = arrayPathname?.slice(2)?.join('/');
-
         return (
-          <Link
+          <Button
             key={language.locale}
-            className="w-12 rounded-none first:rounded-l-[8px] last:rounded-r-[8px] overflow-hidden"
-            href={`/${language.locale}/${currentPath || ''}`}
-          >
-            <Button
-              className={`w-full rounded-none ${isActive ? 'bg-primaryGreen text-white' : ''}`}
-              text={language.locale}
-              variant={ButtonVariant.menu}
-            />
-          </Link>
+            className={`rounded-none first:rounded-l-[8px] last:rounded-r-[8px] w-[48px] ${
+              locale === language.locale ? 'bg-primaryGreen text-white' : ''
+            }`}
+            disabled={isPending}
+            text={language.locale}
+            variant={ButtonVariant.menu}
+            onClick={() => handleChangeLanguage(language.locale)}
+          />
         );
       })}
     </div>

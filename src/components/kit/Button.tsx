@@ -10,6 +10,7 @@ export type ButtonProps = {
   className?: string;
   variant?: ButtonVariant;
   onClick?: () => void;
+  disabled?: boolean;
 };
 
 type VariantClassNames = {
@@ -17,18 +18,19 @@ type VariantClassNames = {
 };
 
 const classNames: VariantClassNames = {
-  [ButtonVariant.primary]: 'h-[56px] w-[144px] bg-white border-primary border-2 text-lg font-medium',
-  [ButtonVariant.secondary]: 'h-[56px] w-[160px] bg-primaryGreen text-white text-lg font-medium',
+  [ButtonVariant.primary]: 'h-14 w-[144px] bg-white border-primary border-2 text-lg font-medium',
+  [ButtonVariant.secondary]: 'h-14 w-[160px] bg-primaryGreen text-white text-lg font-medium',
   [ButtonVariant.menu]: 'h-[48px] w-[100%] bg-activeGray border-activeGray border-2 text-sm font-normal',
-  [ButtonVariant.text]: 'w-[100%]',
+  [ButtonVariant.text]: 'w-[100%] h-14 text-sm',
 };
 
 export function Button(props: ButtonProps) {
-  const {variant = ButtonVariant.primary, text, onClick, className} = props;
+  const {variant = ButtonVariant.primary, text, onClick, className, disabled} = props;
 
   return (
     <button
       className={`rounded-[8px] flex items-center justify-center ${classNames[variant]} ${className}`}
+      disabled={disabled}
       onClick={onClick}
     >
       {text}

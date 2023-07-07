@@ -39,11 +39,11 @@ export function Uploader(props: UploaderProps) {
           </div>
         </Modal>
         <Image
-          className="rounded-sm mr-2"
+          className="rounded-sm mr-2 max-h-[70px]"
           src={previewFile}
           alt="preview-photo"
-          width={120}
-          height={120}
+          width={90}
+          height={70}
           onClick={() => setOpenPreviewModal(true)}
         />
       </RenderIf>

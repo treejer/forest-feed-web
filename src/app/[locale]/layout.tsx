@@ -1,16 +1,16 @@
 import React from 'react';
 import {Inter} from 'next/font/google';
 import {notFound} from 'next/navigation';
-import {NextIntlClientProvider, createTranslator} from 'next-intl';
+import {createTranslator} from 'next-intl';
 
-import './globals.css';
-import {AppHeader} from '@forest-feed/components/layout/AppHeader';
-import {Navbar} from '@forest-feed/components/layout/Navbar';
+import {Locale} from '@forest-feed/languages';
+import {AllTheProviders} from '@forest-feed/components/providers/AllTheProviders';
+import {Layout} from '@forest-feed/components/layout/Layout';
 
 const inter = Inter({subsets: ['latin']});
 
 export type RootLayoutProps = {
-  params: {locale: string};
+  params: {locale: Locale};
   children: React.ReactNode;
 };
 
@@ -50,19 +50,9 @@ export default async function LocaleLayout(props: RootLayoutProps) {
   return (
     <html lang={locale}>
       <body className={`${inter.className} bg-primaryBg`}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <div className="container mx-auto">
-            <div className="grid grid-cols-6 gap-20">
-              <div className="grid col-span-6">
-                <AppHeader walletAddress="0x21212121212121212121212" />
-              </div>
-              <div className="col-span-1">
-                <Navbar />
-              </div>
-              <div className="col-span-5">{children}</div>
-            </div>
-          </div>
-        </NextIntlClientProvider>
+        <AllTheProviders locale={locale} messages={messages}>
+          <Layout>{children}</Layout>
+        </AllTheProviders>
       </body>
     </html>
   );

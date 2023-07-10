@@ -10,8 +10,8 @@ export enum ToastType {
 }
 
 export type ShowToastArgs<T = any, V = any> = {
-  title: string;
-  message?: string;
+  title?: string;
+  message: string;
   type: ToastType;
   translate: boolean;
   variables?: {

@@ -1,7 +1,11 @@
 import {combineReducers} from '@reduxjs/toolkit';
 import {HYDRATE} from 'next-redux-wrapper';
 
-export const combinedReducers = combineReducers({});
+import {jsonPlaceholderReducer} from '@forest-feed/redux/module/jsonPlaceholder/jsonPlaceholder';
+
+export const combinedReducers = combineReducers({
+  jsonPlaceholderReducer,
+});
 
 export const reducer = (state: any, action: any) => {
   if (action.type === HYDRATE) {

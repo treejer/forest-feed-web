@@ -4,8 +4,8 @@ import {ToastType} from '@forest-feed/utils/showToast';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 
 export type CustomToastProps<T = any, V = any> = {
-  title: string;
-  message?: string;
+  title?: string;
+  message: string;
   type: ToastType;
   translate: boolean;
   variables?: {
@@ -21,10 +21,10 @@ export function CustomToast<T = any, V = any>(props: CustomToastProps<T, V>) {
 
   return (
     <div>
-      <p className="text-md">{translate ? t(title, variables?.title || {}) : title}</p>
-      <RenderIf condition={!!message}>
-        <p className="text-sm">{translate ? t(message, variables?.message || {}) : message}</p>
+      <RenderIf condition={!!title}>
+        <p className="text-md">{translate ? t(title, variables?.title || {}) : title}</p>
       </RenderIf>
+      <p className="text-sm">{translate ? t(message, variables?.message || {}) : message}</p>
     </div>
   );
 }

@@ -5,9 +5,9 @@ import {ConnectButton} from '@rainbow-me/rainbowkit';
 import {Logo} from '@forest-feed/components/kit/Icons/Checkbox/LogoIcon';
 import {AssetIcon} from '@forest-feed/components/kit/Icons/AssetIcon';
 import {TreeIcon} from '@forest-feed/components/kit/Icons/TreeIcon';
-import {shortenedString} from '@forest-feed/utils/string';
-import {useCopyToClipboard} from '@forest-feed/hooks/copyToClipboard';
 import {ConnectionStatus} from '@forest-feed/connectWallet';
+import {shortenedString} from '@forest-feed/utils/string';
+import {useCopyToClipboard} from '@forest-feed/hooks/useCopyToClipboard';
 
 export type RootLayoutProps = {
   walletAddress?: string;

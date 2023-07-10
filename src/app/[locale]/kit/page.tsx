@@ -9,6 +9,7 @@ import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {ChangeLanguage} from '@forest-feed/components/kit/ChangeLanguage';
 import {Modal} from '@forest-feed/components/kit/Modal';
+import {showToast, ToastType} from '@forest-feed/utils/showToast';
 
 function KitPage() {
   const [text, setText] = useState('');
@@ -22,7 +23,11 @@ function KitPage() {
       <h1>{t('hello')}</h1>
       <ChangeLanguage />
       <Button text={t('learnMore')} />
-      <Button variant={ButtonVariant.menu} text={t('proceed')} />
+      <Button
+        variant={ButtonVariant.menu}
+        text={t('proceed')}
+        onClick={() => showToast({title: 'hello', message: 'learnMore', translate: true, type: ToastType.info})}
+      />
       <Button variant={ButtonVariant.text} text={t('proceed')} />
 
       <TextArea

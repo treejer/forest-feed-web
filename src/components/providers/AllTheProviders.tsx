@@ -5,10 +5,13 @@ import React, {useEffect, useState} from 'react';
 import {WagmiConfig} from 'wagmi';
 import {RainbowKitProvider} from '@rainbow-me/rainbowkit';
 import {AbstractIntlMessages, NextIntlClientProvider} from 'next-intl';
+import {Provider} from 'react-redux';
+import {ToastContainer} from 'react-toastify';
 
 import {Locale} from '@forest-feed/languages';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {appInfo, chains, forestFeedTheme, wagmiConfig} from '@forest-feed/connectWallet';
+import store from '@forest-feed/redux/store';
 
 export type AllTheProvidersProps = React.PropsWithChildren<{
   locale: Locale;
@@ -26,7 +29,12 @@ export function AllTheProviders(props: AllTheProvidersProps) {
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} appInfo={appInfo} theme={forestFeedTheme}>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <RenderIf condition={mounted}>{children}</RenderIf>
+          <RenderIf condition={mounted}>
+            <Provider store={store}>
+              <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
+              {children}
+            </Provider>
+          </RenderIf>
         </NextIntlClientProvider>
       </RainbowKitProvider>
     </WagmiConfig>

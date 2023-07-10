@@ -3,6 +3,7 @@ import {render} from '@testing-library/react';
 import type {RenderOptions} from '@testing-library/react';
 import type {PreloadedState} from '@reduxjs/toolkit';
 import {Provider} from 'react-redux';
+
 import {AppState, AppStore, makeStore} from '@forest-feed/redux/store';
 
 // This type interface extends the default options for render from RTL, as well
@@ -26,6 +27,5 @@ export function renderWithProviders(
   }
 
   // Return an object with the store and all of RTL's query functions
-  // @ts-ignore
   return {store, ...render(ui, {wrapper: Wrapper, ...renderOptions})};
 }

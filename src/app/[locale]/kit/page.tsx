@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslations} from 'use-intl';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
@@ -15,7 +15,6 @@ function KitPage() {
   const [show, setShow] = useState(false);
 
   const [file, setFile] = useState<File | null>(null);
-
   const t = useTranslations();
 
   return (
@@ -23,7 +22,6 @@ function KitPage() {
       <h1>{t('hello')}</h1>
       <ChangeLanguage />
       <Button text={t('learnMore')} />
-      <Button variant={ButtonVariant.secondary} text={t('proceed')} />
       <Button variant={ButtonVariant.menu} text={t('proceed')} />
       <Button variant={ButtonVariant.text} text={t('proceed')} />
 
@@ -34,7 +32,12 @@ function KitPage() {
         placeholder={t('newCampaign.placeholder.writePost')}
       />
 
-      <Uploader preview file={file} onChange={e => setFile(e.target?.files?.[0] || null)} />
+      <Uploader
+        preview
+        file={file}
+        onChange={e => setFile(e.target?.files?.[0] || null)}
+        onDrop={e => setFile(e.dataTransfer.files[0])}
+      />
       <Button text={t('learnMore')} onClick={() => setShow(true)} />
       <Spacer />
       <Modal visible={show} onClose={() => setShow(false)}>

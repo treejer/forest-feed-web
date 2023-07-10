@@ -1,6 +1,6 @@
 'use client';
 
-import React, {Children, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import Image from 'next/image';
 import {useTranslations} from 'use-intl';
 
@@ -13,25 +13,49 @@ import {colors} from 'colors';
 export type UploaderProps = {
   preview: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
   file?: File | null;
 };
 
 export function Uploader(props: UploaderProps) {
-  const {preview, file, onChange} = props;
+  const {preview, file, onChange, onDrop} = props;
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
 
   const t = useTranslations('newCampaign');
 
   const previewFile = useMemo(() => (file ? URL.createObjectURL(file as Blob) : ''), [file]);
 
-  const handleDrop = (e: any) => {
+  const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log(e);
-  };
+    e.stopPropagation();
+    if (e.type === 'dragenter' || e.type === 'dragover') {
+      setDragActive(true);
+    } else if (e.type === 'dragleave') {
+      setDragActive(false);
+    }
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setDragActive(false);
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        onDrop(e);
+      }
+    },
+    [onDrop],
+  );
 
   return (
-    <div className="border border-border h-[88px] rounded-lg flex items-center justify-center cursor-pointer overflow-hidden">
+    <div
+      onDragEnter={handleDrag}
+      className={`border border-border ${
+        dragActive && 'border-dashed'
+      } h-[88px] rounded-lg flex items-center justify-center cursor-pointer overflow-hidden`}
+    >
       <RenderIf condition={!!previewFile}>
         <Modal visible={openPreviewModal} onClose={() => setOpenPreviewModal(false)}>
           <div className="flex justify-center items-center h-full">
@@ -57,6 +81,15 @@ export function Uploader(props: UploaderProps) {
           <RenderIf condition={!preview}>{t('dropPhoto')}</RenderIf>
         </p>
       </label>
+      <RenderIf condition={dragActive}>
+        <div
+          className="absolute inset-0"
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+        />
+      </RenderIf>
     </div>
   );
 }

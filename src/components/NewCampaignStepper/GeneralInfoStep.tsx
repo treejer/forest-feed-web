@@ -29,6 +29,10 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
     setUploadedFile(e.target?.files?.[0] || null);
   }, []);
 
+  const handleDropUploadedFile = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    setUploadedFile(e.dataTransfer?.files?.[0] || null);
+  }, []);
+
   const handleChangeUserAgreed = useCallback(() => {
     setUserAgreed(prevState => !prevState);
   }, []);
@@ -41,7 +45,12 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
         placeholder={t('newCampaign.placeholder.writePost')}
         onChange={handleChangeContent}
       />
-      <Uploader preview={isConfirm} file={uploadedFile} onChange={handleChangeUploadedFile} />
+      <Uploader
+        preview={isConfirm}
+        file={uploadedFile}
+        onChange={handleChangeUploadedFile}
+        onDrop={handleDropUploadedFile}
+      />
       <Spacer times={4} />
       <div className="flex">
         <Checkbox

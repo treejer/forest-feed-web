@@ -34,7 +34,12 @@ function KitPage() {
         placeholder={t('newCampaign.placeholder.writePost')}
       />
 
-      <Uploader preview file={file} onChange={e => setFile(e.target?.files?.[0] || null)} />
+      <Uploader
+        preview
+        file={file}
+        onChange={e => setFile(e.target?.files?.[0] || null)}
+        onDrop={e => setFile(e.dataTransfer.files[0])}
+      />
       <Button text={t('learnMore')} onClick={() => setShow(true)} />
       <Spacer />
       <Modal visible={show} onClose={() => setShow(false)}>

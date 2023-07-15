@@ -63,7 +63,11 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
       <div className="flex items-end justify-end">
         <Button text={t('learnMore')} />
         <Spacer />
-        <Button variant={ButtonVariant.secondary} text={t('approve')} onClick={() => setActiveStep(1)} />
+        <Button
+          variant={ButtonVariant.secondary}
+          text={t('approve')}
+          onClick={() => setActiveStep(isConfirm ? 3 : 1)}
+        />
       </div>
     </>
   );

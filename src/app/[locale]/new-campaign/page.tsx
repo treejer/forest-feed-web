@@ -32,7 +32,7 @@ function NewCampaignPage() {
               title: t('generalInfo'),
             },
             {
-              content: <PledgeStep />,
+              content: <PledgeStep setActiveStep={setActiveStep} />,
               title: t('pledge'),
             },
             {

@@ -7,7 +7,13 @@ import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
 
-export function PledgeStep() {
+export type pledgeStepProps = {
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export function PledgeStep(props: pledgeStepProps) {
+  const {setActiveStep} = props;
+
   const [campaignSize, setCampaignSize] = useState<number>(1);
   const [switches, setSwitches] = useState({
     canCollect: false,
@@ -106,7 +112,7 @@ export function PledgeStep() {
       <div className="flex items-end justify-end">
         <Button text={t('back')} />
         <Spacer times={2} />
-        <Button variant={ButtonVariant.secondary} text={t('proceed')} />
+        <Button variant={ButtonVariant.secondary} text={t('proceed')} onClick={() => setActiveStep(2)} />
       </div>
     </div>
   );

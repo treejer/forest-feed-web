@@ -2,9 +2,11 @@ import {combineReducers} from '@reduxjs/toolkit';
 import {HYDRATE} from 'next-redux-wrapper';
 
 import {jsonPlaceholderReducer} from '@forest-feed/redux/module/jsonPlaceholder/jsonPlaceholder';
+import campaignJourneyReducer from '@forest-feed/redux/module/campaignJourney/CampaignJourney';
 
 export const combinedReducers = combineReducers({
   jsonPlaceholderReducer,
+  campaignJourney: campaignJourneyReducer,
 });
 
 export const reducer = (state: any, action: any) => {

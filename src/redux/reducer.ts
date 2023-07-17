@@ -2,7 +2,7 @@ import {combineReducers} from '@reduxjs/toolkit';
 import {HYDRATE} from 'next-redux-wrapper';
 
 import {jsonPlaceholderReducer} from '@forest-feed/redux/module/jsonPlaceholder/jsonPlaceholder';
-import campaignJourneyReducer from '@forest-feed/redux/module/campaignJourney/CampaignJourney';
+import campaignJourneyReducer from '@forest-feed/redux/module/campaignJourney/campaignJourney';
 
 export const combinedReducers = combineReducers({
   jsonPlaceholderReducer,

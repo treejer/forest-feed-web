@@ -6,13 +6,20 @@ import {InputRange} from '@forest-feed/components/kit/InputRange/InputRange';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
+import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
 
 export type pledgeStepProps = {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  onProceed: (
+    size: number,
+    reward: {minimumFollowerNumber: number; onlyFollowers: '0' | '1'},
+    settings: {canBeCollected: '0' | '1'; canBeCollectedOnlyFollowers: '0' | '1'},
+  ) => void;
 };
 
 export function PledgeStep(props: pledgeStepProps) {
-  const {setActiveStep} = props;
+  const {setActiveStep, onProceed} = props;
+  const {dispatchApprovePledge, campaignJourney} = useCampaignJourney();
 
   const [campaignSize, setCampaignSize] = useState<number>(1);
   const [switches, setSwitches] = useState({
@@ -36,6 +43,11 @@ export function PledgeStep(props: pledgeStepProps) {
     },
     [switches],
   );
+  // // const handleSubmit = () => {
+  //   if (size && reward && settings) {
+  //     onProceed(content, uploadedFile);
+  //   }
+  // };
 
   return (
     <div>

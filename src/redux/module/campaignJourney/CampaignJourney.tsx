@@ -35,6 +35,7 @@ export const campaignJourneyInitialState: CampaignJourney = {
 
 export type CampaignJourneyAction = {
   approveGeneralInfo: Pick<CampaignJourney, 'content' | 'image'>;
+  approvePledge: Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
 };
 
 export const campaignJourneySlice = createSlice({
@@ -45,10 +46,15 @@ export const campaignJourneySlice = createSlice({
       state.content = action.payload.content;
       state.image = action.payload.image;
     },
+    approvePledge: (state, action: PayloadAction<CampaignJourneyAction['approvePledge']>) => {
+      state.reward = action.payload.reward;
+      state.settings = action.payload.settings;
+      state.size = action.payload.size;
+    },
   },
 });
 
-export const {approveGeneralInfo} = campaignJourneySlice.actions;
+export const {approveGeneralInfo, approvePledge} = campaignJourneySlice.actions;
 
 export const useCampaignJourney = () => {
   const campaignJourney = useAppSelector(selectCampaignJourney);
@@ -60,9 +66,16 @@ export const useCampaignJourney = () => {
     },
     [dispatch],
   );
-
+  const dispatchApprovePledge = useCallback(
+    (payload: CampaignJourneyAction['approvePledge']) => {
+      dispatch(approvePledge(payload));
+    },
+    [dispatch],
+  );
   return {
     campaignJourney,
+    dispatchApproveGeneralInfo,
+    dispatchApprovePledge,
   };
 };
 

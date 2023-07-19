@@ -6,32 +6,35 @@ import {InputRange} from '@forest-feed/components/kit/InputRange/InputRange';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
+import {CampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
+
+export type pledgeStepState = Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
 
 export type pledgeStepProps = {
+  defaultValues?: pledgeStepState;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
-  onProceed: (
-    size: number,
-    reward: {minimumFollowerNumber: number; onlyFollowers: '0' | '1'},
-    settings: {canBeCollected: '0' | '1'; canBeCollectedOnlyFollowers: '0' | '1'},
-  ) => void;
+  onProceed: (pledgeState: pledgeStepState) => void;
 };
 
 export function PledgeStep(props: pledgeStepProps) {
-  const {setActiveStep, onProceed} = props;
-  const {dispatchApprovePledge, campaignJourney} = useCampaignJourney();
+  const {defaultValues, setActiveStep, onProceed} = props;
 
-  const [campaignSize, setCampaignSize] = useState<number>(1);
+  const [campaignSize, setCampaignSize] = useState<number>(defaultValues?.size || 1);
+  const [minFollowers, setMinFollowers] = useState(defaultValues?.reward?.minimumFollowerNumber || 0);
   const [switches, setSwitches] = useState({
-    canCollect: false,
-    onlyFollowers: false,
-    rewardFollowers: false,
+    canCollect: defaultValues?.settings.canBeCollected || false,
+    onlyFollowers: defaultValues?.settings.canBeCollectedOnlyFollowers || false,
+    rewardFollowers: defaultValues?.reward.onlyFollowers || false,
   });
 
   const t = useTranslations();
 
   const handleChangeCampaignSize = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setCampaignSize(+e.target.value);
+  }, []);
+
+  const handleChangeMinFollowers = useCallback((value: -1 | 1) => {
+    setMinFollowers(prevState => prevState + value);
   }, []);
 
   const handleChangeSwitches = useCallback(
@@ -43,11 +46,24 @@ export function PledgeStep(props: pledgeStepProps) {
     },
     [switches],
   );
-  // // const handleSubmit = () => {
-  //   if (size && reward && settings) {
-  //     onProceed(content, uploadedFile);
-  //   }
-  // };
+
+  const handleBack = useCallback(() => {
+    setActiveStep(prevState => prevState - 1);
+  }, [setActiveStep]);
+
+  const handleSubmit = useCallback(() => {
+    onProceed({
+      size: campaignSize,
+      reward: {
+        minimumFollowerNumber: minFollowers,
+        onlyFollowers: switches.rewardFollowers,
+      },
+      settings: {
+        canBeCollected: switches.canCollect,
+        canBeCollectedOnlyFollowers: switches.onlyFollowers,
+      },
+    });
+  }, [onProceed, campaignSize, minFollowers, switches]);
 
   return (
     <div>
@@ -106,7 +122,7 @@ export function PledgeStep(props: pledgeStepProps) {
         <span className="text-LightWhite">{t('newCampaign.chooseMaxFollowers')}</span>
         <Spacer times={4} />
 
-        <Counter />
+        <Counter count={minFollowers} handleChangeCount={handleChangeMinFollowers} />
       </div>
       <div className="flex items-center">
         <Switch
@@ -122,9 +138,9 @@ export function PledgeStep(props: pledgeStepProps) {
       </div>
       <Spacer times={10} />
       <div className="flex items-end justify-end">
-        <Button text={t('back')} />
+        <Button text={t('back')} onClick={handleBack} />
         <Spacer times={2} />
-        <Button variant={ButtonVariant.secondary} text={t('proceed')} onClick={() => setActiveStep(2)} />
+        <Button variant={ButtonVariant.secondary} text={t('proceed')} onClick={handleSubmit} />
       </div>
     </div>
   );

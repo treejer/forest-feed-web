@@ -6,24 +6,23 @@ import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Checkbox} from '@forest-feed/components/kit/Icons/Checkbox/Checkbox';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
+import {CampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
+
+export type GeneralInfoStepState = Pick<CampaignJourney, 'content' | 'image' | 'termsConditionAgreed'>;
 
 export type GeneralInfoStepProps = {
+  defaultValues?: GeneralInfoStepState;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
   isConfirm: boolean;
-  onProceed: (content: string, image: File) => void;
+  onProceed: (generalInfo: GeneralInfoStepState) => void;
 };
 
 export function GeneralInfoStep(props: GeneralInfoStepProps) {
-  const {setActiveStep, isConfirm, onProceed} = props;
+  const {defaultValues, isConfirm, setActiveStep, onProceed} = props;
 
-  const {dispatchApproveGeneralInfo, campaignJourney} = useCampaignJourney();
-
-  console.log(campaignJourney, 'campaignJourney');
-
-  const [content, setContent] = useState<string>('');
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [userAgreed, setUserAgreed] = useState<boolean>(false);
+  const [content, setContent] = useState<string>(defaultValues?.content || '');
+  const [uploadedFile, setUploadedFile] = useState<File | null>(defaultValues?.image || null);
+  const [userAgreed, setUserAgreed] = useState<boolean>(defaultValues?.termsConditionAgreed || false);
 
   const t = useTranslations();
 
@@ -43,11 +42,19 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
     setUserAgreed(prevState => !prevState);
   }, []);
 
-  const handleSubmit = () => {
-    if (content && uploadedFile) {
-      onProceed(content, uploadedFile);
+  const handleLearnMore = useCallback(() => {
+    if (isConfirm) {
+      setActiveStep(prevState => prevState - 1);
+    } else {
+      console.log('learn more proceed');
     }
-  };
+  }, [isConfirm, setActiveStep]);
+
+  const handleSubmit = useCallback(() => {
+    if (content && uploadedFile && userAgreed) {
+      onProceed({termsConditionAgreed: userAgreed, image: uploadedFile, content});
+    }
+  }, [onProceed, content, uploadedFile, userAgreed]);
 
   return (
     <>
@@ -56,12 +63,14 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
         value={content}
         placeholder={t('newCampaign.placeholder.writePost')}
         onChange={handleChangeContent}
+        disabled={isConfirm}
       />
       <Uploader
         preview={isConfirm}
         file={uploadedFile}
         onChange={handleChangeUploadedFile}
         onDrop={handleDropUploadedFile}
+        disabled={isConfirm}
       />
       <Spacer times={4} />
       <div className="flex">
@@ -69,13 +78,14 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
           text={t('privacyPolicy.agreeAppTermsConditions')}
           checked={userAgreed}
           onChange={handleChangeUserAgreed}
+          disabled={isConfirm}
         />
       </div>
       <Spacer times={10} />
       <div className="flex items-end justify-end">
-        <Button text={t('learnMore')} />
+        <Button text={t(isConfirm ? 'back' : 'learnMore')} onClick={handleLearnMore} />
         <Spacer />
-        <Button variant={ButtonVariant.secondary} text={t('approve')} onClick={handleSubmit} />
+        <Button variant={ButtonVariant.secondary} text={t('approve')} disabled={!userAgreed} onClick={handleSubmit} />
       </div>
     </>
   );

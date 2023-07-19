@@ -10,31 +10,33 @@ export type CampaignJourney = {
   image: File | null;
   size: number;
   settings: {
-    canBeCollected: '0' | '1';
-    canBeCollectedOnlyFollowers: '0' | '1';
+    canBeCollected: boolean;
+    canBeCollectedOnlyFollowers: boolean;
   };
   reward: {
     minimumFollowerNumber: number;
-    onlyFollowers: '0' | '1';
+    onlyFollowers: boolean;
   };
+  termsConditionAgreed: boolean;
 };
 
 export const campaignJourneyInitialState: CampaignJourney = {
   content: '',
   image: null,
-  size: 0,
+  size: 1,
   settings: {
-    canBeCollected: '0',
-    canBeCollectedOnlyFollowers: '0',
+    canBeCollected: false,
+    canBeCollectedOnlyFollowers: false,
   },
   reward: {
     minimumFollowerNumber: 0,
-    onlyFollowers: '0',
+    onlyFollowers: false,
   },
+  termsConditionAgreed: false,
 };
 
 export type CampaignJourneyAction = {
-  approveGeneralInfo: Pick<CampaignJourney, 'content' | 'image'>;
+  approveGeneralInfo: Pick<CampaignJourney, 'content' | 'image' | 'termsConditionAgreed'>;
   approvePledge: Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
 };
 
@@ -45,6 +47,7 @@ export const campaignJourneySlice = createSlice({
     approveGeneralInfo: (state, action: PayloadAction<CampaignJourneyAction['approveGeneralInfo']>) => {
       state.content = action.payload.content;
       state.image = action.payload.image;
+      state.termsConditionAgreed = action.payload.termsConditionAgreed;
     },
     approvePledge: (state, action: PayloadAction<CampaignJourneyAction['approvePledge']>) => {
       state.reward = action.payload.reward;

@@ -5,9 +5,9 @@ import {useTranslations} from 'use-intl';
 
 import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
-import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
-import {PledgeStep} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
-import {CampaignJourney, useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
+import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
+import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
+import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
 
 function NewCampaignPage() {
   const [activeStep, setActiveStep] = useState(0);
@@ -25,7 +25,7 @@ function NewCampaignPage() {
   }, []);
 
   const handleApproveGeneralInfo = useCallback(
-    (generalInfo: Pick<CampaignJourney, 'content' | 'image' | 'termsConditionAgreed'>) => {
+    (generalInfo: GeneralInfoStepState) => {
       setActiveStep(1);
       dispatchApproveGeneralInfo(generalInfo);
     },
@@ -36,7 +36,7 @@ function NewCampaignPage() {
     setActiveStep(3);
   }, []);
   const handleApprovePledge = useCallback(
-    (pledgeState: Pick<CampaignJourney, 'size' | 'reward' | 'settings'>) => {
+    (pledgeState: PledgeStepState) => {
       setActiveStep(2);
       dispatchApprovePledge(pledgeState);
     },

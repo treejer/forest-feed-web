@@ -8,15 +8,15 @@ import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
 import {CampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
 
-export type pledgeStepState = Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
+export type PledgeStepState = Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
 
-export type pledgeStepProps = {
-  defaultValues?: pledgeStepState;
+export type PledgeStepProps = {
+  defaultValues?: PledgeStepState;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
-  onProceed: (pledgeState: pledgeStepState) => void;
+  onProceed: (pledgeState: PledgeStepState) => void;
 };
 
-export function PledgeStep(props: pledgeStepProps) {
+export function PledgeStep(props: PledgeStepProps) {
   const {defaultValues, setActiveStep, onProceed} = props;
 
   const [campaignSize, setCampaignSize] = useState<number>(defaultValues?.size || 1);

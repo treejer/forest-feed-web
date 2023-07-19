@@ -1,17 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 export type CounterProps = {
-  defaultCount?: number;
+  count: number;
+  // 0: decrement, 1: increment
+  handleChangeCount: (value: -1 | 1) => void;
 };
 
 export function Counter(props: CounterProps) {
-  const {defaultCount} = props;
-
-  const [count, setCount] = useState(defaultCount || 0);
-
-  const handleChangeCount = (value: number) => {
-    setCount(prevState => (prevState + value >= 0 ? prevState + value : prevState));
-  };
+  const {count, handleChangeCount} = props;
 
   return (
     <div className="flex">

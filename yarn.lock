@@ -2968,7 +2968,7 @@ axe-core@^4.6.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.7.2.tgz#040a7342b20765cb18bb50b628394c21bccc17a0"
   integrity sha512-zIURGIS1E1Q4pcrMjp+nnEh+16G56eG/MUllJH8yEvw7asDo7Ac9uhC9KIH5jzpITueEZolfYglnCGIuSBz39g==
 
-axios@^1.4.0:
+axios@1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.4.0.tgz#38a7bf1224cd308de271146038b551d725f0be1f"
   integrity sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==
@@ -6338,7 +6338,7 @@ real-require@^0.1.0:
   resolved "https://registry.yarnpkg.com/real-require/-/real-require-0.1.0.tgz#736ac214caa20632847b7ca8c1056a0767df9381"
   integrity sha512-r/H9MzAWtrv8aSVjPCMFpDMl5q66GqtmmRkRjpHTsp4zBAa+snZyiQNlMONiUmEJcsnaw0wCauJ2GWODr/aFkg==
 
-redux-fetch-state@^0.2.4:
+redux-fetch-state@0.2.4:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/redux-fetch-state/-/redux-fetch-state-0.2.4.tgz#48ed81ee6876faff51d82ee4b0ce4e7732dd6d04"
   integrity sha512-7ESGE7jkIpDyGOGg/a4/TrEF81KAuEP2tg+GfkB5pEqvgovtEB3aI60b91XXfhHzVZWs3NgBeGiL+WyJKegMaQ==

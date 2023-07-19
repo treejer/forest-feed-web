@@ -15,10 +15,11 @@ export type UploaderProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
   file?: File | null;
+  disabled?: boolean;
 };
 
 export function Uploader(props: UploaderProps) {
-  const {preview, file, onChange, onDrop} = props;
+  const {preview, file, disabled, onChange, onDrop} = props;
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -27,26 +28,33 @@ export function Uploader(props: UploaderProps) {
 
   const previewFile = useMemo(() => (file ? URL.createObjectURL(file as Blob) : ''), [file]);
 
-  const handleDrag = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setDragActive(true);
-    } else if (e.type === 'dragleave') {
-      setDragActive(false);
-    }
-  }, []);
+  const handleDrag = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      if (!disabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.type === 'dragenter' || e.type === 'dragover') {
+          setDragActive(true);
+        } else if (e.type === 'dragleave') {
+          setDragActive(false);
+        }
+      }
+    },
+    [disabled],
+  );
 
   const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setDragActive(false);
-      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-        onDrop(e);
+      if (!disabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        setDragActive(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          onDrop(e);
+        }
       }
     },
-    [onDrop],
+    [disabled, onDrop],
   );
 
   return (
@@ -72,7 +80,7 @@ export function Uploader(props: UploaderProps) {
         />
       </RenderIf>
       <label className="flex items-center cursor-pointer" htmlFor="file-uploader">
-        <input className="hidden" id="file-uploader" type="file" onChange={onChange} />
+        <input disabled={disabled} className="hidden" id="file-uploader" type="file" onChange={onChange} />
         {preview ? <DeleteIcon /> : <AttachIcon color={colors.primaryGreen} />}
         <p className="text-secondary text-lg font-medium ml-1">
           <span className="text-primaryGreen">

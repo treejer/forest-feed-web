@@ -2,7 +2,7 @@ import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {call} from 'redux-saga/effects';
 
 import {showSagaToast, ToastType} from '@forest-feed/utils/showToast';
-import {appConfig} from '@forest-feed/config';
+import {debugFetch} from '@forest-feed/config';
 
 export type FetchResult<Data> = {
   result: Data;
@@ -16,7 +16,7 @@ export function fetch<Data, Form = any>(
   return new Promise(async (resolve, reject) => {
     try {
       const res = await axios(url, {...options, timeout: 10000});
-      if (appConfig.debugFetch) {
+      if (debugFetch) {
         console.log(url, res.data, 'res is here', res.status);
       }
       if (res.status) {
@@ -35,7 +35,7 @@ export function fetch<Data, Form = any>(
         });
       }
     } catch (e: any) {
-      if (appConfig.debugFetch) {
+      if (debugFetch) {
         console.log(JSON.parse(JSON.stringify(e)), e, 'error inside fetch');
       }
       reject(e);
@@ -61,7 +61,8 @@ export function* sagaFetch<Data, Form = any>(url: string, options: SagaFetchOpti
     };
   }
 
-  const requestUrl = (options.baseUrl || appConfig.apiBaseUrl) + url;
+  // TODO: read from config
+  const requestUrl = options.baseUrl + url;
 
   return yield call(() => fetch<Data, Form>(requestUrl, options));
 }

@@ -6,9 +6,9 @@ import {InputRange} from '@forest-feed/components/kit/InputRange/InputRange';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
-import {CampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
+import {CampaignJourneySlice} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 
-export type PledgeStepState = Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
+export type PledgeStepState = Pick<CampaignJourneySlice, 'size' | 'reward' | 'settings'>;
 
 export type PledgeStepProps = {
   defaultValues?: PledgeStepState;

@@ -1,22 +1,22 @@
 import {configureChains, createConfig} from 'wagmi';
 import {GetAccountResult} from '@wagmi/core';
-import {arbitrum, mainnet, optimism, polygon, zora} from 'wagmi/chains';
+import {polygonMumbai, polygon} from 'wagmi/chains';
 import {getDefaultWallets, lightTheme} from '@rainbow-me/rainbowkit';
 import {publicProvider} from 'wagmi/providers/public';
 
-import {appConfig} from '@forest-feed/config';
 import {colors} from 'colors';
+import {projectId, projectName} from '@forest-feed/config';
 
 export type ConnectionStatus = GetAccountResult['status'];
 
 export const {chains, publicClient, webSocketPublicClient} = configureChains(
-  [mainnet, polygon, optimism, arbitrum, zora],
+  [polygon, polygonMumbai],
   [publicProvider()],
 );
 
 export const {connectors} = getDefaultWallets({
-  appName: appConfig.name,
-  projectId: appConfig.projectId,
+  appName: projectName,
+  projectId: projectId,
   chains,
 });
 
@@ -28,7 +28,7 @@ export const wagmiConfig = createConfig({
 });
 
 export const appInfo = {
-  appName: appConfig.name,
+  appName: projectName,
 };
 export const forestFeedTheme = lightTheme({
   accentColor: colors.primaryGreen,

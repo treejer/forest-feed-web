@@ -7,7 +7,7 @@ import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
 import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
+import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 
 function NewCampaignPage() {
   const [activeStep, setActiveStep] = useState(0);

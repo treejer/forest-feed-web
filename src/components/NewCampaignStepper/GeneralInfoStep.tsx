@@ -6,9 +6,9 @@ import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Checkbox} from '@forest-feed/components/kit/Icons/Checkbox/Checkbox';
-import {CampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney';
+import {CampaignJourneySlice} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 
-export type GeneralInfoStepState = Pick<CampaignJourney, 'content' | 'image' | 'termsConditionAgreed'>;
+export type GeneralInfoStepState = Pick<CampaignJourneySlice, 'content' | 'image' | 'termsConditionAgreed'>;
 
 export type GeneralInfoStepProps = {
   defaultValues?: GeneralInfoStepState;

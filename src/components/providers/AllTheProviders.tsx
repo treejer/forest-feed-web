@@ -7,12 +7,13 @@ import {polygon} from 'wagmi/chains';
 import {RainbowKitProvider} from '@rainbow-me/rainbowkit';
 import {AbstractIntlMessages, NextIntlClientProvider} from 'next-intl';
 import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 import {ToastContainer} from 'react-toastify';
 
 import {Locale} from '@forest-feed/languages';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {appInfo, chains, forestFeedTheme, wagmiConfig} from '@forest-feed/connectWallet';
-import store from '@forest-feed/redux/store';
+import {store, persistor} from '@forest-feed/redux/store';
 
 export type AllTheProvidersProps = React.PropsWithChildren<{
   locale: Locale;
@@ -32,8 +33,10 @@ export function AllTheProviders(props: AllTheProvidersProps) {
         <NextIntlClientProvider locale={locale} messages={messages}>
           <RenderIf condition={mounted}>
             <Provider store={store}>
-              <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
-              {children}
+              <PersistGate persistor={persistor} loading={null}>
+                <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
+                {children}
+              </PersistGate>
             </Provider>
           </RenderIf>
         </NextIntlClientProvider>

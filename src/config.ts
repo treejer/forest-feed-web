@@ -133,3 +133,4 @@ export const networks: Networks = {
 };
 
 export const debugFetch = false;
+export const reduxLogger = false;

@@ -5,7 +5,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {selectCampaignJourney} from '@forest-feed/redux/selectors';
 
-export type CampaignJourney = {
+export type CampaignJourneySlice = {
   content: string;
   image: File | null;
   size: number;
@@ -21,11 +21,11 @@ export type CampaignJourney = {
 };
 
 export type CampaignJourneyAction = {
-  approveGeneralInfo: Pick<CampaignJourney, 'content' | 'image' | 'termsConditionAgreed'>;
-  approvePledge: Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
+  approveGeneralInfo: Pick<CampaignJourneySlice, 'content' | 'image' | 'termsConditionAgreed'>;
+  approvePledge: Pick<CampaignJourneySlice, 'size' | 'reward' | 'settings'>;
 };
 
-export const campaignJourneyInitialState: CampaignJourney = {
+export const campaignJourneyInitialState: CampaignJourneySlice = {
   content: '',
   image: null,
   size: 1,

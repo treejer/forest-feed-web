@@ -18,7 +18,7 @@ export function renderWithProviders(
   {
     preloadedState = {},
     // Automatically create a store instance if no store was passed in
-    store = makeStore(preloadedState),
+    store = makeStore(preloadedState).store,
     ...renderOptions
   }: ExtendedRenderOptions = {},
 ) {

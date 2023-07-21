@@ -17,7 +17,7 @@ export const makeStore = (preloadedState?: PreloadedState<AppState>) => {
   const sagaMiddleware = createSagaMiddleware();
   const store = configureStore({
     reducer,
-    middleware: [sagaMiddleware],
+    middleware: getDefaultMiddleware => getDefaultMiddleware({thunk: false}).prepend(sagaMiddleware),
     preloadedState,
   }) as SagaStore;
 

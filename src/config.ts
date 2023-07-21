@@ -19,7 +19,7 @@ export interface ConfigContract {
 
 export enum BlockchainNetwork {
   Polygon = 'Polygon',
-  Mumbai = 'Polygon Mumbai',
+  Mumbai = 'Mumbai',
 }
 
 export interface NetworkConfig {
@@ -52,7 +52,7 @@ export interface Config {
 
 export const isProd = process.env.NODE_ENV?.toLowerCase() === 'production';
 
-const config: Config = {
+export const config: Config = {
   [BlockchainNetwork.Polygon]: {
     name: projectName,
     projectId: projectId,
@@ -75,7 +75,7 @@ const config: Config = {
     pastEventsQueryMaxPageSize: '',
     learnMoreLink: '',
     network: BlockchainNetwork.Polygon,
-    chainId: '',
+    chainId: '137',
     explorerUrl: '',
   },
   [BlockchainNetwork.Mumbai]: {
@@ -100,7 +100,7 @@ const config: Config = {
     pastEventsQueryMaxPageSize: '',
     learnMoreLink: '',
     network: BlockchainNetwork.Mumbai,
-    chainId: '',
+    chainId: '80001',
     explorerUrl: '',
   },
 };

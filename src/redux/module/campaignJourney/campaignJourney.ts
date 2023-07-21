@@ -20,6 +20,11 @@ export type CampaignJourney = {
   termsConditionAgreed: boolean;
 };
 
+export type CampaignJourneyAction = {
+  approveGeneralInfo: Pick<CampaignJourney, 'content' | 'image' | 'termsConditionAgreed'>;
+  approvePledge: Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
+};
+
 export const campaignJourneyInitialState: CampaignJourney = {
   content: '',
   image: null,
@@ -33,11 +38,6 @@ export const campaignJourneyInitialState: CampaignJourney = {
     onlyFollowers: false,
   },
   termsConditionAgreed: false,
-};
-
-export type CampaignJourneyAction = {
-  approveGeneralInfo: Pick<CampaignJourney, 'content' | 'image' | 'termsConditionAgreed'>;
-  approvePledge: Pick<CampaignJourney, 'size' | 'reward' | 'settings'>;
 };
 
 export const campaignJourneySlice = createSlice({

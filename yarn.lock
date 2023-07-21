@@ -6343,7 +6343,7 @@ redux-fetch-state@0.2.4:
   resolved "https://registry.yarnpkg.com/redux-fetch-state/-/redux-fetch-state-0.2.4.tgz#48ed81ee6876faff51d82ee4b0ce4e7732dd6d04"
   integrity sha512-7ESGE7jkIpDyGOGg/a4/TrEF81KAuEP2tg+GfkB5pEqvgovtEB3aI60b91XXfhHzVZWs3NgBeGiL+WyJKegMaQ==
 
-redux-saga@^1.2.3:
+redux-saga@1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-1.2.3.tgz#7362f78a0235868daf1210f8862a95906ac018a1"
   integrity sha512-HDe0wTR5nhd8Xr5xjGzoyTbdAw6rjy1GDplFt3JKtKN8/MnkQSRqK/n6aQQhpw5NI4ekDVOaW+w4sdxPBaCoTQ==

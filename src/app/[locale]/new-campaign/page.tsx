@@ -10,15 +10,20 @@ import {Stepper} from '@forest-feed/components/kit/Stepper';
 import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 
 function NewCampaignPage() {
   const [activeStep, setActiveStep] = useState(0);
 
   const [treeCount, setTreeCount] = useState<number>(1);
 
+  const {
+    web3: {isSupportedNetwork},
+  } = useWeb3();
+
   const {campaignJourney, dispatchApproveGeneralInfo, dispatchApprovePledge} = useCampaignJourney();
 
-  console.log(campaignJourney, 'campaignJourney state');
+  const {address, isConnected} = useAccount();
 
   const t = useTranslations('newCampaign.stepper');
 
@@ -37,6 +42,7 @@ function NewCampaignPage() {
   const handleApproveReview = useCallback(() => {
     setActiveStep(3);
   }, []);
+
   const handleApprovePledge = useCallback(
     (pledgeState: PledgeStepState) => {
       setActiveStep(2);
@@ -44,8 +50,6 @@ function NewCampaignPage() {
     },
     [dispatchApprovePledge],
   );
-
-  const {address} = useAccount();
 
   const generalInfoState = useMemo(
     () => ({
@@ -67,7 +71,7 @@ function NewCampaignPage() {
 
   return (
     <div className="grid grid-cols-6 gap-4">
-      {address ? (
+      {address && isConnected && isSupportedNetwork ? (
         <>
           <div className="col-span-5">
             <Stepper

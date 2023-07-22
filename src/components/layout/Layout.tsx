@@ -2,12 +2,13 @@
 
 import React, {useEffect} from 'react';
 
-import {useAccount} from 'wagmi';
+import {useAccount, useNetwork} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
 import {AppHeader} from '@forest-feed/components/layout/AppHeader';
 import {Navbar} from '@forest-feed/components/layout/Navbar';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
+import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 
 export type LayoutProps = React.PropsWithChildren;
 
@@ -16,14 +17,27 @@ export function Layout(props: LayoutProps) {
 
   const {dispatchInit} = useInit();
 
+  const {web3, dispatchNotSupportedNetwork} = useWeb3();
+
+  const {chain} = useNetwork();
+
   const {address, status} = useAccount({
     onConnect: data => {},
   });
 
   useEffect(() => {
-    console.log('how are you doing?');
+    console.log(web3, 'web3');
+  }, [web3]);
+
+  useEffect(() => {
     dispatchInit();
   }, []);
+
+  useEffect(() => {
+    if (typeof chain?.unsupported !== 'undefined' && chain?.unsupported) {
+      dispatchNotSupportedNetwork();
+    }
+  }, [chain]);
 
   return (
     <div className="container mx-auto">

@@ -2,6 +2,7 @@ import {ImageProps} from 'next/image';
 
 import {formatUrl} from '@forest-feed/utils/fotmatUrl';
 import MaticLogo from 'public/assets/images/Asset.png';
+import {polygon, polygonMumbai} from 'wagmi/chains';
 
 export const projectName = 'Forest Feed';
 export const projectId = 'ID';
@@ -41,7 +42,7 @@ export interface NetworkConfig {
   pastEventsQueryMaxPageSize: string;
   learnMoreLink: string;
   network: BlockchainNetwork;
-  chainId: string;
+  chainId: number;
   explorerUrl: string;
 }
 
@@ -75,7 +76,7 @@ export const config: Config = {
     pastEventsQueryMaxPageSize: '',
     learnMoreLink: '',
     network: BlockchainNetwork.Polygon,
-    chainId: '137',
+    chainId: polygon.id,
     explorerUrl: '',
   },
   [BlockchainNetwork.Mumbai]: {
@@ -100,7 +101,7 @@ export const config: Config = {
     pastEventsQueryMaxPageSize: '',
     learnMoreLink: '',
     network: BlockchainNetwork.Mumbai,
-    chainId: '80001',
+    chainId: polygonMumbai.id,
     explorerUrl: '',
   },
 };

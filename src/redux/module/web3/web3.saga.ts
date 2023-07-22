@@ -13,7 +13,7 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
     if (newNetwork) {
       config = configs[newNetwork];
       yield switchNetworkWeb3({
-        chainId: +configs[newNetwork].chainId,
+        chainId: configs[newNetwork].chainId,
       });
     }
     yield put(updateNetwork({newConfig: config}));

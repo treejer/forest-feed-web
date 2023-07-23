@@ -5,6 +5,7 @@ import React, {useEffect, useState} from 'react';
 import {WagmiConfig} from 'wagmi';
 import {polygon} from 'wagmi/chains';
 import {RainbowKitProvider} from '@rainbow-me/rainbowkit';
+import {LensProvider} from '@lens-protocol/react-web';
 import {AbstractIntlMessages, NextIntlClientProvider} from 'next-intl';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -12,7 +13,7 @@ import {ToastContainer} from 'react-toastify';
 
 import {Locale} from '@forest-feed/languages';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {appInfo, chains, forestFeedTheme, wagmiConfig} from '@forest-feed/connectWallet';
+import {appInfo, chains, forestFeedTheme, lensConfig, wagmiConfig} from '@forest-feed/connectWallet';
 import {store, persistor} from '@forest-feed/redux/store';
 
 export type AllTheProvidersProps = React.PropsWithChildren<{
@@ -30,16 +31,18 @@ export function AllTheProviders(props: AllTheProvidersProps) {
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} appInfo={appInfo} theme={forestFeedTheme} initialChain={polygon}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <RenderIf condition={mounted}>
-            <Provider store={store}>
-              <PersistGate persistor={persistor} loading={null}>
-                <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
-                {children}
-              </PersistGate>
-            </Provider>
-          </RenderIf>
-        </NextIntlClientProvider>
+        <LensProvider config={lensConfig}>
+          <NextIntlClientProvider locale={locale} messages={messages}>
+            <RenderIf condition={mounted}>
+              <Provider store={store}>
+                <PersistGate persistor={persistor} loading={null}>
+                  <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
+                  {children}
+                </PersistGate>
+              </Provider>
+            </RenderIf>
+          </NextIntlClientProvider>
+        </LensProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );

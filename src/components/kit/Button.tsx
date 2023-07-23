@@ -1,3 +1,8 @@
+import React from 'react';
+
+import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import {Spacer} from '@forest-feed/components/common/Spacer';
+
 export enum ButtonVariant {
   primary = 'primary',
   secondary = 'secondary',
@@ -6,6 +11,7 @@ export enum ButtonVariant {
 }
 
 export type ButtonProps = {
+  icon?: React.ReactNode;
   text: string;
   className?: string;
   variant?: ButtonVariant;
@@ -25,7 +31,7 @@ const classNames: VariantClassNames = {
 };
 
 export function Button(props: ButtonProps) {
-  const {variant = ButtonVariant.primary, text, onClick, className, disabled} = props;
+  const {variant = ButtonVariant.primary, text, icon, onClick, className, disabled} = props;
 
   return (
     <button
@@ -33,6 +39,10 @@ export function Button(props: ButtonProps) {
       disabled={disabled}
       onClick={onClick}
     >
+      <RenderIf condition={!!icon}>
+        {icon}
+        <Spacer />
+      </RenderIf>
       {text}
     </button>
   );

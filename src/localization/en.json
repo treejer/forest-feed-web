@@ -64,5 +64,8 @@
   },
   "notFound": {
     "desc": "This page not exist!"
+  },
+  "lens": {
+    "login": "Login with lens"
   }
 }

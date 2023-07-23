@@ -9,6 +9,7 @@ import {AppHeader} from '@forest-feed/components/layout/AppHeader';
 import {Navbar} from '@forest-feed/components/layout/Navbar';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 
 export type LayoutProps = React.PropsWithChildren;
 
@@ -17,33 +18,42 @@ export function Layout(props: LayoutProps) {
 
   const {dispatchInit} = useInit();
 
-  const {web3, dispatchNotSupportedNetwork} = useWeb3();
+  const {dispatchNotSupportedNetwork} = useWeb3();
 
   const {chain} = useNetwork();
 
-  const {address, status} = useAccount({
+  const {address, status, isConnected} = useAccount({
     onConnect: data => {},
   });
 
-  useEffect(() => {
-    console.log(web3, 'web3');
-  }, [web3]);
+  const {lensProfile, handleLensLogin} = useAuthLens({
+    wallet: address,
+    isConnected,
+  });
 
   useEffect(() => {
     dispatchInit();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (typeof chain?.unsupported !== 'undefined' && chain?.unsupported) {
       dispatchNotSupportedNetwork();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chain]);
 
   return (
     <div className="container mx-auto">
       <div className="grid grid-cols-6 gap-20">
         <div className="grid col-span-6">
-          <AppHeader walletAddress={address} connectionStatus={status} />
+          <AppHeader
+            walletAddress={address}
+            isLensLoggedIn={!!lensProfile}
+            connectionStatus={status}
+            onLensLogin={handleLensLogin}
+          />
           <ConnectButton />
         </div>
         <div className="col-span-1">

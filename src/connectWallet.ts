@@ -3,6 +3,8 @@ import {GetAccountResult} from '@wagmi/core';
 import {polygonMumbai, polygon} from 'wagmi/chains';
 import {getDefaultWallets, lightTheme} from '@rainbow-me/rainbowkit';
 import {publicProvider} from 'wagmi/providers/public';
+import {LensConfig, development} from '@lens-protocol/react-web';
+import {bindings as wagmiBindings} from '@lens-protocol/wagmi';
 
 import {colors} from 'colors';
 import {projectId, projectName} from '@forest-feed/config';
@@ -26,6 +28,11 @@ export const wagmiConfig = createConfig({
   publicClient,
   webSocketPublicClient,
 });
+
+export const lensConfig: LensConfig = {
+  bindings: wagmiBindings(),
+  environment: development,
+};
 
 export const appInfo = {
   appName: projectName,

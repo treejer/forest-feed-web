@@ -5,7 +5,7 @@ import {TextArea} from '@forest-feed/components/kit/TextArea';
 import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {Checkbox} from '@forest-feed/components/kit/Icons/Checkbox/Checkbox';
+import {Checkbox} from '@forest-feed/components/kit/Checkbox/Checkbox';
 import {CampaignJourneySlice} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 
 export type GeneralInfoStepState = Pick<CampaignJourneySlice, 'content' | 'image' | 'termsConditionAgreed'>;

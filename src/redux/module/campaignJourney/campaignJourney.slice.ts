@@ -24,6 +24,8 @@ export type CampaignJourneySlice = {
 export type CampaignJourneyAction = {
   approveGeneralInfo: Pick<CampaignJourneySlice, 'content' | 'image' | 'termsConditionAgreed'>;
   approvePledge: Pick<CampaignJourneySlice, 'size' | 'reward' | 'settings'>;
+  setMinimumFollowerNumber: number;
+  setCampaignSize: number;
   setCurrentStep: number;
 };
 
@@ -60,10 +62,30 @@ export const campaignJourneySlice = createSlice({
     setCurrentStep: (state, action: PayloadAction<CampaignJourneyAction['setCurrentStep']>) => {
       state.currentStep = action.payload;
     },
+    setCanBeCollected: state => {
+      state.settings.canBeCollected = !state.settings.canBeCollected;
+    },
+    setCanBeCollectedOnlyFollowers: state => {
+      state.settings.canBeCollectedOnlyFollowers = !state.settings.canBeCollectedOnlyFollowers;
+    },
+    setMinimumFollowerNumber: (state, action: PayloadAction<CampaignJourneyAction['setMinimumFollowerNumber']>) => {
+      state.reward.minimumFollowerNumber = action.payload;
+    },
+    setOnlyFollowers: state => {
+      state.reward.onlyFollowers = !state.reward.onlyFollowers;
+    },
   },
 });
 
-export const {approveGeneralInfo, approvePledge, setCurrentStep} = campaignJourneySlice.actions;
+export const {
+  approveGeneralInfo,
+  approvePledge,
+  setCurrentStep,
+  setCanBeCollectedOnlyFollowers,
+  setOnlyFollowers,
+  setMinimumFollowerNumber,
+  setCanBeCollected,
+} = campaignJourneySlice.actions;
 
 export const useCampaignJourney = () => {
   const campaignJourney = useAppSelector(selectCampaignJourney);
@@ -90,11 +112,34 @@ export const useCampaignJourney = () => {
     [dispatch],
   );
 
+  const dispatchSetCanBeCollected = useCallback(() => {
+    dispatch(setCanBeCollected());
+  }, [dispatch]);
+
+  const dispatchSetCanBeCollectedOnlyFollowers = useCallback(() => {
+    dispatch(setCanBeCollectedOnlyFollowers());
+  }, [dispatch]);
+
+  const dispatchSetOnlyFollowers = useCallback(() => {
+    dispatch(setOnlyFollowers());
+  }, [dispatch]);
+
+  const dispatchSetMinimumFollowerNumber = useCallback(
+    (payload: CampaignJourneyAction['setMinimumFollowerNumber']) => {
+      dispatch(setMinimumFollowerNumber(payload));
+    },
+    [dispatch],
+  );
+
   return {
     campaignJourney,
     dispatchApproveGeneralInfo,
     dispatchApprovePledge,
     dispatchSetCurrentStep,
+    dispatchSetCanBeCollected,
+    dispatchSetCanBeCollectedOnlyFollowers,
+    dispatchSetOnlyFollowers,
+    dispatchSetMinimumFollowerNumber,
   };
 };
 

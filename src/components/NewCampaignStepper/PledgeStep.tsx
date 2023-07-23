@@ -1,4 +1,5 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
+
 import {useTranslations} from 'use-intl';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
@@ -11,40 +12,44 @@ import {CampaignJourneySlice} from '@forest-feed/redux/module/campaignJourney/ca
 export type PledgeStepState = Pick<CampaignJourneySlice, 'size' | 'reward' | 'settings'>;
 
 export type PledgeStepProps = {
-  defaultValues?: PledgeStepState;
+  campaignSize: number;
+  setCampaignSize: React.Dispatch<React.SetStateAction<number>>;
+  values: PledgeStepState;
+  setCanBeCollected: () => void;
+  setCanBeCollectedOnlyFollowers: () => void;
+  setOnlyFollowers: () => void;
+  setMinimumFollowerNumber: (count: number) => void;
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
   onProceed: (pledgeState: PledgeStepState) => void;
 };
 
 export function PledgeStep(props: PledgeStepProps) {
-  const {defaultValues, setActiveStep, onProceed} = props;
-
-  const [campaignSize, setCampaignSize] = useState<number>(defaultValues?.size || 1);
-  const [minFollowers, setMinFollowers] = useState(defaultValues?.reward?.minimumFollowerNumber || 0);
-  const [switches, setSwitches] = useState({
-    canCollect: defaultValues?.settings.canBeCollected || false,
-    onlyFollowers: defaultValues?.settings.canBeCollectedOnlyFollowers || false,
-    rewardFollowers: defaultValues?.reward.onlyFollowers || false,
-  });
+  const {
+    values,
+    setCanBeCollected,
+    setCanBeCollectedOnlyFollowers,
+    setOnlyFollowers,
+    setMinimumFollowerNumber,
+    setActiveStep,
+    campaignSize,
+    setCampaignSize,
+    onProceed,
+  } = props;
 
   const t = useTranslations();
 
-  const handleChangeCampaignSize = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setCampaignSize(+e.target.value);
-  }, []);
-
-  const handleChangeMinFollowers = useCallback((value: -1 | 1) => {
-    setMinFollowers(prevState => prevState + value);
-  }, []);
-
-  const handleChangeSwitches = useCallback(
+  const handleChangeCampaignSize = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setSwitches({
-        ...switches,
-        [e.target.name]: !switches[e.target.name],
-      });
+      setCampaignSize(+e.target.value);
     },
-    [switches],
+    [setCampaignSize],
+  );
+
+  const handleChangeMinFollowers = useCallback(
+    (value: -1 | 1) => {
+      setMinimumFollowerNumber(values?.reward?.minimumFollowerNumber + value);
+    },
+    [setMinimumFollowerNumber, values?.reward?.minimumFollowerNumber],
   );
 
   const handleBack = useCallback(() => {
@@ -55,15 +60,15 @@ export function PledgeStep(props: PledgeStepProps) {
     onProceed({
       size: campaignSize,
       reward: {
-        minimumFollowerNumber: minFollowers,
-        onlyFollowers: switches.rewardFollowers,
+        minimumFollowerNumber: values.reward.minimumFollowerNumber,
+        onlyFollowers: values.reward.onlyFollowers,
       },
       settings: {
-        canBeCollected: switches.canCollect,
-        canBeCollectedOnlyFollowers: switches.onlyFollowers,
+        canBeCollected: values.settings.canBeCollected,
+        canBeCollectedOnlyFollowers: values.settings.canBeCollectedOnlyFollowers,
       },
     });
-  }, [onProceed, campaignSize, minFollowers, switches]);
+  }, [onProceed, campaignSize, values]);
 
   return (
     <div>
@@ -96,8 +101,8 @@ export function PledgeStep(props: PledgeStepProps) {
           name="canCollect"
           id="canCollect"
           value={0}
-          checked={switches.canCollect}
-          onChange={handleChangeSwitches}
+          checked={values?.settings.canBeCollected}
+          onChange={setCanBeCollected}
         />
         <span className="text-lg">{t('newCampaign.canBeCollected')}</span>
       </div>
@@ -109,8 +114,8 @@ export function PledgeStep(props: PledgeStepProps) {
           name="onlyFollowers"
           id="onlyFollowers"
           value={0}
-          checked={switches.onlyFollowers}
-          onChange={handleChangeSwitches}
+          checked={values?.settings.canBeCollectedOnlyFollowers}
+          onChange={setCanBeCollectedOnlyFollowers}
         />
         <span className="text-lg">{t('newCampaign.collectedOnlyFollowers')}</span>
       </div>
@@ -122,7 +127,7 @@ export function PledgeStep(props: PledgeStepProps) {
         <span className="text-LightWhite">{t('newCampaign.chooseMaxFollowers')}</span>
         <Spacer times={4} />
 
-        <Counter count={minFollowers} handleChangeCount={handleChangeMinFollowers} />
+        <Counter count={values?.reward.minimumFollowerNumber} handleChangeCount={handleChangeMinFollowers} />
       </div>
       <div className="flex items-center">
         <Switch
@@ -131,8 +136,8 @@ export function PledgeStep(props: PledgeStepProps) {
           name="rewardFollowers"
           id="rewardFollowers"
           value={0}
-          checked={switches.rewardFollowers}
-          onChange={handleChangeSwitches}
+          checked={values.reward.onlyFollowers}
+          onChange={setOnlyFollowers}
         />
         <span className="text-lg">{t('newCampaign.rewardOnlyYourFollowers')}</span>
       </div>

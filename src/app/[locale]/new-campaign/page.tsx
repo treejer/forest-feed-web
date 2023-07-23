@@ -14,11 +14,19 @@ import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useIsMounted} from '@forest-feed/hooks/useIsMounted';
 
 function NewCampaignPage() {
-  const {campaignJourney, dispatchApproveGeneralInfo, dispatchApprovePledge, dispatchSetCurrentStep} =
-    useCampaignJourney();
+  const {
+    campaignJourney,
+    dispatchApproveGeneralInfo,
+    dispatchApprovePledge,
+    dispatchSetCurrentStep,
+    dispatchSetMinimumFollowerNumber,
+    dispatchSetOnlyFollowers,
+    dispatchSetCanBeCollectedOnlyFollowers,
+    dispatchSetCanBeCollected,
+  } = useCampaignJourney();
   const [activeStep, setActiveStep] = useState(campaignJourney.currentStep);
 
-  const [treeCount, setTreeCount] = useState<number>(1);
+  const [campaignSize, setCampaignSize] = useState<number>(campaignJourney?.size || 1);
 
   const {
     web3: {isSupportedNetwork},
@@ -35,10 +43,6 @@ function NewCampaignPage() {
       dispatchSetCurrentStep(activeStep);
     }
   }, [activeStep]);
-
-  const handleChangeTreeCount = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setTreeCount(+e.target.value);
-  }, []);
 
   const handleApproveGeneralInfo = useCallback(
     (generalInfo: GeneralInfoStepState) => {
@@ -103,7 +107,13 @@ function NewCampaignPage() {
                 {
                   content: (
                     <PledgeStep
-                      defaultValues={pledgeState}
+                      campaignSize={campaignSize}
+                      setCampaignSize={setCampaignSize}
+                      setCanBeCollected={dispatchSetCanBeCollected}
+                      setCanBeCollectedOnlyFollowers={dispatchSetCanBeCollectedOnlyFollowers}
+                      setMinimumFollowerNumber={dispatchSetMinimumFollowerNumber}
+                      setOnlyFollowers={dispatchSetOnlyFollowers}
+                      values={pledgeState}
                       setActiveStep={setActiveStep}
                       onProceed={handleApprovePledge}
                     />
@@ -130,7 +140,7 @@ function NewCampaignPage() {
             />
           </div>
           <div className="col-span-1">
-            <TreeCost treeCount={treeCount} onChangeTrees={handleChangeTreeCount} costValue={treeCount * 2} />
+            <TreeCost treeCount={campaignSize} costValue={campaignSize * 10} />
           </div>
         </>
       ) : (

@@ -9,10 +9,11 @@ export const projectId = 'ID';
 
 export enum ContractType {
   NOTHING_YET = 'NOTHING_YET',
+  DAI = 'DAI',
 }
 
 export interface ConfigContract {
-  address: string;
+  address: `0x${string}`;
   abi: any;
   // TODO: apollo-link-ethereum
   // abi: AbiDefinition['abi'];
@@ -59,8 +60,12 @@ export const config: Config = {
     projectId: projectId,
     contracts: {
       NOTHING_YET: {
-        address: '',
+        address: '' as `0x${string}`,
         abi: '',
+      },
+      DAI: {
+        address: (process.env.NEXT_PUBLIC_POLYGON_DAI_TOKEN || '') as `0x${string}`,
+        abi: require('./abis/Dai.json'),
       },
     },
     networkId: Number('' || 3),
@@ -84,8 +89,12 @@ export const config: Config = {
     projectId: projectId,
     contracts: {
       NOTHING_YET: {
-        address: '',
+        address: '' as `0x${string}`,
         abi: '',
+      },
+      DAI: {
+        address: (process.env.NEXT_PUBLIC_MUMBAI_DAI_TOKEN || '') as `0x${string}`,
+        abi: require('./abis/Dai.json'),
       },
     },
     networkId: Number('' || 3),

@@ -3,7 +3,7 @@
 import React, {useEffect, useState} from 'react';
 
 import {WagmiConfig} from 'wagmi';
-import {polygon} from 'wagmi/chains';
+import {polygonMumbai} from 'wagmi/chains';
 import {RainbowKitProvider} from '@rainbow-me/rainbowkit';
 import {AbstractIntlMessages, NextIntlClientProvider} from 'next-intl';
 import {Provider} from 'react-redux';
@@ -29,7 +29,7 @@ export function AllTheProviders(props: AllTheProvidersProps) {
 
   return (
     <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains} appInfo={appInfo} theme={forestFeedTheme} initialChain={polygon}>
+      <RainbowKitProvider chains={chains} appInfo={appInfo} theme={forestFeedTheme} initialChain={polygonMumbai}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <RenderIf condition={mounted}>
             <Provider store={store}>

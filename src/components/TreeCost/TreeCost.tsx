@@ -19,7 +19,7 @@ export function TreeCost(props: TreeCostProps) {
     <div>
       <span className="font-bold">{t('trees')}</span>
       <input
-        className="flex bg-lightGreen border border-border rounded-md w-[176px] h-[71px] font-size text-lg font-normal text-center"
+        className="flex bg-lightGreen border border-border rounded-md w-full h-[71px] font-size text-lg font-normal text-center"
         value={treeCount}
         onChange={onChangeTrees}
       />
@@ -30,7 +30,7 @@ export function TreeCost(props: TreeCostProps) {
         value={t('dollarSign', {
           value: costValue,
         })}
-        className="bg-yellow border-border rounded-md w-[176px] h-[71px] font-size text-lg font-normal text-center"
+        className="bg-yellow border-border rounded-md w-full h-[71px] font-size text-lg font-normal text-center"
       />
       <Spacer times={4} />
       <WalletAssets />

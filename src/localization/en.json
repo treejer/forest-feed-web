@@ -48,7 +48,10 @@
     "placeholder": {
       "writePost": "Write your post here..."
     },
-    "walletAssets": "Wallet Assets"
+    "assets": {
+      "title": "Wallet Assets",
+      "dai": "DAI"
+    }
   },
   "myCampaigns": {
     "status": "Status",

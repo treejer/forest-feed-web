@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
-import {selectWeb3} from '@forest-feed/redux/selectors';
+import {selectConfig, selectWeb3} from '@forest-feed/redux/selectors';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 
 export type Web3State = {
@@ -18,7 +18,7 @@ export type Web3Action = {
 };
 
 export const web3InitialState: Web3State = {
-  config: configs[BlockchainNetwork.Polygon],
+  config: configs[BlockchainNetwork.Mumbai],
   switching: false,
   isSupportedNetwork: false,
 };
@@ -66,3 +66,5 @@ export function useWeb3() {
     dispatchNotSupportedNetwork,
   };
 }
+
+export const useConfig = () => useAppSelector(selectConfig);

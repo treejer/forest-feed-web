@@ -69,6 +69,7 @@
     "desc": "This page not exist!"
   },
   "labels": {
+    "termsConditionAgreed": "Terms and Conditions",
     "content": "Content",
     "image": "Photo"
   },

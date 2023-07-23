@@ -20,7 +20,7 @@ export type GeneralInfoStepProps = {
 export function GeneralInfoStep(props: GeneralInfoStepProps) {
   const {defaultValues, isConfirm, setActiveStep, onProceed} = props;
 
-  const {control, setValue, handleSubmit, formState} = useForm<GeneralInfoForm>({
+  const {control, setValue, handleSubmit} = useForm<GeneralInfoForm>({
     defaultValues: {
       image: defaultValues?.image ? [defaultValues.image] : undefined,
       content: defaultValues?.content || '',

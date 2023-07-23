@@ -8,7 +8,7 @@ export type StepperProps = {
   contents: {title: string; content: JSX.Element}[];
   activeStep: number;
   isDependent: boolean;
-  setActiveStep: React.Dispatch<number>;
+  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export function Stepper(props: StepperProps) {

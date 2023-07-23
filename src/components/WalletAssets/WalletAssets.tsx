@@ -15,6 +15,7 @@ export function WalletAssets() {
   const {data: dai, isLoading} = useBalance({
     address,
     token: contracts.DAI.address as `0x${string}`,
+    cacheTime: 2_000,
   });
 
   const t = useTranslations('newCampaign.assets');

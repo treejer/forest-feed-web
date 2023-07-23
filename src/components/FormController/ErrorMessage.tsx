@@ -16,9 +16,7 @@ export const ErrorMessage = memo(function ErrorMessage(props: ErrorMessageProps)
 
   const t = useTranslations();
 
-  console.log(`labels.${name}`);
-
-  return (isSubmitted || touched) && !!error ? (
+  return (isSubmitted || touched) && error && name ? (
     <p className="text-red text-sm">
       {t(error, {
         value: t(`labels.${name}`),

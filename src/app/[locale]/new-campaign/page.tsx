@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {useTranslations} from 'use-intl';
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
@@ -11,9 +11,12 @@ import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/New
 import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import {useIsMounted} from '@forest-feed/hooks/useIsMounted';
 
 function NewCampaignPage() {
-  const [activeStep, setActiveStep] = useState(0);
+  const {campaignJourney, dispatchApproveGeneralInfo, dispatchApprovePledge, dispatchSetCurrentStep} =
+    useCampaignJourney();
+  const [activeStep, setActiveStep] = useState(campaignJourney.currentStep);
 
   const [treeCount, setTreeCount] = useState<number>(1);
 
@@ -21,11 +24,17 @@ function NewCampaignPage() {
     web3: {isSupportedNetwork},
   } = useWeb3();
 
-  const {campaignJourney, dispatchApproveGeneralInfo, dispatchApprovePledge} = useCampaignJourney();
-
   const {address, isConnected} = useAccount();
 
+  const isMounted = useIsMounted();
+
   const t = useTranslations('newCampaign.stepper');
+
+  useEffect(() => {
+    if (isMounted) {
+      dispatchSetCurrentStep(activeStep);
+    }
+  }, [activeStep]);
 
   const handleChangeTreeCount = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setTreeCount(+e.target.value);

@@ -18,11 +18,13 @@ export type CampaignJourneySlice = {
     onlyFollowers: boolean;
   };
   termsConditionAgreed: boolean;
+  currentStep: number;
 };
 
 export type CampaignJourneyAction = {
   approveGeneralInfo: Pick<CampaignJourneySlice, 'content' | 'image' | 'termsConditionAgreed'>;
   approvePledge: Pick<CampaignJourneySlice, 'size' | 'reward' | 'settings'>;
+  setCurrentStep: number;
 };
 
 export const campaignJourneyInitialState: CampaignJourneySlice = {
@@ -38,6 +40,7 @@ export const campaignJourneyInitialState: CampaignJourneySlice = {
     onlyFollowers: false,
   },
   termsConditionAgreed: false,
+  currentStep: 0,
 };
 
 export const campaignJourneySlice = createSlice({
@@ -54,10 +57,13 @@ export const campaignJourneySlice = createSlice({
       state.settings = action.payload.settings;
       state.size = action.payload.size;
     },
+    setCurrentStep: (state, action: PayloadAction<CampaignJourneyAction['setCurrentStep']>) => {
+      state.currentStep = action.payload;
+    },
   },
 });
 
-export const {approveGeneralInfo, approvePledge} = campaignJourneySlice.actions;
+export const {approveGeneralInfo, approvePledge, setCurrentStep} = campaignJourneySlice.actions;
 
 export const useCampaignJourney = () => {
   const campaignJourney = useAppSelector(selectCampaignJourney);
@@ -69,16 +75,26 @@ export const useCampaignJourney = () => {
     },
     [dispatch],
   );
+
   const dispatchApprovePledge = useCallback(
     (payload: CampaignJourneyAction['approvePledge']) => {
       dispatch(approvePledge(payload));
     },
     [dispatch],
   );
+
+  const dispatchSetCurrentStep = useCallback(
+    (payload: CampaignJourneyAction['setCurrentStep']) => {
+      dispatch(setCurrentStep(payload));
+    },
+    [dispatch],
+  );
+
   return {
     campaignJourney,
     dispatchApproveGeneralInfo,
     dispatchApprovePledge,
+    dispatchSetCurrentStep,
   };
 };
 

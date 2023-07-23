@@ -5,18 +5,14 @@ import {useTranslations} from 'use-intl';
 
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {DaiIcon} from '@forest-feed/components/kit/Icons/DaiIcon';
+import {AssetSkeleton} from '@forest-feed/components/WalletAssets/AssetSkeleton';
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 
 export function WalletAssets() {
   const {contracts} = useConfig();
 
   const {address} = useAccount();
-  const {
-    data: dai,
-    isLoading,
-    error,
-    fetchStatus,
-  } = useBalance({
+  const {data: dai, isLoading} = useBalance({
     address,
     token: contracts.DAI.address as `0x${string}`,
   });
@@ -28,15 +24,19 @@ export function WalletAssets() {
       <span>{t('title')}</span>
       <div className="border border-1 border-LightWhite w-full" />
       <Spacer />
-      <div className="flex items-start justify-between">
-        <div className="flex">
-          <DaiIcon />
-          <Spacer />
-          <span>{t('dai')}</span>
+      {isLoading ? (
+        <AssetSkeleton />
+      ) : (
+        <div className="flex items-start justify-between">
+          <div className="flex">
+            <DaiIcon />
+            <Spacer />
+            <span>{t('dai')}</span>
+          </div>
+          <Spacer times={2} />
+          <span className="text-Green">{dai?.formatted}</span>
         </div>
-        <Spacer times={2} />
-        <span className="text-Green">{dai?.formatted}</span>
-      </div>
+      )}
     </div>
   );
 }

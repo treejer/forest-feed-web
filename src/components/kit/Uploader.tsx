@@ -11,15 +11,16 @@ import {Modal} from '@forest-feed/components/kit/Modal';
 import {colors} from 'colors';
 
 export type UploaderProps = {
-  preview: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
+  onBlur?: () => void;
+  preview?: boolean;
   file?: File | null;
   disabled?: boolean;
 };
 
 export function Uploader(props: UploaderProps) {
-  const {preview, file, disabled, onChange, onDrop} = props;
+  const {preview, file, disabled, onChange, onDrop, onBlur} = props;
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -80,7 +81,14 @@ export function Uploader(props: UploaderProps) {
         />
       </RenderIf>
       <label className="flex items-center cursor-pointer" htmlFor="file-uploader">
-        <input disabled={disabled} className="hidden" id="file-uploader" type="file" onChange={onChange} />
+        <input
+          disabled={disabled}
+          className="hidden"
+          id="file-uploader"
+          type="file"
+          onChange={onChange}
+          onBlur={onBlur}
+        />
         {preview ? <DeleteIcon /> : <AttachIcon color={colors.primaryGreen} />}
         <p className="text-secondary text-lg font-medium ml-1">
           <span className="text-primaryGreen">

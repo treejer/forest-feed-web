@@ -67,5 +67,14 @@
   },
   "notFound": {
     "desc": "This page not exist!"
+  },
+  "labels": {
+    "content": "Content",
+    "image": "Photo"
+  },
+  "errors": {
+    "privacyPolicy": "Accept terms and condition is required to continue.",
+    "required": "{value} is required.",
+    "tooLarge": "The file is too large"
   }
 }

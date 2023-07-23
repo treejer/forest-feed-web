@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import {Button, ButtonVariant} from './kit/Button';
-import {Spacer} from './common/Spacer';
+import {Button, ButtonVariant} from '../kit/Button';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 
@@ -24,12 +23,8 @@ export function Navbar() {
       {links.map(link => {
         const isActive = pathname.startsWith(link.href);
         return (
-          <Link className='mb-2 last:mb-0' key={link.href} href={link.href}>
-            <Button
-             
-              text={link.title}
-              variant={isActive ? ButtonVariant.menu : ButtonVariant.text}
-            />
+          <Link className="mb-2 last:mb-0" key={link.href} href={link.href}>
+            <Button text={link.title} variant={isActive ? ButtonVariant.menu : ButtonVariant.text} />
           </Link>
         );
       })}

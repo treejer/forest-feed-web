@@ -4,6 +4,9 @@
       "title": "Forest Feed"
     }
   },
+  "disconnect": "Disconnect",
+  "copy": "Copy",
+  "copied": "Copied to clipboard!",
   "hello": "hello world",
   "proceed": "Proceed",
   "back": "Back",

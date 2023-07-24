@@ -12,6 +12,8 @@ export const defaultStyles: TableStyles = {
   table: {
     style: {
       border: '1px solid #BDBDBD',
+      borderRadius: '10px',
+      overflow: 'hidden',
     },
   },
 };

@@ -12,7 +12,7 @@ import {
 import {TextArea} from '@forest-feed/components/kit/TextArea';
 import {ErrorMessage} from '@forest-feed/components/FormController/ErrorMessage';
 import {Uploader} from '@forest-feed/components/kit/Uploader';
-import {Checkbox} from '@forest-feed/components/kit/Icons/Checkbox/Checkbox';
+import {Checkbox} from '@forest-feed/components/kit/Checkbox/Checkbox';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 

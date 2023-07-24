@@ -3,11 +3,11 @@ import {createWrapper} from 'next-redux-wrapper';
 import {configureStore, PreloadedState, Store, Middleware} from '@reduxjs/toolkit';
 import {persistReducer, persistStore} from 'redux-persist';
 import logger from 'redux-logger';
-import storage from 'redux-persist/lib/storage';
 
 import {combinedReducers, reducer} from '@forest-feed/redux/reducer';
 import {rootSaga} from '@forest-feed/redux/saga';
 import {reduxLogger} from '@forest-feed/config';
+import storage from '@forest-feed/lib/persist/storage';
 
 export interface SagaStore extends Store {
   sagaTask?: Task;
@@ -19,7 +19,7 @@ export type AppDispatch = AppStore['dispatch'];
 
 const persistConfig = {
   key: 'forestFeedPersist',
-  storage: storage,
+  storage,
   whitelist: ['web3'],
 };
 

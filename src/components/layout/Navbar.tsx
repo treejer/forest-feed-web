@@ -28,7 +28,7 @@ export function Navbar() {
       {links.map(link => {
         const isActive = pathname.startsWith(link.href);
         return (
-          <Link className="mb-2 last:mb-0" key={link.href} href={link.href}>
+          <Link className="block mb-2 last:mb-0" key={link.href} href={link.href}>
             <Button text={t(link.name)} variant={isActive ? ButtonVariant.menu : ButtonVariant.text} />
           </Link>
         );

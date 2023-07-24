@@ -2,7 +2,7 @@
 
 import React, {useEffect} from 'react';
 
-import {useAccount, useNetwork} from 'wagmi';
+import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
 import {AppHeader} from '@forest-feed/components/layout/AppHeader';

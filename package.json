@@ -25,6 +25,7 @@
     "next": "13.4.6",
     "next-intl": "2.17.3",
     "next-redux-wrapper": "8.1.0",
+    "nprogress": "0.2.0",
     "postcss": "8.4.24",
     "react": "18.2.0",
     "react-data-table-component": "7.5.3",

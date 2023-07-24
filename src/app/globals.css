@@ -1,3 +1,16 @@
+@import "nprogress/nprogress.css";
+
+#nprogress .bar {
+    background: #0CC863 !important;
+    height: 6px !important;
+}
+
+#nprogress .spinner .spinner-icon {
+    border-top-color: #0CC863 !important;
+    border-left-color: #0CC863 !important;
+}
+
+
 @tailwind base;
 @tailwind components;
 

@@ -53,11 +53,13 @@ export const campaignJourneySlice = createSlice({
       state.content = action.payload.content;
       state.image = action.payload.image;
       state.termsConditionAgreed = action.payload.termsConditionAgreed;
+      state.currentStep = 1;
     },
     approvePledge: (state, action: PayloadAction<CampaignJourneyAction['approvePledge']>) => {
       state.reward = action.payload.reward;
       state.settings = action.payload.settings;
       state.size = action.payload.size;
+      state.currentStep = 2;
     },
     setCurrentStep: (state, action: PayloadAction<CampaignJourneyAction['setCurrentStep']>) => {
       state.currentStep = action.payload;

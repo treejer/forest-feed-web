@@ -12,13 +12,14 @@ export type GeneralInfoStepState = Pick<CampaignJourneySlice, 'content' | 'image
 
 export type GeneralInfoStepProps = {
   defaultValues?: GeneralInfoStepState;
-  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  activeStep: number;
+  setActiveStep: (step: number) => void;
   isConfirm: boolean;
   onProceed: (generalInfo: GeneralInfoStepState) => void;
 };
 
 export function GeneralInfoStep(props: GeneralInfoStepProps) {
-  const {defaultValues, isConfirm, setActiveStep, onProceed} = props;
+  const {defaultValues, isConfirm, activeStep, setActiveStep, onProceed} = props;
 
   const {control, setValue, handleSubmit} = useForm<GeneralInfoForm>({
     defaultValues: {
@@ -57,11 +58,11 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
 
   const handleLearnMore = useCallback(() => {
     if (isConfirm) {
-      setActiveStep(prevState => prevState - 1);
+      setActiveStep(activeStep - 1);
     } else {
       console.log('learn more proceed');
     }
-  }, [isConfirm, setActiveStep]);
+  }, [isConfirm, activeStep, setActiveStep]);
 
   const onSubmit = useCallback(
     ({content, image, termsConditionAgreed}: GeneralInfoForm) => {
@@ -89,6 +90,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
         control={control}
         name="image"
         type="file"
+        preview={isConfirm}
         onDrop={handleDropUploadedFile}
         onChange={handleChangeUploadedFile}
         disabled={isConfirm}

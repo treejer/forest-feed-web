@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {useTranslations} from 'use-intl';
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
@@ -11,7 +11,6 @@ import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/New
 import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {useIsMounted} from '@forest-feed/hooks/useIsMounted';
 
 function NewCampaignPage() {
   const {
@@ -24,7 +23,6 @@ function NewCampaignPage() {
     dispatchSetCanBeCollectedOnlyFollowers,
     dispatchSetCanBeCollected,
   } = useCampaignJourney();
-  const [activeStep, setActiveStep] = useState(campaignJourney.currentStep);
 
   const [campaignSize, setCampaignSize] = useState<number>(campaignJourney?.size || 1);
 
@@ -34,31 +32,21 @@ function NewCampaignPage() {
 
   const {address, isConnected} = useAccount();
 
-  const isMounted = useIsMounted();
-
   const t = useTranslations('newCampaign.stepper');
-
-  useEffect(() => {
-    if (isMounted) {
-      dispatchSetCurrentStep(activeStep);
-    }
-  }, [activeStep]);
 
   const handleApproveGeneralInfo = useCallback(
     (generalInfo: GeneralInfoStepState) => {
-      setActiveStep(1);
       dispatchApproveGeneralInfo(generalInfo);
     },
     [dispatchApproveGeneralInfo],
   );
 
   const handleApproveReview = useCallback(() => {
-    setActiveStep(3);
-  }, []);
+    dispatchSetCurrentStep(3);
+  }, [dispatchSetCurrentStep]);
 
   const handleApprovePledge = useCallback(
     (pledgeState: PledgeStepState) => {
-      setActiveStep(2);
       dispatchApprovePledge(pledgeState);
     },
     [dispatchApprovePledge],
@@ -89,15 +77,16 @@ function NewCampaignPage() {
           <div className="col-span-5">
             <Stepper
               isDependent
-              activeStep={activeStep}
-              setActiveStep={setActiveStep}
+              activeStep={campaignJourney.currentStep}
+              setActiveStep={dispatchSetCurrentStep}
               contents={[
                 {
                   content: (
                     <GeneralInfoStep
                       defaultValues={generalInfoState}
                       isConfirm={false}
-                      setActiveStep={setActiveStep}
+                      activeStep={campaignJourney.currentStep}
+                      setActiveStep={dispatchSetCurrentStep}
                       onProceed={handleApproveGeneralInfo}
                       key="general-info-form"
                     />
@@ -114,7 +103,8 @@ function NewCampaignPage() {
                       setMinimumFollowerNumber={dispatchSetMinimumFollowerNumber}
                       setOnlyFollowers={dispatchSetOnlyFollowers}
                       values={pledgeState}
-                      setActiveStep={setActiveStep}
+                      activeStep={campaignJourney.currentStep}
+                      setActiveStep={dispatchSetCurrentStep}
                       onProceed={handleApprovePledge}
                     />
                   ),
@@ -125,7 +115,8 @@ function NewCampaignPage() {
                     <GeneralInfoStep
                       defaultValues={generalInfoState}
                       isConfirm
-                      setActiveStep={setActiveStep}
+                      activeStep={campaignJourney.currentStep}
+                      setActiveStep={dispatchSetCurrentStep}
                       onProceed={handleApproveReview}
                       key="general-info-preview"
                     />

@@ -19,20 +19,22 @@ export type PledgeStepProps = {
   setCanBeCollectedOnlyFollowers: () => void;
   setOnlyFollowers: () => void;
   setMinimumFollowerNumber: (count: number) => void;
-  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  activeStep: number;
+  setActiveStep: (step: number) => void;
   onProceed: (pledgeState: PledgeStepState) => void;
 };
 
 export function PledgeStep(props: PledgeStepProps) {
   const {
     values,
+    campaignSize,
+    setCampaignSize,
+    activeStep,
     setCanBeCollected,
     setCanBeCollectedOnlyFollowers,
     setOnlyFollowers,
     setMinimumFollowerNumber,
     setActiveStep,
-    campaignSize,
-    setCampaignSize,
     onProceed,
   } = props;
 
@@ -53,8 +55,8 @@ export function PledgeStep(props: PledgeStepProps) {
   );
 
   const handleBack = useCallback(() => {
-    setActiveStep(prevState => prevState - 1);
-  }, [setActiveStep]);
+    setActiveStep(activeStep - 1);
+  }, [setActiveStep, activeStep]);
 
   const handleSubmit = useCallback(() => {
     onProceed({

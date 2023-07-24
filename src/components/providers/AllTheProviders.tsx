@@ -10,9 +10,10 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {ToastContainer} from 'react-toastify';
 
-import {Locale} from '@forest-feed/languages';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import {ApolloProvider} from '@forest-feed/components/providers/Apollo';
 import {appInfo, chains, forestFeedTheme, wagmiConfig} from '@forest-feed/connectWallet';
+import {Locale} from '@forest-feed/languages';
 import {store, persistor} from '@forest-feed/redux/store';
 
 export type AllTheProvidersProps = React.PropsWithChildren<{
@@ -34,8 +35,10 @@ export function AllTheProviders(props: AllTheProvidersProps) {
           <RenderIf condition={mounted}>
             <Provider store={store}>
               <PersistGate persistor={persistor} loading={null}>
-                <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
-                {children}
+                <ApolloProvider>
+                  <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
+                  {children}
+                </ApolloProvider>
               </PersistGate>
             </Provider>
           </RenderIf>

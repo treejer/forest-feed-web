@@ -1,0 +1,5 @@
+projects:
+  forest_feed_api:
+    schemaPath: './src/data/schema/forest_feed_api.graphql'
+    includes:
+      - './src/**/*.graphql'

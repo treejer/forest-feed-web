@@ -28,6 +28,7 @@ export const web3Slice = createSlice({
   initialState: web3InitialState,
   reducers: {
     startConfiguration: (state, _action: PayloadAction<Web3Action['startConfiguration']>) => state,
+    watchCurrentNetwork: state => state,
     switchNetwork: (state, action: PayloadAction<Web3Action['switchNetwork']>) => {
       state.switching = true;
     },
@@ -42,7 +43,8 @@ export const web3Slice = createSlice({
   },
 });
 
-export const {switchNetwork, updateNetwork, startConfiguration, notSupportedNetwork} = web3Slice.actions;
+export const {switchNetwork, updateNetwork, startConfiguration, notSupportedNetwork, watchCurrentNetwork} =
+  web3Slice.actions;
 export default web3Slice.reducer;
 
 export function useWeb3() {

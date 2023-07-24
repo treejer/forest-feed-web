@@ -17,9 +17,7 @@ export function Layout(props: LayoutProps) {
 
   const {dispatchInit} = useInit();
 
-  const {web3, dispatchNotSupportedNetwork} = useWeb3();
-
-  const {chain} = useNetwork();
+  const {web3} = useWeb3();
 
   const {address, status} = useAccount({
     onConnect: data => {},
@@ -32,12 +30,6 @@ export function Layout(props: LayoutProps) {
   useEffect(() => {
     dispatchInit();
   }, []);
-
-  useEffect(() => {
-    if (typeof chain?.unsupported !== 'undefined' && chain?.unsupported) {
-      dispatchNotSupportedNetwork();
-    }
-  }, [chain]);
 
   return (
     <div className="container mx-auto">

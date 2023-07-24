@@ -83,6 +83,7 @@ function createApolloClient(config: NetworkConfig, accessToken: string) {
 
   return new ApolloClient({
     link: ApolloLink.from([restLink, graphqlLink]),
+    connectToDevTools: true,
     cache: new InMemoryCache({
       typePolicies: {
         Query: {

@@ -21,7 +21,7 @@ export type GeneralInfoStepProps = {
 export function GeneralInfoStep(props: GeneralInfoStepProps) {
   const {defaultValues, isConfirm, activeStep, setActiveStep, onProceed} = props;
 
-  const {control, setValue, handleSubmit} = useForm<GeneralInfoForm>({
+  const {control, setValue, handleSubmit, formState} = useForm<GeneralInfoForm>({
     defaultValues: {
       image: defaultValues?.image ? [defaultValues.image] : undefined,
       content: defaultValues?.content || '',
@@ -108,7 +108,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
       <div className="flex items-end justify-end">
         <Button text={t(isConfirm ? 'back' : 'learnMore')} onClick={handleLearnMore} />
         <Spacer />
-        <Button variant={ButtonVariant.secondary} text={t('approve')} type="submit" />
+        <Button variant={ButtonVariant.secondary} disabled={!formState.isValid} text={t('approve')} type="submit" />
       </div>
     </form>
   );

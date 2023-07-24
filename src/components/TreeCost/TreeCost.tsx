@@ -6,32 +6,27 @@ import {useTranslations} from 'use-intl';
 
 export type TreeCostProps = {
   treeCount: number;
-  onChangeTrees: (e: React.ChangeEvent<HTMLInputElement>) => void;
   costValue: number;
 };
 
 export function TreeCost(props: TreeCostProps) {
-  const {treeCount, costValue, onChangeTrees} = props;
+  const {treeCount, costValue} = props;
 
   const t = useTranslations();
 
   return (
     <div>
       <span className="font-bold">{t('trees')}</span>
-      <input
-        className="flex bg-lightGreen border border-border rounded-md w-[176px] h-[71px] font-size text-lg font-normal text-center"
-        value={treeCount}
-        onChange={onChangeTrees}
-      />
+      <div className="flex items-center justify-center bg-lightGreen border border-border rounded-md w-full h-[71px] font-size text-lg font-normal">
+        {treeCount}
+      </div>
       <Spacer />
       <span className="font-bold">{t('cost')}</span>
-      <input
-        readOnly
-        value={t('dollarSign', {
+      <div className="flex items-center justify-center bg-yellow border-border rounded-md w-full h-[71px] font-size text-lg font-normal">
+        {t('dollarSign', {
           value: costValue,
         })}
-        className="bg-yellow border-border rounded-md w-[176px] h-[71px] font-size text-lg font-normal text-center"
-      />
+      </div>
       <Spacer times={4} />
       <WalletAssets />
     </div>

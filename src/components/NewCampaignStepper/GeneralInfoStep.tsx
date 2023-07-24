@@ -1,92 +1,115 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback} from 'react';
 import {useTranslations} from 'use-intl';
+import {useForm} from 'react-hook-form';
 
-import {TextArea} from '@forest-feed/components/kit/TextArea';
-import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {Checkbox} from '@forest-feed/components/kit/Checkbox/Checkbox';
 import {CampaignJourneySlice} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {FormController} from '@forest-feed/components/FormController/FormController';
+import {GeneralInfoForm, generalInfoYup} from '@forest-feed/validators/generalInfo';
 
 export type GeneralInfoStepState = Pick<CampaignJourneySlice, 'content' | 'image' | 'termsConditionAgreed'>;
 
 export type GeneralInfoStepProps = {
   defaultValues?: GeneralInfoStepState;
-  setActiveStep: React.Dispatch<React.SetStateAction<number>>;
+  activeStep: number;
+  setActiveStep: (step: number) => void;
   isConfirm: boolean;
   onProceed: (generalInfo: GeneralInfoStepState) => void;
 };
 
 export function GeneralInfoStep(props: GeneralInfoStepProps) {
-  const {defaultValues, isConfirm, setActiveStep, onProceed} = props;
+  const {defaultValues, isConfirm, activeStep, setActiveStep, onProceed} = props;
 
-  const [content, setContent] = useState<string>(defaultValues?.content || '');
-  const [uploadedFile, setUploadedFile] = useState<File | null>(defaultValues?.image || null);
-  const [userAgreed, setUserAgreed] = useState<boolean>(defaultValues?.termsConditionAgreed || false);
+  const {control, setValue, handleSubmit, formState} = useForm<GeneralInfoForm>({
+    defaultValues: {
+      image: defaultValues?.image ? [defaultValues.image] : undefined,
+      content: defaultValues?.content || '',
+      termsConditionAgreed: defaultValues?.termsConditionAgreed || false,
+    },
+    mode: 'all',
+    reValidateMode: 'onChange',
+    resolver: generalInfoYup,
+  });
 
   const t = useTranslations();
 
-  const handleChangeContent = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
-  }, []);
+  const handleChangeUploadedFile = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target?.files) {
+        setValue('image', e.target?.files as any, {
+          shouldTouch: true,
+          shouldValidate: true,
+        });
+      }
+    },
+    [setValue],
+  );
 
-  const handleChangeUploadedFile = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setUploadedFile(e.target?.files?.[0] || null);
-  }, []);
-
-  const handleDropUploadedFile = useCallback((e: React.DragEvent<HTMLDivElement>) => {
-    setUploadedFile(e.dataTransfer?.files?.[0] || null);
-  }, []);
-
-  const handleChangeUserAgreed = useCallback(() => {
-    setUserAgreed(prevState => !prevState);
-  }, []);
+  const handleDropUploadedFile = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      setValue('image', e.dataTransfer?.files as any, {
+        shouldTouch: true,
+        shouldValidate: true,
+      });
+    },
+    [setValue],
+  );
 
   const handleLearnMore = useCallback(() => {
     if (isConfirm) {
-      setActiveStep(prevState => prevState - 1);
+      setActiveStep(activeStep - 1);
     } else {
       console.log('learn more proceed');
     }
-  }, [isConfirm, setActiveStep]);
+  }, [isConfirm, activeStep, setActiveStep]);
 
-  const handleSubmit = useCallback(() => {
-    if (content && uploadedFile && userAgreed) {
-      onProceed({termsConditionAgreed: userAgreed, image: uploadedFile, content});
-    }
-  }, [onProceed, content, uploadedFile, userAgreed]);
+  const onSubmit = useCallback(
+    ({content, image, termsConditionAgreed}: GeneralInfoForm) => {
+      onProceed({
+        content,
+        image: image[0],
+        termsConditionAgreed,
+      });
+    },
+    [onProceed],
+  );
 
   return (
-    <>
-      <TextArea
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <FormController<HTMLTextAreaElement>
+        control={control}
+        name="content"
+        type="textarea"
         label={t(isConfirm ? 'newCampaign.postPreview' : 'newCampaign.content')}
-        value={content}
         placeholder={t('newCampaign.placeholder.writePost')}
-        onChange={handleChangeContent}
         disabled={isConfirm}
       />
-      <Uploader
+      <Spacer times={2} />
+      <FormController
+        control={control}
+        name="image"
+        type="file"
         preview={isConfirm}
-        file={uploadedFile}
-        onChange={handleChangeUploadedFile}
         onDrop={handleDropUploadedFile}
+        onChange={handleChangeUploadedFile}
         disabled={isConfirm}
       />
       <Spacer times={4} />
-      <div className="flex">
-        <Checkbox
-          text={t('privacyPolicy.agreeAppTermsConditions')}
-          checked={userAgreed}
-          onChange={handleChangeUserAgreed}
-          disabled={isConfirm}
-        />
-      </div>
+      <FormController
+        control={control}
+        name="termsConditionAgreed"
+        type="checkbox"
+        label={t('privacyPolicy.agreeAppTermsConditions')}
+        disabled={isConfirm}
+        hideLabel
+      />
       <Spacer times={10} />
       <div className="flex items-end justify-end">
         <Button text={t(isConfirm ? 'back' : 'learnMore')} onClick={handleLearnMore} />
         <Spacer />
-        <Button variant={ButtonVariant.secondary} text={t('approve')} disabled={!userAgreed} onClick={handleSubmit} />
+        <Button variant={ButtonVariant.secondary} disabled={!formState.isValid} text={t('approve')} type="submit" />
       </div>
-    </>
+    </form>
   );
 }

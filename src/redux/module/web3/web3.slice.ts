@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
-import {selectWeb3} from '@forest-feed/redux/selectors';
+import {selectConfig, selectWeb3} from '@forest-feed/redux/selectors';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 
 export type Web3State = {
@@ -18,7 +18,7 @@ export type Web3Action = {
 };
 
 export const web3InitialState: Web3State = {
-  config: configs[BlockchainNetwork.Polygon],
+  config: configs[BlockchainNetwork.Mumbai],
   switching: false,
   isSupportedNetwork: false,
 };
@@ -28,6 +28,7 @@ export const web3Slice = createSlice({
   initialState: web3InitialState,
   reducers: {
     startConfiguration: (state, _action: PayloadAction<Web3Action['startConfiguration']>) => state,
+    watchCurrentNetwork: state => state,
     switchNetwork: (state, action: PayloadAction<Web3Action['switchNetwork']>) => {
       state.switching = true;
     },
@@ -42,7 +43,8 @@ export const web3Slice = createSlice({
   },
 });
 
-export const {switchNetwork, updateNetwork, startConfiguration, notSupportedNetwork} = web3Slice.actions;
+export const {switchNetwork, updateNetwork, startConfiguration, notSupportedNetwork, watchCurrentNetwork} =
+  web3Slice.actions;
 export default web3Slice.reducer;
 
 export function useWeb3() {
@@ -66,3 +68,5 @@ export function useWeb3() {
     dispatchNotSupportedNetwork,
   };
 }
+
+export const useConfig = () => useAppSelector(selectConfig);

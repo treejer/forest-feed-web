@@ -2,25 +2,30 @@ import {ImageProps} from 'next/image';
 
 import {formatUrl} from '@forest-feed/utils/fotmatUrl';
 import MaticLogo from 'public/assets/images/Asset.png';
-import {polygon, polygonMumbai} from 'wagmi/chains';
 
 export const projectName = 'Forest Feed';
 export const projectId = 'ID';
 
 export enum ContractType {
   NOTHING_YET = 'NOTHING_YET',
+  DAI = 'DAI',
 }
 
 export interface ConfigContract {
-  address: string;
+  address: `0x${string}`;
   abi: any;
   // TODO: apollo-link-ethereum
   // abi: AbiDefinition['abi'];
 }
 
 export enum BlockchainNetwork {
+  Polygon = 137,
+  Mumbai = 80001,
+}
+
+export enum BlockchainNetworkName {
   Polygon = 'Polygon',
-  Mumbai = 'Mumbai',
+  Mumbai = 'Polygon Mumbai',
 }
 
 export interface NetworkConfig {
@@ -41,8 +46,8 @@ export interface NetworkConfig {
   relayRegistrationLookupBlocks: string;
   pastEventsQueryMaxPageSize: string;
   learnMoreLink: string;
-  network: BlockchainNetwork;
-  chainId: number;
+  network: BlockchainNetworkName;
+  chainId: BlockchainNetwork;
   explorerUrl: string;
 }
 
@@ -59,8 +64,12 @@ export const config: Config = {
     projectId: projectId,
     contracts: {
       NOTHING_YET: {
-        address: '',
+        address: '' as `0x${string}`,
         abi: '',
+      },
+      DAI: {
+        address: (process.env.NEXT_PUBLIC_POLYGON_DAI_TOKEN || '') as `0x${string}`,
+        abi: require('./abis/Dai.json'),
       },
     },
     networkId: Number('' || 3),
@@ -75,8 +84,8 @@ export const config: Config = {
     relayRegistrationLookupBlocks: '',
     pastEventsQueryMaxPageSize: '',
     learnMoreLink: '',
-    network: BlockchainNetwork.Polygon,
-    chainId: polygon.id,
+    network: BlockchainNetworkName.Polygon,
+    chainId: BlockchainNetwork.Polygon,
     explorerUrl: '',
   },
   [BlockchainNetwork.Mumbai]: {
@@ -84,8 +93,12 @@ export const config: Config = {
     projectId: projectId,
     contracts: {
       NOTHING_YET: {
-        address: '',
+        address: '' as `0x${string}`,
         abi: '',
+      },
+      DAI: {
+        address: (process.env.NEXT_PUBLIC_MUMBAI_DAI_TOKEN || '') as `0x${string}`,
+        abi: require('./abis/Dai.json'),
       },
     },
     networkId: Number('' || 3),
@@ -100,8 +113,8 @@ export const config: Config = {
     relayRegistrationLookupBlocks: '',
     pastEventsQueryMaxPageSize: '',
     learnMoreLink: '',
-    network: BlockchainNetwork.Mumbai,
-    chainId: polygonMumbai.id,
+    network: BlockchainNetworkName.Mumbai,
+    chainId: BlockchainNetwork.Mumbai,
     explorerUrl: '',
   },
 };

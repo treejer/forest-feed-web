@@ -48,7 +48,10 @@
     "placeholder": {
       "writePost": "Write your post here..."
     },
-    "walletAssets": "Wallet Assets"
+    "assets": {
+      "title": "Wallet Assets",
+      "dai": "DAI"
+    }
   },
   "myCampaigns": {
     "status": "Status",
@@ -64,6 +67,16 @@
   },
   "notFound": {
     "desc": "This page not exist!"
+  },
+  "labels": {
+    "termsConditionAgreed": "Terms and Conditions",
+    "content": "Content",
+    "image": "Photo"
+  },
+  "errors": {
+    "privacyPolicy": "Accept terms and condition is required to continue.",
+    "required": "{value} is required.",
+    "tooLarge": "The file is too large"
   },
   "lens": {
     "login": "Login with lens"

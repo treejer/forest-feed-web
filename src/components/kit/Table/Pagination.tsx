@@ -25,14 +25,11 @@ export function Pagination(props: PaginationProps) {
           <ChevronIcon direction={ChevronIconDirection.left} />
         </div>
       ) : null}
-
-      {Array(count)
-        .fill('')
-        .map((page, index) => (
-          <div key={page} className={itemClassName}>
-            {index + 1}
-          </div>
-        ))}
+      {Array.from(Array(count).keys()).map((page, index) => (
+        <div key={page} className={itemClassName}>
+          {index + 1}
+        </div>
+      ))}
       {currentPage !== count || !hideNext ? (
         <div className={itemClassName}>
           <ChevronIcon direction={ChevronIconDirection.right} />

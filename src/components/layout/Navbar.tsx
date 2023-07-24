@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
+import {Link} from '@forest-feed/lib/router-events';
 import {useTranslations} from 'use-intl';
 import {usePathname} from 'next-intl/client';
 

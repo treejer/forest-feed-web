@@ -2,14 +2,14 @@
 
 import React, {useEffect} from 'react';
 
-import {useAccount, useNetwork} from 'wagmi';
+import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
 import {AppHeader} from '@forest-feed/components/layout/AppHeader';
 import {Navbar} from '@forest-feed/components/layout/Navbar';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
+import {useAuthLens} from "@forest-feed/hooks/useAuthLens";
 
 export type LayoutProps = React.PropsWithChildren;
 
@@ -18,9 +18,7 @@ export function Layout(props: LayoutProps) {
 
   const {dispatchInit} = useInit();
 
-  const {dispatchNotSupportedNetwork} = useWeb3();
-
-  const {chain} = useNetwork();
+  const {web3} = useWeb3();
 
   const {address, status, isConnected} = useAccount({
     onConnect: data => {},
@@ -31,18 +29,18 @@ export function Layout(props: LayoutProps) {
     isConnected,
   });
 
+
+  useEffect(() => {
+    console.log(web3, 'web3');
+  }, [web3]);
+
+
   useEffect(() => {
     dispatchInit();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (typeof chain?.unsupported !== 'undefined' && chain?.unsupported) {
-      dispatchNotSupportedNetwork();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chain]);
 
   return (
     <div className="container mx-auto">

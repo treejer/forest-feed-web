@@ -49,7 +49,9 @@ export function PledgeStep(props: PledgeStepProps) {
 
   const handleChangeMinFollowers = useCallback(
     (value: -1 | 1) => {
-      setMinimumFollowerNumber(values?.reward?.minimumFollowerNumber + value);
+      if (values?.reward?.minimumFollowerNumber + value >= 0) {
+        setMinimumFollowerNumber(values?.reward?.minimumFollowerNumber + value);
+      }
     },
     [setMinimumFollowerNumber, values?.reward?.minimumFollowerNumber],
   );

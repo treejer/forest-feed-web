@@ -63,7 +63,7 @@ export function Uploader(props: UploaderProps) {
       onDragEnter={handleDrag}
       className={`border border-border ${
         dragActive && 'border-dashed'
-      } h-[88px] rounded-lg flex items-center justify-center cursor-pointer overflow-hidden`}
+      } h-[88px] rounded-lg flex items-center justify-center cursor-pointer overflow-hidden transition-shadow hover:shadow-lg`}
     >
       <RenderIf condition={!!previewFile}>
         <Modal visible={openPreviewModal} onClose={() => setOpenPreviewModal(false)}>

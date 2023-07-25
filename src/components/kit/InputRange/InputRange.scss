@@ -21,18 +21,13 @@ $thumb-size: 24px;
   }
 }
 
-#root {
-  max-width: 500px;
-  padding: 12px;
-  margin: auto;
-}
 
 .wrapper {
   position: relative;
   display: flex;
   align-items: center;
-  margin: 4px calc(#{$thumb-size} / 2);
-  height: calc(#{$thumb-size} + 1.6rem);
+  margin: 4px calc(#{$thumb-size} / 2) 0;
+  height: calc(#{$thumb-size});
 }
 
 .input-wrapper {
@@ -51,7 +46,6 @@ $thumb-size: 24px;
 .input {
   position: absolute;
   width: 100%;
-  pointer-events: none;
   appearance: none;
   height: 100%;
   opacity: 0;

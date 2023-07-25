@@ -76,27 +76,23 @@ export function PledgeStep(props: PledgeStepProps) {
 
   return (
     <div>
-      <span className="text-lg font-bold">{t('newCampaign.campaignSize')}</span>
-      <div>
-        <span className="font-semibold text-LightWhite text-lg"></span>
-      </div>
+      <p className="text-xl font-extrabold">{t('newCampaign.campaignSize')}</p>
+      <p className="text-sm text-secondary">{t('newCampaign.howManyWantsToPlant')}</p>
       <InputRange value={campaignSize} onChange={handleChangeCampaignSize} />
-      <div className="flex items-start justify-between text-LightWhite">
-        <span>
+      <div className="flex items-start justify-between">
+        <span className="text-sm text-secondary">
           {t('countTrees', {
             count: 1,
           })}
         </span>
-        <span>
+        <span className="text-sm text-secondary">
           {t('countTrees', {
             count: 1000,
           })}
         </span>
       </div>
       <Spacer times={4} />
-      <div className="font-bold">
-        <span className="text-xl font-bold">{t('newCampaign.postSettings')}</span>
-      </div>
+      <p className="text-xl font-extrabold">{t('newCampaign.postSettings')}</p>
       <Spacer times={2} />
       <div className="flex items-center">
         <Switch
@@ -108,7 +104,7 @@ export function PledgeStep(props: PledgeStepProps) {
           checked={values?.settings.canBeCollected}
           onChange={setCanBeCollected}
         />
-        <span className="text-lg">{t('newCampaign.canBeCollected')}</span>
+        <p>{t('newCampaign.canBeCollected')}</p>
       </div>
       <Spacer times={2} />
       <div className="flex items-center">
@@ -121,18 +117,18 @@ export function PledgeStep(props: PledgeStepProps) {
           checked={values?.settings.canBeCollectedOnlyFollowers}
           onChange={setCanBeCollectedOnlyFollowers}
         />
-        <span className="text-lg">{t('newCampaign.collectedOnlyFollowers')}</span>
+        <span>{t('newCampaign.collectedOnlyFollowers')}</span>
       </div>
       <Spacer times={4} />
-      <div>
-        <span className="text-lg font-bold">{t('newCampaign.rewardFilters')}</span>
-      </div>
       <div className="flex items-center">
-        <span className="text-LightWhite">{t('newCampaign.chooseMaxFollowers')}</span>
-        <Spacer times={4} />
-
+        <div>
+          <p className="text-xl font-extrabold mb-2">{t('newCampaign.rewardFilters')}</p>
+          <span className="text-sm text-secondary">{t('newCampaign.chooseMaxFollowers')}</span>
+        </div>
+        <Spacer times={6} />
         <Counter count={values?.reward.minimumFollowerNumber} handleChangeCount={handleChangeMinFollowers} />
       </div>
+      <Spacer times={2} />
       <div className="flex items-center">
         <Switch
           containerClassName="mr-1"
@@ -143,7 +139,7 @@ export function PledgeStep(props: PledgeStepProps) {
           checked={values.reward.onlyFollowers}
           onChange={setOnlyFollowers}
         />
-        <span className="text-lg">{t('newCampaign.rewardOnlyYourFollowers')}</span>
+        <span>{t('newCampaign.rewardOnlyYourFollowers')}</span>
       </div>
       <Spacer times={10} />
       <div className="flex items-end justify-end">

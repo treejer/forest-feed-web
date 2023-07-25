@@ -62,7 +62,7 @@ export function Layout(props: LayoutProps) {
         <div className="col-span-1">
           <Navbar />
         </div>
-        <div className="col-span-5">{children}</div>
+        <div className="col-span-5 pb-5">{children}</div>
       </div>
     </div>
   );

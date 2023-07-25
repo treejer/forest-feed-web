@@ -3,7 +3,7 @@ import React from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
 
 export type ExitBeforeEnterProps = React.PropsWithChildren<{
-  animateKey: string;
+  animateKey?: string;
 }>;
 
 export function ExitBeforeEnter(props: ExitBeforeEnterProps) {

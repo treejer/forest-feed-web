@@ -9,7 +9,7 @@ import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {ChangeLanguage} from '@forest-feed/components/kit/ChangeLanguage';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
-import {Modal} from '@forest-feed/components/kit/Modal';
+import {Modal} from '@forest-feed/components/kit/Modal/Modal';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
 import {useJsonPlaceholder} from '@forest-feed/redux/module/jsonPlaceholder/jsonPlaceholder';
 

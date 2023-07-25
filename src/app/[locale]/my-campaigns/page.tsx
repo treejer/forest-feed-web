@@ -5,6 +5,7 @@ import {useTranslations} from 'use-intl';
 
 import {Table, TColumn} from '@forest-feed/components/kit/Table/Table';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
+import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
 
 export type TCampaign = {
@@ -69,7 +70,7 @@ function MyCampaigns() {
   );
 
   return (
-    <div>
+    <AnimatedPage>
       <Table<TCampaign>
         data={Array(200).fill({
           id: 'ff-twit-4',
@@ -82,7 +83,7 @@ function MyCampaigns() {
         })}
         columns={columns}
       />
-    </div>
+    </AnimatedPage>
   );
 }
 

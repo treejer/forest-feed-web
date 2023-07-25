@@ -8,6 +8,7 @@ import {TextArea} from '@forest-feed/components/kit/TextArea';
 import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {ChangeLanguage} from '@forest-feed/components/kit/ChangeLanguage';
+import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Modal} from '@forest-feed/components/kit/Modal';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
 import {useJsonPlaceholder} from '@forest-feed/redux/module/jsonPlaceholder/jsonPlaceholder';
@@ -30,7 +31,7 @@ function KitPage() {
   }, []);
 
   return (
-    <div>
+    <AnimatedPage>
       <h1>{t('hello')}</h1>
       <ChangeLanguage />
       <Button text={t('learnMore')} />
@@ -44,7 +45,6 @@ function KitPage() {
       <TextArea
         value={text}
         onChange={e => setText(e.target.value)}
-        label={t('newCampaign.content')}
         placeholder={t('newCampaign.placeholder.writePost')}
       />
 
@@ -59,7 +59,7 @@ function KitPage() {
       <Modal visible={show} onClose={() => setShow(false)}>
         test
       </Modal>
-    </div>
+    </AnimatedPage>
   );
 }
 

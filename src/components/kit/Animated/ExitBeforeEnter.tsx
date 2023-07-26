@@ -4,18 +4,20 @@ import {AnimatePresence, motion} from 'framer-motion';
 
 export type ExitBeforeEnterProps = React.PropsWithChildren<{
   animateKey?: string;
+  initial?: boolean;
+  direction?: 'x' | 'y';
 }>;
 
 export function ExitBeforeEnter(props: ExitBeforeEnterProps) {
-  const {animateKey, children} = props;
+  const {animateKey, direction = 'y', initial = true, children} = props;
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={initial}>
       <motion.div
         key={animateKey || 'empty'}
-        initial={{y: -10, opacity: 0}}
-        animate={{y: 0, opacity: 1}}
-        exit={{y: 10, opacity: 0}}
+        initial={{[direction]: -15, opacity: 0}}
+        animate={{[direction]: 0, opacity: 1}}
+        exit={{[direction]: 50, opacity: 0}}
         transition={{duration: 0.2}}
       >
         {children}

@@ -3,8 +3,9 @@ import {ImageProps} from 'next/image';
 import {formatUrl} from '@forest-feed/utils/fotmatUrl';
 import MaticLogo from 'public/assets/images/Asset.png';
 
-export const projectName = 'Forest Feed';
-export const projectId = 'ID';
+export const projectName = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_NAME || '';
+export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '';
+export const infuraKey = process.env.NEXT_PUBLIC_INFURA_KEY || '';
 
 export enum ContractType {
   NOTHING_YET = 'NOTHING_YET',
@@ -36,7 +37,7 @@ export interface NetworkConfig {
   };
   networkId: number;
   isMainnet: boolean;
-  web3Url: string;
+  infuraKey: string;
   forestFeedApiUrl: string;
   thegraphUrl: string;
   ipfsPostURL: string;
@@ -74,7 +75,7 @@ export const config: Config = {
     },
     networkId: Number('' || 3),
     isMainnet: true,
-    web3Url: '',
+    infuraKey: process.env.NEXT_PUBLIC_INFURA_KEY || '',
     forestFeedApiUrl: formatUrl(''),
     thegraphUrl: formatUrl(''),
     ipfsPostURL: formatUrl(''),
@@ -103,7 +104,7 @@ export const config: Config = {
     },
     networkId: Number('' || 3),
     isMainnet: false,
-    web3Url: '',
+    infuraKey: process.env.NEXT_PUBLIC_INFURA_KEY || '',
     forestFeedApiUrl: formatUrl(''),
     thegraphUrl: formatUrl(''),
     ipfsPostURL: formatUrl(''),

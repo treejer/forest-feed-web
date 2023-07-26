@@ -5,6 +5,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {useTranslations} from 'use-intl';
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
+import {motion} from 'framer-motion';
 
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
@@ -132,9 +133,14 @@ function NewCampaignPage() {
               ]}
             />
           </div>
-          <div className="col-span-1">
+          <motion.div
+            initial={{x: 100, opacity: 0}}
+            animate={{x: 0, opacity: 1}}
+            exit={{x: 100, opacity: 0}}
+            transition={{duration: 0.5}}
+          >
             <TreeCost treeCount={campaignSize} costValue={campaignSize * 10} />
-          </div>
+          </motion.div>
         </>
       ) : (
         <ConnectButton />

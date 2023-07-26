@@ -122,8 +122,8 @@ export function PledgeStep(props: PledgeStepProps) {
       <Spacer times={4} />
       <div className="flex items-center">
         <div>
-          <p className="text-xl font-extrabold mb-2">{t('newCampaign.rewardFilters')}</p>
-          <span className="text-sm text-secondary">{t('newCampaign.chooseMaxFollowers')}</span>
+          <p className="text-xl font-extrabold mb-1">{t('newCampaign.rewardFilters')}</p>
+          <p className="text-sm text-secondary">{t('newCampaign.chooseMaxFollowers')}</p>
         </div>
         <Spacer times={6} />
         <Counter count={values?.reward.minimumFollowerNumber} handleChangeCount={handleChangeMinFollowers} />

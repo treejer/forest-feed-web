@@ -6,6 +6,7 @@ import {createTranslator} from 'next-intl';
 import {Locale} from '@forest-feed/languages';
 import {AllTheProviders} from '@forest-feed/components/providers/AllTheProviders';
 import {Layout} from '@forest-feed/components/layout/Layout';
+import {HandleOnComplete} from '@forest-feed/lib/router-events';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -52,6 +53,7 @@ export default async function LocaleLayout(props: RootLayoutProps) {
       <body className={`${inter.className} bg-primaryBg`}>
         <AllTheProviders locale={locale} messages={messages}>
           <Layout>{children}</Layout>
+          <HandleOnComplete />
         </AllTheProviders>
       </body>
     </html>

@@ -3,17 +3,18 @@ import {GetAccountResult} from '@wagmi/core';
 import {polygonMumbai, polygon} from 'wagmi/chains';
 import {getDefaultWallets, lightTheme} from '@rainbow-me/rainbowkit';
 import {publicProvider} from 'wagmi/providers/public';
+import {infuraProvider} from 'wagmi/providers/infura';
 import {LensConfig, development} from '@lens-protocol/react-web';
 import {bindings as wagmiBindings} from '@lens-protocol/wagmi';
 
+import {infuraKey, projectId, projectName} from '@forest-feed/config';
 import {colors} from 'colors';
-import {projectId, projectName} from '@forest-feed/config';
 
 export type ConnectionStatus = GetAccountResult['status'];
 
 export const {chains, publicClient, webSocketPublicClient} = configureChains(
   [polygon, polygonMumbai],
-  [publicProvider()],
+  [infuraProvider({apiKey: infuraKey}), publicProvider()],
 );
 
 export const {connectors} = getDefaultWallets({

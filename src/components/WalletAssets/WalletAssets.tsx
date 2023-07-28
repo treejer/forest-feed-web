@@ -29,14 +29,14 @@ export function WalletAssets() {
       {isLoading ? (
         <AssetSkeleton />
       ) : (
-        <div className="flex items-start justify-between">
+        <div className="flex items-center justify-between">
           <div className="flex items-center">
             <DaiIcon />
             <Spacer />
             <span>{t('dai')}</span>
           </div>
           <Spacer times={2} />
-          <span className="text-Green">{dai?.formatted}</span>
+          <span className="text-green">{dai?.formatted}</span>
         </div>
       )}
     </div>

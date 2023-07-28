@@ -38,10 +38,8 @@ export function AllTheProviders(props: AllTheProvidersProps) {
               <PersistGate persistor={persistor} loading={null}>
                 <ApolloProvider>
                   <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
-                  {children}
+                  <RenderIf condition={mounted}>{children}</RenderIf>
                 </ApolloProvider>
-                <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
-                <RenderIf condition={mounted}>{children}</RenderIf>
               </PersistGate>
             </Provider>
           </NextIntlClientProvider>

@@ -23,7 +23,7 @@ export function UserWallet(props: UserWalletProps) {
       <div className="flex items-center relative py-1">
         <button
           onClick={() => handleCopy(walletAddress)}
-          className="absolute bottom-0 inset-x-0 flex justify-center items-center top-0 bottom-0 group-hover:bottom-full transition-all duration-700"
+          className="absolute inset-x-0 flex justify-center items-center top-0 bottom-0 group-hover:bottom-full transition-all duration-700"
         >
           <span className="text-sm bg-primaryGreen text-white rounded-t px-2">{t(copiedText ? 'copied' : 'copy')}</span>
         </button>

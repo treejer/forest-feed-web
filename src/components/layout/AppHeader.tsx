@@ -24,11 +24,15 @@ export function AppHeader(props: AppHeaderProps) {
 
   console.log(isLensLoggedIn, 'isLensLoggedIn');
 
-  const t = useTranslations('lens');
+  const t = useTranslations();
 
   return (
     <div className="flex items-center justify-between py-4">
-      <Logo />
+      <div className="flex items-center">
+        <Logo />
+        <Spacer times={2} />
+        <p className="font-extrabold text-4xl">{t('forestFeed')}</p>
+      </div>
       {['connecting', 'reconnecting'].includes(connectionStatus) ? (
         'loading..'
       ) : walletAddress && connectionStatus === 'connected' ? (
@@ -37,7 +41,7 @@ export function AppHeader(props: AppHeaderProps) {
             <Button
               className="text-sm py-0 pl-1 pr-2 w-auto h-auto"
               icon={<LensIcon />}
-              text={t('login')}
+              text={t('lens.login')}
               variant={ButtonVariant.secondary}
               onClick={onLensLogin}
             />

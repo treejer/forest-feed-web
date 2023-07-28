@@ -37,9 +37,9 @@ export const makeStore = (preloadedState?: PreloadedState<AppState>) => {
     preloadedState,
   }) as SagaStore;
 
-  const persistor = persistStore(store);
-
   store.sagaTask = sagaMiddleware.run(rootSaga, store);
+
+  const persistor = persistStore(store);
 
   return {store, persistor};
 };

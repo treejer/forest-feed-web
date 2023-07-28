@@ -12,7 +12,7 @@ export const validator = {
   attachment: () =>
     Yup.mixed()
       .required('errors.required')
-      .test('fileSize', 'tooLarge', value => {
+      .test('fileSize', 'errors.tooLarge', value => {
         return value[0]?.size <= 2000000;
       }),
 };

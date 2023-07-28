@@ -1,0 +1,108 @@
+$thumb-size: 24px;
+
+@mixin track-styles {
+  appearance: none;
+  background: transparent;
+  border: transparent;
+}
+
+@mixin thumb-styles {
+  appearance: none;
+  pointer-events: all;
+  width: $thumb-size;
+  height: $thumb-size;
+  border-radius: 0px;
+  border: 0 none;
+  cursor: grab;
+  background-color: red;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 4px calc(#{$thumb-size} / 2) 0;
+  height: calc(#{$thumb-size});
+}
+
+.input-wrapper {
+  width: calc(100% + #{$thumb-size});
+  margin: 0 calc(#{$thumb-size} / -2);
+  position: absolute;
+  height: $thumb-size;
+}
+
+.control-wrapper {
+  width: 100%;
+  position: absolute;
+  height: $thumb-size;
+}
+
+.input {
+  position: absolute;
+  width: 100%;
+  appearance: none;
+  height: 100%;
+  opacity: 0;
+  z-index: 3;
+  padding: 0;
+
+  &::-ms-track {
+    @include track-styles;
+  }
+
+  &::-moz-range-track {
+    @include track-styles;
+  }
+
+  &:focus::-webkit-slider-runnable-track {
+    @include track-styles;
+  }
+
+  &::-ms-thumb {
+    @include thumb-styles;
+  }
+
+  &::-moz-range-thumb {
+    @include thumb-styles;
+  }
+
+  &::-webkit-slider-thumb {
+    @include thumb-styles;
+  }
+};
+
+.rail {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 6px;
+  border-radius: 3px;
+  background: #D3E4D0;
+}
+
+.inner-rail {
+  position: absolute;
+  height: 100%;
+  background: #0CC863;
+  opacity: 1;
+}
+
+.control {
+  width: $thumb-size;
+  height: $thumb-size;
+  border-radius: 50%;
+  position: absolute;
+  background: #ffffff;
+  border: 4px #0CC863 solid;
+  top: 50%;
+  margin-left: calc(#{$thumb-size} / -2);
+  transform: translate3d(0, -50%, 0);
+  z-index: 2;
+}

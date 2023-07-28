@@ -14,15 +14,23 @@ export function useAuthLens(params: UseLensParams) {
   const {data: lensProfile, loading: lensProfileLoading, error: lensProfileError} = useActiveProfile();
 
   const handleLensLogin = useCallback(async () => {
-    if (wallet && isConnected) {
-      await login({
-        address: wallet,
-      });
+    try {
+      if (wallet && isConnected) {
+        await login({
+          address: wallet,
+        });
+      }
+    } catch (e: any) {
+      console.log(e, 'error in login with lens');
     }
   }, [wallet, login, isConnected]);
 
   const handleLensLogout = useCallback(async () => {
-    await logout();
+    try {
+      await logout();
+    } catch (e: any) {
+      console.log(e, 'error in logout lens');
+    }
   }, [logout]);
 
   return {

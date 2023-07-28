@@ -8,6 +8,7 @@ export type CheckBoxProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
   disabled?: boolean;
+  label?: string;
 };
 
 export function Checkbox(props: CheckBoxProps) {

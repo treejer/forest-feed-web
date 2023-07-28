@@ -1,12 +1,15 @@
 'use client';
 
 import React, {useCallback, useMemo, useState} from 'react';
+
 import {useTranslations} from 'use-intl';
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
+import {motion} from 'framer-motion';
 
-import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
+import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
+import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
 import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
@@ -71,7 +74,7 @@ function NewCampaignPage() {
   );
 
   return (
-    <div className="grid grid-cols-6 gap-4">
+    <AnimatedPage className="grid grid-cols-6 gap-10">
       {address && isConnected && isSupportedNetwork ? (
         <>
           <div className="col-span-5">
@@ -130,14 +133,19 @@ function NewCampaignPage() {
               ]}
             />
           </div>
-          <div className="col-span-1">
+          <motion.div
+            initial={{x: 100, opacity: 0}}
+            animate={{x: 0, opacity: 1}}
+            exit={{x: 100, opacity: 0}}
+            transition={{duration: 0.5}}
+          >
             <TreeCost treeCount={campaignSize} costValue={campaignSize * 10} />
-          </div>
+          </motion.div>
         </>
       ) : (
         <ConnectButton />
       )}
-    </div>
+    </AnimatedPage>
   );
 }
 

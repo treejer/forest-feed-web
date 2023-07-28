@@ -29,7 +29,7 @@ export const web3Slice = createSlice({
   reducers: {
     startConfiguration: (state, _action: PayloadAction<Web3Action['startConfiguration']>) => state,
     watchCurrentNetwork: state => state,
-    switchNetwork: (state, action: PayloadAction<Web3Action['switchNetwork']>) => {
+    switchNetwork: (state, _action: PayloadAction<Web3Action['switchNetwork']>) => {
       state.switching = true;
     },
     updateNetwork: (state, action: PayloadAction<Web3Action['updateNetwork']>) => {

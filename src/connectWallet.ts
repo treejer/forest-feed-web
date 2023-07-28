@@ -4,8 +4,6 @@ import {polygonMumbai, polygon} from 'wagmi/chains';
 import {getDefaultWallets, lightTheme} from '@rainbow-me/rainbowkit';
 import {publicProvider} from 'wagmi/providers/public';
 import {infuraProvider} from 'wagmi/providers/infura';
-import {LensConfig, development} from '@lens-protocol/react-web';
-import {bindings as wagmiBindings} from '@lens-protocol/wagmi';
 
 import {infuraKey, projectId, projectName} from '@forest-feed/config';
 import {colors} from 'colors';
@@ -29,11 +27,6 @@ export const wagmiConfig = createConfig({
   publicClient,
   webSocketPublicClient,
 });
-
-export const lensConfig: LensConfig = {
-  bindings: wagmiBindings(),
-  environment: development,
-};
 
 export const appInfo = {
   appName: projectName,

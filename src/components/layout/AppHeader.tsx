@@ -10,6 +10,7 @@ import {LensIcon} from '@forest-feed/components/kit/Icons/LensIcon';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {UserWallet} from '@forest-feed/components/layout/UserWallet';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import {SwitchNetwork} from '@forest-feed/components/SwitchNetwork/SwitchNetwork';
 
 export type AppHeaderProps = {
   walletAddress?: string;
@@ -37,6 +38,8 @@ export function AppHeader(props: AppHeaderProps) {
         'loading..'
       ) : walletAddress && connectionStatus === 'connected' ? (
         <div className="flex items-center">
+          <SwitchNetwork />
+          <Spacer />
           <RenderIf condition={!isLensLoggedIn}>
             <Button
               className="text-sm py-0 pl-1 pr-2 w-auto h-auto"

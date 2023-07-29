@@ -20,13 +20,12 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
     console.log(newNetwork, 'newNetwork is here');
     let config: NetworkConfig = yield select(selectConfig);
     if (newNetwork) {
-      config = configs[newNetwork];
-
       if (config.chainId !== newNetwork) {
         yield switchNetworkWeb3({
           chainId: configs[newNetwork].chainId,
         });
       }
+      config = configs[newNetwork];
     }
 
     yield put(updateNetwork({newConfig: config}));

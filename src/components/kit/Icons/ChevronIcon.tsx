@@ -14,7 +14,7 @@ export type ChevronIconProps = {
 };
 
 const directionClassNames = {
-  [ChevronIconDirection.up]: 'rotate-270',
+  [ChevronIconDirection.up]: '-rotate-90',
   [ChevronIconDirection.down]: 'rotate-90',
   [ChevronIconDirection.right]: '',
   [ChevronIconDirection.left]: 'rotate-180',
@@ -26,7 +26,7 @@ export function ChevronIcon(props: ChevronIconProps) {
     <img
       src="/assets/images/ChevronRight.png"
       alt="add"
-      className={`${directionClassNames[direction]} ${className}`}
+      className={`transition-all ${directionClassNames[direction]} ${className}`}
       style={{width: size, height: size}}
     />
   );

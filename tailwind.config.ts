@@ -2,6 +2,11 @@
 const {colors} = require('./colors');
 
 module.exports = {
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: [{theme: colors}],
+    base: false,
+  },
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -22,5 +27,4 @@ module.exports = {
       '4xl': '28px',
     },
   },
-  plugins: [],
 };

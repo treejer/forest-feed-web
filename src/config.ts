@@ -1,7 +1,6 @@
 import {ImageProps} from 'next/image';
 
 import {formatUrl} from '@forest-feed/utils/fotmatUrl';
-import MaticLogo from 'public/assets/images/Asset.png';
 
 export const projectName = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_NAME || '';
 export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '';
@@ -137,13 +136,13 @@ export const networks: Networks = {
     network: BlockchainNetwork.Polygon,
     details:
       'This is the main network, by switching all your transaction would be send on the treejer main blockchain network!',
-    logo: MaticLogo,
+    logo: '/assets/images/Polygon-MATIC.svg',
   },
   [BlockchainNetwork.Mumbai]: {
     title: 'Mumbai',
     network: BlockchainNetwork.Mumbai,
     details: 'This network is development purpose only',
-    logo: MaticLogo,
+    logo: '/assets/images/Polygon-MATIC.svg',
   },
 };
 

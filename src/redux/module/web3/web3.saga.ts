@@ -1,26 +1,28 @@
 import {PayloadAction} from '@reduxjs/toolkit';
 import {put, select, takeEvery} from 'redux-saga/effects';
-import {switchNetwork as switchNetworkWeb3, watchNetwork} from '@wagmi/core';
+import {switchNetwork as switchNetworkWeb3, watchAccount, watchNetwork} from '@wagmi/core';
 
 import {config as configs, NetworkConfig} from '@forest-feed/config';
 import {selectConfig} from '@forest-feed/redux/selectors';
 import {
+  Web3Action,
   startConfiguration,
   switchNetwork,
   updateNetwork,
   watchCurrentNetwork,
   notSupportedNetwork,
-  Web3Action,
+  cancelSwitchNetwork,
+  walletConnected,
 } from '@forest-feed/redux/module/web3/web3.slice';
 import {AppStore} from '@forest-feed/redux/store';
 
 export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['startConfiguration']>) {
   try {
-    const {newNetwork} = payload || {};
+    const {newNetwork, userInApp} = payload || {};
     console.log(newNetwork, 'newNetwork is here');
     let config: NetworkConfig = yield select(selectConfig);
     if (newNetwork) {
-      if (config.chainId !== newNetwork) {
+      if (config.chainId !== newNetwork && userInApp) {
         yield switchNetworkWeb3({
           chainId: configs[newNetwork].chainId,
         });
@@ -31,13 +33,14 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
     yield put(updateNetwork({newConfig: config}));
   } catch (e: any) {
     console.log(e, 'error is start configuration');
+    yield put(cancelSwitchNetwork());
   }
 }
 
 export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchNetwork']>) {
   try {
-    const {newNetwork} = payload;
-    yield put(startConfiguration({newNetwork}));
+    const {newNetwork, userInApp} = payload;
+    yield put(startConfiguration({newNetwork, userInApp}));
   } catch (e: any) {
     console.log(e, 'error in switch network');
   }
@@ -45,7 +48,10 @@ export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchN
 
 export function* watchWatchCurrentNetwork(store: AppStore) {
   try {
-    const unwatch = watchNetwork(network => {
+    watchAccount(account => {
+      store.dispatch(walletConnected({address: account.address}));
+    });
+    watchNetwork(network => {
       if (typeof network.chain?.unsupported !== 'undefined' && network.chain?.unsupported) {
         store.dispatch(notSupportedNetwork());
       } else {

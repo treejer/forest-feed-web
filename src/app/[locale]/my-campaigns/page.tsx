@@ -7,6 +7,7 @@ import {Table, TColumn} from '@forest-feed/components/kit/Table/Table';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
+import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 
 export type TCampaign = {
   id: string;
@@ -71,18 +72,20 @@ function MyCampaigns() {
 
   return (
     <AnimatedPage>
-      <Table<TCampaign>
-        data={Array(200).fill({
-          id: 'ff-twit-4',
-          status: 'eyb nadareh',
-          type: 'Standard',
-          budget: 'budget',
-          goal: 'goal',
-          reposts: '67/100',
-          createdAt: 'creationDate',
-        })}
-        columns={columns}
-      />
+      <AuthWrapper>
+        <Table<TCampaign>
+          data={Array(200).fill({
+            id: 'ff-twit-4',
+            status: 'eyb nadareh',
+            type: 'Standard',
+            budget: 'budget',
+            goal: 'goal',
+            reposts: '67/100',
+            createdAt: 'creationDate',
+          })}
+          columns={columns}
+        />
+      </AuthWrapper>
     </AnimatedPage>
   );
 }

@@ -26,8 +26,7 @@ export function SwitchNetwork() {
 
   const handleSwitchNetwork = useCallback(
     (network: DropDownItem) => {
-      console.log(network.id, 'network id');
-      dispatchSwitchNetwork({newNetwork: network.id as BlockchainNetwork});
+      dispatchSwitchNetwork({newNetwork: network.id as BlockchainNetwork, userInApp: true});
     },
     [dispatchSwitchNetwork],
   );

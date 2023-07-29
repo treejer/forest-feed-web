@@ -5,6 +5,8 @@
       "title": "Forest Feed"
     }
   },
+  "Polygon": "Polygon",
+  "Mumbai": "Mumbai",
   "disconnect": "Disconnect",
   "copy": "Copy",
   "copied": "Copied to clipboard!",
@@ -84,5 +86,9 @@
   },
   "lens": {
     "login": "Login with lens"
+  },
+  "switchNetwork": {
+    "Polygon": "Polygon",
+    "Mumbai": "Mumbai <red>testnet</red>"
   }
 }

@@ -10,7 +10,7 @@ import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Ico
 
 export type DropDownItem = {
   id: string | number;
-  text: string | number;
+  text: number | string | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactNodeArray;
   image?: ImageProps['src'];
 };
 
@@ -77,7 +77,7 @@ export function DropDown(props: DropDownProps) {
             >
               {items.map(item => (
                 <li
-                  key={item.text}
+                  key={item.text.toString()}
                   className="flex flex-row justify-start items-center"
                   onClick={() => handleClick(item)}
                 >

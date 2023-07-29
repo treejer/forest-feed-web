@@ -1,34 +1,45 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useMemo} from 'react';
 
+import {useTranslations} from 'use-intl';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
 import {DropDown, DropDownItem} from '@forest-feed/components/kit/DropDown';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {BlockchainNetwork, networks} from '@forest-feed/config';
 
-export const networksList: DropDownItem[] = [
-  {
-    id: networks[BlockchainNetwork.Polygon].network,
-    text: networks[BlockchainNetwork.Polygon].title,
-    image: networks[BlockchainNetwork.Polygon].logo,
-  },
-  {
-    id: networks[BlockchainNetwork.Mumbai].network,
-    text: networks[BlockchainNetwork.Mumbai].title,
-    image: networks[BlockchainNetwork.Mumbai].logo,
-  },
-];
 export function SwitchNetwork() {
   const {
     web3: {config, switching, isSupportedNetwork},
     dispatchSwitchNetwork,
   } = useWeb3();
 
+  const t = useTranslations();
+
   const handleSwitchNetwork = useCallback(
     (network: DropDownItem) => {
       dispatchSwitchNetwork({newNetwork: network.id as BlockchainNetwork, userInApp: true});
     },
     [dispatchSwitchNetwork],
+  );
+
+  const networksList: DropDownItem[] = useMemo(
+    () => [
+      {
+        id: networks[BlockchainNetwork.Polygon].network,
+        text: t.rich(`switchNetwork.${networks[BlockchainNetwork.Polygon].title}`, {
+          red: chunk => <span className="text-red">{chunk}</span>,
+        }),
+        image: networks[BlockchainNetwork.Polygon].logo,
+      },
+      {
+        id: networks[BlockchainNetwork.Mumbai].network,
+        text: t.rich(`switchNetwork.${networks[BlockchainNetwork.Mumbai].title}`, {
+          red: chunk => <span className="ml-1 text-red">{chunk}</span>,
+        }),
+        image: networks[BlockchainNetwork.Mumbai].logo,
+      },
+    ],
+    [t],
   );
 
   return isSupportedNetwork ? (

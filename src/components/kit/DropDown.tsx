@@ -3,10 +3,11 @@ import React, {useCallback, useMemo, useRef, useState} from 'react';
 import Image, {ImageProps} from 'next/image';
 import {AnimatePresence, motion} from 'framer-motion';
 
+import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Spacer} from '@forest-feed/components/common/Spacer';
+import {useOnClickOutSide} from '@forest-feed/hooks/useOnClickOutSide';
 import {Colors} from 'colors';
-import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
 
 export type DropDownItem = {
   id: string | number;
@@ -28,6 +29,8 @@ export function DropDown(props: DropDownProps) {
   const [open, setOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useOnClickOutSide<HTMLDivElement>(dropdownRef, () => setOpen(false));
 
   const imageStyles = useMemo(
     () => ({

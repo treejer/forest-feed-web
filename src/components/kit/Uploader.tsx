@@ -67,8 +67,8 @@ export function Uploader(props: UploaderProps) {
           draggable={false}
           src={previewFile}
           alt="preview-photo"
-          width={500}
-          height={400}
+          width={800}
+          height={900}
         />
       </Modal>
       <div

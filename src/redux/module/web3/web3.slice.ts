@@ -1,5 +1,6 @@
 import {useCallback} from 'react';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {GetAccountResult} from '@wagmi/core';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
 import {selectConfig, selectWeb3} from '@forest-feed/redux/selectors';
@@ -10,13 +11,16 @@ export type Web3State = {
   config: NetworkConfig;
   switching: boolean;
   isSupportedNetwork: boolean;
+  address: `0x${string}` | null;
+  accessToken: string | null;
 };
 
 export type Web3Action = {
   switchNetwork: {newNetwork: BlockchainNetwork; userInApp?: boolean};
   updateNetwork: {newConfig: NetworkConfig};
   startConfiguration?: {newNetwork?: BlockchainNetwork; userInApp?: boolean};
-  walletConnected: {address?: string};
+  connectedWallet: {address?: `0x${string}`};
+  checkAccount: {account: GetAccountResult};
 };
 
 export const web3InitialState: Web3State = {
@@ -24,6 +28,8 @@ export const web3InitialState: Web3State = {
   config: configs[BlockchainNetwork.Mumbai],
   switching: false,
   isSupportedNetwork: false,
+  address: null,
+  accessToken: null,
 };
 
 export const web3Slice = createSlice({
@@ -31,7 +37,8 @@ export const web3Slice = createSlice({
   initialState: web3InitialState,
   reducers: {
     startConfiguration: (state, _action: PayloadAction<Web3Action['startConfiguration']>) => state,
-    watchCurrentNetwork: state => state,
+    watchCurrentWeb3: state => state,
+    checkAccount: (state, _action: PayloadAction<Web3Action['checkAccount']>) => state,
     switchNetwork: (state, _action: PayloadAction<Web3Action['switchNetwork']>) => {
       state.switching = true;
     },
@@ -46,8 +53,9 @@ export const web3Slice = createSlice({
     cancelSwitchNetwork: state => {
       state.switching = false;
     },
-    walletConnected: (state, action: PayloadAction<Web3Action['walletConnected']>) => {
+    connectedWallet: (state, action: PayloadAction<Web3Action['connectedWallet']>) => {
       state.isConnected = !!action.payload.address;
+      state.address = action.payload.address || null;
     },
   },
 });
@@ -57,9 +65,10 @@ export const {
   updateNetwork,
   startConfiguration,
   notSupportedNetwork,
-  watchCurrentNetwork,
+  watchCurrentWeb3,
   cancelSwitchNetwork,
-  walletConnected,
+  connectedWallet,
+  checkAccount,
 } = web3Slice.actions;
 export default web3Slice.reducer;
 

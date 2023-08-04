@@ -3,16 +3,18 @@ import {put, select, takeEvery} from 'redux-saga/effects';
 import {switchNetwork as switchNetworkWeb3, watchAccount, watchNetwork} from '@wagmi/core';
 
 import {config as configs, NetworkConfig} from '@forest-feed/config';
-import {selectConfig} from '@forest-feed/redux/selectors';
+import {selectConfig, selectWeb3} from '@forest-feed/redux/selectors';
 import {
   Web3Action,
   startConfiguration,
   switchNetwork,
   updateNetwork,
-  watchCurrentNetwork,
+  watchCurrentWeb3,
   notSupportedNetwork,
   cancelSwitchNetwork,
-  walletConnected,
+  connectedWallet,
+  Web3State,
+  checkAccount,
 } from '@forest-feed/redux/module/web3/web3.slice';
 import {AppStore} from '@forest-feed/redux/store';
 
@@ -46,10 +48,25 @@ export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchN
   }
 }
 
-export function* watchWatchCurrentNetwork(store: AppStore) {
+export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAccount']>) {
+  try {
+    const {account} = payload || {};
+    console.log('in check account');
+    const {address, accessToken}: Web3State = yield select(selectWeb3);
+    if (!accessToken || address !== account.address) {
+      // TODO: logout/login
+      // * 1. nonce load, 2. take nonce response, 3. sign message, 4. sign load
+    }
+    yield put(connectedWallet({address: account.address}));
+  } catch (e: any) {
+    console.log('error in check account');
+  }
+}
+
+export function* watchWatchWeb3(store: AppStore) {
   try {
     watchAccount(account => {
-      store.dispatch(walletConnected({address: account.address}));
+      store.dispatch(checkAccount({account}));
     });
     watchNetwork(network => {
       if (typeof network.chain?.unsupported !== 'undefined' && network.chain?.unsupported) {
@@ -68,5 +85,6 @@ export function* watchWatchCurrentNetwork(store: AppStore) {
 export function* web3Sagas(store: AppStore) {
   yield takeEvery(startConfiguration.type, watchStartConfiguration);
   yield takeEvery(switchNetwork.type, watchSwitchNetwork);
-  yield takeEvery(watchCurrentNetwork.type, watchWatchCurrentNetwork, store);
+  yield takeEvery(checkAccount.type, watchCheckAccount);
+  yield takeEvery(watchCurrentWeb3.type, watchWatchWeb3, store);
 }

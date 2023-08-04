@@ -12,7 +12,6 @@ export function LensProvider(props: LensProviderProps) {
   const {children} = props;
 
   const config = useConfig();
-  console.log(config, 'config is here');
 
   const lensConfig: LensConfig = useMemo(
     () => ({

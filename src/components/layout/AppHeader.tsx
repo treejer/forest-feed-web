@@ -1,31 +1,28 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 
+import {useAccount, useDisconnect} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 import {useTranslations} from 'use-intl';
 
-import {ConnectionStatus} from '@forest-feed/connectWallet';
 import {Logo} from '@forest-feed/components/kit/Icons/LogoIcon';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {LensIcon} from '@forest-feed/components/kit/Icons/LensIcon';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {UserWallet} from '@forest-feed/components/layout/UserWallet';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {SwitchNetwork} from '@forest-feed/components/SwitchNetwork/SwitchNetwork';
+import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 
-export type AppHeaderProps = {
-  walletAddress?: string;
-  isLensLoggedIn?: boolean;
-  onLensLogin: () => void;
-  onDisconnect: () => void;
-  connectionStatus: ConnectionStatus;
-};
-
-export function AppHeader(props: AppHeaderProps) {
-  const {walletAddress, connectionStatus, isLensLoggedIn, onDisconnect, onLensLogin} = props;
-
-  console.log(isLensLoggedIn, 'isLensLoggedIn');
+export function AppHeader() {
+  const {address, status, isConnected} = useAccount();
+  const {disconnectAsync} = useDisconnect();
+  const {lensProfile, lensProfileLoading, loginIsPending, handleLensLogin, handleLensLogout} = useAuthLens();
 
   const t = useTranslations();
+
+  const handleDisconnect = useCallback(async () => {
+    await disconnectAsync();
+    await handleLensLogout();
+  }, [disconnectAsync, handleLensLogout]);
 
   return (
     <div className="flex items-center justify-between py-4">
@@ -34,23 +31,30 @@ export function AppHeader(props: AppHeaderProps) {
         <Spacer times={2} />
         <p className="font-extrabold text-4xl">{t('forestFeed')}</p>
       </div>
-      {['connecting', 'reconnecting'].includes(connectionStatus) ? (
+      {['connecting', 'reconnecting'].includes(status) ? (
         'loading..'
-      ) : walletAddress && connectionStatus === 'connected' ? (
+      ) : address && status === 'connected' ? (
         <div className="flex items-center">
           <SwitchNetwork />
           <Spacer />
-          <RenderIf condition={!isLensLoggedIn}>
+          {lensProfile ? (
+            <div className="w-40 disabled:bg-primaryGreen flex justify-center items-center rounded-[8px]">
+              <p className="text-sm text-green font-extrabold drop-shadow-md">@{lensProfile.handle}</p>
+            </div>
+          ) : (
             <Button
-              className="text-sm py-0 pl-1 pr-2 w-auto h-auto"
-              icon={<LensIcon />}
-              text={t('lens.login')}
+              className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
+              autoSize={false}
               variant={ButtonVariant.secondary}
-              onClick={onLensLogin}
+              text={t('lens.login')}
+              icon={<LensIcon />}
+              disabled={lensProfileLoading || loginIsPending}
+              loading={lensProfileLoading || loginIsPending}
+              onClick={handleLensLogin}
             />
-            <Spacer />
-          </RenderIf>
-          <UserWallet walletAddress={walletAddress} onDisconnect={onDisconnect} />
+          )}
+          <Spacer />
+          <UserWallet walletAddress={address} onDisconnect={handleDisconnect} />
         </div>
       ) : (
         <ConnectButton />

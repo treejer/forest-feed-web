@@ -20,8 +20,8 @@ import {AppStore} from '@forest-feed/redux/store';
 
 export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['startConfiguration']>) {
   try {
-    const {newNetwork, userInApp} = payload || {};
-    console.log(newNetwork, 'newNetwork is here');
+    const {newNetwork, userInApp, onSuccess} = payload || {};
+    console.log(newNetwork, 'newNetwork');
     let config: NetworkConfig = yield select(selectConfig);
     if (newNetwork) {
       if (config.chainId !== newNetwork && userInApp) {
@@ -30,8 +30,8 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
         });
       }
       config = configs[newNetwork];
+      yield onSuccess?.();
     }
-
     yield put(updateNetwork({newConfig: config}));
   } catch (e: any) {
     console.log(e, 'error is start configuration');
@@ -41,8 +41,8 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
 
 export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchNetwork']>) {
   try {
-    const {newNetwork, userInApp} = payload;
-    yield put(startConfiguration({newNetwork, userInApp}));
+    const {newNetwork, userInApp, onSuccess} = payload;
+    yield put(startConfiguration({newNetwork, userInApp, onSuccess}));
   } catch (e: any) {
     console.log(e, 'error in switch network');
   }
@@ -50,11 +50,13 @@ export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchN
 
 export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAccount']>) {
   try {
-    const {account} = payload || {};
-    console.log('in check account');
+    const {account, lensLogout} = payload || {};
     const {address, accessToken}: Web3State = yield select(selectWeb3);
     if (!accessToken || address !== account.address) {
       // TODO: logout/login
+      // * logout lens account
+      yield lensLogout();
+
       // * 1. nonce load, 2. take nonce response, 3. sign message, 4. sign load
     }
     yield put(connectedWallet({address: account.address}));
@@ -63,10 +65,11 @@ export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAcc
   }
 }
 
-export function* watchWatchWeb3(store: AppStore) {
+export function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Action['watchCurrentWeb3']>) {
   try {
+    const {lensLogout} = payload || {};
     watchAccount(account => {
-      store.dispatch(checkAccount({account}));
+      store.dispatch(checkAccount({account, lensLogout}));
     });
     watchNetwork(network => {
       if (typeof network.chain?.unsupported !== 'undefined' && network.chain?.unsupported) {

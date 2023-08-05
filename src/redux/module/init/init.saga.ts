@@ -1,12 +1,15 @@
 import {put, take, takeEvery} from 'redux-saga/effects';
+import {PayloadAction} from '@reduxjs/toolkit';
 
 import {updateNetwork, watchCurrentWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {initApp, initAppCompleted} from '@forest-feed/redux/module/init/init.slice';
+import {InitAction, initApp, initAppCompleted} from '@forest-feed/redux/module/init/init.slice';
 
-export function* watchInitApp() {
+export function* watchInitApp({payload}: PayloadAction<InitAction['init']>) {
   try {
+    const {lensLogout} = payload || {};
+
     console.log('init');
-    yield put(watchCurrentWeb3());
+    yield put(watchCurrentWeb3({lensLogout}));
     yield take(updateNetwork.type);
     yield put(initAppCompleted());
   } catch (e: any) {

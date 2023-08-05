@@ -1,7 +1,9 @@
 import React from 'react';
+import {Circles} from 'react-loader-spinner';
 
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Spacer} from '@forest-feed/components/common/Spacer';
+import {colors} from 'colors';
 
 export enum ButtonVariant {
   primary = 'primary',
@@ -17,6 +19,8 @@ export type ButtonProps = {
   variant?: ButtonVariant;
   onClick?: () => void;
   disabled?: boolean;
+  loading?: boolean;
+  autoSize?: boolean;
   type?: 'button' | 'reset' | 'submit';
 };
 
@@ -24,28 +28,52 @@ type VariantClassNames = {
   [key in ButtonVariant]: string;
 };
 
-const classNames: VariantClassNames = {
-  [ButtonVariant.primary]: `h-14 w-[144px] bg-white border-primary border-2 text-lg font-medium disabled:bg-white/60`,
-  [ButtonVariant.secondary]: `h-14 w-[160px] bg-primaryGreen text-white text-lg font-medium disabled:bg-primaryGreen/60`,
-  [ButtonVariant.menu]: `h-[48px] w-[100%] bg-activeGray border-activeGray border-2 text-sm font-normal disabled:bg-activeGray/60`,
-  [ButtonVariant.text]: `w-[100%] h-14 text-sm disabled:bg-opacity/50`,
-};
+const classNames: (autoSize: boolean) => VariantClassNames = autoSize => ({
+  [ButtonVariant.primary]: `${
+    autoSize ? 'h-14 w-[144px]' : ''
+  } bg-white border-primary border-2 text-lg font-medium disabled:bg-white/60`,
+  [ButtonVariant.secondary]: `${
+    autoSize ? 'h-14 w-[160px]' : ''
+  } bg-primaryGreen text-white text-lg font-medium disabled:bg-primaryGreen/60`,
+  [ButtonVariant.menu]: `${
+    autoSize ? 'h-[48px] w-[100%]' : ''
+  } bg-activeGray border-activeGray border-2 text-sm font-normal disabled:bg-activeGray/60`,
+  [ButtonVariant.text]: `${autoSize ? 'w-[100%] h-14' : ''} text-sm disabled:bg-opacity/50`,
+});
 
 export function Button(props: ButtonProps) {
-  const {variant = ButtonVariant.primary, text, onClick, className, disabled, icon, type = 'button'} = props;
+  const {
+    variant = ButtonVariant.primary,
+    autoSize = true,
+    text,
+    loading,
+    onClick,
+    className,
+    disabled,
+    icon,
+    type = 'button',
+  } = props;
 
   return (
     <button
-      className={`rounded-[8px] flex items-center justify-center hover:shadow-lg transition-all ${classNames[variant]} ${className}`}
+      className={`rounded-[8px] flex items-center justify-center hover:shadow-lg transition-all ${
+        classNames(autoSize)[variant]
+      } ${className}`}
       disabled={disabled}
       onClick={onClick}
       type={type}
     >
-      <RenderIf condition={!!icon}>
-        {icon}
-        <Spacer />
-      </RenderIf>
-      {text}
+      {loading ? (
+        <Circles height="20" width="20" color={colors.white} ariaLabel="circles-loading" visible={true} />
+      ) : (
+        <>
+          <RenderIf condition={!!icon}>
+            {icon}
+            <Spacer />
+          </RenderIf>
+          {text}
+        </>
+      )}
     </button>
   );
 }

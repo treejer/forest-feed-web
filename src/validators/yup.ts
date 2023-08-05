@@ -9,10 +9,14 @@ export const validator = {
         return !!value;
       })
       .required(message || 'errors.required'),
-  attachment: () =>
-    Yup.mixed()
-      .required('errors.required')
-      .test('fileSize', 'errors.tooLarge', value => {
-        return value[0]?.size <= 2000000;
-      }),
+  attachment: (required: boolean = false) =>
+    required
+      ? Yup.mixed()
+          .required('errors.required')
+          .test('fileSize', 'errors.tooLarge', value => {
+            return value[0]?.size <= 2000000;
+          })
+      : Yup.mixed().test('fileSize', 'errors.tooLarge', value => {
+          return !value || value?.[0]?.size <= 2000000;
+        }),
 };

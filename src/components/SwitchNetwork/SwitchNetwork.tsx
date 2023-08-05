@@ -6,20 +6,26 @@ import {ConnectButton} from '@rainbow-me/rainbowkit';
 import {DropDown, DropDownItem} from '@forest-feed/components/kit/DropDown';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {BlockchainNetwork, networks} from '@forest-feed/config';
+import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 
 export function SwitchNetwork() {
   const {
     web3: {config, switching, isSupportedNetwork},
     dispatchSwitchNetwork,
   } = useWeb3();
+  const {handleLensLogout} = useAuthLens();
 
   const t = useTranslations();
 
   const handleSwitchNetwork = useCallback(
-    (network: DropDownItem) => {
-      dispatchSwitchNetwork({newNetwork: network.id as BlockchainNetwork, userInApp: true});
+    async (network: DropDownItem) => {
+      dispatchSwitchNetwork({
+        newNetwork: network.id as BlockchainNetwork,
+        userInApp: true,
+        onSuccess: handleLensLogout,
+      });
     },
-    [dispatchSwitchNetwork],
+    [dispatchSwitchNetwork, handleLensLogout],
   );
 
   const networksList: DropDownItem[] = useMemo(

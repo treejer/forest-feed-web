@@ -7,15 +7,12 @@ export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || ''
 export const infuraKey = process.env.NEXT_PUBLIC_INFURA_KEY || '';
 
 export enum ContractType {
-  NOTHING_YET = 'NOTHING_YET',
   DAI = 'DAI',
+  REGULAR_SALE = 'REGULAR_SALE',
 }
-
 export interface ConfigContract {
   address: `0x${string}`;
   abi: any;
-  // TODO: apollo-link-ethereum
-  // abi: AbiDefinition['abi'];
 }
 
 export enum BlockchainNetwork {
@@ -63,13 +60,13 @@ export const config: Config = {
     name: projectName,
     projectId: projectId,
     contracts: {
-      NOTHING_YET: {
-        address: '' as `0x${string}`,
-        abi: '',
-      },
       DAI: {
         address: (process.env.NEXT_PUBLIC_POLYGON_DAI_TOKEN || '') as `0x${string}`,
         abi: require('./abis/Dai.json'),
+      },
+      REGULAR_SALE: {
+        address: (process.env.NEXT_PUBLIC_POLYGON_REGULAR_SALE_CONTRACT || '') as `0x${string}`,
+        abi: require('./abis/RegularSale.json'),
       },
     },
     networkId: Number('' || 3),
@@ -92,13 +89,13 @@ export const config: Config = {
     name: projectName,
     projectId: projectId,
     contracts: {
-      NOTHING_YET: {
-        address: '' as `0x${string}`,
-        abi: '',
-      },
       DAI: {
         address: (process.env.NEXT_PUBLIC_MUMBAI_DAI_TOKEN || '') as `0x${string}`,
         abi: require('./abis/Dai.json'),
+      },
+      REGULAR_SALE: {
+        address: (process.env.NEXT_PUBLIC_MUMBAI_REGULAR_SALE_CONTRACT || '') as `0x${string}`,
+        abi: require('./abis/RegularSale.json'),
       },
     },
     networkId: Number('' || 3),

@@ -3,7 +3,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {GetAccountResult} from '@wagmi/core';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
-import {selectConfig, selectWeb3} from '@forest-feed/redux/selectors';
+import {selectConfig, selectRegularSale, selectWeb3} from '@forest-feed/redux/selectors';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 
 export type Web3State = {
@@ -102,3 +102,4 @@ export function useWeb3() {
 }
 
 export const useConfig = () => useAppSelector(selectConfig);
+export const useRegularSale = () => useAppSelector(selectRegularSale);

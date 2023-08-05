@@ -131,7 +131,7 @@ function NewCampaignPage() {
           transition={{duration: 0.5}}
           className="col-span-1"
         >
-          <TreeCost treeCount={campaignSize} costValue={campaignSize * 10} />
+          <TreeCost treeCount={campaignSize} />
         </motion.div>
       </AuthWrapper>
     </AnimatedPage>

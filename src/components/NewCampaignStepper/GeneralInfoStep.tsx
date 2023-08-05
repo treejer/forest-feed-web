@@ -77,7 +77,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormController<HTMLTextAreaElement>
+      <FormController
         control={control}
         name="content"
         type="textarea"

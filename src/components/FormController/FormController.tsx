@@ -22,22 +22,37 @@ export type FormControllerRender = {
   formState: UseFormStateReturn<FieldValues>;
 };
 
-export type FormControllerProps<ElType = HTMLInputElement> = {
+export type FormControllerProps = {
   control: Control<any>;
   name: string;
   placeholder?: string;
-  type: 'textarea' | 'file' | 'checkbox';
   label?: string;
   disabled?: boolean;
-  onChange?: (e: React.ChangeEvent<ElType>, field: Omit<FormControllerRender, 'formState'>) => void;
-  onBlur?: (field: Omit<FormControllerRender, 'formState'>) => void;
-  onDrop?: (e: React.DragEvent<HTMLDivElement>, field: Omit<FormControllerRender, 'formState'>) => void;
-  preview?: boolean;
   hideLabel?: boolean;
+} & (FileProps | CheckBoxProps | TextAreaProps);
+
+export type CheckBoxProps = {
+  type: 'checkbox';
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>, field: Omit<FormControllerRender, 'formState'>) => void;
+  onBlur?: (field: Omit<FormControllerRender, 'formState'>) => void;
 };
 
-export function FormController<ElType = HTMLInputElement>(props: FormControllerProps<ElType>) {
-  const {control, type, label, hideLabel, name, placeholder, disabled, preview, onChange, onBlur, onDrop} = props;
+export type TextAreaProps = {
+  type: 'textarea';
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>, field: Omit<FormControllerRender, 'formState'>) => void;
+  onBlur?: (field: Omit<FormControllerRender, 'formState'>) => void;
+};
+
+export type FileProps = {
+  type: 'file';
+  onDrop?: (e: React.DragEvent<HTMLDivElement>, field: Omit<FormControllerRender, 'formState'>) => void;
+  preview?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>, field: Omit<FormControllerRender, 'formState'>) => void;
+  onBlur?: (field: Omit<FormControllerRender, 'formState'>) => void;
+};
+
+export function FormController(props: FormControllerProps) {
+  const {control, type, label, hideLabel, name, placeholder, disabled, onChange, onBlur} = props;
 
   const handleChange = useCallback(
     (e, {field, fieldState}: Omit<FormControllerRender, 'formState'>) => {
@@ -72,9 +87,9 @@ export function FormController<ElType = HTMLInputElement>(props: FormControllerP
           return (
             <Uploader
               file={field.value?.[0]}
-              preview={preview}
+              preview={props.preview}
               onChange={e => handleChange(e, {field, fieldState})}
-              onDrop={e => onDrop?.(e, {field, fieldState})}
+              onDrop={e => props.onDrop?.(e, {field, fieldState})}
               onBlur={() => handleBlur({field, fieldState})}
               disabled={disabled}
             />
@@ -93,7 +108,7 @@ export function FormController<ElType = HTMLInputElement>(props: FormControllerP
           );
       }
     },
-    [type, preview, placeholder, disabled, handleChange, onDrop, handleBlur],
+    [disabled, handleBlur, handleChange, label, name, placeholder, props, type],
   );
 
   return (

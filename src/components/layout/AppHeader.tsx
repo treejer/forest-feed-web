@@ -11,6 +11,7 @@ import {Spacer} from '@forest-feed/components/common/Spacer';
 import {UserWallet} from '@forest-feed/components/layout/UserWallet';
 import {SwitchNetwork} from '@forest-feed/components/SwitchNetwork/SwitchNetwork';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
+import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleton';
 
 export function AppHeader() {
   const {address, status, isConnected} = useAccount();
@@ -32,7 +33,7 @@ export function AppHeader() {
         <p className="font-extrabold text-4xl">{t('forestFeed')}</p>
       </div>
       {['connecting', 'reconnecting'].includes(status) ? (
-        'loading..'
+        <AppHeaderSkeleton />
       ) : address && status === 'connected' ? (
         <div className="flex items-center">
           <SwitchNetwork />

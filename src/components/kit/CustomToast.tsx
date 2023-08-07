@@ -1,7 +1,6 @@
 import {useTranslations} from 'use-intl';
 
 import {ToastType} from '@forest-feed/utils/showToast';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
 
 export type CustomToastProps<T = any, V = any> = {
   title?: string;
@@ -14,17 +13,21 @@ export type CustomToastProps<T = any, V = any> = {
   };
 };
 
+const possibleColors = ['text-error', 'text-success'];
+
 export function CustomToast<T = any, V = any>(props: CustomToastProps<T, V>) {
   const {title, message, type, translate, variables} = props;
+
+  console.log(title, message, 'here');
 
   const t = useTranslations();
 
   return (
     <div>
-      <RenderIf condition={!!title}>
-        <p className="text-md">{translate ? t(title, variables?.title || {}) : title}</p>
-      </RenderIf>
-      <p className="text-sm">{translate ? t(message, variables?.message || {}) : message}</p>
+      {title ? <p className={`text-md text-${type}`}>{translate ? t(title, variables?.title || {}) : title}</p> : null}
+      <p className={`text-sm ${!title ? `text-${type}` : ''}`}>
+        {translate ? t(message, variables?.message || {}) : message}
+      </p>
     </div>
   );
 }

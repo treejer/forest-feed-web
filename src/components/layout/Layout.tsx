@@ -35,7 +35,6 @@ export function Layout(props: LayoutProps) {
       <div className="grid grid-cols-6 gap-20">
         <div className="grid col-span-6">
           <AppHeader />
-          <ConnectButton />
         </div>
         <div className="col-span-1">
           <Navbar />

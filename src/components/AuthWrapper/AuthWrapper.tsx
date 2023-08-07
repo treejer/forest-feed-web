@@ -8,6 +8,7 @@ import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {colors} from 'colors';
 
+import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import './AuthWrapper.scss';
 
 export function AuthLoader() {
@@ -38,6 +39,8 @@ export function AuthWrapper(props: AuthWrapperProps) {
     web3: {isSupportedNetwork, switching},
   } = useWeb3();
 
+  const {lensProfile, lensProfileLoading} = useAuthLens();
+
   const renderLoader = useCallback((loading: boolean) => {
     return (
       <RenderIf condition={loading}>
@@ -48,8 +51,8 @@ export function AuthWrapper(props: AuthWrapperProps) {
 
   return (
     <div className={`relative ${className}`}>
-      {renderLoader(isConnecting || switching)}
-      {address && isConnected && isSupportedNetwork ? children : <ConnectButton />}
+      {renderLoader(isConnecting || switching || lensProfileLoading)}
+      {address && lensProfile && isConnected && isSupportedNetwork ? children : <ConnectButton />}
     </div>
   );
 }

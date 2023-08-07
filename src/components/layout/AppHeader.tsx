@@ -16,50 +16,56 @@ import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleto
 export function AppHeader() {
   const {address, status, isConnected} = useAccount();
   const {disconnectAsync} = useDisconnect();
-  const {lensProfile, lensProfileLoading, loginIsPending, handleLensLogin, handleLensLogout} = useAuthLens();
+  const {lensProfile, lensProfileLoading, loginIsPending, handleLensLogin, handleLensLogout, unknownError} =
+    useAuthLens();
 
   const t = useTranslations();
 
   const handleDisconnect = useCallback(async () => {
-    await disconnectAsync();
     await handleLensLogout();
+    await disconnectAsync();
   }, [disconnectAsync, handleLensLogout]);
 
   return (
-    <div className="flex items-center justify-between py-4">
-      <div className="flex items-center">
-        <Logo />
-        <Spacer times={2} />
-        <p className="font-extrabold text-4xl">{t('forestFeed')}</p>
-      </div>
-      {['connecting', 'reconnecting'].includes(status) ? (
-        <AppHeaderSkeleton />
-      ) : address && status === 'connected' ? (
+    <div className="py-4">
+      <div className="flex items-center justify-between">
         <div className="flex items-center">
-          <SwitchNetwork />
-          <Spacer />
-          {lensProfile ? (
-            <div className="w-40 disabled:bg-primaryGreen flex justify-center items-center rounded-[8px]">
-              <p className="text-sm text-green font-extrabold drop-shadow-md">@{lensProfile.handle}</p>
-            </div>
-          ) : (
-            <Button
-              className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
-              autoSize={false}
-              variant={ButtonVariant.secondary}
-              text={t('lens.login')}
-              icon={<LensIcon />}
-              disabled={lensProfileLoading || loginIsPending}
-              loading={lensProfileLoading || loginIsPending}
-              onClick={handleLensLogin}
-            />
-          )}
-          <Spacer />
-          <UserWallet walletAddress={address} onDisconnect={handleDisconnect} />
+          <Logo />
+          <Spacer times={2} />
+          <p className="font-extrabold text-4xl">{t('forestFeed')}</p>
         </div>
-      ) : (
-        <ConnectButton />
-      )}
+        {['connecting', 'reconnecting'].includes(status) ? (
+          <AppHeaderSkeleton />
+        ) : address && status === 'connected' ? (
+          <div className="flex items-center">
+            <SwitchNetwork />
+            <Spacer />
+            {lensProfile ? (
+              <div className="w-40 disabled:bg-primaryGreen flex justify-center items-center rounded-[8px]">
+                <p className="text-sm text-green font-extrabold drop-shadow-md">@{lensProfile.handle}</p>
+              </div>
+            ) : (
+              <Button
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
+                autoSize={false}
+                variant={ButtonVariant.secondary}
+                text={t('lens.login')}
+                icon={<LensIcon />}
+                disabled={lensProfileLoading || loginIsPending}
+                loading={lensProfileLoading || loginIsPending}
+                onClick={handleLensLogin}
+              />
+            )}
+            <Spacer />
+            <UserWallet walletAddress={address} onDisconnect={handleDisconnect} />
+          </div>
+        ) : (
+          <ConnectButton />
+        )}
+      </div>
+      <div className="flex items-center justify-end mt-1">
+        {unknownError ? <p className="text-error text-sm">{t(`lens.errors.${unknownError}`)}</p> : null}
+      </div>
     </div>
   );
 }

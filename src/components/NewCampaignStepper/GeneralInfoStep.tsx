@@ -68,7 +68,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
     ({content, image, termsConditionAgreed}: GeneralInfoForm) => {
       onProceed({
         content,
-        image: image[0],
+        image: image?.[0],
         termsConditionAgreed,
       });
     },

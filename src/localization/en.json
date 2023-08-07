@@ -85,7 +85,10 @@
     "tooLarge": "The file is too large"
   },
   "lens": {
-    "login": "Login with lens"
+    "login": "Login with lens",
+    "errors": {
+      "1": "You have no handle on lens protocol with this wallet address"
+    }
   },
   "switchNetwork": {
     "Polygon": "Polygon",

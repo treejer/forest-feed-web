@@ -14,12 +14,14 @@ export type StepperProps = {
   setActiveStep: (step: number) => void;
 };
 
+const possibleGridCols = ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6'];
+
 export function Stepper(props: StepperProps) {
   const {contents, activeStep, setActiveStep, isDependent} = props;
 
   return (
     <div>
-      <div className="grid grid-cols-4">
+      <div className={`grid grid-cols-${contents.length}`}>
         {contents.map((item, index) => (
           <div key={`${item.title}-${index}`} className="flex flex-col justify-between relative">
             <div

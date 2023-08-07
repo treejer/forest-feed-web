@@ -23,7 +23,7 @@ export function TreeCost(props: TreeCostProps) {
     functionName: 'price',
   });
 
-  const price = useMemo(() => (salePrice ? ethers.utils.formatEther(salePrice) : null), [salePrice]);
+  const price = useMemo(() => (salePrice ? ethers.utils.formatEther(salePrice) : 10), [salePrice]);
 
   const t = useTranslations();
 

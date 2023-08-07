@@ -6,6 +6,7 @@ import {
   ControllerFieldState,
   ControllerRenderProps,
   FieldValues,
+  UseFormResetField,
   UseFormStateReturn,
 } from 'react-hook-form';
 
@@ -47,8 +48,9 @@ export type FileProps = {
   type: 'file';
   onDrop?: (e: React.DragEvent<HTMLDivElement>, field: Omit<FormControllerRender, 'formState'>) => void;
   preview?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>, field: Omit<FormControllerRender, 'formState'>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>, field: Omit<FormControllerRender, 'formState'>) => void;
   onBlur?: (field: Omit<FormControllerRender, 'formState'>) => void;
+  resetField?: UseFormResetField<any>;
 };
 
 export function FormController(props: FormControllerProps) {
@@ -90,6 +92,7 @@ export function FormController(props: FormControllerProps) {
               preview={props.preview}
               onChange={e => handleChange(e, {field, fieldState})}
               onDrop={e => props.onDrop?.(e, {field, fieldState})}
+              onDetach={() => props?.resetField?.(field.name)}
               onBlur={() => handleBlur({field, fieldState})}
               disabled={disabled}
             />

@@ -1,8 +1,10 @@
 import React, {useCallback} from 'react';
+
 import {useTranslations} from 'use-intl';
 import {useForm} from 'react-hook-form';
 
 import {Spacer} from '@forest-feed/components/common/Spacer';
+import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {CampaignJourneySlice} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {FormController} from '@forest-feed/components/FormController/FormController';
@@ -21,7 +23,7 @@ export type GeneralInfoStepProps = {
 export function GeneralInfoStep(props: GeneralInfoStepProps) {
   const {defaultValues, isConfirm, activeStep, setActiveStep, onProceed} = props;
 
-  const {control, setValue, handleSubmit, formState} = useForm<GeneralInfoForm>({
+  const {control, resetField, setValue, handleSubmit, formState} = useForm<GeneralInfoForm>({
     defaultValues: {
       image: defaultValues?.image ? [defaultValues.image] : undefined,
       content: defaultValues?.content || '',
@@ -36,19 +38,17 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
 
   const handleChangeUploadedFile = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target?.files) {
-        setValue('image', e.target?.files as any, {
-          shouldTouch: true,
-          shouldValidate: true,
-        });
-      }
+      setValue('image', e?.target?.files as any, {
+        shouldTouch: true,
+        shouldValidate: true,
+      });
     },
     [setValue],
   );
 
   const handleDropUploadedFile = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
-      setValue('image', e.dataTransfer?.files as any, {
+      setValue('image', e?.dataTransfer?.files as any, {
         shouldTouch: true,
         shouldValidate: true,
       });
@@ -86,16 +86,19 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
         disabled={isConfirm}
       />
       <Spacer times={2} />
-      <FormController
-        control={control}
-        name="image"
-        type="file"
-        preview={isConfirm}
-        onDrop={handleDropUploadedFile}
-        onChange={handleChangeUploadedFile}
-        disabled={isConfirm}
-      />
-      <Spacer times={4} />
+      <RenderIf condition={!isConfirm || !!defaultValues?.image}>
+        <FormController
+          control={control}
+          name="image"
+          type="file"
+          preview={isConfirm}
+          onDrop={handleDropUploadedFile}
+          onChange={handleChangeUploadedFile}
+          resetField={resetField}
+          disabled={isConfirm}
+        />
+        <Spacer times={4} />
+      </RenderIf>
       <FormController
         control={control}
         name="termsConditionAgreed"
@@ -108,6 +111,10 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
       <div className="flex items-end justify-end">
         <Button text={t(isConfirm ? 'back' : 'learnMore')} onClick={handleLearnMore} />
         <Spacer />
+        <RenderIf condition={isConfirm}>
+          <Button text={t('edit')} onClick={() => setActiveStep(0)} />
+          <Spacer />
+        </RenderIf>
         <Button variant={ButtonVariant.secondary} disabled={!formState.isValid} text={t('approve')} type="submit" />
       </div>
     </form>

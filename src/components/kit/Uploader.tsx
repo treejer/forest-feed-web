@@ -6,21 +6,23 @@ import {useTranslations} from 'use-intl';
 
 import {AttachIcon} from '@forest-feed/components/kit/Icons/AttachIcon';
 import {DeleteIcon} from '@forest-feed/components/kit/Icons/DeleteIcon';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Modal} from '@forest-feed/components/kit/Modal/Modal';
+import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import {Spacer} from '@forest-feed/components/common/Spacer';
 import {colors} from 'colors';
 
 export type UploaderProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onDrop: (e: React.DragEvent<HTMLDivElement>) => void;
+  onDetach?: () => void;
   onBlur?: () => void;
   preview?: boolean;
-  file?: File | null;
+  file: File | null;
   disabled?: boolean;
 };
 
 export function Uploader(props: UploaderProps) {
-  const {preview, file, disabled, onChange, onDrop, onBlur} = props;
+  const {preview, file, disabled, onChange, onDrop, onBlur, onDetach} = props;
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -77,6 +79,12 @@ export function Uploader(props: UploaderProps) {
           dragActive && 'border-dashed'
         } h-[88px] rounded-lg flex items-center justify-center cursor-pointer overflow-hidden transition-shadow hover:shadow-lg`}
       >
+        <RenderIf condition={!!previewFile && !preview && !!onDetach}>
+          <button type="button" onClick={onDetach}>
+            <DeleteIcon />
+          </button>
+          <Spacer />
+        </RenderIf>
         <RenderIf condition={!!previewFile}>
           <Image
             className="rounded-sm mr-2 max-h-[70px]"
@@ -96,8 +104,11 @@ export function Uploader(props: UploaderProps) {
             type="file"
             onChange={onChange}
             onBlur={onBlur}
+            multiple={false}
           />
-          {preview ? <DeleteIcon /> : <AttachIcon color={colors.primaryGreen} />}
+          <RenderIf condition={!preview}>
+            <AttachIcon color={colors.primaryGreen} />
+          </RenderIf>
           <p className="text-secondary text-lg font-medium ml-1">
             <span className="text-primaryGreen">
               {t(preview ? 'attachedPhoto' : previewFile ? 'changePhoto' : 'addPhoto')}

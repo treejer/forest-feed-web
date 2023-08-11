@@ -55,8 +55,7 @@ export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAcc
     if (!accessToken || address !== account.address) {
       // TODO: logout/login
       // * logout lens account
-      yield lensLogout();
-
+      // yield lensLogout();
       // * 1. nonce load, 2. take nonce response, 3. sign message, 4. sign load
     }
     yield put(connectedWallet({address: account.address}));

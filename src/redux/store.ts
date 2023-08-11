@@ -6,8 +6,10 @@ import logger from 'redux-logger';
 
 import {combinedReducers, reducer} from '@forest-feed/redux/reducer';
 import {rootSaga} from '@forest-feed/redux/saga';
+import {checkAppVersion} from '@forest-feed/redux/module/appInfo/appInfo.slice';
 import {reduxLogger} from '@forest-feed/config';
 import storage from '@forest-feed/lib/persist/storage';
+import {checkUserVersion} from '@forest-feed/utils/version';
 
 export interface SagaStore extends Store {
   sagaTask?: Task;
@@ -20,10 +22,20 @@ export type AppDispatch = AppStore['dispatch'];
 const persistConfig = {
   key: 'forestFeedPersist',
   storage,
-  whitelist: ['web3'],
+  whitelist: ['web3', 'appInfo'],
 };
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+const persistedReducer = persistReducer(persistConfig, (state: any, action: {type: string; payload: any}) => {
+  if (action.type === 'persist/REHYDRATE') {
+    return reducer({...state, appInfo: {version: action?.payload?.appInfo?.version || ''}}, action);
+  }
+  if (action.type === checkAppVersion.type) {
+    if (!state.appInfo.version || checkUserVersion(state.appInfo.version)) {
+      return reducer(undefined, action);
+    }
+  }
+  return reducer(state, action);
+});
 export const makeStore = (preloadedState?: PreloadedState<AppState>) => {
   const sagaMiddleware = createSagaMiddleware();
   const middlewares: Middleware[] = [sagaMiddleware];

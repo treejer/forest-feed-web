@@ -38,7 +38,9 @@ export function useAuthLens() {
   );
 
   useEffect(() => {
-    dispatchSetLensLoading({loading: loading});
+    if (lensLoading !== loading) {
+      dispatchSetLensLoading({loading: loading});
+    }
   }, [loading]);
 
   useEffect(() => {

@@ -16,8 +16,7 @@ import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleto
 export function AppHeader() {
   const {address, status} = useAccount();
   const {disconnectAsync} = useDisconnect();
-  const {lensProfile, lensProfileLoading, loginIsPending, handleLensLogin, handleLensLogout, unknownError} =
-    useAuthLens();
+  const {lensProfile, lensLoading, handleLensLogin, handleLensLogout, unknownError} = useAuthLens();
 
   const t = useTranslations();
 
@@ -51,8 +50,8 @@ export function AppHeader() {
                 variant={ButtonVariant.secondary}
                 text={t('lens.login')}
                 icon={<LensIcon />}
-                disabled={lensProfileLoading || loginIsPending}
-                loading={lensProfileLoading || loginIsPending}
+                disabled={lensLoading}
+                loading={lensLoading}
                 onClick={handleLensLogin}
               />
             )}

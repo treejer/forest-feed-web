@@ -1,10 +1,10 @@
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useAccount} from 'wagmi';
 
 import {useActiveProfile, useWalletLogin, useWalletLogout} from '@lens-protocol/react-web';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
-import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
+import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 
 export type LensStatus = {
   isSuccess: boolean;
@@ -20,11 +20,26 @@ export function useAuthLens() {
   const [logoutStatus, setLogoutStatus] = useState<LensStatus | null>(null);
   const [unknownError, setUnknownError] = useState<LensUnknownErrors | null>(null);
 
-  const {chainId} = useConfig();
+  const {
+    web3: {
+      lensLoading,
+      config: {chainId},
+    },
+    dispatchSetLensLoading,
+  } = useWeb3();
   const {address, isConnected} = useAccount();
   const {execute: login, isPending: loginIsPending} = useWalletLogin();
   const {execute: logout, isPending: logoutIsPending} = useWalletLogout();
   const {data: lensProfile, loading: lensProfileLoading, error: lensProfileError} = useActiveProfile();
+
+  const loading = useMemo(
+    () => loginIsPending || logoutIsPending || lensProfileLoading,
+    [loginIsPending, logoutIsPending, lensProfileLoading],
+  );
+
+  useEffect(() => {
+    dispatchSetLensLoading({loading: loading});
+  }, [loading]);
 
   useEffect(() => {
     setUnknownError(null);
@@ -92,5 +107,6 @@ export function useAuthLens() {
     loginIsPending,
     logoutIsPending,
     unknownError,
+    lensLoading,
   };
 }

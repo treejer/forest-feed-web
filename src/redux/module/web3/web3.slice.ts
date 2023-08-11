@@ -13,6 +13,7 @@ export type Web3State = {
   isSupportedNetwork: boolean;
   address: `0x${string}` | null;
   accessToken: string | null;
+  lensLoading: boolean;
 };
 
 export type SwitchNetworkAction = {
@@ -28,6 +29,7 @@ export type Web3Action = {
   updateNetwork: {newConfig: NetworkConfig};
   connectedWallet: {address?: `0x${string}`};
   checkAccount: {account: GetAccountResult; lensLogout: () => void};
+  setLensLoading: {loading: boolean};
 };
 
 export const web3InitialState: Web3State = {
@@ -37,6 +39,7 @@ export const web3InitialState: Web3State = {
   isSupportedNetwork: false,
   address: null,
   accessToken: null,
+  lensLoading: false,
 };
 
 export const web3Slice = createSlice({
@@ -64,6 +67,9 @@ export const web3Slice = createSlice({
       state.isConnected = !!action.payload.address;
       state.address = action.payload.address || null;
     },
+    setLensLoading: (state, action: PayloadAction<Web3Action['setLensLoading']>) => {
+      state.lensLoading = action.payload.loading;
+    },
   },
 });
 
@@ -76,6 +82,7 @@ export const {
   cancelSwitchNetwork,
   connectedWallet,
   checkAccount,
+  setLensLoading,
 } = web3Slice.actions;
 export default web3Slice.reducer;
 
@@ -94,10 +101,18 @@ export function useWeb3() {
     dispatch(notSupportedNetwork());
   }, [dispatch]);
 
+  const dispatchSetLensLoading = useCallback(
+    (payload: Web3Action['setLensLoading']) => {
+      dispatch(setLensLoading(payload));
+    },
+    [dispatch],
+  );
+
   return {
     web3,
     dispatchSwitchNetwork,
     dispatchNotSupportedNetwork,
+    dispatchSetLensLoading,
   };
 }
 

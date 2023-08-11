@@ -11,12 +11,12 @@ import {LensIcon} from '@forest-feed/components/kit/Icons/LensIcon';
 
 export function ConnectToUse() {
   const {address, status} = useAccount();
-  const {lensProfileLoading, loginIsPending, handleLensLogin} = useAuthLens();
+  const {lensLoading, handleLensLogin} = useAuthLens();
 
   const t = useTranslations();
 
   return (
-    <div className="col-span-full w-full h-full flex flex-col justify-center items-center">
+    <div className="col-span-full w-full h-full flex flex-col items-center">
       <Image src="/assets/images/trees.svg" alt="trees" width={300} height={300} draggable={false} />
       <p className="my-4 text-secondary drop-shadow max-w-2xl text-center">{t('connectToUse.text')}</p>
       {address && status === 'connected' ? (
@@ -27,8 +27,8 @@ export function ConnectToUse() {
             variant={ButtonVariant.secondary}
             text={t('lens.login')}
             icon={<LensIcon />}
-            disabled={lensProfileLoading || loginIsPending}
-            loading={lensProfileLoading || loginIsPending}
+            disabled={lensLoading}
+            loading={lensLoading}
             onClick={handleLensLogin}
           />
           <p className="text-green text-sm font-thin">{t('connectToUse.connected')}</p>

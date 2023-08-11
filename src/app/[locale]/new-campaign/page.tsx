@@ -66,8 +66,8 @@ function NewCampaignPage() {
   );
 
   return (
-    <AnimatedPage>
-      <AuthWrapper className="grid grid-cols-6 gap-10">
+    <AnimatedPage className="h-full">
+      <AuthWrapper className="grid grid-cols-6 gap-10 h-full">
         <div className="col-span-5">
           <Stepper
             isDependent

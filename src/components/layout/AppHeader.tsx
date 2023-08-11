@@ -14,7 +14,7 @@ import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleton';
 
 export function AppHeader() {
-  const {address, status, isConnected} = useAccount();
+  const {address, status} = useAccount();
   const {disconnectAsync} = useDisconnect();
   const {lensProfile, lensProfileLoading, loginIsPending, handleLensLogin, handleLensLogout, unknownError} =
     useAuthLens();
@@ -46,7 +46,7 @@ export function AppHeader() {
               </div>
             ) : (
               <Button
-                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-1"
                 autoSize={false}
                 variant={ButtonVariant.secondary}
                 text={t('lens.login')}
@@ -56,7 +56,6 @@ export function AppHeader() {
                 onClick={handleLensLogin}
               />
             )}
-            <Spacer />
             <UserWallet walletAddress={address} onDisconnect={handleDisconnect} />
           </div>
         ) : (

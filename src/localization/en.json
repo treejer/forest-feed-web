@@ -94,5 +94,9 @@
   "switchNetwork": {
     "Polygon": "Polygon",
     "Mumbai": "Mumbai <red>testnet</red>"
+  },
+  "connectToUse": {
+    "text": "Please connect to your wallet and log in with your Lance account to continue using the app so you can create exciting campaigns for your followers!",
+    "connected": "Wallet successfully connected."
   }
 }

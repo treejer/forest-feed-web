@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
 
 import {useAccount} from 'wagmi';
-import {ConnectButton} from '@rainbow-me/rainbowkit';
 import {RotatingLines} from 'react-loader-spinner';
 
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
@@ -9,6 +8,7 @@ import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {colors} from 'colors';
 
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
+import {ConnectToUse} from '@forest-feed/components/AuthWrapper/ConnectToUse';
 import './AuthWrapper.scss';
 
 export function AuthLoader() {
@@ -52,7 +52,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
   return (
     <div className={`relative ${className}`}>
       {renderLoader(isConnecting || switching || lensProfileLoading)}
-      {address && lensProfile && isConnected && isSupportedNetwork ? children : <ConnectButton />}
+      {address && lensProfile && isConnected && isSupportedNetwork ? children : <ConnectToUse />}
     </div>
   );
 }

@@ -66,8 +66,14 @@ export const campaignJourneySlice = createSlice({
     },
     setCanBeCollected: state => {
       state.settings.canBeCollected = !state.settings.canBeCollected;
+      state.settings.canBeCollectedOnlyFollowers = !state.settings.canBeCollected
+        ? false
+        : state.settings.canBeCollectedOnlyFollowers;
     },
     setCanBeCollectedOnlyFollowers: state => {
+      state.settings.canBeCollected = !state.settings.canBeCollectedOnlyFollowers
+        ? true
+        : state.settings.canBeCollected;
       state.settings.canBeCollectedOnlyFollowers = !state.settings.canBeCollectedOnlyFollowers;
     },
     setMinimumFollowerNumber: (state, action: PayloadAction<CampaignJourneyAction['setMinimumFollowerNumber']>) => {

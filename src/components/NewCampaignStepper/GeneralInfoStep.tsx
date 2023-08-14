@@ -6,11 +6,11 @@ import {useForm} from 'react-hook-form';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {CampaignJourneySlice} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {FormController} from '@forest-feed/components/FormController/FormController';
 import {GeneralInfoForm, generalInfoYup} from '@forest-feed/validators/generalInfo';
 
-export type GeneralInfoStepState = Pick<CampaignJourneySlice, 'content' | 'image' | 'termsConditionAgreed'>;
+export type GeneralInfoStepState = Pick<CampaignJourneyState, 'content' | 'image' | 'termsConditionAgreed'>;
 
 export type GeneralInfoStepProps = {
   defaultValues?: GeneralInfoStepState;

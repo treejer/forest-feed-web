@@ -76,7 +76,7 @@ function MyCampaigns() {
         <Table<TCampaign>
           data={Array(200).fill({
             id: 'ff-twit-4',
-            status: 'eyb nadareh',
+            status: "It's OK!",
             type: 'Standard',
             budget: 'budget',
             goal: 'goal',

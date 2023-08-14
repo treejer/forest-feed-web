@@ -55,6 +55,7 @@ export function AppHeader() {
                 onClick={handleLensLogin}
               />
             )}
+            <Spacer />
             <UserWallet walletAddress={address} onDisconnect={handleDisconnect} />
           </div>
         ) : (

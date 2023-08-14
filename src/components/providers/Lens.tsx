@@ -2,7 +2,13 @@
 
 import React, {useMemo} from 'react';
 
-import {LensConfig, LensProvider as OriginalLensProvider, production, development} from '@lens-protocol/react-web';
+import {
+  LensConfig,
+  LensProvider as OriginalLensProvider,
+  production,
+  development,
+  appId,
+} from '@lens-protocol/react-web';
 import {bindings as wagmiBindings} from '@lens-protocol/wagmi';
 
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
@@ -15,6 +21,7 @@ export function LensProvider(props: LensProviderProps) {
 
   const lensConfig: LensConfig = useMemo(
     () => ({
+      appId: appId('lenster'),
       bindings: wagmiBindings(),
       environment: config.isMainnet ? production : development,
     }),

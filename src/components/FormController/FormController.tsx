@@ -1,8 +1,8 @@
 import React, {useCallback} from 'react';
 
 import {
-  Control,
   Controller,
+  Control,
   ControllerFieldState,
   ControllerRenderProps,
   FieldValues,

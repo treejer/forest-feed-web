@@ -6,6 +6,8 @@ export const projectName = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_NAME |
 export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '';
 export const infuraKey = process.env.NEXT_PUBLIC_INFURA_KEY || '';
 
+export const lensProtocolAppId = process.env.NEXT_PUBLIC_LENS_PROTOCOL_APP_ID || '';
+
 export enum ContractType {
   DAI = 'DAI',
   REGULAR_SALE = 'REGULAR_SALE',

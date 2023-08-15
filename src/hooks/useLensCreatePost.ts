@@ -1,4 +1,4 @@
-import {useCallback, useId, useMemo, useState} from 'react';
+import {useCallback, useState} from 'react';
 
 import {
   ContentFocus,
@@ -9,8 +9,6 @@ import {
   SupportedPublicationMediaType,
   CollectPolicyType,
   NftAttributeDisplayType,
-  Amount,
-  useCurrencies,
   ReferencePolicyType,
   CollectPolicyConfig,
   ReferencePolicyConfig,
@@ -39,10 +37,6 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
 
   const config = useConfig();
   const {campaignJourney} = useCampaignJourney();
-  const id = useId();
-
-  const {data: currencies} = useCurrencies();
-  const currency = useMemo(() => currencies?.find(item => item.name === 'DAI'), [currencies]);
 
   const {execute: create, ...createPostState} = useCreatePost({publisher, upload: uploadLens(config)});
   const [loading, setLoading] = useState(false);
@@ -50,32 +44,20 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
   const createLensPost = useCallback(async () => {
     setLoading(true);
     try {
-      if (!currency) throw new Error('Currency is not available');
-
       const {content, image, settings, reward, size} = campaignJourney;
-      let media: MediaObject[] | undefined;
+
+      let photoMetaData;
 
       if (image) {
-        const photoMetaData = await upload(config.ipfsPostURL, image);
-        media = [
-          {
-            url: getHttpDownloadUrl(config.ipfsGetURL, photoMetaData.Hash),
-            mimeType: image?.type as SupportedPublicationMediaType,
-            altTag: image.name,
-          },
-        ];
+        photoMetaData = await upload(config.ipfsPostURL, image);
       }
 
       let collect: CollectPolicyConfig;
       if (settings.canBeCollected) {
         collect = {
-          type: CollectPolicyType.CHARGE,
-          followersOnly: false,
+          type: CollectPolicyType.FREE,
+          followersOnly: settings.canBeCollectedOnlyFollowers,
           collectLimit: size,
-          mirrorReward: 5,
-          recipient: publisher.ownedBy,
-          timeLimited: false,
-          fee: Amount.erc20(currency, 1),
           metadata: {
             name: 'The NFT',
             description: 'The NFT description',
@@ -114,9 +96,15 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
       }
 
       await create({
-        content: content,
-        contentFocus: ContentFocus.TEXT,
-        ...(media ? {media} : {}),
+        content,
+        contentFocus: image ? ContentFocus.IMAGE : ContentFocus.TEXT_ONLY,
+        media: [
+          {
+            url: getHttpDownloadUrl(config.ipfsGetURL, photoMetaData.Hash),
+            mimeType: image?.type as SupportedPublicationMediaType,
+            altTag: image?.name,
+          },
+        ],
         locale: 'en',
         collect,
         reference,
@@ -128,7 +116,7 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
       console.log('create post finally');
       setLoading(false);
     }
-  }, [currency, campaignJourney, create, config.ipfsPostURL, config.ipfsGetURL, publisher.ownedBy]);
+  }, [campaignJourney, create, config.ipfsPostURL, config.ipfsGetURL]);
 
   return {
     ...createPostState,

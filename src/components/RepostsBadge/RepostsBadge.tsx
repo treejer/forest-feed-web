@@ -6,9 +6,11 @@ export enum RepostsStatus {
 }
 
 export type RepostsBadgeProps = {
-  text: string;
+  min: string | number;
+  max: string | number;
   status: RepostsStatus;
 };
+
 type VariantClassNames = {
   [key in RepostsStatus]: string;
 };
@@ -19,13 +21,13 @@ const className: VariantClassNames = {
 };
 
 export function RepostsBadge(props: RepostsBadgeProps) {
-  const {text, status} = props;
+  const {min, max, status} = props;
 
   return (
     <span
-      className={`border rounded-md w-[96px] h-[28px] text-lg font-semibold text-white text-center ${className[status]}`}
+      className={`block border rounded-md w-[96px] h-[28px] text-lg font-semibold text-white text-center ${className[status]}`}
     >
-      {text}
+      {min}/{max}
     </span>
   );
 }

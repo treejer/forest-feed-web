@@ -2,69 +2,72 @@
 
 import React, {useMemo} from 'react';
 import {useTranslations} from 'use-intl';
+import {TableOptions} from 'react-table';
+import moment from 'moment';
 
-import {Table, TColumn} from '@forest-feed/components/kit/Table/Table';
+import {Table} from '@forest-feed/components/kit/Table/Table';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 
+import mockCampaigns from '@forest-feed/db/mockCampaigns.json';
+
 export type TCampaign = {
   id: string;
-  status: string;
+  status: boolean;
   type: string;
   budget: string;
-  goal: string;
-  reposts: string;
+  goal: number;
+  reposts: number;
   createdAt: string;
 };
 
 function MyCampaigns() {
   const t = useTranslations('myCampaigns');
 
-  const columns: TColumn<TCampaign>[] = useMemo(
+  const columns: TableOptions<TCampaign>['columns'] = useMemo(
     () => [
       {
-        name: t('status'),
-        cell: (row: TCampaign, index: number) => {
-          return (
-            <Switch
-              value={row.status}
-              checked={row.status === 'checked'}
-              onChange={e => console.log(e.target.value)}
-              id={`swatch-${index}`}
-            />
-          );
-        },
-        selector: (row: TCampaign) => row.status,
+        Header: t('status'),
+        accessor: 'status',
+        Cell: ({cell, value}) => (
+          <Switch id={cell.row.values.id} checked={!!value} onChange={() => {}} value={value.toString()} />
+        ),
       },
       {
-        name: t('campaignId'),
-        selector: (row: TCampaign) => row.id,
+        Header: t('campaignId'),
+        accessor: 'id',
       },
       {
-        name: t('type'),
-        selector: (row: TCampaign) => row.type,
-        sortable: true,
+        Header: t('type'),
+        accessor: 'type',
       },
       {
-        name: t('budget'),
-        selector: (row: TCampaign) => row.budget,
+        Header: t('budget'),
+        accessor: 'budget',
       },
       {
-        name: t('goal'),
-        selector: (row: TCampaign) => row.goal,
-        sortable: true,
+        Header: t('goal'),
+        accessor: 'goal',
       },
       {
-        name: t('reposts'),
-        cell: (row: TCampaign) => <RepostsBadge text={row.reposts} status={RepostsStatus.active} />,
-        selector: (row: TCampaign) => row.reposts,
+        Header: t('reposts'),
+        accessor: 'reposts',
+        Cell: ({cell, value}) => (
+          <RepostsBadge
+            min={value}
+            max={cell.row.values.goal}
+            status={cell.row.values.goal === value ? RepostsStatus.active : RepostsStatus.stopped}
+          />
+        ),
       },
       {
-        name: t('creationDate'),
-        selector: (row: TCampaign) => row.createdAt,
-        sortable: true,
+        Header: t('creationDate'),
+        accessor: 'createdAt',
+        Cell: ({value}) => moment(value).format('l'),
+        sortDescFirst: true,
+        defaultCanSort: true,
       },
     ],
     [t],
@@ -73,18 +76,7 @@ function MyCampaigns() {
   return (
     <AnimatedPage>
       <AuthWrapper>
-        <Table<TCampaign>
-          data={Array(200).fill({
-            id: 'ff-twit-4',
-            status: "It's OK!",
-            type: 'Standard',
-            budget: 'budget',
-            goal: 'goal',
-            reposts: '67/100',
-            createdAt: 'creationDate',
-          })}
-          columns={columns}
-        />
+        <Table<TCampaign> data={mockCampaigns} columns={columns} />
       </AuthWrapper>
     </AnimatedPage>
   );

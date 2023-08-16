@@ -15,6 +15,8 @@ export enum Color {
   lightWhite = 'lightWhite',
   primaryBg = 'primaryBg',
   black = 'black',
+  tableBorder = 'tableBorder',
+  khakiDark = 'khakiDark',
 }
 
 export type Colors = {
@@ -22,6 +24,8 @@ export type Colors = {
 };
 
 export const colors: Colors = {
+  khakiDark: '#E5E7DB',
+  tableBorder: '#BDBDBD',
   lightGreen: '#D3E4D0',
   yellow: '#F0E5C8',
   border: '#D0CEC8',

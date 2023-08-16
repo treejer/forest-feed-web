@@ -26,7 +26,7 @@ export function ChevronIcon(props: ChevronIconProps) {
     <img
       src="/assets/images/ChevronRight.png"
       alt="add"
-      className={`transition-all ${directionClassNames[direction]} ${className}`}
+      className={`transition-all inline ${directionClassNames[direction]} ${className}`}
       style={{width: size, height: size}}
     />
   );

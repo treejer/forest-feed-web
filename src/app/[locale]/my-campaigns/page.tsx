@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {useTranslations} from 'use-intl';
 import {TableOptions} from 'react-table';
 import moment from 'moment';
@@ -12,6 +12,7 @@ import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 
 import mockCampaigns from '@forest-feed/db/mockCampaigns.json';
+import {paginationPageSize} from '@forest-feed/config';
 
 export type TCampaign = {
   id: string;
@@ -25,6 +26,8 @@ export type TCampaign = {
 
 function MyCampaigns() {
   const t = useTranslations('myCampaigns');
+
+  const [page, setPage] = useState(1);
 
   const columns: TableOptions<TCampaign>['columns'] = useMemo(
     () => [
@@ -73,10 +76,22 @@ function MyCampaigns() {
     [t],
   );
 
+  const data = useMemo(() => mockCampaigns.slice((page - 1) * paginationPageSize, page * paginationPageSize), [page]);
+
   return (
     <AnimatedPage>
       <AuthWrapper>
-        <Table<TCampaign> data={mockCampaigns} columns={columns} />
+        <Table<TCampaign>
+          data={data}
+          columns={columns}
+          pagination={{
+            page,
+            loading: false,
+            refetching: false,
+            loadNextPrevPage: async (number: 1 | -1) =>
+              setPage(prevState => (prevState + number < 1 ? prevState : prevState + number)),
+          }}
+        />
       </AuthWrapper>
     </AnimatedPage>
   );

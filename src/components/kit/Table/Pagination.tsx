@@ -1,40 +1,131 @@
-'use client';
+import React, {useMemo} from 'react';
 
-import React from 'react';
-
-import {ChevronIcon, ChevronIconDirection} from '../Icons/ChevronIcon';
+import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
+import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import {paginationPageSize} from '@forest-feed/config';
 
 export type PaginationProps = {
-  count: number;
+  count?: number;
   currentPage: number;
+  onNextPage: () => void;
+  onPrevPage: () => void;
+  onLoadPage?: (page: number) => void;
   hideNext?: boolean;
   disabled?: boolean;
   hidePrev?: boolean;
+  siblingCount?: number;
 };
 
+export const DOTS = '...';
+function range(start: number, end: number) {
+  let length = end - start + 1;
+  /*
+  	Create an array of certain length and set the elements within it from
+    start value to end value.
+  */
+  return Array.from({length}, (_, idx) => idx + start);
+}
+
 export function Pagination(props: PaginationProps) {
-  const {count, currentPage, hideNext, hidePrev} = props;
+  const {count, currentPage, hideNext, hidePrev, siblingCount = 1, onPrevPage, onNextPage, onLoadPage} = props;
+
+  const paginationRange = useMemo(() => {
+    if (!count) return null;
+    const totalPageCount = Math.ceil(count / paginationPageSize);
+
+    // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*DOTS
+    const totalPageNumbers = siblingCount + 5;
+
+    /*
+      Case 1:
+      If the number of pages is less than the page numbers we want to show in our
+      paginationComponent, we return the range [1..totalPageCount]
+    */
+    if (totalPageNumbers >= totalPageCount) {
+      return range(1, totalPageCount);
+    }
+
+    /*
+    	Calculate left and right sibling index and make sure they are within range 1 and totalPageCount
+    */
+    const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
+    const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPageCount);
+
+    /*
+      We do not show dots just when there is just one page number to be inserted between the extremes of sibling and the page limits i.e 1 and totalPageCount. Hence we are using leftSiblingIndex > 2 and rightSiblingIndex < totalPageCount - 2
+    */
+    const shouldShowLeftDots = leftSiblingIndex > 2;
+    const shouldShowRightDots = rightSiblingIndex < totalPageCount - 2;
+
+    const firstPageIndex = 1;
+    const lastPageIndex = totalPageCount;
+
+    /*
+    	Case 2: No left dots to show, but rights dots to be shown
+    */
+    if (!shouldShowLeftDots && shouldShowRightDots) {
+      let leftItemCount = 3 + 2 * siblingCount;
+      let leftRange = range(1, leftItemCount);
+
+      return [...leftRange, DOTS, totalPageCount];
+    }
+
+    /*
+    	Case 3: No right dots to show, but left dots to be shown
+    */
+    if (shouldShowLeftDots && !shouldShowRightDots) {
+      let rightItemCount = 3 + 2 * siblingCount;
+      let rightRange = range(totalPageCount - rightItemCount + 1, totalPageCount);
+      return [firstPageIndex, DOTS, ...rightRange];
+    }
+
+    /*
+    	Case 4: Both left and right dots to be shown
+    */
+    if (shouldShowLeftDots && shouldShowRightDots) {
+      let middleRange = range(leftSiblingIndex, rightSiblingIndex);
+      return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
+    }
+  }, [count, siblingCount, currentPage]);
+
+  console.log(currentPage, 'pagination range');
 
   const itemClassName =
     'border rounded-full w-[36px] h-[36px] border-border flex items-center justify-center mx-2 first:ml-0 last:mr-0';
 
   return (
     <div className="flex items-end justify-end mt-5">
-      {currentPage !== 1 || !hidePrev ? (
-        <div className={itemClassName}>
-          <ChevronIcon direction={ChevronIconDirection.left} />
-        </div>
-      ) : null}
-      {Array.from(Array(count).keys()).map((page, index) => (
-        <div key={page} className={itemClassName}>
-          {index + 1}
-        </div>
-      ))}
-      {currentPage !== count || !hideNext ? (
-        <div className={itemClassName}>
+      <RenderIf condition={!hidePrev}>
+        <RenderIf condition={currentPage !== 1}>
+          <button className={itemClassName} onClick={onPrevPage}>
+            <ChevronIcon direction={ChevronIconDirection.left} />
+          </button>
+        </RenderIf>
+      </RenderIf>
+      {count && paginationRange && onLoadPage ? (
+        paginationRange.map((pageNumber, index) => {
+          if (pageNumber === DOTS) {
+            return <span key={`${pageNumber}-${index}-dots`}>&#8230;</span>;
+          }
+
+          return (
+            <button
+              className={`${itemClassName} ${pageNumber === currentPage ? 'bg-green/70 text-white' : ''}`}
+              key={`${pageNumber}-${index}-page`}
+              onClick={() => onLoadPage(+pageNumber)}
+            >
+              {pageNumber}
+            </button>
+          );
+        })
+      ) : (
+        <div className={itemClassName}>{currentPage}</div>
+      )}
+      <RenderIf condition={!hideNext}>
+        <button className={itemClassName} onClick={onNextPage}>
           <ChevronIcon direction={ChevronIconDirection.right} />
-        </div>
-      ) : null}
+        </button>
+      </RenderIf>
     </div>
   );
 }

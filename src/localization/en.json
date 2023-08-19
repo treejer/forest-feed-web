@@ -89,7 +89,9 @@
     "login": "Login with lens",
     "errors": {
       "1": "You have no handle on lens protocol with this wallet address"
-    }
+    },
+    "postCreated": "Post successfully created!",
+    "postFailure": "Something went wrong! Please try again..."
   },
   "switchNetwork": {
     "Polygon": "Polygon",

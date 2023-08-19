@@ -4,6 +4,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 
 import {useTranslations} from 'use-intl';
 import {motion} from 'framer-motion';
+import {ProfileOwnedByMe, useActiveProfile} from '@lens-protocol/react-web';
 
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
@@ -12,6 +13,7 @@ import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/New
 import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
+import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
 
 function NewCampaignPage() {
   const {
@@ -27,6 +29,12 @@ function NewCampaignPage() {
 
   const [campaignSize, setCampaignSize] = useState<number>(campaignJourney?.size || 1);
 
+  const {data: activeProfile} = useActiveProfile();
+
+  const {createLensPost} = useLensCreatePost({
+    publisher: activeProfile as ProfileOwnedByMe,
+  });
+
   const t = useTranslations('newCampaign.stepper');
 
   const handleApproveGeneralInfo = useCallback(
@@ -36,9 +44,10 @@ function NewCampaignPage() {
     [dispatchApproveGeneralInfo],
   );
 
-  const handleApproveReview = useCallback(() => {
+  const handleApproveReview = useCallback(async () => {
     dispatchSetCurrentStep(3);
-  }, [dispatchSetCurrentStep]);
+    await createLensPost();
+  }, [dispatchSetCurrentStep, createLensPost]);
 
   const handleApprovePledge = useCallback(
     (pledgeState: PledgeStepState) => {

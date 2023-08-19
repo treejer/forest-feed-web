@@ -1,23 +1,30 @@
 import {useCallback, useState} from 'react';
 
 import {
-  ContentFocus,
-  MetadataUploadHandler,
-  ProfileOwnedByMe,
-  useCreatePost,
-  MediaObject,
-  SupportedPublicationMediaType,
-  CollectPolicyType,
-  NftAttributeDisplayType,
-  ReferencePolicyType,
+  appId,
+  BroadcastingError,
   CollectPolicyConfig,
+  CollectPolicyType,
+  ContentFocus,
+  FailedUploadError,
+  MetadataUploadHandler,
+  NftAttributeDisplayType,
+  PendingSigningRequestError,
+  ProfileOwnedByMe,
   ReferencePolicyConfig,
+  ReferencePolicyType,
+  Result,
+  SupportedPublicationMediaType,
+  useCreatePost,
+  UserRejectedError,
+  WalletConnectionError,
 } from '@lens-protocol/react-web';
 
-import {NetworkConfig} from '@forest-feed/config';
+import {lensProtocolAppId, NetworkConfig} from '@forest-feed/config';
 import {getHttpDownloadUrl, upload, uploadContent} from '@forest-feed/utils/ipfs';
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {showToast, ToastType} from '@forest-feed/utils/showToast';
 
 export type UseLensCreatePostParams = {
   publisher: ProfileOwnedByMe;
@@ -59,15 +66,24 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
           followersOnly: settings.canBeCollectedOnlyFollowers,
           collectLimit: size,
           metadata: {
-            name: 'The NFT',
-            description: 'The NFT description',
-
+            name: content.slice(0, 20),
+            description: content,
             //TODO: attributes
             attributes: [
               {
                 displayType: NftAttributeDisplayType.Date,
+                value: new Date(), // actual Data instance
                 traitType: 'DoB',
-                value: new Date(),
+              },
+              {
+                displayType: NftAttributeDisplayType.Number,
+                value: 42, // an actual JS number
+                traitType: 'Level',
+              },
+              {
+                displayType: NftAttributeDisplayType.String,
+                value: '#ababab', // an arbitrary JS string
+                traitType: 'Color',
               },
             ],
           },
@@ -95,21 +111,52 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
         };
       }
 
-      await create({
+      const values = {
         content,
-        contentFocus: image ? ContentFocus.IMAGE : ContentFocus.TEXT_ONLY,
-        media: [
-          {
-            url: getHttpDownloadUrl(config.ipfsGetURL, photoMetaData.Hash),
-            mimeType: image?.type as SupportedPublicationMediaType,
-            altTag: image?.name,
-          },
-        ],
-        locale: 'en',
         collect,
         reference,
-        // metadata_id: `forest-feed:${id}`,
-      });
+        appId: appId(lensProtocolAppId),
+        locale: 'en',
+      };
+
+      let result: Result<
+        void,
+        BroadcastingError | PendingSigningRequestError | UserRejectedError | WalletConnectionError | FailedUploadError
+      >;
+
+      if (image) {
+        result = await create({
+          contentFocus: ContentFocus.IMAGE,
+          media: [
+            {
+              url: getHttpDownloadUrl(config.ipfsGetURL, photoMetaData.Hash),
+              mimeType: image?.type as SupportedPublicationMediaType,
+              altTag: image?.name,
+            },
+          ],
+          ...values,
+        });
+      } else {
+        result = await create({
+          contentFocus: ContentFocus.TEXT_ONLY,
+          ...values,
+        });
+      }
+
+      if (result.isSuccess()) {
+        showToast({
+          message: 'lens.postCreated',
+          translate: true,
+          type: ToastType.success,
+        });
+      }
+      if (result.isFailure()) {
+        showToast({
+          message: 'lens.postFailure',
+          translate: true,
+          type: ToastType.error,
+        });
+      }
     } catch (e: any) {
       console.log(e, 'error in create post');
     } finally {

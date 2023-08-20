@@ -7,7 +7,7 @@ import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Ico
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {useOnClickOutSide} from '@forest-feed/hooks/useOnClickOutSide';
-import {Colors} from 'colors';
+import {Color, colors} from 'colors';
 
 export type DropDownItem = {
   id: string | number;
@@ -18,13 +18,20 @@ export type DropDownItem = {
 export type DropDownProps = {
   selected: DropDownItem;
   items: DropDownItem[];
-  color?: Colors;
+  color?: Color;
+  activeColor?: Color;
   hideText?: boolean;
   onChange: (item: DropDownItem) => void;
   disabled?: boolean;
+  bgColor?: Color;
+  shadow?: boolean;
+  width?: string;
 };
+
+const possibleColors = Object.keys(colors);
+
 export function DropDown(props: DropDownProps) {
-  const {selected, items, hideText, color, disabled, onChange} = props;
+  const {selected, items, hideText, color, activeColor, disabled, bgColor = Color.white, width, onChange} = props;
 
   const [open, setOpen] = useState(false);
 
@@ -51,20 +58,22 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div className="transition-all">
-      <div ref={dropdownRef} className="dropdown dropdown-end">
+      <div ref={dropdownRef} style={{minWidth: width ? +width * 4 : 'auto'}} className="dropdown dropdown-end">
         <button
           tabIndex={0}
           onClick={() => handleClick()}
-          className="bg-white p-2 shadow-lg rounded-[5px] flex items-center disabled:opacity-50"
+          className={`bg-${bgColor} p-2 shadow-lg rounded-[5px] flex items-center justify-between disabled:opacity-50 w-full`}
           disabled={disabled}
         >
-          <RenderIf condition={!!selected.image}>
-            <Image src={selected.image!} alt={selected.text.toString()} {...imageStyles} />
-            <Spacer />
-          </RenderIf>
-          <RenderIf condition={!hideText}>
-            <span className={`text-${color}`}>{selected.text}</span>
-          </RenderIf>
+          <div className="flex items-center">
+            <RenderIf condition={!!selected.image}>
+              <Image src={selected.image!} alt={selected.text.toString()} {...imageStyles} />
+              <Spacer />
+            </RenderIf>
+            <RenderIf condition={!hideText}>
+              <span className={`text-${activeColor}`}>{selected.text}</span>
+            </RenderIf>
+          </div>
           <Spacer />
           <ChevronIcon direction={open ? ChevronIconDirection.up : ChevronIconDirection.down} />
         </button>
@@ -76,7 +85,7 @@ export function DropDown(props: DropDownProps) {
               animate={{opacity: 1, y: 0}}
               exit={{opacity: 0, y: -10}}
               transition={{duration: 0.2}}
-              className="dropdown-content z-[1] menu shadow-lg rounded-[5px] w-52 bg-white p-0 mt-1"
+              className={`dropdown-content z-[1] menu shadow-lg rounded-[5px] w-52 bg-${bgColor} p-0 mt-1`}
             >
               {items.map(item => (
                 <li
@@ -88,7 +97,9 @@ export function DropDown(props: DropDownProps) {
                     <RenderIf condition={!!item.image}>
                       <Image src={item.image!} alt={item.text.toString()} {...imageStyles} />
                     </RenderIf>
-                    <span className={`text-${color} flex justify-start`}>{item.text}</span>
+                    <span className={`text-${selected.id === item.id ? activeColor : color} flex justify-start`}>
+                      {item.text}
+                    </span>
                   </div>
                 </li>
               ))}

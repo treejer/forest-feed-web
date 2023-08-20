@@ -4,25 +4,32 @@ import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
 
 import {Spacer} from '@forest-feed/components/common/Spacer';
 
+export type SkeletonBoxProps = {
+  width?: number;
+  height?: number;
+};
+
+export function SkeletonBox(props: SkeletonBoxProps) {
+  const {height = 40, width = 200} = props;
+
+  return (
+    <div>
+      <Skeleton height={height} width={width} />
+    </div>
+  );
+}
+
 export function AppHeaderSkeleton() {
   return (
     <SkeletonTheme>
       <div className="flex items-center">
-        <div>
-          <Skeleton height={40} width={200} />
-        </div>
+        <SkeletonBox />
         <Spacer />
-        <div>
-          <Skeleton height={40} width={160} />
-        </div>
+        <SkeletonBox width={160} />
         <Spacer />
-        <div>
-          <Skeleton height={40} width={160} />
-        </div>
+        <SkeletonBox width={160} />
         <Spacer />
-        <div>
-          <Skeleton height={40} width={30} />
-        </div>
+        <SkeletonBox width={30} />
       </div>
     </SkeletonTheme>
   );

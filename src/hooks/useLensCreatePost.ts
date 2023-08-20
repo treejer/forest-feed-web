@@ -94,27 +94,9 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
         };
       }
 
-      let reference: ReferencePolicyConfig;
-
-      if (reward.onlyFollowers) {
-        reference = {
-          type: ReferencePolicyType.FOLLOWERS_ONLY,
-        };
-      } else {
-        reference = {
-          type: ReferencePolicyType.DEGREES_OF_SEPARATION,
-          params: {
-            degreesOfSeparation: reward.minimumFollowerNumber,
-            commentsRestricted: false,
-            mirrorsRestricted: true,
-          },
-        };
-      }
-
       const values = {
         content,
         collect,
-        reference,
         appId: appId(lensProtocolAppId),
         locale: 'en',
       };

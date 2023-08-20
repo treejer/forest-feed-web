@@ -10,8 +10,9 @@ import {LensIcon} from '@forest-feed/components/kit/Icons/LensIcon';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {UserWallet} from '@forest-feed/components/layout/UserWallet';
 import {SwitchNetwork} from '@forest-feed/components/SwitchNetwork/SwitchNetwork';
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleton';
+import {SwitchProfile} from '@forest-feed/components/SwitchProfile/SwitchProfile';
+import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 
 export function AppHeader() {
   const {address, status} = useAccount();
@@ -40,9 +41,7 @@ export function AppHeader() {
             <SwitchNetwork />
             <Spacer />
             {lensProfile ? (
-              <div className="w-40 disabled:bg-primaryGreen flex justify-center items-center rounded-[8px]">
-                <p className="text-sm text-green font-extrabold drop-shadow-md">@{lensProfile.handle}</p>
-              </div>
+              <SwitchProfile />
             ) : (
               <Button
                 className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-1"

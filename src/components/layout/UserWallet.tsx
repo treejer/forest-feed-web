@@ -19,7 +19,7 @@ export function UserWallet(props: UserWalletProps) {
   const t = useTranslations();
 
   return (
-    <div className="group flex items-center">
+    <div className="group flex items-center drop-shadow-lg">
       <div className="flex items-center relative py-1">
         <button
           onClick={() => handleCopy(walletAddress)}

@@ -48,13 +48,13 @@ export function SwitchNetwork() {
     [t],
   );
 
+  const currentNetwork = useMemo(
+    () => networksList.find(network => network.id === config.chainId),
+    [config.chainId, networksList],
+  );
+
   return isSupportedNetwork ? (
-    <DropDown
-      selected={networksList.find(network => network.id === config.chainId)!}
-      items={networksList}
-      onChange={handleSwitchNetwork}
-      disabled={switching}
-    />
+    <DropDown selected={currentNetwork!} items={networksList} onChange={handleSwitchNetwork} disabled={switching} />
   ) : (
     <ConnectButton />
   );

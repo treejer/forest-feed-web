@@ -1,8 +1,9 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
-import {call} from 'redux-saga/effects';
+import {call, select} from 'redux-saga/effects';
 
 import {showSagaToast, ToastType} from '@forest-feed/utils/showToast';
-import {debugFetch} from '@forest-feed/config';
+import {debugFetch, NetworkConfig} from '@forest-feed/config';
+import {selectAccessToken, selectConfig} from '@forest-feed/redux/selectors';
 
 export type FetchResult<Data> = {
   result: Data;
@@ -22,7 +23,7 @@ export function fetch<Data, Form = any>(
       if (res.status) {
         if (res.status.toString().split('')[0] === '2') {
           return resolve({
-            result: res.data,
+            result: res.data.data,
             status: res.status,
           });
         } else {
@@ -48,7 +49,8 @@ export type SagaFetchOptions = {
 };
 
 export function* sagaFetch<Data, Form = any>(url: string, options: SagaFetchOptions & AxiosRequestConfig<Form> = {}) {
-  let accessToken;
+  const {forestFeedApiUrl}: NetworkConfig = yield select(selectConfig);
+  const accessToken = yield select(selectAccessToken);
 
   if (accessToken) {
     options = {
@@ -62,9 +64,9 @@ export function* sagaFetch<Data, Form = any>(url: string, options: SagaFetchOpti
   }
 
   // TODO: read from config
-  const requestUrl = options.baseUrl + url;
+  const requestUrl = (options.baseUrl ? options.baseUrl : forestFeedApiUrl) + url;
 
-  return yield call(() => fetch<Data, Form>(requestUrl, options));
+  return yield call(fetch, requestUrl, options);
 }
 
 type ClientError = {

@@ -1,4 +1,4 @@
 export type NonceRes = {
   message: string;
-  nonce: string | number;
+  userId: string | number;
 };

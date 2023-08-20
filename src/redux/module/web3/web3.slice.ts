@@ -30,6 +30,7 @@ export type Web3Action = {
   connectedWallet: {address?: `0x${string}`};
   checkAccount: {account: GetAccountResult; lensLogout: () => void};
   setLensLoading: {loading: boolean};
+  setAccessToken: {token: string};
 };
 
 export const web3InitialState: Web3State = {
@@ -48,7 +49,7 @@ export const web3Slice = createSlice({
   reducers: {
     startConfiguration: (state, _action: PayloadAction<Web3Action['startConfiguration']>) => state,
     watchCurrentWeb3: (state, _action: PayloadAction<Web3Action['watchCurrentWeb3']>) => state,
-    checkAccount: (state, _action: PayloadAction<Web3Action['checkAccount']>) => state,
+    loginAccount: (state, _action: PayloadAction<Web3Action['checkAccount']>) => state,
     switchNetwork: (state, _action: PayloadAction<Web3Action['switchNetwork']>) => {
       state.switching = true;
     },
@@ -70,6 +71,9 @@ export const web3Slice = createSlice({
     setLensLoading: (state, action: PayloadAction<Web3Action['setLensLoading']>) => {
       state.lensLoading = action.payload.loading;
     },
+    setAccessToken: (state, actions: PayloadAction<Web3Action['setAccessToken']>) => {
+      state.accessToken = actions.payload.token;
+    },
   },
 });
 
@@ -81,8 +85,9 @@ export const {
   watchCurrentWeb3,
   cancelSwitchNetwork,
   connectedWallet,
-  checkAccount,
+  loginAccount,
   setLensLoading,
+  setAccessToken,
 } = web3Slice.actions;
 export default web3Slice.reducer;
 
@@ -108,11 +113,16 @@ export function useWeb3() {
     [dispatch],
   );
 
+  const dispatchRemoveAccessToken = useCallback(() => {
+    dispatch(setAccessToken({token: ''}));
+  }, [dispatch]);
+
   return {
     web3,
     dispatchSwitchNetwork,
     dispatchNotSupportedNetwork,
     dispatchSetLensLoading,
+    dispatchRemoveAccessToken,
   };
 }
 

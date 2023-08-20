@@ -75,7 +75,7 @@ export const config: Config = {
     networkId: Number('' || 3),
     isMainnet: true,
     infuraKey: process.env.NEXT_PUBLIC_INFURA_KEY || '',
-    forestFeedApiUrl: formatUrl(''),
+    forestFeedApiUrl: formatUrl(process.env.NEXT_PUBLIC_POLYGON_NEST_API_URL || ''),
     thegraphUrl: formatUrl(''),
     ipfsPostURL: formatUrl(process.env.NEXT_PUBLIC_POLYGON_IPFS_POST_URL || ''),
     ipfsGetURL: formatUrl(process.env.NEXT_PUBLIC_POLYGON_IPFS_GET_URL || ''),
@@ -104,7 +104,7 @@ export const config: Config = {
     networkId: Number('' || 3),
     isMainnet: false,
     infuraKey: process.env.NEXT_PUBLIC_INFURA_KEY || '',
-    forestFeedApiUrl: formatUrl(''),
+    forestFeedApiUrl: formatUrl(process.env.NEXT_PUBLIC_MUMBAI_NEST_API_URL || ''),
     thegraphUrl: formatUrl(''),
     ipfsPostURL: formatUrl(process.env.NEXT_PUBLIC_MUMBAI_IPFS_POST_URL || ''),
     ipfsGetURL: formatUrl(process.env.NEXT_PUBLIC_MUMBAI_IPFS_GET_URL || ''),
@@ -146,5 +146,5 @@ export const networks: Networks = {
   },
 };
 
-export const debugFetch = false;
+export const debugFetch = true;
 export const reduxLogger = false;

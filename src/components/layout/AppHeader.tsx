@@ -1,6 +1,6 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 
-import {useAccount, useDisconnect} from 'wagmi';
+import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 import {useTranslations} from 'use-intl';
 
@@ -13,18 +13,14 @@ import {SwitchNetwork} from '@forest-feed/components/SwitchNetwork/SwitchNetwork
 import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleton';
 import {SwitchProfile} from '@forest-feed/components/SwitchProfile/SwitchProfile';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
+import {useProfile} from '@forest-feed/redux/module/profile/profile';
 
 export function AppHeader() {
   const {address, status} = useAccount();
-  const {disconnectAsync} = useDisconnect();
-  const {lensProfile, lensLoading, handleLensLogin, handleLensLogout, unknownError} = useAuthLens();
+  const {lensProfile, lensLoading, handleLensLogin, unknownError} = useAuthLens();
+  const {dispatchLogoutAccount} = useProfile();
 
   const t = useTranslations();
-
-  const handleDisconnect = useCallback(async () => {
-    await handleLensLogout();
-    await disconnectAsync();
-  }, [disconnectAsync, handleLensLogout]);
 
   return (
     <div className="py-4">
@@ -55,7 +51,7 @@ export function AppHeader() {
               />
             )}
             <Spacer />
-            <UserWallet walletAddress={address} onDisconnect={handleDisconnect} />
+            <UserWallet walletAddress={address} onDisconnect={dispatchLogoutAccount} />
           </div>
         ) : (
           <ConnectButton />

@@ -12,7 +12,7 @@ const Nonce = new ReduxFetchState<NonceRes, null, string>('nonce');
 
 export function* watchNonce() {
   try {
-    const address = yield getAccount();
+    const {address} = yield getAccount();
     const res: FetchResult<NonceRes> = yield sagaFetch(`/nonce/${address}`);
     yield put(Nonce.actions.loadSuccess(res.result));
   } catch (e: any) {

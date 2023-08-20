@@ -1,10 +1,11 @@
 import {PayloadAction} from '@reduxjs/toolkit';
-import {put, select, takeEvery} from 'redux-saga/effects';
-import {switchNetwork as switchNetworkWeb3, watchAccount, watchNetwork} from '@wagmi/core';
+import {put, select, take, takeEvery} from 'redux-saga/effects';
+import {signMessage, switchNetwork as switchNetworkWeb3, watchAccount, watchNetwork} from '@wagmi/core';
 
 import {config as configs, NetworkConfig} from '@forest-feed/config';
 import {selectConfig, selectWeb3} from '@forest-feed/redux/selectors';
 import {
+  Web3State,
   Web3Action,
   startConfiguration,
   switchNetwork,
@@ -13,10 +14,13 @@ import {
   notSupportedNetwork,
   cancelSwitchNetwork,
   connectedWallet,
-  Web3State,
-  checkAccount,
+  setAccessToken,
+  loginAccount,
 } from '@forest-feed/redux/module/web3/web3.slice';
 import {AppStore} from '@forest-feed/redux/store';
+import {nonceActions, nonceActionTypes} from '@forest-feed/redux/module/nonce/nonce';
+import {signActions, signActionTypes} from '@forest-feed/redux/module/sign/sign';
+import {profileActions} from '@forest-feed/redux/module/profile/profile';
 
 export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['startConfiguration']>) {
   try {
@@ -48,19 +52,28 @@ export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchN
   }
 }
 
-export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAccount']>) {
+export function* watchLoginAccount({payload}: PayloadAction<Web3Action['checkAccount']>) {
   try {
     const {account, lensLogout} = payload || {};
     const {address, accessToken}: Web3State = yield select(selectWeb3);
     if (!accessToken || address !== account.address) {
-      // TODO: logout/login
-      // * logout lens account
-      // yield lensLogout();
-      // * 1. nonce load, 2. take nonce response, 3. sign message, 4. sign load
+      yield lensLogout();
+      if (!account.address) return;
+      yield put(nonceActions.load());
+      const {payload: nonce} = yield take(nonceActionTypes.loadSuccess);
+      const signature = yield signMessage({message: nonce.message});
+      yield put(signActions.load({signature}));
+      const {payload: sign} = yield take(signActionTypes.loadSuccess);
+      yield put(setAccessToken({token: sign.access_token}));
+      yield put(profileActions.load());
     }
     yield put(connectedWallet({address: account.address}));
   } catch (e: any) {
     console.log('error in check account');
+    yield put(nonceActions.resetCache());
+    yield put(signActions.resetCache());
+    yield put(profileActions.resetCache());
+    yield put(setAccessToken({token: ''}));
   }
 }
 
@@ -68,7 +81,7 @@ export function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Ac
   try {
     const {lensLogout} = payload || {};
     watchAccount(account => {
-      store.dispatch(checkAccount({account, lensLogout}));
+      store.dispatch(loginAccount({account, lensLogout}));
     });
     watchNetwork(network => {
       if (typeof network.chain?.unsupported !== 'undefined' && network.chain?.unsupported) {
@@ -76,6 +89,7 @@ export function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Ac
       } else {
         if (network.chain?.id) {
           store.dispatch(switchNetwork({newNetwork: network?.chain?.id}));
+          lensLogout();
         }
       }
     });
@@ -87,6 +101,6 @@ export function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Ac
 export function* web3Sagas(store: AppStore) {
   yield takeEvery(startConfiguration.type, watchStartConfiguration);
   yield takeEvery(switchNetwork.type, watchSwitchNetwork);
-  yield takeEvery(checkAccount.type, watchCheckAccount);
+  yield takeEvery(loginAccount.type, watchLoginAccount);
   yield takeEvery(watchCurrentWeb3.type, watchWatchWeb3, store);
 }

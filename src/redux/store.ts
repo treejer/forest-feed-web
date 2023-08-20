@@ -22,7 +22,7 @@ export type AppDispatch = AppStore['dispatch'];
 const persistConfig = {
   key: 'forestFeedPersist',
   storage,
-  whitelist: ['web3', 'appInfo'],
+  whitelist: ['web3', 'appInfo', 'profile'],
 };
 
 const persistedReducer = persistReducer(persistConfig, (state: any, action: {type: string; payload: any}) => {

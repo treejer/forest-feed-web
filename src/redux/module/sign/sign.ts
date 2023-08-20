@@ -1,8 +1,9 @@
 import {useCallback} from 'react';
 import ReduxFetchState from 'redux-fetch-state';
 import {put, takeEvery} from 'redux-saga/effects';
+import {getAccount} from '@wagmi/core';
 
-import {SignAction, SignForm, SignPayload, SignRes} from '@forest-feed/webServices/sign/sign';
+import {SignAction, SignPayload, SignRes} from '@forest-feed/webServices/sign/sign';
 import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@forest-feed/utils/fetch';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {selectSign} from '@forest-feed/redux/selectors';
@@ -11,12 +12,14 @@ const Sign = new ReduxFetchState<SignRes, SignPayload, string>('sign');
 
 export function* watchSign({payload}: SignAction) {
   try {
-    const {wallet, signature} = payload || {};
+    const {signature} = payload || {};
 
-    const res: FetchResult<SignRes> = yield sagaFetch<SignRes, SignForm>(`/login/${wallet}`, {
+    const {address} = yield getAccount();
+    const res: FetchResult<SignRes> = yield sagaFetch<SignRes, SignPayload>(`/login/${address}`, {
       data: {
         signature,
       },
+      method: 'POST',
     });
 
     yield put(Sign.actions.loadSuccess(res.result));

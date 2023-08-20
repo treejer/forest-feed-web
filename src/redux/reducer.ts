@@ -8,6 +8,7 @@ import initReducer from '@forest-feed/redux/module/init/init.slice';
 import appInfoReducer from '@forest-feed/redux/module/appInfo/appInfo.slice';
 import {nonceReducer} from '@forest-feed/redux/module/nonce/nonce';
 import {signReducer} from '@forest-feed/redux/module/sign/sign';
+import {profileReducer} from '@forest-feed/redux/module/profile/profile';
 
 export const combinedReducers = combineReducers({
   init: initReducer,
@@ -16,6 +17,7 @@ export const combinedReducers = combineReducers({
   nonce: nonceReducer,
   sign: signReducer,
   appInfo: appInfoReducer,
+  profile: profileReducer,
   jsonPlaceholderReducer,
 });
 

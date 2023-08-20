@@ -3,11 +3,8 @@ export type SignRes = {
 };
 
 export type SignPayload = {
-  wallet: string;
   signature: string;
 };
-
-export type SignForm = Pick<SignPayload, 'signature'>;
 
 export type SignAction = {
   type: string;

@@ -9,6 +9,7 @@ import {colors} from 'colors';
 
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {ConnectToUse} from '@forest-feed/components/AuthWrapper/ConnectToUse';
+import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import './AuthWrapper.scss';
 
 export function AuthLoader() {
@@ -39,6 +40,8 @@ export function AuthWrapper(props: AuthWrapperProps) {
     web3: {isSupportedNetwork, switching},
   } = useWeb3();
 
+  const {profile: forestProfile} = useProfile();
+
   const {lensProfile, lensProfileLoading} = useAuthLens();
 
   const renderLoader = useCallback((loading: boolean) => {
@@ -52,7 +55,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
   return (
     <div className={`relative ${className}`}>
       {renderLoader(isConnecting || switching || lensProfileLoading)}
-      {address && lensProfile && isConnected && isSupportedNetwork ? children : <ConnectToUse />}
+      {address && lensProfile && isConnected && isSupportedNetwork && forestProfile ? children : <ConnectToUse />}
     </div>
   );
 }

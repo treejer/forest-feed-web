@@ -1,11 +1,11 @@
 'use client';
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+
+import {useAccount, useNetwork} from 'wagmi';
 
 import {AppHeader} from '@forest-feed/components/layout/AppHeader';
 import {Navbar} from '@forest-feed/components/layout/Navbar';
-import {useInit} from '@forest-feed/redux/module/init/init.slice';
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 
 export type LayoutProps = React.PropsWithChildren;
@@ -13,20 +13,24 @@ export type LayoutProps = React.PropsWithChildren;
 export function Layout(props: LayoutProps) {
   const {children} = props;
 
-  const {dispatchInit} = useInit();
+  const [mounted, setMounted] = useState(false);
 
-  const {web3} = useWeb3();
   const {handleLensLogout} = useAuthLens();
 
-  useEffect(() => {
-    console.log(web3, 'web3');
-  }, [web3]);
+  const {chain} = useNetwork();
+  const {address} = useAccount();
 
   useEffect(() => {
-    dispatchInit({lensLogout: handleLensLogout});
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      (async () => {
+        await handleLensLogout();
+      })();
+    }
+  }, [chain, address]);
 
   return (
     <div className="container mx-auto">

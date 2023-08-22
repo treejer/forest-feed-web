@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import {WagmiConfig} from 'wagmi';
 import {polygonMumbai} from 'wagmi/chains';
@@ -11,11 +11,11 @@ import {PersistGate} from 'redux-persist/lib/integration/react';
 import {ToastContainer} from 'react-toastify';
 
 import {Locale} from '@forest-feed/languages';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {appInfo, chains, forestFeedTheme, wagmiConfig} from '@forest-feed/connectWallet';
 import {ApolloProvider} from '@forest-feed/components/providers/Apollo';
 import {LensProvider} from '@forest-feed/components/providers/Lens';
 import {store, persistor} from '@forest-feed/redux/store';
+import {InitAppActions} from '@forest-feed/components/providers/InitActions';
 
 export type AllTheProvidersProps = React.PropsWithChildren<{
   locale: Locale;
@@ -25,22 +25,20 @@ export type AllTheProvidersProps = React.PropsWithChildren<{
 export function AllTheProviders(props: AllTheProvidersProps) {
   const {locale, messages, children} = props;
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} appInfo={appInfo} theme={forestFeedTheme} initialChain={polygonMumbai}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
-              <LensProvider>
-                <ApolloProvider>
-                  <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
-                  <RenderIf condition={mounted}>{children}</RenderIf>
-                </ApolloProvider>
-              </LensProvider>
+              <InitAppActions>
+                <LensProvider>
+                  <ApolloProvider>
+                    <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
+                    {children}
+                  </ApolloProvider>
+                </LensProvider>
+              </InitAppActions>
             </PersistGate>
           </Provider>
         </NextIntlClientProvider>

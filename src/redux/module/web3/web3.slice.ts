@@ -5,6 +5,9 @@ import {GetAccountResult} from '@wagmi/core';
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
 import {selectConfig, selectRegularSale, selectWeb3} from '@forest-feed/redux/selectors';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
+import {profileActions} from '@forest-feed/redux/module/profile/profile';
+import {nonceActions} from '@forest-feed/redux/module/nonce/nonce';
+import {signActions} from '@forest-feed/redux/module/sign/sign';
 
 export type Web3State = {
   isConnected: boolean;
@@ -25,10 +28,9 @@ export type SwitchNetworkAction = {
 export type Web3Action = {
   switchNetwork: SwitchNetworkAction;
   startConfiguration?: SwitchNetworkAction;
-  watchCurrentWeb3: {lensLogout: () => void};
   updateNetwork: {newConfig: NetworkConfig};
   connectedWallet: {address?: `0x${string}`};
-  checkAccount: {account: GetAccountResult; lensLogout: () => void};
+  checkAccount: {account: GetAccountResult};
   setLensLoading: {loading: boolean};
   setAccessToken: {token: string};
 };
@@ -48,8 +50,10 @@ export const web3Slice = createSlice({
   initialState: web3InitialState,
   reducers: {
     startConfiguration: (state, _action: PayloadAction<Web3Action['startConfiguration']>) => state,
-    watchCurrentWeb3: (state, _action: PayloadAction<Web3Action['watchCurrentWeb3']>) => state,
-    loginAccount: (state, _action: PayloadAction<Web3Action['checkAccount']>) => state,
+    watchCurrentWeb3: state => state,
+    checkAccount: (state, _action: PayloadAction<Web3Action['checkAccount']>) => state,
+    loginAccount: state => state,
+    logoutAccount: state => state,
     switchNetwork: (state, _action: PayloadAction<Web3Action['switchNetwork']>) => {
       state.switching = true;
     },
@@ -85,7 +89,9 @@ export const {
   watchCurrentWeb3,
   cancelSwitchNetwork,
   connectedWallet,
+  checkAccount,
   loginAccount,
+  logoutAccount,
   setLensLoading,
   setAccessToken,
 } = web3Slice.actions;
@@ -117,12 +123,25 @@ export function useWeb3() {
     dispatch(setAccessToken({token: ''}));
   }, [dispatch]);
 
+  const dispatchLogoutForest = useCallback(() => {
+    dispatchRemoveAccessToken();
+    dispatch(profileActions.resetCache());
+    dispatch(nonceActions.resetCache());
+    dispatch(signActions.resetCache());
+  }, [dispatchRemoveAccessToken, dispatch]);
+
+  const dispatchSignWithForest = useCallback(() => {
+    dispatch(loginAccount());
+  }, [dispatch]);
+
   return {
     web3,
     dispatchSwitchNetwork,
     dispatchNotSupportedNetwork,
     dispatchSetLensLoading,
     dispatchRemoveAccessToken,
+    dispatchSignWithForest,
+    dispatchLogoutForest,
   };
 }
 

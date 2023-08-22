@@ -26,6 +26,8 @@ export function useAuthLens() {
       config: {chainId},
     },
     dispatchSetLensLoading,
+    dispatchSignWithForest,
+    dispatchLogoutForest,
   } = useWeb3();
   const {address, isConnected} = useAccount();
   const {execute: login, isPending: loginIsPending} = useWalletLogin();
@@ -76,27 +78,31 @@ export function useAuthLens() {
         setLoginStatus({isSuccess: isSuccessValue, isFailure: isFailureValue});
         if (isSuccessValue) {
           setLogoutStatus(null);
+          dispatchSignWithForest();
         }
       }
     } catch (e: any) {
       console.log(e, 'error in login with lens');
     }
-  }, [address, login, isConnected]);
+  }, [address, login, isConnected, dispatchSignWithForest]);
 
   const handleLensLogout = useCallback(async () => {
     try {
       setUnknownError(null);
-      const {isSuccess, isFailure} = await logout();
-      const isSuccessValue = isSuccess();
-      const isFailureValue = isFailure();
-      setLogoutStatus({isSuccess: isSuccessValue, isFailure: isFailureValue});
-      if (isSuccessValue) {
-        setLoginStatus(null);
+      if (lensProfile) {
+        const {isSuccess, isFailure} = await logout();
+        const isSuccessValue = isSuccess();
+        const isFailureValue = isFailure();
+        setLogoutStatus({isSuccess: isSuccessValue, isFailure: isFailureValue});
+        if (isSuccessValue) {
+          setLoginStatus(null);
+          dispatchLogoutForest();
+        }
       }
     } catch (e: any) {
       console.log(e, 'error in logout lens');
     }
-  }, [logout]);
+  }, [lensProfile, logout, dispatchLogoutForest]);
 
   return {
     lensProfile,

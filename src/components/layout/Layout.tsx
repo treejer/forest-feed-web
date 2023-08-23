@@ -12,13 +12,14 @@ export type LayoutProps = React.PropsWithChildren;
 export function Layout(props: LayoutProps) {
   const {children} = props;
 
-  const {dispatchInit} = useInit();
-
-  const {handleLensLogout} = useAuthLens();
+  const {handleLensLogout, lensProfileLoading} = useAuthLens();
+  const {dispatchInit, initState} = useInit();
 
   useEffect(() => {
-    dispatchInit({lensLogout: handleLensLogout});
-  }, []);
+    if (!lensProfileLoading && initState.loading) {
+      dispatchInit({lensLogout: handleLensLogout});
+    }
+  }, [lensProfileLoading]);
 
   return (
     <div className="container mx-auto">

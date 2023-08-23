@@ -14,11 +14,17 @@ import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleto
 import {SwitchProfile} from '@forest-feed/components/SwitchProfile/SwitchProfile';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
+import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 
 export function AppHeader() {
   const {address, status} = useAccount();
   const {lensProfile, lensLoading, handleLensLogin, unknownError} = useAuthLens();
-  const {dispatchLogoutAccount} = useProfile();
+  const {dispatchLogoutAccount, profile} = useProfile();
+
+  const {
+    web3: {forestLoading},
+    dispatchSignWithForest,
+  } = useWeb3();
 
   const t = useTranslations();
 
@@ -34,13 +40,34 @@ export function AppHeader() {
           <AppHeaderSkeleton />
         ) : address && status === 'connected' ? (
           <div className="flex items-center">
+            {lensProfile && !profile ? (
+              <Button
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
+                autoSize={false}
+                variant={ButtonVariant.secondary}
+                text={t('signWithForest')}
+                disabled={forestLoading}
+                loading={forestLoading}
+                onClick={dispatchSignWithForest}
+              />
+            ) : null}
+            <Spacer />
+            <UserWallet walletAddress={address} onDisconnect={dispatchLogoutAccount} />
+          </div>
+        ) : (
+          <ConnectButton />
+        )}
+      </div>
+      <div className="flex items-center justify-between mt-1">
+        {address && status === 'connected' ? (
+          <div className="flex items-center">
             <SwitchNetwork />
             <Spacer />
             {lensProfile ? (
               <SwitchProfile />
             ) : (
               <Button
-                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-1"
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
                 autoSize={false}
                 variant={ButtonVariant.secondary}
                 text={t('lens.login')}
@@ -50,14 +77,8 @@ export function AppHeader() {
                 onClick={handleLensLogin}
               />
             )}
-            <Spacer />
-            <UserWallet walletAddress={address} onDisconnect={dispatchLogoutAccount} />
           </div>
-        ) : (
-          <ConnectButton />
-        )}
-      </div>
-      <div className="flex items-center justify-end mt-1">
+        ) : null}
         {unknownError ? <p className="text-error text-sm">{t(`lens.errors.${unknownError}`)}</p> : null}
       </div>
     </div>

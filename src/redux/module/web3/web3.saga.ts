@@ -48,11 +48,11 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
 }
 
 export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchNetwork']>) {
+  const {newNetwork, userInApp, onSuccess, lensLogout} = payload || {};
+  const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
   try {
-    const {newNetwork, userInApp, onSuccess, lensLogout} = payload || {};
-    const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
     if (!userInApp && lensProfile) {
-      yield lensLogout();
+      yield lensLogout?.();
     }
     yield put(startConfiguration({newNetwork, userInApp, onSuccess}));
   } catch (e: any) {
@@ -72,6 +72,7 @@ export function* watchLoginAccount() {
     yield put(profileActions.load());
   } catch (e: any) {
     console.log(e, 'error in login account');
+    yield put(setAccessToken({token: ''}));
     yield handleSagaFetchError(e);
   }
 }
@@ -88,11 +89,12 @@ export function* watchLogoutAccount() {
 }
 
 export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAccount']>) {
+  const {account, lensLogout} = payload || {};
+  const {address, accessToken}: Web3State = yield select(selectWeb3);
+  const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
   try {
-    const {account, lensLogout} = payload || {};
-    const {address, accessToken}: Web3State = yield select(selectWeb3);
-    if (!accessToken || address !== account.address) {
-      yield lensLogout();
+    if (!accessToken || address?.toLowerCase() !== account?.address?.toLowerCase()) {
+      if (lensProfile) yield lensLogout();
       yield put(logoutAccount());
     }
     yield put(connectedWallet({address: account.address}));

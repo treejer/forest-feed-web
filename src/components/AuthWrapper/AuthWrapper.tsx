@@ -37,7 +37,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
 
   const {address, isConnected, isConnecting} = useAccount();
   const {
-    web3: {isSupportedNetwork, switching},
+    web3: {isSupportedNetwork, switching, forestLoading},
   } = useWeb3();
 
   const {profile: forestProfile} = useProfile();
@@ -54,7 +54,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
 
   return (
     <div className={`relative ${className}`}>
-      {renderLoader(isConnecting || switching || lensProfileLoading)}
+      {renderLoader(isConnecting || switching || lensProfileLoading || forestLoading)}
       {address && lensProfile && isConnected && isSupportedNetwork && forestProfile ? children : <ConnectToUse />}
     </div>
   );

@@ -20,6 +20,7 @@ export type Web3State = {
   address: `0x${string}` | null;
   accessToken: string | null;
   lensLoading: boolean;
+  forestLoading: boolean;
   lensProfile: ProfileOwnedByMe | null | undefined;
 };
 
@@ -30,7 +31,7 @@ export type SwitchNetworkAction = {
 };
 
 export type Web3Action = {
-  switchNetwork: SwitchNetworkAction & InitAction['init'];
+  switchNetwork: SwitchNetworkAction & Partial<InitAction['init']>;
   startConfiguration?: SwitchNetworkAction;
   watchCurrentWeb3: InitAction['init'];
   updateNetwork: {newConfig: NetworkConfig};
@@ -49,6 +50,7 @@ export const web3InitialState: Web3State = {
   address: null,
   accessToken: null,
   lensLoading: false,
+  forestLoading: false,
   lensProfile: null,
 };
 
@@ -59,7 +61,9 @@ export const web3Slice = createSlice({
     startConfiguration: (state, _action: PayloadAction<Web3Action['startConfiguration']>) => state,
     watchCurrentWeb3: (state, _action: PayloadAction<Web3Action['watchCurrentWeb3']>) => state,
     checkAccount: (state, _action: PayloadAction<Web3Action['checkAccount']>) => state,
-    loginAccount: state => state,
+    loginAccount: state => {
+      state.forestLoading = true;
+    },
     logoutAccount: state => state,
     switchNetwork: (state, _action: PayloadAction<Web3Action['switchNetwork']>) => {
       state.switching = true;
@@ -84,6 +88,7 @@ export const web3Slice = createSlice({
     },
     setAccessToken: (state, action: PayloadAction<Web3Action['setAccessToken']>) => {
       state.accessToken = action.payload.token;
+      state.forestLoading = false;
     },
     setLensProfile: (state, action: PayloadAction<Web3Action['setLensProfile']>) => {
       state.lensProfile = action.payload.profile;

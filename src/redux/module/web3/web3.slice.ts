@@ -1,6 +1,8 @@
 import {useCallback} from 'react';
+
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {GetAccountResult} from '@wagmi/core';
+import {ProfileOwnedByMe} from '@lens-protocol/react-web';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
 import {selectConfig, selectRegularSale, selectWeb3} from '@forest-feed/redux/selectors';
@@ -8,6 +10,7 @@ import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {profileActions} from '@forest-feed/redux/module/profile/profile';
 import {nonceActions} from '@forest-feed/redux/module/nonce/nonce';
 import {signActions} from '@forest-feed/redux/module/sign/sign';
+import {InitAction} from '@forest-feed/redux/module/init/init.slice';
 
 export type Web3State = {
   isConnected: boolean;
@@ -17,6 +20,7 @@ export type Web3State = {
   address: `0x${string}` | null;
   accessToken: string | null;
   lensLoading: boolean;
+  lensProfile: ProfileOwnedByMe | null | undefined;
 };
 
 export type SwitchNetworkAction = {
@@ -26,13 +30,15 @@ export type SwitchNetworkAction = {
 };
 
 export type Web3Action = {
-  switchNetwork: SwitchNetworkAction;
+  switchNetwork: SwitchNetworkAction & InitAction['init'];
   startConfiguration?: SwitchNetworkAction;
+  watchCurrentWeb3: InitAction['init'];
   updateNetwork: {newConfig: NetworkConfig};
   connectedWallet: {address?: `0x${string}`};
-  checkAccount: {account: GetAccountResult};
+  checkAccount: {account: GetAccountResult} & InitAction['init'];
   setLensLoading: {loading: boolean};
   setAccessToken: {token: string};
+  setLensProfile: {profile: ProfileOwnedByMe | null | undefined};
 };
 
 export const web3InitialState: Web3State = {
@@ -43,6 +49,7 @@ export const web3InitialState: Web3State = {
   address: null,
   accessToken: null,
   lensLoading: false,
+  lensProfile: null,
 };
 
 export const web3Slice = createSlice({
@@ -50,7 +57,7 @@ export const web3Slice = createSlice({
   initialState: web3InitialState,
   reducers: {
     startConfiguration: (state, _action: PayloadAction<Web3Action['startConfiguration']>) => state,
-    watchCurrentWeb3: state => state,
+    watchCurrentWeb3: (state, _action: PayloadAction<Web3Action['watchCurrentWeb3']>) => state,
     checkAccount: (state, _action: PayloadAction<Web3Action['checkAccount']>) => state,
     loginAccount: state => state,
     logoutAccount: state => state,
@@ -75,8 +82,11 @@ export const web3Slice = createSlice({
     setLensLoading: (state, action: PayloadAction<Web3Action['setLensLoading']>) => {
       state.lensLoading = action.payload.loading;
     },
-    setAccessToken: (state, actions: PayloadAction<Web3Action['setAccessToken']>) => {
-      state.accessToken = actions.payload.token;
+    setAccessToken: (state, action: PayloadAction<Web3Action['setAccessToken']>) => {
+      state.accessToken = action.payload.token;
+    },
+    setLensProfile: (state, action: PayloadAction<Web3Action['setLensProfile']>) => {
+      state.lensProfile = action.payload.profile;
     },
   },
 });
@@ -94,6 +104,7 @@ export const {
   logoutAccount,
   setLensLoading,
   setAccessToken,
+  setLensProfile,
 } = web3Slice.actions;
 export default web3Slice.reducer;
 
@@ -134,6 +145,13 @@ export function useWeb3() {
     dispatch(loginAccount());
   }, [dispatch]);
 
+  const dispatchSetLensProfile = useCallback(
+    (payload: Web3Action['setLensProfile']) => {
+      dispatch(setLensProfile(payload));
+    },
+    [dispatch],
+  );
+
   return {
     web3,
     dispatchSwitchNetwork,
@@ -142,6 +160,7 @@ export function useWeb3() {
     dispatchRemoveAccessToken,
     dispatchSignWithForest,
     dispatchLogoutForest,
+    dispatchSetLensProfile,
   };
 }
 

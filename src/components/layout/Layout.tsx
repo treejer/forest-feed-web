@@ -1,36 +1,24 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
-
-import {useAccount, useNetwork} from 'wagmi';
+import React, {useEffect} from 'react';
 
 import {AppHeader} from '@forest-feed/components/layout/AppHeader';
 import {Navbar} from '@forest-feed/components/layout/Navbar';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
+import {useInit} from '@forest-feed/redux/module/init/init.slice';
 
 export type LayoutProps = React.PropsWithChildren;
 
 export function Layout(props: LayoutProps) {
   const {children} = props;
 
-  const [mounted, setMounted] = useState(false);
+  const {dispatchInit} = useInit();
 
   const {handleLensLogout} = useAuthLens();
 
-  const {chain} = useNetwork();
-  const {address} = useAccount();
-
   useEffect(() => {
-    setMounted(true);
+    dispatchInit({lensLogout: handleLensLogout});
   }, []);
-
-  useEffect(() => {
-    if (mounted) {
-      (async () => {
-        await handleLensLogout();
-      })();
-    }
-  }, [chain, address]);
 
   return (
     <div className="container mx-auto">

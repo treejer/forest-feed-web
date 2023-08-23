@@ -15,7 +15,6 @@ import {appInfo, chains, forestFeedTheme, wagmiConfig} from '@forest-feed/connec
 import {ApolloProvider} from '@forest-feed/components/providers/Apollo';
 import {LensProvider} from '@forest-feed/components/providers/Lens';
 import {store, persistor} from '@forest-feed/redux/store';
-import {InitAppActions} from '@forest-feed/components/providers/InitActions';
 
 export type AllTheProvidersProps = React.PropsWithChildren<{
   locale: Locale;
@@ -31,14 +30,12 @@ export function AllTheProviders(props: AllTheProvidersProps) {
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
-              <InitAppActions>
-                <LensProvider>
-                  <ApolloProvider>
-                    <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
-                    {children}
-                  </ApolloProvider>
-                </LensProvider>
-              </InitAppActions>
+              <LensProvider>
+                <ApolloProvider>
+                  <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
+                  {children}
+                </ApolloProvider>
+              </LensProvider>
             </PersistGate>
           </Provider>
         </NextIntlClientProvider>

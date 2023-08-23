@@ -8,6 +8,7 @@ import {nonceSagas} from '@forest-feed/redux/module/nonce/nonce';
 import {signSagas} from '@forest-feed/redux/module/sign/sign';
 import {profileSagas} from '@forest-feed/redux/module/profile/profile';
 import {paginationSagas} from '@forest-feed/redux/module/pagination/pagination.saga';
+import {myCampaignsSagas} from '@forest-feed/redux/module/myCampaigns/myCampaigns';
 
 export function* rootSaga(store: SagaStore) {
   yield all([
@@ -17,6 +18,7 @@ export function* rootSaga(store: SagaStore) {
     nonceSagas(),
     signSagas(),
     profileSagas(),
-    paginationSagas,
+    paginationSagas(),
+    myCampaignsSagas(),
   ]);
 }

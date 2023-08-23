@@ -4,15 +4,12 @@ import {PayloadAction} from '@reduxjs/toolkit';
 import {AppState} from '@forest-feed/redux/store';
 import {
   PaginationName,
+  PaginationNameFetcher,
   setNextPage,
   setPage,
   TPaginationAction,
   TPaginationItem,
 } from '@forest-feed/redux/module/pagination/pagination.slice';
-
-export const PaginationNameFetcher = {
-  [PaginationName.MyCampaigns]: () => {}, //TODO: myCampaigns.load,
-};
 
 export function* selectPaginationForName(name: PaginationName) {
   return yield select((state: AppState) => state.pagination[name]);

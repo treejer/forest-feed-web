@@ -34,10 +34,14 @@ export const paginationInitialState: TPaginationState = {
   [PaginationName.MyCampaigns]: defaultPaginationItem,
 };
 
+export const PaginationNameFetcher = {
+  [PaginationName.MyCampaigns]: () => {}, //TODO: myCampaigns.load,
+};
+
 export type TPaginationAction = {
   setNextPage: {name: PaginationName; query?: TAppQueries};
   setPage: {name: PaginationName; page: number; query?: TAppQueries};
-  setTotal: {name: PaginationName; total: number};
+  setPaginationTotal: {name: PaginationName; total: number};
   paginationReachedEnd: {name: PaginationName};
   resetPagination: {name: PaginationName};
   name: PaginationName;
@@ -54,7 +58,7 @@ const paginationSlice = createSlice({
     setPage: (state, action: PayloadAction<TPaginationAction['setPage']>) => {
       state[action.payload.name].page = action.payload.page;
     },
-    setPaginationTotal: (state, action: PayloadAction<TPaginationAction['setTotal']>) => {
+    setPaginationTotal: (state, action: PayloadAction<TPaginationAction['setPaginationTotal']>) => {
       state[action.payload.name].total = action.payload.total;
       state[action.payload.name].loading = false;
     },

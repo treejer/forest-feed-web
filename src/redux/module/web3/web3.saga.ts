@@ -1,9 +1,16 @@
 import {PayloadAction} from '@reduxjs/toolkit';
 import {put, select, take, takeEvery} from 'redux-saga/effects';
-import {signMessage, switchNetwork as switchNetworkWeb3, watchAccount, watchNetwork} from '@wagmi/core';
+import {
+  getAccount,
+  getNetwork,
+  signMessage,
+  switchNetwork as switchNetworkWeb3,
+  watchAccount,
+  watchNetwork,
+} from '@wagmi/core';
 import {ProfileOwnedByMe} from '@lens-protocol/react-web';
 
-import {config as configs, NetworkConfig} from '@forest-feed/config';
+import {config as configs, defaultChainId, NetworkConfig} from '@forest-feed/config';
 import {selectConfig, selectLensProfile, selectWeb3} from '@forest-feed/redux/selectors';
 import {
   Web3State,
@@ -48,11 +55,11 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
 }
 
 export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchNetwork']>) {
-  const {newNetwork, userInApp, onSuccess, lensLogout} = payload || {};
+  const {newNetwork, userInApp, onSuccess, lensLogout, inInit} = payload || {};
   const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
   try {
-    if (!userInApp && lensProfile) {
-      yield lensLogout?.();
+    if (!userInApp && lensProfile && !inInit) {
+      yield lensLogout?.(true);
     }
     yield put(startConfiguration({newNetwork, userInApp, onSuccess}));
   } catch (e: any) {
@@ -94,7 +101,7 @@ export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAcc
   const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
   try {
     if (!accessToken || address?.toLowerCase() !== account?.address?.toLowerCase()) {
-      if (lensProfile) yield lensLogout();
+      if (lensProfile) yield lensLogout(true);
       yield put(logoutAccount());
     }
     yield put(connectedWallet({address: account.address}));
@@ -106,6 +113,14 @@ export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAcc
 export function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Action['watchCurrentWeb3']>) {
   try {
     const {lensLogout} = payload || {};
+    const account = yield getAccount();
+    const network = yield getNetwork();
+    yield put(checkAccount({account, lensLogout}));
+    if (typeof network.chain?.unsupported !== 'undefined' && network.chain?.unsupported) {
+      yield put(notSupportedNetwork());
+    } else {
+      yield put(switchNetwork({newNetwork: network?.chain?.id || defaultChainId, lensLogout, inInit: true}));
+    }
     watchAccount(account => {
       store.dispatch(checkAccount({account, lensLogout}));
     });

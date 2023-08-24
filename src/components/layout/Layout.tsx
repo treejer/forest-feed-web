@@ -21,7 +21,7 @@ export function Layout(props: LayoutProps) {
     }
   }, [lensProfileLoading]);
 
-  return (
+  return !initState.loading ? (
     <div className="container mx-auto">
       <div className="grid grid-cols-6 gap-20 min-h-screen grid-rows-appLayout">
         <div className="grid col-span-6">
@@ -33,5 +33,5 @@ export function Layout(props: LayoutProps) {
         <div className="col-span-5 pb-5">{children}</div>
       </div>
     </div>
-  );
+  ) : null;
 }

@@ -28,6 +28,7 @@ export type SwitchNetworkAction = {
   newNetwork: BlockchainNetwork;
   userInApp?: boolean;
   onSuccess?: () => void;
+  inInit?: boolean;
 };
 
 export type Web3Action = {

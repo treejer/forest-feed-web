@@ -8,6 +8,8 @@ export const infuraKey = process.env.NEXT_PUBLIC_INFURA_KEY || '';
 
 export const lensProtocolAppId = process.env.NEXT_PUBLIC_LENS_PROTOCOL_APP_ID || '';
 
+export const defaultChainId = 80001;
+
 export const paginationPageSize = 10;
 export enum ContractType {
   DAI = 'DAI',

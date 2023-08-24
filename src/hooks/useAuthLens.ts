@@ -91,21 +91,26 @@ export function useAuthLens() {
     }
   }, [address, login, isConnected, dispatchSignWithForest]);
 
-  const handleLensLogout = useCallback(async () => {
-    try {
-      setUnknownError(null);
-      const {isSuccess, isFailure} = await logout();
-      const isSuccessValue = isSuccess();
-      const isFailureValue = isFailure();
-      setLogoutStatus({isSuccess: isSuccessValue, isFailure: isFailureValue});
-      if (isSuccessValue) {
-        setLoginStatus(null);
-        dispatchLogoutForest();
+  const handleLensLogout = useCallback(
+    async (inSaga?: boolean) => {
+      try {
+        setUnknownError(null);
+        const {isSuccess, isFailure} = await logout();
+        const isSuccessValue = isSuccess();
+        const isFailureValue = isFailure();
+        setLogoutStatus({isSuccess: isSuccessValue, isFailure: isFailureValue});
+        if (isSuccessValue) {
+          setLoginStatus(null);
+          if (!inSaga) {
+            dispatchLogoutForest();
+          }
+        }
+      } catch (e: any) {
+        console.log(e, 'error in logout lens');
       }
-    } catch (e: any) {
-      console.log(e, 'error in logout lens');
-    }
-  }, [logout, dispatchLogoutForest]);
+    },
+    [logout, dispatchLogoutForest],
+  );
 
   return {
     lensProfile,

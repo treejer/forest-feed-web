@@ -10,7 +10,7 @@ export type InitState = {
 };
 
 export type InitAction = {
-  init: {lensLogout: () => void};
+  init: {lensLogout: (isSaga?: boolean) => void};
 };
 
 export const initInitialState: InitState = {

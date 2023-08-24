@@ -6,6 +6,7 @@ import {AppHeader} from '@forest-feed/components/layout/AppHeader';
 import {Navbar} from '@forest-feed/components/layout/Navbar';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
+import {InitLoader} from '@forest-feed/components/layout/InitLoader';
 
 export type LayoutProps = React.PropsWithChildren;
 
@@ -33,5 +34,7 @@ export function Layout(props: LayoutProps) {
         <div className="col-span-5 pb-5">{children}</div>
       </div>
     </div>
-  ) : null;
+  ) : (
+    <InitLoader />
+  );
 }

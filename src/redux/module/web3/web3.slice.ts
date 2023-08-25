@@ -5,7 +5,7 @@ import {GetAccountResult} from '@wagmi/core';
 import {ProfileOwnedByMe} from '@lens-protocol/react-web';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
-import {selectConfig, selectRegularSale, selectWeb3} from '@forest-feed/redux/selectors';
+import {selectAccessToken, selectConfig, selectRegularSale, selectWeb3} from '@forest-feed/redux/selectors';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {profileActions} from '@forest-feed/redux/module/profile/profile';
 import {nonceActions} from '@forest-feed/redux/module/nonce/nonce';
@@ -172,3 +172,4 @@ export function useWeb3() {
 
 export const useConfig = () => useAppSelector(selectConfig);
 export const useRegularSale = () => useAppSelector(selectRegularSale);
+export const useAccessToken = () => useAppSelector(selectAccessToken);

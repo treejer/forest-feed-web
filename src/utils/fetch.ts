@@ -13,10 +13,11 @@ export type FetchResult<Data> = {
 export function fetch<Data, Form = any>(
   url: string,
   options: AxiosRequestConfig<Form> = {},
+  baseUrl?: string,
 ): Promise<FetchResult<Data>> {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await axios(url, {...options, timeout: 10000});
+      const res = await axios(baseUrl ? baseUrl + url : url, {...options, timeout: 10000});
       if (debugFetch) {
         console.log(url, res.data, 'res is here', res.status);
       }
@@ -97,7 +98,7 @@ export function* handleSagaFetchError(e: AxiosError<ClientError>, options: Handl
 
   if ((status === 401 || status === 403) && logoutUnauthorized) {
     // TODO: @logout
-    // yield put(logoutAccount());
+    // yield put(web3.logoutAccount());
   }
   if (showToastError && message && message?.length) {
     yield showSagaToast({

@@ -19,7 +19,7 @@ const MyCampaigns = new ReduxFetchState<MyCampaignsRes, null, string>('myCampaig
 export function* watchMyCampaigns() {
   try {
     const {page, perPage}: TPaginationItem = yield selectPaginationForName(PaginationName.MyCampaigns);
-    const res: FetchResult<MyCampaignsRes> = yield sagaFetch<MyCampaignsRes>('/users/doctors', {
+    const res: FetchResult<MyCampaignsRes> = yield sagaFetch<MyCampaignsRes>('/campaign/my-campaign', {
       params: {
         skip: page - 1,
         limit: perPage,

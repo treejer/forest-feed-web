@@ -1,35 +1,31 @@
 'use client';
 
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useTranslations} from 'use-intl';
 import {TableOptions} from 'react-table';
 import moment from 'moment';
 
-import {Table} from '@forest-feed/components/kit/Table/Table';
+import {TableWrapper} from '@forest-feed/components/kit/Table/TableWrapper';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 
-import mockCampaigns from '@forest-feed/db/mockCampaigns.json';
-import {paginationPageSize} from '@forest-feed/config';
-
-export type TCampaign = {
-  id: string;
-  status: boolean;
-  type: string;
-  budget: string;
-  goal: number;
-  reposts: number;
-  createdAt: string;
-};
+import {useMyCampaigns} from '@forest-feed/redux/module/myCampaigns/myCampaigns';
+import {Campaign} from '@forest-feed/types/campaigns';
 
 function MyCampaigns() {
   const t = useTranslations('myCampaigns');
 
-  const [page, setPage] = useState(1);
+  const {myCampaigns, pagination, dispatchFetchMyCampaigns} = useMyCampaigns();
 
-  const columns: TableOptions<TCampaign>['columns'] = useMemo(
+  useEffect(() => {
+    dispatchFetchMyCampaigns();
+  }, []);
+
+  console.log(myCampaigns, 'myCampaigns is ehere');
+
+  const columns: TableOptions<Campaign>['columns'] = useMemo(
     () => [
       {
         Header: t('status'),
@@ -40,23 +36,23 @@ function MyCampaigns() {
       },
       {
         Header: t('campaignId'),
-        accessor: 'id',
+        accessor: 'publicationId',
       },
-      {
-        Header: t('type'),
-        accessor: 'type',
-      },
-      {
-        Header: t('budget'),
-        accessor: 'budget',
-      },
+      // {
+      //   Header: t('type'),
+      //   accessor: '',
+      // },
+      // {
+      //   Header: t('budget'),
+      //   accessor: 'budget',
+      // },
       {
         Header: t('goal'),
-        accessor: 'goal',
+        accessor: 'campaignSize',
       },
       {
         Header: t('reposts'),
-        accessor: 'reposts',
+        accessor: 'awardedCount',
         Cell: ({cell, value}) => (
           <RepostsBadge
             min={value}
@@ -76,20 +72,18 @@ function MyCampaigns() {
     [t],
   );
 
-  const data = useMemo(() => mockCampaigns.slice((page - 1) * paginationPageSize, page * paginationPageSize), [page]);
-
   return (
     <AnimatedPage>
       <AuthWrapper>
-        <Table<TCampaign>
-          data={data}
+        <TableWrapper<Campaign>
+          data={myCampaigns?.campaignList}
           columns={columns}
           pagination={{
-            page,
-            loading: false,
-            refetching: false,
-            loadNextPrevPage: async (number: 1 | -1) =>
-              setPage(prevState => (prevState + number < 1 ? prevState : prevState + number)),
+            page: pagination.page,
+            loading: pagination.loading,
+            count: pagination.total,
+            loadPage: page => pagination.dispatchSetPage({page}),
+            loadNextPrevPage: count => pagination.dispatchNextPrevPage({count}),
           }}
         />
       </AuthWrapper>

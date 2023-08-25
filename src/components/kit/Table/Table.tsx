@@ -5,18 +5,18 @@ import {TableOptions, useSortBy, useTable} from 'react-table';
 import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Pagination} from '@forest-feed/components/kit/Table/Pagination';
-import {useQueryPagination} from '@forest-feed/hooks/pagination/useQueryPagination';
 
 export type TableProps<D extends object> = {
   columns: TableOptions<D>['columns'];
-  data: D[];
+  data: D[] | null | undefined;
   initialState?: TableOptions<D>['initialState'];
-  pagination?: Omit<
-    ReturnType<typeof useQueryPagination>,
-    'persistedData' | 'query' | 'refetchData' | 'resetPagination' | 'loadPage'
-  > & {
+  pagination?: {
     count?: number;
-    loadPage?: (page: number) => Promise<void>;
+    loadNextPrevPage: (count: number) => void;
+    loadPage?: (page: number) => void;
+    page: number;
+    loading: boolean;
+    refetching?: boolean;
   };
 };
 
@@ -29,7 +29,7 @@ function TableComponent<D extends object>(props: TableProps<D>) {
   const {getTableProps, getTableBodyProps, headerGroups, rows, prepareRow} = useTable(
     {
       columns,
-      data,
+      data: data?.length ? data : [],
       initialState,
     },
     useSortBy,

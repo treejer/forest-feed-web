@@ -5,29 +5,31 @@ import {ProfileId, useActiveProfile, useActiveProfileSwitch, useProfilesOwnedByM
 import {DropDown, DropDownItem} from '@forest-feed/components/kit/DropDown';
 import {SkeletonBox} from '@forest-feed/components/layout/AppHeaderSkeleton';
 import {Color} from 'colors';
+import {useDebounce} from '@forest-feed/hooks/useDebounce';
 
 export function SwitchProfile() {
   const {data: lensProfile} = useActiveProfile();
   const {data: profiles, loading: profilesLoading, hasMore, next} = useProfilesOwnedByMe();
   const {execute: switchProfile} = useActiveProfileSwitch();
 
-  useEffect(() => {
-    if (hasMore) {
-      (async () => {
-        await next();
-      })();
-    }
-  }, [profiles]);
+  const debouncedProfiles = useDebounce(profiles);
+  // useEffect(() => {
+  //   if (hasMore) {
+  //     (async () => {
+  //       await next();
+  //     })();
+  //   }
+  // }, [debouncedProfiles]);
 
   const profilesList = useMemo(
     () =>
-      profiles?.map(
+      debouncedProfiles?.map(
         (profile): DropDownItem => ({
           id: profile.id,
           text: `@${profile.handle}`,
         }),
       ),
-    [profiles],
+    [debouncedProfiles],
   );
 
   const currentProfile = useMemo(

@@ -1,6 +1,8 @@
 import {ImageProps} from 'next/image';
 
 import {formatUrl} from '@forest-feed/utils/fotmatUrl';
+import {myCampaignsActions} from '@forest-feed/redux/module/myCampaigns/myCampaigns';
+import {PaginationName} from '@forest-feed/redux/module/pagination/pagination.slice';
 
 export const projectName = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_NAME || '';
 export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '';
@@ -10,7 +12,11 @@ export const lensProtocolAppId = process.env.NEXT_PUBLIC_LENS_PROTOCOL_APP_ID ||
 
 export const defaultChainId = 80001;
 
-export const paginationPageSize = 10;
+export const paginationPageSize = 7;
+
+export const PaginationNameFetcher = {
+  [PaginationName.MyCampaigns]: myCampaignsActions.load,
+};
 export enum ContractType {
   DAI = 'DAI',
   REGULAR_SALE = 'REGULAR_SALE',

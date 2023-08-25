@@ -23,7 +23,7 @@ export type TPaginationState = {
 };
 
 export const defaultPaginationItem: TPaginationItem = {
-  page: 0,
+  page: 1,
   perPage: 7,
   total: 0,
   hasMore: true,
@@ -34,12 +34,8 @@ export const paginationInitialState: TPaginationState = {
   [PaginationName.MyCampaigns]: defaultPaginationItem,
 };
 
-export const PaginationNameFetcher = {
-  [PaginationName.MyCampaigns]: () => {}, //TODO: myCampaigns.load,
-};
-
 export type TPaginationAction = {
-  setNextPage: {name: PaginationName; query?: TAppQueries};
+  setNextPrevPage: {name: PaginationName; count: number; query?: TAppQueries};
   setPage: {name: PaginationName; page: number; query?: TAppQueries};
   setPaginationTotal: {name: PaginationName; total: number};
   paginationReachedEnd: {name: PaginationName};
@@ -51,7 +47,7 @@ const paginationSlice = createSlice({
   name: 'pagination',
   initialState: paginationInitialState,
   reducers: {
-    setNextPage: (state, action: PayloadAction<TPaginationAction['setNextPage']>) => {
+    setNextPrevPage: (state, action: PayloadAction<TPaginationAction['setNextPrevPage']>) => {
       state[action.payload.name].page = state[action.payload.name].page + 1;
       state[action.payload.name].loading = true;
     },
@@ -71,7 +67,7 @@ const paginationSlice = createSlice({
   },
 });
 
-export const {setNextPage, setPage, resetPagination, setPaginationTotal, paginationReachedEnd} =
+export const {setNextPrevPage, setPage, resetPagination, setPaginationTotal, paginationReachedEnd} =
   paginationSlice.actions;
 
 export default paginationSlice.reducer;
@@ -81,9 +77,9 @@ export function useReduxPagination(name: PaginationName) {
 
   const dispatch = useAppDispatch();
 
-  const dispatchNextPage = useCallback(
-    ({query}: Omit<TPaginationAction['setNextPage'], 'name'>) => {
-      dispatch(setNextPage({name, query}));
+  const dispatchNextPrevPage = useCallback(
+    ({query, count}: Omit<TPaginationAction['setNextPrevPage'], 'name'>) => {
+      dispatch(setNextPrevPage({name, query, count}));
     },
     [dispatch, name],
   );
@@ -102,7 +98,7 @@ export function useReduxPagination(name: PaginationName) {
   return {
     ...data,
     dispatchSetPage,
-    dispatchNextPage,
+    dispatchNextPrevPage,
     dispatchResetPagination,
   };
 }

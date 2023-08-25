@@ -4,12 +4,12 @@ import {PayloadAction} from '@reduxjs/toolkit';
 import {AppState} from '@forest-feed/redux/store';
 import {
   PaginationName,
-  PaginationNameFetcher,
-  setNextPage,
+  setNextPrevPage,
   setPage,
   TPaginationAction,
   TPaginationItem,
 } from '@forest-feed/redux/module/pagination/pagination.slice';
+import {PaginationNameFetcher} from '@forest-feed/config';
 
 export function* selectPaginationForName(name: PaginationName) {
   return yield select((state: AppState) => state.pagination[name]);
@@ -47,6 +47,6 @@ export function* watchSetPage({payload}: PayloadAction<TPaginationAction['setPag
 }
 
 export function* paginationSagas() {
-  yield takeEvery(setNextPage.type, watchSetNextPage);
+  yield takeEvery(setNextPrevPage.type, watchSetNextPage);
   yield takeEvery(setPage.type, watchSetPage);
 }

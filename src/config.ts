@@ -1,7 +1,7 @@
 import {ImageProps} from 'next/image';
 
 import {formatUrl} from '@forest-feed/utils/fotmatUrl';
-import {myCampaignsActions} from '@forest-feed/redux/module/myCampaigns/myCampaigns';
+import {myCampaignsActions} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {PaginationName} from '@forest-feed/redux/module/pagination/pagination.slice';
 
 export const projectName = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_NAME || '';

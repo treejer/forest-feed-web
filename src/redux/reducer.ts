@@ -10,7 +10,8 @@ import {nonceReducer} from '@forest-feed/redux/module/nonce/nonce';
 import {signReducer} from '@forest-feed/redux/module/sign/sign';
 import {profileReducer} from '@forest-feed/redux/module/profile/profile';
 import paginationReducer from '@forest-feed/redux/module/pagination/pagination.slice';
-import {myCampaignsReducer} from '@forest-feed/redux/module/myCampaigns/myCampaigns';
+import {myCampaignsReducer} from '@forest-feed/redux/module/campaign/myCampaigns';
+import {createCampaignReducer} from '@forest-feed/redux/module/campaign/createCampaign';
 
 export const combinedReducers = combineReducers({
   init: initReducer,
@@ -22,6 +23,7 @@ export const combinedReducers = combineReducers({
   profile: profileReducer,
   pagination: paginationReducer,
   myCampaigns: myCampaignsReducer,
+  createCampaign: createCampaignReducer,
   jsonPlaceholderReducer,
 });
 

@@ -9,3 +9,6 @@ export const selectLensProfile = (state: AppState) => state.web3.lensProfile;
 export const selectRegularSale = (state: AppState) => state.web3.config.contracts.REGULAR_SALE;
 export const selectNonce = (state: AppState) => state.nonce;
 export const selectSign = (state: AppState) => state.sign;
+
+export const selectMyCampaign = (state: AppState) => state.myCampaigns;
+export const selectCreateCampaign = (state: AppState) => state.createCampaign;

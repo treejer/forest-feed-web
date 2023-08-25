@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useTranslations} from 'use-intl';
 import {TableOptions} from 'react-table';
 import moment from 'moment';
@@ -11,19 +11,17 @@ import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 
-import {useMyCampaigns} from '@forest-feed/redux/module/myCampaigns/myCampaigns';
+import {useMyCampaigns} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {Campaign} from '@forest-feed/types/campaigns';
 
 function MyCampaigns() {
-  const t = useTranslations('myCampaigns');
-
   const {myCampaigns, pagination, dispatchFetchMyCampaigns} = useMyCampaigns();
+
+  const t = useTranslations('myCampaigns');
 
   useEffect(() => {
     dispatchFetchMyCampaigns();
   }, []);
-
-  console.log(myCampaigns, 'myCampaigns is ehere');
 
   const columns: TableOptions<Campaign>['columns'] = useMemo(
     () => [

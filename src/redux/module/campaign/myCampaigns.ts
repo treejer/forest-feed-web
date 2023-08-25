@@ -3,7 +3,7 @@ import {useCallback} from 'react';
 import ReduxFetchState from 'redux-fetch-state';
 import {put, takeEvery} from 'redux-saga/effects';
 
-import {MyCampaignsRes} from '@forest-feed/webServices/myCampaigns/myCampaigns';
+import {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
 import {selectPaginationForName} from '@forest-feed/redux/module/pagination/pagination.saga';
 import {
   PaginationName,
@@ -13,6 +13,7 @@ import {
 } from '@forest-feed/redux/module/pagination/pagination.slice';
 import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@forest-feed/utils/fetch';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
+import {selectMyCampaign} from '@forest-feed/redux/selectors';
 
 const MyCampaigns = new ReduxFetchState<MyCampaignsRes, null, string>('myCampaigns');
 
@@ -39,7 +40,7 @@ export function* myCampaignsSagas() {
 }
 
 export function useMyCampaigns() {
-  const {data: myCampaigns, ...myCampaignsState} = useAppSelector(state => state.myCampaigns);
+  const {data: myCampaigns, ...myCampaignsState} = useAppSelector(selectMyCampaign);
   const dispatch = useAppDispatch();
 
   const pagination = useReduxPagination(PaginationName.MyCampaigns);

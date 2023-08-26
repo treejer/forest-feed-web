@@ -47,8 +47,7 @@ function NewCampaignPage() {
 
   const handleApproveReview = useCallback(async () => {
     try {
-      // await createLensPost();
-      dispatchSetCurrentStep(3);
+      await createLensPost();
     } catch (e: any) {
       console.log(e, 'error in handle approve review');
     }

@@ -20,6 +20,7 @@ export const PaginationNameFetcher = {
 export enum ContractType {
   DAI = 'DAI',
   REGULAR_SALE = 'REGULAR_SALE',
+  FOREST_FEED = 'FOREST_FEED',
 }
 export interface ConfigContract {
   address: `0x${string}`;
@@ -46,6 +47,7 @@ export interface NetworkConfig {
   isMainnet: boolean;
   infuraKey: string;
   forestFeedApiUrl: string;
+  lensApiUrl: string;
   thegraphUrl: string;
   ipfsPostURL: string;
   ipfsGetURL: string;
@@ -79,11 +81,16 @@ export const config: Config = {
         address: (process.env.NEXT_PUBLIC_POLYGON_REGULAR_SALE_CONTRACT || '') as `0x${string}`,
         abi: require('./abis/RegularSale.json'),
       },
+      FOREST_FEED: {
+        address: (process.env.NEXT_PUBLIC_POLYGON_FOREST_FEED_CONTRACT || '') as `0x${string}`,
+        abi: require('./abis/ForestFeed.json'),
+      },
     },
     networkId: Number('' || 3),
     isMainnet: true,
     infuraKey: process.env.NEXT_PUBLIC_INFURA_KEY || '',
     forestFeedApiUrl: formatUrl(process.env.NEXT_PUBLIC_POLYGON_NEST_API_URL || ''),
+    lensApiUrl: formatUrl(process.env.NEXT_PUBLIC_POLYGON_LENS_API_URL || ''),
     thegraphUrl: formatUrl(''),
     ipfsPostURL: formatUrl(process.env.NEXT_PUBLIC_POLYGON_IPFS_POST_URL || ''),
     ipfsGetURL: formatUrl(process.env.NEXT_PUBLIC_POLYGON_IPFS_GET_URL || ''),
@@ -108,11 +115,16 @@ export const config: Config = {
         address: (process.env.NEXT_PUBLIC_MUMBAI_REGULAR_SALE_CONTRACT || '') as `0x${string}`,
         abi: require('./abis/RegularSale.json'),
       },
+      FOREST_FEED: {
+        address: (process.env.NEXT_PUBLIC_MUMBAI_FOREST_FEED_CONTRACT || '') as `0x${string}`,
+        abi: require('./abis/ForestFeed.json'),
+      },
     },
     networkId: Number('' || 3),
     isMainnet: false,
     infuraKey: process.env.NEXT_PUBLIC_INFURA_KEY || '',
     forestFeedApiUrl: formatUrl(process.env.NEXT_PUBLIC_MUMBAI_NEST_API_URL || ''),
+    lensApiUrl: formatUrl(process.env.NEXT_PUBLIC_MUMBAI_LENS_API_URL || ''),
     thegraphUrl: formatUrl(''),
     ipfsPostURL: formatUrl(process.env.NEXT_PUBLIC_MUMBAI_IPFS_POST_URL || ''),
     ipfsGetURL: formatUrl(process.env.NEXT_PUBLIC_MUMBAI_IPFS_GET_URL || ''),

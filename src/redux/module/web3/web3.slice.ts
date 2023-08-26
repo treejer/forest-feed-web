@@ -18,7 +18,7 @@ export type Web3State = {
   switching: boolean;
   isSupportedNetwork: boolean;
   address: `0x${string}` | null;
-  accessToken: string | null;
+  accessToken: string;
   lensLoading: boolean;
   forestLoading: boolean;
   lensProfile: ProfileOwnedByMe | null | undefined;
@@ -49,7 +49,7 @@ export const web3InitialState: Web3State = {
   switching: false,
   isSupportedNetwork: false,
   address: null,
-  accessToken: null,
+  accessToken: '',
   lensLoading: false,
   forestLoading: false,
   lensProfile: null,

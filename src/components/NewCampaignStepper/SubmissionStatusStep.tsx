@@ -2,17 +2,29 @@ import React, {useMemo, useState} from 'react';
 
 import {Circles} from 'react-loader-spinner';
 import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
+import {useActiveProfile} from '@lens-protocol/react-web';
 import {useTranslations} from 'use-intl';
+import {useQuery} from '@apollo/client';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
 import {colors} from 'colors';
 
 export function SubmissionStatusStep() {
   const [loading, setLoading] = useState(false);
   const [activeStep, setActiveStep] = useState(2);
   const [error, setError] = useState(true);
+
+  const {data: activeProfile} = useActiveProfile();
+
+  const publications = useQuery(publicationIds, {
+    variables: publicationIdsVariables(activeProfile?.id as string, 1),
+    context: {clientName: 'lens'},
+  });
+
+  console.log(publications.data, 'publications');
 
   const t = useTranslations('newCampaign');
 

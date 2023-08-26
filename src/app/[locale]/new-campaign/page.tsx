@@ -4,7 +4,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 
 import {useTranslations} from 'use-intl';
 import {motion} from 'framer-motion';
-import {ProfileOwnedByMe, useActiveProfile} from '@lens-protocol/react-web';
+import {ProfileId, ProfileOwnedByMe, useActiveProfile, usePublications} from '@lens-protocol/react-web';
 
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
@@ -14,6 +14,7 @@ import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignSt
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
+import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
 
 function NewCampaignPage() {
   const {
@@ -45,8 +46,12 @@ function NewCampaignPage() {
   );
 
   const handleApproveReview = useCallback(async () => {
-    dispatchSetCurrentStep(3);
-    await createLensPost();
+    try {
+      // await createLensPost();
+      dispatchSetCurrentStep(3);
+    } catch (e: any) {
+      console.log(e, 'error in handle approve review');
+    }
   }, [dispatchSetCurrentStep, createLensPost]);
 
   const handleApprovePledge = useCallback(
@@ -127,8 +132,8 @@ function NewCampaignPage() {
                 title: t('confirm'),
               },
               {
-                content: <div>Step 4</div>,
-                title: t('share'),
+                content: <SubmissionStatusStep />,
+                title: t('finalize'),
               },
             ]}
           />

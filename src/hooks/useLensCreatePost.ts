@@ -11,8 +11,6 @@ import {
   NftAttributeDisplayType,
   PendingSigningRequestError,
   ProfileOwnedByMe,
-  ReferencePolicyConfig,
-  ReferencePolicyType,
   Result,
   SupportedPublicationMediaType,
   useCreatePost,
@@ -43,7 +41,7 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
   const {publisher} = props;
 
   const config = useConfig();
-  const {campaignJourney} = useCampaignJourney();
+  const {campaignJourney, dispatchSetCurrentStep} = useCampaignJourney();
 
   const {execute: create, ...createPostState} = useCreatePost({publisher, upload: uploadLens(config)});
   const [loading, setLoading] = useState(false);
@@ -131,6 +129,7 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
           translate: true,
           type: ToastType.success,
         });
+        dispatchSetCurrentStep(3);
       }
       if (result.isFailure()) {
         showToast({
@@ -145,7 +144,7 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
       console.log('create post finally');
       setLoading(false);
     }
-  }, [campaignJourney, create, config.ipfsPostURL, config.ipfsGetURL]);
+  }, [campaignJourney, create, config.ipfsPostURL, config.ipfsGetURL, dispatchSetCurrentStep]);
 
   return {
     ...createPostState,

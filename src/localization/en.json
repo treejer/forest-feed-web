@@ -37,7 +37,7 @@
       "generalInfo": "General Info",
       "pledge": "Pledge",
       "confirm": "Confirm",
-      "share": "Share"
+      "finalize": "Finalize"
     },
     "campaignSize": "Campaign Size",
     "howManyWantsToPlant": "How many trees do you want to plant?",
@@ -59,7 +59,17 @@
     "assets": {
       "title": "Wallet Assets",
       "dai": "DAI"
-    }
+    },
+    "processing": "Processing...",
+    "oops": "Oops!",
+    "failText": "Something went wrong! Please try again...",
+    "bePatient": "Please hold while we're processing your campaign creation.",
+    "createOnLens": "Create post on lens",
+    "approveDai": "Approve DAI to contract",
+    "deposit": "Deposit to contract",
+    "finalize": "Finalize you campaign creation",
+    "tryAgain": "Try again",
+    "cancel": "Cancel"
   },
   "myCampaigns": {
     "status": "Status",

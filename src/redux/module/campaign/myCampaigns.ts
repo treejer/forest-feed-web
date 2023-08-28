@@ -7,6 +7,7 @@ import {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
 import {selectPaginationForName} from '@forest-feed/redux/module/pagination/pagination.saga';
 import {
   PaginationName,
+  paginationReachedEnd,
   setPaginationTotal,
   TPaginationItem,
   useReduxPagination,
@@ -14,6 +15,7 @@ import {
 import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@forest-feed/utils/fetch';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {selectMyCampaign} from '@forest-feed/redux/selectors';
+import {paginationPageSize} from '@forest-feed/config';
 
 const MyCampaigns = new ReduxFetchState<MyCampaignsRes, null, string>('myCampaigns');
 
@@ -26,6 +28,8 @@ export function* watchMyCampaigns() {
         limit: perPage,
       },
     });
+    const totalPageCount = Math.ceil(res.result.count / paginationPageSize);
+    yield put(paginationReachedEnd({name: PaginationName.MyCampaigns, end: page === totalPageCount}));
     yield put(setPaginationTotal({name: PaginationName.MyCampaigns, total: res.result.count}));
     yield put(MyCampaigns.actions.loadSuccess(res.result));
   } catch (e: any) {

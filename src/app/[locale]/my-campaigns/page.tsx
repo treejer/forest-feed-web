@@ -54,8 +54,8 @@ function MyCampaigns() {
         Cell: ({cell, value}) => (
           <RepostsBadge
             min={value}
-            max={cell.row.values.goal}
-            status={cell.row.values.goal === value ? RepostsStatus.active : RepostsStatus.stopped}
+            max={cell.row.values.campaignSize}
+            status={cell.row.values.campaignSize === value ? RepostsStatus.active : RepostsStatus.stopped}
           />
         ),
       },
@@ -82,6 +82,7 @@ function MyCampaigns() {
             count: pagination.total,
             loadPage: page => pagination.dispatchSetPage({page}),
             loadNextPrevPage: count => pagination.dispatchNextPrevPage({count}),
+            refetching: false,
           }}
         />
       </AuthWrapper>

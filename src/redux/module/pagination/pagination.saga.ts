@@ -7,7 +7,6 @@ import {
   setNextPrevPage,
   setPage,
   TPaginationAction,
-  TPaginationItem,
 } from '@forest-feed/redux/module/pagination/pagination.slice';
 import {PaginationNameFetcher} from '@forest-feed/config';
 
@@ -15,16 +14,13 @@ export function* selectPaginationForName(name: PaginationName) {
   return yield select((state: AppState) => state.pagination[name]);
 }
 
-export function* watchSetNextPage({payload}: PayloadAction<TPaginationAction['setPage']>) {
+export function* watchSetNextPrevPage({payload}: PayloadAction<TPaginationAction['setNextPrevPage']>) {
   try {
-    const {name, query} = payload;
-    const {hasMore}: TPaginationItem = yield selectPaginationForName(name);
-    if (!hasMore) {
-      const action = PaginationNameFetcher[name];
-      if (action) {
-        // @ts-ignore
-        yield put(action(query));
-      }
+    const {name, query} = payload || {};
+    const action = PaginationNameFetcher[name];
+    if (action) {
+      // @ts-ignore
+      yield put(action(query));
     }
   } catch (e) {
     console.log(e, 'e is here watchSetNextPage');
@@ -33,20 +29,18 @@ export function* watchSetNextPage({payload}: PayloadAction<TPaginationAction['se
 
 export function* watchSetPage({payload}: PayloadAction<TPaginationAction['setPage']>) {
   try {
-    const {name} = payload;
-    yield selectPaginationForName(name);
+    const {name, query} = payload || {};
     const action = PaginationNameFetcher[name];
     if (action) {
       // @ts-ignore
       yield put(action(query));
     }
-    // }
   } catch (e) {
     console.log(e, 'e is here watchSetNewPage');
   }
 }
 
 export function* paginationSagas() {
-  yield takeEvery(setNextPrevPage.type, watchSetNextPage);
+  yield takeEvery(setNextPrevPage.type, watchSetNextPrevPage);
   yield takeEvery(setPage.type, watchSetPage);
 }

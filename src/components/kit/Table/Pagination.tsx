@@ -27,7 +27,7 @@ function range(start: number, end: number) {
 }
 
 export function Pagination(props: PaginationProps) {
-  const {count, currentPage, hideNext, hidePrev, siblingCount = 1, onPrevPage, onNextPage, onLoadPage} = props;
+  const {count, currentPage, disabled, hidePrev, siblingCount = 1, onPrevPage, onNextPage, onLoadPage} = props;
 
   const paginationRange = useMemo(() => {
     if (!count) return null;
@@ -91,13 +91,13 @@ export function Pagination(props: PaginationProps) {
   console.log(currentPage, 'pagination range');
 
   const itemClassName =
-    'border rounded-full w-[36px] h-[36px] border-border flex items-center justify-center mx-2 first:ml-0 last:mr-0';
+    'border rounded-full w-[36px] h-[36px] border-border flex items-center justify-center mx-2 first:ml-0 last:mr-0 disabled:opacity-50';
 
   return (
     <div className="flex items-end justify-end mt-5">
       <RenderIf condition={!hidePrev}>
         <RenderIf condition={currentPage !== 1}>
-          <button className={itemClassName} onClick={onPrevPage}>
+          <button className={itemClassName} onClick={onPrevPage} disabled={disabled}>
             <ChevronIcon direction={ChevronIconDirection.left} />
           </button>
         </RenderIf>
@@ -113,6 +113,7 @@ export function Pagination(props: PaginationProps) {
               className={`${itemClassName} ${pageNumber === currentPage ? 'bg-green/70 text-white' : ''}`}
               key={`${pageNumber}-${index}-page`}
               onClick={() => onLoadPage(+pageNumber)}
+              disabled={disabled}
             >
               {pageNumber}
             </button>
@@ -121,8 +122,8 @@ export function Pagination(props: PaginationProps) {
       ) : (
         <div className={itemClassName}>{currentPage}</div>
       )}
-      <RenderIf condition={!hideNext}>
-        <button className={itemClassName} onClick={onNextPage}>
+      <RenderIf condition={!count ? true : currentPage !== Math.ceil(count / paginationPageSize)}>
+        <button disabled={disabled} className={itemClassName} onClick={onNextPage}>
           <ChevronIcon direction={ChevronIconDirection.right} />
         </button>
       </RenderIf>

@@ -1,6 +1,6 @@
 import {useMemo, useState} from 'react';
 
-import {useContractWrite, usePrepareContractWrite} from 'wagmi';
+import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 
 import {UseApproveDaiParams, UseApproveDaiReturnType} from '@forest-feed/hooks/useApproveDai';
 import {useForestFeedContract} from '@forest-feed/redux/module/web3/web3.slice';
@@ -13,6 +13,7 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
   const {amount, enabled = true, onSuccess, onError, onPrepareSuccess, onPrepareError} = params;
 
   const [readyToUse, setReadyToUse] = useState(false);
+  const [txHash, setTxHash] = useState('');
 
   const {address, abi} = useForestFeedContract();
 
@@ -36,6 +37,7 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
     ...config,
     onSuccess: data => {
       onSuccess?.(data);
+      setTxHash(data.hash);
       console.log(data, 'success in write deposit');
     },
     onError: err => {
@@ -44,7 +46,12 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
     },
   });
 
+  const {data} = useWaitForTransaction({
+    hash: txHash as `0x${string}`,
+    enabled: !!txHash,
+  });
+
   const canUse = useMemo(() => readyToUse && !!write, [readyToUse, write]);
 
-  return [write, canUse];
+  return [write, canUse, !!data];
 }

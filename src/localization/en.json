@@ -65,13 +65,19 @@
     "failText": "Something went wrong! Please try again...",
     "bePatient": "Please hold while we're processing your campaign creation.",
     "createOnLens": "Create post on lens",
+    "createOnLensDesc": "Your post was successfully created on the lens protocol in the previous step",
     "approveDai": "Approve DAI to contract",
+    "approveDaiDesc": "Please approve DAI to the Forest Feed contract in your wallet to continue",
     "deposit": "Deposit to contract",
+    "depositDesc": "Please confirm the DAI deposit request to Forest Feed contract",
     "finalize": "Finalize you campaign creation",
+    "finalizeDesc": "In the last step, you must title your campaign",
     "tryAgain": "Try again",
     "cancel": "Cancel",
     "goodJob": "Good job!",
-    "succeed": "Campaign successfully created"
+    "succeed": "Campaign successfully created",
+    "confirm": "Confirm",
+    "titleError": "Title should not be empty."
   },
   "myCampaigns": {
     "status": "Status",
@@ -80,7 +86,8 @@
     "budget": "Budget",
     "goal": "Goal",
     "reposts": "Reposts",
-    "creationDate": "Creation Date"
+    "creationDate": "Creation Date",
+    "title": "Title"
   },
   "privacyPolicy": {
     "agreeAppTermsConditions": "I agree to the terms and conditions."

@@ -36,6 +36,10 @@ function MyCampaigns() {
         Header: t('campaignId'),
         accessor: 'publicationId',
       },
+      {
+        Header: t('title'),
+        accessor: 'title',
+      },
       // {
       //   Header: t('type'),
       //   accessor: '',

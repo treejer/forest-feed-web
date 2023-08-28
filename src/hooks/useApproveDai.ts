@@ -1,6 +1,6 @@
 import {useMemo, useState} from 'react';
 
-import {useContractWrite, usePrepareContractWrite} from 'wagmi';
+import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 import {PrepareWriteContractResult, WriteContractResult} from '@wagmi/core';
 
 import {useDaiTokenContract, useForestFeedContract} from '@forest-feed/redux/module/web3/web3.slice';
@@ -14,12 +14,13 @@ export type UseApproveDaiParams = {
   amount: number;
 };
 
-export type UseApproveDaiReturnType = [(() => void) | undefined, boolean];
+export type UseApproveDaiReturnType = [(() => void) | undefined, boolean, boolean];
 
 export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnType {
   const {amount, enabled = true, onSuccess, onError, onPrepareSuccess, onPrepareError} = params;
 
   const [readyToUse, setReadyToUse] = useState(false);
+  const [txHash, setTxHash] = useState('');
 
   const {address, abi} = useDaiTokenContract();
   const {address: forestFeedAddress} = useForestFeedContract();
@@ -44,6 +45,7 @@ export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnT
     ...config,
     onSuccess: data => {
       onSuccess?.(data);
+      setTxHash(data.hash);
       console.log(data, 'data in write approve');
     },
     onError: err => {
@@ -52,7 +54,12 @@ export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnT
     },
   });
 
-  const canUse = useMemo(() => readyToUse && !!write, [readyToUse, write]);
+  const {data} = useWaitForTransaction({
+    hash: txHash as `0x${string}`,
+    enabled: !!txHash,
+  });
 
-  return [write, canUse];
+  const canUse = useMemo(() => readyToUse && !!write, [readyToUse, write, data]);
+
+  return [write, canUse, !!data];
 }

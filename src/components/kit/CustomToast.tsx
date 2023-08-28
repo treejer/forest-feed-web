@@ -18,8 +18,6 @@ const possibleColors = ['text-error', 'text-success'];
 export function CustomToast<T = any, V = any>(props: CustomToastProps<T, V>) {
   const {title, message, type, translate, variables} = props;
 
-  console.log(title, message);
-
   const t = useTranslations();
 
   return (

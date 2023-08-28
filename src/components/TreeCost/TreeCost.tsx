@@ -26,9 +26,11 @@ export function TreeCost(props: TreeCostProps) {
       <Spacer />
       <span className="font-bold">{t('cost')}</span>
       <div className="flex items-center justify-center bg-yellow border-border rounded-md w-full h-[71px] font-size text-lg font-normal">
-        {t('dollarSign', {
-          value: (treeCount * Number(salePrice?.toString())) / 1e18,
-        })}
+        {salePrice
+          ? t('dollarSign', {
+              value: (treeCount * Number(salePrice?.toString())) / 1e18,
+            })
+          : '...'}
       </div>
       <Spacer times={4} />
       <WalletAssets />

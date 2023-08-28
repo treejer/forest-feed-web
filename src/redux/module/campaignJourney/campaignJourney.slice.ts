@@ -82,6 +82,9 @@ export const campaignJourneySlice = createSlice({
     setOnlyFollowers: state => {
       state.reward.onlyFollowers = !state.reward.onlyFollowers;
     },
+    resetCampaignJourney: () => {
+      return campaignJourneyInitialState;
+    },
   },
 });
 
@@ -93,6 +96,7 @@ export const {
   setOnlyFollowers,
   setMinimumFollowerNumber,
   setCanBeCollected,
+  resetCampaignJourney,
 } = campaignJourneySlice.actions;
 
 export const useCampaignJourney = () => {
@@ -139,6 +143,10 @@ export const useCampaignJourney = () => {
     [dispatch],
   );
 
+  const dispatchResetCampaignJourney = useCallback(() => {
+    dispatch(resetCampaignJourney());
+  }, [dispatch]);
+
   return {
     campaignJourney,
     dispatchApproveGeneralInfo,
@@ -148,6 +156,7 @@ export const useCampaignJourney = () => {
     dispatchSetCanBeCollectedOnlyFollowers,
     dispatchSetOnlyFollowers,
     dispatchSetMinimumFollowerNumber,
+    dispatchResetCampaignJourney,
   };
 };
 

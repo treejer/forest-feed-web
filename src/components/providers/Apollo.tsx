@@ -8,6 +8,7 @@ import {
   InMemoryCache,
   ApolloLink,
   ApolloProvider as OriginalApolloProvider,
+  DefaultOptions,
 } from '@apollo/client';
 
 import {NetworkConfig} from '@forest-feed/config';
@@ -19,6 +20,17 @@ function createApolloClient(config: NetworkConfig, accessToken: string) {
   const forestGraphqlLink = new HttpLink({uri: forest});
   const lensGraphqlLink = new HttpLink({uri: lens});
 
+  const defaultOptions: DefaultOptions = {
+    watchQuery: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'ignore',
+    },
+    query: {
+      fetchPolicy: 'no-cache',
+      errorPolicy: 'all',
+    },
+  };
+
   return new ApolloClient({
     link: ApolloLink.split(
       operation => {
@@ -29,6 +41,7 @@ function createApolloClient(config: NetworkConfig, accessToken: string) {
     ),
     connectToDevTools: true,
     cache: new InMemoryCache(),
+    defaultOptions,
   });
 }
 

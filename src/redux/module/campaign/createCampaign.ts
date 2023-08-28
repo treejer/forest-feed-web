@@ -6,6 +6,7 @@ import {put, takeEvery} from 'redux-saga/effects';
 import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@forest-feed/utils/fetch';
 import {
   CreateCampaignAction,
+  CreateCampaignForm,
   CreateCampaignPayload,
   CreateCampaignRes,
 } from '@forest-feed/webServices/campaign/createCampaign';
@@ -16,8 +17,8 @@ const CreateCampaign = new ReduxFetchState<CreateCampaignRes, CreateCampaignPayl
 
 export function* watchCreateCampaign({payload}: CreateCampaignAction) {
   try {
-    const {campaignSize, title, isFollowerOnly, minFollower, publicationId} = payload || {};
-    const res: FetchResult<CreateCampaignRes> = yield sagaFetch<CreateCampaignRes, CreateCampaignPayload>('/campaign', {
+    const {campaignSize, title, isFollowerOnly, minFollower, publicationId, onSuccess} = payload || {};
+    const res: FetchResult<CreateCampaignRes> = yield sagaFetch<CreateCampaignRes, CreateCampaignForm>('/campaign', {
       method: 'POST',
       data: {
         campaignSize,
@@ -28,11 +29,13 @@ export function* watchCreateCampaign({payload}: CreateCampaignAction) {
       },
     });
     yield put(CreateCampaign.actions.loadSuccess(res.result));
+    onSuccess?.();
   } catch (e: any) {
     console.log(e, 'error in create campaign module');
     const {message} = handleFetchError(e);
     yield handleSagaFetchError(e);
     yield put(CreateCampaign.actions.loadFailure(message));
+    payload?.onFailure?.();
   }
 }
 

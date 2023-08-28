@@ -18,7 +18,11 @@ export type CreateCampaignPayload = {
   isFollowerOnly: boolean;
   minFollower: number;
   campaignSize: number;
+  onSuccess?: () => void;
+  onFailure?: () => void;
 };
+
+export type CreateCampaignForm = Omit<CreateCampaignPayload, 'onSuccess' | 'onFailure'>;
 
 export type CreateCampaignAction = {
   type: string;

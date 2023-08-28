@@ -11,22 +11,24 @@ export type StepperProps = {
   contents: {title: string; content: React.ReactNode}[];
   activeStep: number;
   isDependent: boolean;
+  disabled?: boolean;
   setActiveStep: (step: number) => void;
 };
 
 const possibleGridCols = ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6'];
 
 export function Stepper(props: StepperProps) {
-  const {contents, activeStep, setActiveStep, isDependent} = props;
+  const {contents, activeStep, setActiveStep, isDependent, disabled} = props;
 
   return (
     <div>
       <div className={`grid grid-cols-${contents.length}`}>
         {contents.map((item, index) => (
           <div key={`${item.title}-${index}`} className="flex flex-col justify-between relative">
-            <div
+            <button
               onClick={() => (isDependent && index >= activeStep ? undefined : setActiveStep(index))}
               className="flex cursor-pointer mb-6"
+              disabled={disabled}
             >
               <div
                 className={`transition-all w-[24px] h-[24px] rounded-[50%] flex items-center justify-center border text-sm font-bold ${
@@ -37,7 +39,7 @@ export function Stepper(props: StepperProps) {
               </div>
               <Spacer />
               <span className="text-lg font-medium">{item.title}</span>
-            </div>
+            </button>
             {activeStep === index ? (
               <motion.div className="h-[4px] rounded-md underline bg-primary" layoutId="underline" />
             ) : null}

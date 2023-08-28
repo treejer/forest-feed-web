@@ -69,7 +69,9 @@
     "deposit": "Deposit to contract",
     "finalize": "Finalize you campaign creation",
     "tryAgain": "Try again",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "goodJob": "Good job!",
+    "succeed": "Campaign successfully created"
   },
   "myCampaigns": {
     "status": "Status",

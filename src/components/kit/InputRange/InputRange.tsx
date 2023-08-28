@@ -11,7 +11,7 @@ export type InputRangeProps = {
 };
 
 export function InputRange(props: InputRangeProps) {
-  const {value, min = 1, max = 1000, onChange} = props;
+  const {value, min = 1, max = 100, onChange} = props;
 
   const t = useTranslations();
 

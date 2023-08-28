@@ -18,10 +18,11 @@ export type GeneralInfoStepProps = {
   setActiveStep: (step: number) => void;
   isConfirm: boolean;
   onProceed: (generalInfo: GeneralInfoStepState) => void;
+  loading?: boolean;
 };
 
 export function GeneralInfoStep(props: GeneralInfoStepProps) {
-  const {defaultValues, isConfirm, activeStep, setActiveStep, onProceed} = props;
+  const {defaultValues, isConfirm, activeStep, setActiveStep, onProceed, loading} = props;
 
   const {control, resetField, setValue, handleSubmit, formState} = useForm<GeneralInfoForm>({
     defaultValues: {
@@ -109,13 +110,19 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
       />
       <Spacer times={10} />
       <div className="flex items-end justify-end">
-        <Button text={t(isConfirm ? 'back' : 'learnMore')} onClick={handleLearnMore} />
+        <Button text={t(isConfirm ? 'back' : 'learnMore')} disabled={loading} onClick={handleLearnMore} />
         <Spacer />
         <RenderIf condition={isConfirm}>
-          <Button text={t('edit')} onClick={() => setActiveStep(0)} />
+          <Button disabled={loading} text={t('edit')} onClick={() => setActiveStep(0)} />
           <Spacer />
         </RenderIf>
-        <Button variant={ButtonVariant.secondary} disabled={!formState.isValid} text={t('approve')} type="submit" />
+        <Button
+          variant={ButtonVariant.secondary}
+          disabled={isConfirm ? loading : !formState.isValid}
+          loading={isConfirm ? loading : false}
+          text={t('approve')}
+          type="submit"
+        />
       </div>
     </form>
   );

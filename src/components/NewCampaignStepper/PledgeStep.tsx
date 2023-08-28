@@ -87,7 +87,7 @@ export function PledgeStep(props: PledgeStepProps) {
         </span>
         <span className="text-sm text-secondary">
           {t('countTrees', {
-            count: 1000,
+            count: 100,
           })}
         </span>
       </div>

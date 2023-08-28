@@ -1,30 +1,150 @@
-import React, {useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {Circles} from 'react-loader-spinner';
-import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
-import {useActiveProfile} from '@lens-protocol/react-web';
-import {useTranslations} from 'use-intl';
 import {useQuery} from '@apollo/client';
+import {ProfileId, useActiveProfile} from '@lens-protocol/react-web';
+import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
+import {Circles} from 'react-loader-spinner';
+import {useTranslations} from 'use-intl';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
+import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
+import {useDepositToForestFeed} from '@forest-feed/hooks/useDepositToForestFeed';
+import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
+import {useCreateCampaign} from '@forest-feed/redux/module/campaign/createCampaign';
+import {showToast, ToastType} from '@forest-feed/utils/showToast';
+import {useRouter} from '@forest-feed/lib/router-events';
 import {colors} from 'colors';
 
 export function SubmissionStatusStep() {
-  const [loading, setLoading] = useState(false);
-  const [activeStep, setActiveStep] = useState(2);
-  const [error, setError] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [activeStep, setActiveStep] = useState(1);
+  const [error, setError] = useState(false);
+
+  const router = useRouter();
 
   const {data: activeProfile} = useActiveProfile();
-
-  const publications = useQuery(publicationIds, {
-    variables: publicationIdsVariables(activeProfile?.id as string, 1),
+  const {data: publicationQueryData} = useQuery(publicationIds, {
+    variables: publicationIdsVariables(activeProfile?.id as ProfileId, 1),
     context: {clientName: 'lens'},
   });
 
-  console.log(publications.data, 'publications');
+  const {campaignJourney, dispatchResetCampaignJourney} = useCampaignJourney();
+  const {dispatchCreateCampaign} = useCreateCampaign();
+
+  const salePrice = useRegularSale();
+  const amount = useMemo(() => campaignJourney.size * Number(salePrice?.toString()), [campaignJourney.size, salePrice]);
+
+  const handleErrorInProcess = useCallback(() => {
+    setError(true);
+    setLoading(false);
+  }, []);
+
+  const handleSuccessDeposit = useCallback(() => {
+    setActiveStep(4);
+  }, []);
+
+  const handleSuccessApproveDai = useCallback(() => {
+    setActiveStep(3);
+  }, []);
+
+  const handleSuccessCreateCampaign = useCallback(() => {
+    setActiveStep(5);
+    setLoading(false);
+    showToast({
+      title: 'newCampaign.goodJob',
+      message: 'newCampaign.succeed',
+      type: ToastType.success,
+      translate: true,
+    });
+    router.push('/my-campaigns');
+    dispatchResetCampaignJourney();
+  }, [dispatchResetCampaignJourney, router]);
+
+  const [depositMethod, isDepositReady] = useDepositToForestFeed({
+    onSuccess: handleSuccessDeposit,
+    enabled: activeStep === 3,
+    onError: handleErrorInProcess,
+    onPrepareError: handleErrorInProcess,
+    amount,
+  });
+
+  const [approveDaiMethod, isApproveReady] = useApproveDai({
+    onSuccess: handleSuccessApproveDai,
+    onError: handleErrorInProcess,
+    onPrepareError: handleErrorInProcess,
+    amount,
+  });
+
+  const handleStartCreateCampaign = useCallback(
+    (byUser: boolean = false) => {
+      if (byUser) {
+        setLoading(true);
+        setError(false);
+      }
+      if (activeStep === 1) {
+        setActiveStep(2);
+      }
+      if (activeStep === 2 && isApproveReady) {
+        approveDaiMethod?.();
+      }
+      if (activeStep === 3 && isDepositReady) {
+        depositMethod?.();
+      }
+      if (activeStep === 4) {
+        console.log(
+          {
+            title: campaignJourney.content,
+            minFollower: campaignJourney.reward.minimumFollowerNumber,
+            isFollowerOnly: campaignJourney.reward.onlyFollowers,
+            campaignSize: campaignJourney.size,
+            publicationId: publicationQueryData?.publications?.items?.[0]?.id,
+          },
+          'body',
+        );
+        dispatchCreateCampaign({
+          title: campaignJourney.content,
+          minFollower: campaignJourney.reward.minimumFollowerNumber,
+          isFollowerOnly: campaignJourney.reward.onlyFollowers,
+          campaignSize: campaignJourney.size,
+          publicationId: publicationQueryData?.publications?.items[0]?.id,
+          onSuccess: handleSuccessCreateCampaign,
+          onFailure: handleErrorInProcess,
+        });
+      }
+    },
+    [
+      activeStep,
+      approveDaiMethod,
+      campaignJourney.content,
+      campaignJourney.reward.minimumFollowerNumber,
+      campaignJourney.reward.onlyFollowers,
+      campaignJourney.size,
+      depositMethod,
+      dispatchCreateCampaign,
+      handleErrorInProcess,
+      handleSuccessCreateCampaign,
+      isApproveReady,
+      isDepositReady,
+      publicationQueryData,
+    ],
+  );
+
+  useEffect(() => {
+    showToast({
+      title: 'Is it correct?',
+      message: publicationQueryData?.publications?.items?.[0].metadata?.content,
+      type: ToastType.info,
+      translate: false,
+    });
+  }, [publicationQueryData]);
+
+  useEffect(() => {
+    handleStartCreateCampaign();
+  }, [activeStep, isDepositReady, isApproveReady]);
 
   const t = useTranslations('newCampaign');
 
@@ -106,7 +226,11 @@ export function SubmissionStatusStep() {
         <div className="flex justify-end items-center mt-10">
           <Button text={t('cancel')} variant={ButtonVariant.primary} />
           <Spacer />
-          <Button text={t('tryAgain')} variant={ButtonVariant.secondary} />
+          <Button
+            text={t('tryAgain')}
+            onClick={() => handleStartCreateCampaign(true)}
+            variant={ButtonVariant.secondary}
+          />
         </div>
       </RenderIf>
     </div>

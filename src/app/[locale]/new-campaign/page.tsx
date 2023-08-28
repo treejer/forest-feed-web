@@ -32,7 +32,7 @@ function NewCampaignPage() {
 
   const {data: activeProfile} = useActiveProfile();
 
-  const {createLensPost} = useLensCreatePost({
+  const {createLensPost, allLoading: createPostLoading} = useLensCreatePost({
     publisher: activeProfile as ProfileOwnedByMe,
   });
 
@@ -84,6 +84,7 @@ function NewCampaignPage() {
         <div className="col-span-5">
           <Stepper
             isDependent
+            disabled={createPostLoading}
             activeStep={campaignJourney.currentStep}
             setActiveStep={dispatchSetCurrentStep}
             contents={[
@@ -122,6 +123,7 @@ function NewCampaignPage() {
                   <GeneralInfoStep
                     defaultValues={generalInfoState}
                     isConfirm
+                    loading={createPostLoading}
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
                     onProceed={handleApproveReview}

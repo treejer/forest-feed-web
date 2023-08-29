@@ -14,6 +14,7 @@ import {
 } from '@forest-feed/redux/module/pagination/pagination.slice';
 import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@forest-feed/utils/fetch';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
+import {checkUserAuthState} from '@forest-feed/utils/auth';
 import {selectMyCampaign} from '@forest-feed/redux/selectors';
 import {paginationPageSize} from '@forest-feed/config';
 
@@ -21,6 +22,7 @@ const MyCampaigns = new ReduxFetchState<MyCampaignsRes, null, string>('myCampaig
 
 export function* watchMyCampaigns() {
   try {
+    yield checkUserAuthState();
     const {page, perPage}: TPaginationItem = yield selectPaginationForName(PaginationName.MyCampaigns);
     const res: FetchResult<MyCampaignsRes> = yield sagaFetch<MyCampaignsRes>('/campaign/my-campaign', {
       params: {

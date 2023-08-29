@@ -98,7 +98,6 @@ export function* handleSagaFetchError(e: AxiosError<ClientError>, options: Handl
 
   if ((status === 401 || status === 403) && logoutUnauthorized) {
     // TODO: @logout
-    // yield put(web3.logoutAccount());
   }
   if (showToastError && message && message?.length) {
     yield showSagaToast({

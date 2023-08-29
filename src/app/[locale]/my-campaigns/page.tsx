@@ -13,15 +13,17 @@ import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 
 import {useMyCampaigns} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {Campaign} from '@forest-feed/types/campaigns';
+import {useProfile} from '@forest-feed/redux/module/profile/profile';
 
 function MyCampaigns() {
   const {myCampaigns, pagination, dispatchFetchMyCampaigns} = useMyCampaigns();
+  const {profile} = useProfile();
 
   const t = useTranslations('myCampaigns');
 
   useEffect(() => {
     dispatchFetchMyCampaigns();
-  }, []);
+  }, [profile]);
 
   const columns: TableOptions<Campaign>['columns'] = useMemo(
     () => [

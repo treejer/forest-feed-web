@@ -39,7 +39,6 @@ export interface UseHttpState<Data> {
 export function useFetch<Data>(
   url: string,
   options: UseFetchOptions = {},
-  baseUrl?: string,
 ): [UseHttpState<Data>, (options?: UseFetchOptions) => Promise<any>, () => void] {
   const token = useAccessToken();
   const {actions, reducer} = useMemo(() => new ReduxFetchState(url), [url]);
@@ -49,7 +48,7 @@ export function useFetch<Data>(
   const initialState = useMemo(() => reducer(undefined, {type: ''}), [reducer]);
   const [state, setState] = useState(initialState);
 
-  const makeApiCall = async (methodOptions: UseFetchOptions = {}) => {
+  const makeApiCall = async (methodOptions: UseFetchOptions = options) => {
     let {
       isSilent = false,
       form,
@@ -82,7 +81,6 @@ export function useFetch<Data>(
       const data = await fetch<Data>(url, {
         data: form,
         ...fetchOptions,
-        baseURL: baseUrl,
       });
       await beforeSuccess?.(data);
       setState(reducer(state, actions.loadSuccess(data)));

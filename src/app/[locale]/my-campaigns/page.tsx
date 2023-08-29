@@ -6,17 +6,17 @@ import {TableOptions} from 'react-table';
 import moment from 'moment';
 
 import {TableWrapper} from '@forest-feed/components/kit/Table/TableWrapper';
-import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 
 import {useMyCampaigns} from '@forest-feed/redux/module/campaign/myCampaigns';
-import {Campaign} from '@forest-feed/types/campaigns';
+import {Campaign, CampaignStatus} from '@forest-feed/types/campaigns';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
+import {CampaignActivation} from '@forest-feed/components/CampaignActivation/CampaignActivation';
 
 function MyCampaigns() {
-  const {myCampaigns, pagination, dispatchFetchMyCampaigns} = useMyCampaigns();
+  const {myCampaigns, loading, pagination, dispatchFetchMyCampaigns} = useMyCampaigns();
   const {profile} = useProfile();
 
   const t = useTranslations('myCampaigns');
@@ -30,29 +30,32 @@ function MyCampaigns() {
       {
         Header: t('status'),
         accessor: 'status',
-        Cell: ({cell, value}) => (
-          <Switch id={cell.row.values.id} checked={!!value} onChange={() => {}} value={value.toString()} />
-        ),
+        Cell: ({cell, value}) => {
+          return (
+            <CampaignActivation
+              campaignId={cell.row.original._id}
+              checked={value === CampaignStatus.active}
+              disabled={value === CampaignStatus.finished}
+              value={value.toString()}
+            />
+          );
+        },
+        defaultCanSort: false,
       },
       {
         Header: t('campaignId'),
         accessor: 'publicationId',
+        defaultCanSort: false,
       },
       {
         Header: t('title'),
         accessor: 'title',
+        defaultCanSort: false,
       },
-      // {
-      //   Header: t('type'),
-      //   accessor: '',
-      // },
-      // {
-      //   Header: t('budget'),
-      //   accessor: 'budget',
-      // },
       {
         Header: t('goal'),
         accessor: 'campaignSize',
+        defaultCanSort: false,
       },
       {
         Header: t('reposts'),
@@ -60,16 +63,16 @@ function MyCampaigns() {
         Cell: ({cell, value}) => (
           <RepostsBadge
             min={value}
-            max={cell.row.values.campaignSize}
-            status={cell.row.values.campaignSize === value ? RepostsStatus.active : RepostsStatus.stopped}
+            max={cell.row.original.campaignSize}
+            status={cell.row.original.campaignSize === value ? RepostsStatus.active : RepostsStatus.stopped}
           />
         ),
+        defaultCanSort: false,
       },
       {
         Header: t('creationDate'),
         accessor: 'createdAt',
         Cell: ({value}) => moment(value).format('l'),
-        sortDescFirst: true,
         defaultCanSort: true,
       },
     ],
@@ -77,11 +80,12 @@ function MyCampaigns() {
   );
 
   return (
-    <AnimatedPage>
-      <AuthWrapper>
+    <AnimatedPage className="h-full">
+      <AuthWrapper className="h-full">
         <TableWrapper<Campaign>
           data={myCampaigns?.campaignList}
           columns={columns}
+          loading={loading}
           pagination={{
             page: pagination.page,
             loading: pagination.loading,

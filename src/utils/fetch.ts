@@ -13,13 +13,12 @@ export type FetchResult<Data> = {
 export function fetch<Data, Form = any>(
   url: string,
   options: AxiosRequestConfig<Form> = {},
-  baseUrl?: string,
 ): Promise<FetchResult<Data>> {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await axios(baseUrl ? baseUrl + url : url, {...options, timeout: 10000});
+      const res = await axios(url, {...options, timeout: 10000});
       if (debugFetch) {
-        console.log(url, res.data, 'res is here', res.status);
+        console.log(`${res.config.baseURL}${res.config.url}`, res.data, 'res is here', res.status);
       }
       if (res.status) {
         if (res.status.toString().split('')[0] === '2') {
@@ -45,13 +44,14 @@ export function fetch<Data, Form = any>(
   });
 }
 
-export type SagaFetchOptions = {
-  baseUrl?: string;
-};
-
-export function* sagaFetch<Data, Form = any>(url: string, options: SagaFetchOptions & AxiosRequestConfig<Form> = {}) {
+export function* sagaFetch<Data, Form = any>(url: string, options: AxiosRequestConfig<Form> = {}) {
   const {forestFeedApiUrl}: NetworkConfig = yield select(selectConfig);
   const accessToken = yield select(selectAccessToken);
+
+  options = {
+    ...options,
+    baseURL: options.baseURL || forestFeedApiUrl,
+  };
 
   if (accessToken) {
     options = {
@@ -64,10 +64,7 @@ export function* sagaFetch<Data, Form = any>(url: string, options: SagaFetchOpti
     };
   }
 
-  // TODO: read from config
-  const requestUrl = (options.baseUrl ? options.baseUrl : forestFeedApiUrl) + url;
-
-  return yield call(fetch, requestUrl, options);
+  return yield call(fetch, url, options);
 }
 
 type ClientError = {

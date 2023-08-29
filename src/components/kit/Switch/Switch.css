@@ -33,6 +33,14 @@
   transition: 0.3s;
 }
 
+.loading-switch input + label:after {
+  background: white;
+  border: 1px solid #D0CEC8;
+  border-right-color: #5bc56e;
+  border-left-color: #5bc56e;
+  animation: loading-switch .5s infinite;
+}
+
 .switch input:checked + label {
   background: #5bc56e;
   border-color: #5bc56e;
@@ -46,4 +54,16 @@
 
 .switch label:active:after {
   width: 16px;
+}
+
+@keyframes loading-switch {
+  0% {
+    border-width: 1px;
+  }
+  50% {
+    border-width: 2px;
+  }
+  100% {
+    border-width: 1px;
+  }
 }

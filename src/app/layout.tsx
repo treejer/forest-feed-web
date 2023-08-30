@@ -6,6 +6,8 @@ import 'react-loading-skeleton/dist/skeleton.css';
 
 import './globals.css';
 
+import {config} from '@forest-feed/config';
+
 export type RootLayoutProps = React.PropsWithChildren;
 
 export default function RootLayout(props: RootLayoutProps) {

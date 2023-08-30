@@ -1,3 +1,5 @@
+// 'use client';
+
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
 import {call, put, select} from 'redux-saga/effects';
 
@@ -95,7 +97,7 @@ export function* handleSagaFetchError(e: AxiosError<ClientError>, options: Handl
   const {message, status} = handleFetchError(e);
 
   if ((status === 401 || status === 403) && logoutUnauthorized) {
-    yield put(logoutAccount());
+    // yield put(logoutAccount());
   }
   if (showToastError && message && message?.length) {
     yield showSagaToast({

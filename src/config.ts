@@ -1,3 +1,5 @@
+'use client';
+
 import {ImageProps} from 'next/image';
 
 import {formatUrl} from '@forest-feed/utils/fotmatUrl';

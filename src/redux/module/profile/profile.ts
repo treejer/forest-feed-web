@@ -1,3 +1,5 @@
+'use client';
+
 import {useCallback} from 'react';
 
 import ReduxFetchState from 'redux-fetch-state';

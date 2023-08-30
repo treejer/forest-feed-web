@@ -1,4 +1,5 @@
 import React, {useCallback, useTransition} from 'react';
+
 import {useRouter} from 'next/navigation';
 import {usePathname} from 'next-intl/client';
 import {useLocale} from 'use-intl';

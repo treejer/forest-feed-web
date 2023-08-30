@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslations} from 'use-intl';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
@@ -11,7 +11,6 @@ import {ChangeLanguage} from '@forest-feed/components/kit/ChangeLanguage';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Modal} from '@forest-feed/components/kit/Modal/Modal';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
-import {useJsonPlaceholder} from '@forest-feed/redux/module/jsonPlaceholder/jsonPlaceholder';
 
 function KitPage() {
   const [text, setText] = useState('');
@@ -19,16 +18,6 @@ function KitPage() {
 
   const [file, setFile] = useState<File | null>(null);
   const t = useTranslations();
-
-  const {jsonPlaceholder, dispatchGetJsonPlaceholder, ...jsonPlaceholderState} = useJsonPlaceholder();
-
-  console.log(jsonPlaceholder, jsonPlaceholderState, 'state is here');
-
-  useEffect(() => {
-    dispatchGetJsonPlaceholder({type: 'TEST'});
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <AnimatedPage>

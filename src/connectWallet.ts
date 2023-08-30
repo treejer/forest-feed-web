@@ -1,3 +1,5 @@
+'use client';
+
 import {configureChains, createConfig} from 'wagmi';
 import {GetAccountResult} from '@wagmi/core';
 import {polygonMumbai, polygon} from 'wagmi/chains';

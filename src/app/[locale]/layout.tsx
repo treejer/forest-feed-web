@@ -36,10 +36,6 @@ export async function generateMetadata({params: {locale}}: RootLayoutProps) {
   };
 }
 
-export async function generateStaticParams() {
-  return ['en', 'fa'].map(locale => ({locale}));
-}
-
 export default async function LocaleLayout(props: RootLayoutProps) {
   const {
     params: {locale},

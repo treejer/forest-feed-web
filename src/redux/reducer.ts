@@ -1,7 +1,6 @@
 import {combineReducers} from '@reduxjs/toolkit';
 import {HYDRATE} from 'next-redux-wrapper';
 
-import {jsonPlaceholderReducer} from '@forest-feed/redux/module/jsonPlaceholder/jsonPlaceholder';
 import campaignJourneyReducer from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import web3Reducer from '@forest-feed/redux/module/web3/web3.slice';
 import initReducer from '@forest-feed/redux/module/init/init.slice';
@@ -24,7 +23,6 @@ export const combinedReducers = combineReducers({
   pagination: paginationReducer,
   myCampaigns: myCampaignsReducer,
   createCampaign: createCampaignReducer,
-  jsonPlaceholderReducer,
 });
 
 export const reducer = (state: any, action: any) => {

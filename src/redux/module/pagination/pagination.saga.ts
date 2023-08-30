@@ -20,7 +20,7 @@ export function* watchSetNextPrevPage({payload}: PayloadAction<TPaginationAction
     const action = PaginationNameFetcher[name];
     if (action) {
       // @ts-ignore
-      yield put(action(query));
+      yield put(action(query, true));
     }
   } catch (e) {
     console.log(e, 'e is here watchSetNextPage');
@@ -33,7 +33,7 @@ export function* watchSetPage({payload}: PayloadAction<TPaginationAction['setPag
     const action = PaginationNameFetcher[name];
     if (action) {
       // @ts-ignore
-      yield put(action(query));
+      yield put(action(query, true));
     }
   } catch (e) {
     console.log(e, 'e is here watchSetNewPage');

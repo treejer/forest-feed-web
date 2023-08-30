@@ -16,7 +16,7 @@ export function ConnectToUse() {
   const {lensLoading, handleLensLogin, lensProfile} = useAuthLens();
   const {profile} = useProfile();
   const {
-    web3: {forestLoading},
+    web3: {forestLoading, isSupportedNetwork},
     dispatchSignWithForest,
   } = useWeb3();
 
@@ -28,30 +28,34 @@ export function ConnectToUse() {
       <p className="my-4 text-secondary drop-shadow max-w-2xl text-center">{t('connectToUse.text')}</p>
       {address && status === 'connected' ? (
         <>
-          {!lensProfile ? (
-            <Button
-              className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-2"
-              autoSize={false}
-              variant={ButtonVariant.secondary}
-              text={t('lens.login')}
-              icon={<LensIcon />}
-              disabled={lensLoading}
-              loading={lensLoading}
-              onClick={handleLensLogin}
-            />
-          ) : !profile ? (
-            <Button
-              className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-2"
-              autoSize={false}
-              variant={ButtonVariant.secondary}
-              text={t('signWithForest')}
-              disabled={forestLoading}
-              loading={forestLoading}
-              onClick={dispatchSignWithForest}
-            />
+          {isSupportedNetwork ? (
+            !lensProfile ? (
+              <Button
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-2"
+                autoSize={false}
+                variant={ButtonVariant.secondary}
+                text={t('lens.login')}
+                icon={<LensIcon />}
+                disabled={lensLoading}
+                loading={lensLoading}
+                onClick={handleLensLogin}
+              />
+            ) : !profile ? (
+              <Button
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-2"
+                autoSize={false}
+                variant={ButtonVariant.secondary}
+                text={t('signWithForest')}
+                disabled={forestLoading}
+                loading={forestLoading}
+                onClick={dispatchSignWithForest}
+              />
+            ) : null
           ) : null}
           <p className="text-green text-sm font-thin">{t('connectToUse.connected')}</p>
-          {lensProfile ? <p className="text-green text-sm font-thin">{t('connectToUse.lensLoggedIn')}</p> : null}
+          {isSupportedNetwork && lensProfile ? (
+            <p className="text-green text-sm font-thin">{t('connectToUse.lensLoggedIn')}</p>
+          ) : null}
         </>
       ) : (
         <ConnectButton />

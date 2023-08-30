@@ -22,7 +22,7 @@ export function AppHeader() {
   const {dispatchLogoutAccount, profile} = useProfile();
 
   const {
-    web3: {forestLoading},
+    web3: {forestLoading, isSupportedNetwork},
     dispatchSignWithForest,
   } = useWeb3();
 
@@ -63,20 +63,22 @@ export function AppHeader() {
           <div className="flex items-center">
             <SwitchNetwork />
             <Spacer />
-            {lensProfile ? (
-              <SwitchProfile />
-            ) : (
-              <Button
-                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
-                autoSize={false}
-                variant={ButtonVariant.secondary}
-                text={t('lens.login')}
-                icon={<LensIcon />}
-                disabled={lensLoading}
-                loading={lensLoading}
-                onClick={handleLensLogin}
-              />
-            )}
+            {isSupportedNetwork ? (
+              lensProfile ? (
+                <SwitchProfile />
+              ) : (
+                <Button
+                  className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
+                  autoSize={false}
+                  variant={ButtonVariant.secondary}
+                  text={t('lens.login')}
+                  icon={<LensIcon />}
+                  disabled={lensLoading}
+                  loading={lensLoading}
+                  onClick={handleLensLogin}
+                />
+              )
+            ) : null}
           </div>
         ) : null}
         {unknownError ? <p className="text-error text-sm">{t(`lens.errors.${unknownError}`)}</p> : null}

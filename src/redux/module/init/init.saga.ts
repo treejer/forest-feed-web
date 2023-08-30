@@ -15,7 +15,6 @@ export function* watchInitApp({payload}: PayloadAction<InitAction['init']>) {
     yield put(checkAppVersion());
     yield put(watchCurrentWeb3({lensLogout}));
     yield take(updateNetwork.type);
-
     if (accessToken) {
       yield put(profileActions.load());
       yield take([profileActionTypes.loadSuccess, profileActionTypes.loadFailure]);

@@ -40,22 +40,22 @@ function MyCampaigns() {
             />
           );
         },
-        defaultCanSort: false,
+        disableSortBy: true,
       },
       {
         Header: t('campaignId'),
         accessor: 'publicationId',
-        defaultCanSort: false,
+        disableSortBy: true,
       },
       {
         Header: t('title'),
         accessor: 'title',
-        defaultCanSort: false,
+        disableSortBy: true,
       },
       {
         Header: t('goal'),
         accessor: 'campaignSize',
-        defaultCanSort: false,
+        disableSortBy: true,
       },
       {
         Header: t('reposts'),
@@ -67,12 +67,15 @@ function MyCampaigns() {
             status={cell.row.original.campaignSize === value ? RepostsStatus.active : RepostsStatus.stopped}
           />
         ),
-        defaultCanSort: false,
+        disableSortBy: true,
       },
       {
         Header: t('creationDate'),
         accessor: 'createdAt',
-        Cell: ({value}) => moment(value).format('l'),
+        Cell: ({value}) => {
+          console.log(value, 'value is here');
+          return moment(moment(value).valueOf()).format('MMMM Do YYYY, h:mm:ss a');
+        },
         defaultCanSort: true,
       },
     ],
@@ -83,6 +86,7 @@ function MyCampaigns() {
     <AnimatedPage className="h-full">
       <AuthWrapper className="h-full">
         <TableWrapper<Campaign>
+          initialState={{sortBy: [{id: 'createdAt', desc: true}]}}
           data={myCampaigns?.campaignList}
           columns={columns}
           loading={loading}

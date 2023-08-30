@@ -113,11 +113,13 @@ export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAcc
 export function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Action['watchCurrentWeb3']>) {
   try {
     const {lensLogout} = payload || {};
+    const config = yield select(selectConfig);
     const account = yield getAccount();
     const network = yield getNetwork();
     yield put(checkAccount({account, lensLogout}));
     if (typeof network.chain?.unsupported !== 'undefined' && network.chain?.unsupported) {
       yield put(notSupportedNetwork());
+      yield put(updateNetwork({newConfig: config}));
     } else {
       yield put(switchNetwork({newNetwork: network?.chain?.id || defaultChainId, lensLogout, inInit: true}));
     }

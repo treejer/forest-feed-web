@@ -37,7 +37,7 @@
     "stepper": {
       "generalInfo": "General Info",
       "pledge": "Pledge",
-      "confirm": "Confirm",
+      "review": "Review",
       "finalize": "Finalize"
     },
     "campaignSize": "Campaign Size",
@@ -78,6 +78,7 @@
     "goodJob": "Good job!",
     "succeed": "Campaign successfully created",
     "confirm": "Confirm",
+    "review": "Review",
     "titleError": "Title should not be empty."
   },
   "myCampaigns": {

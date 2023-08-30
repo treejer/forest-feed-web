@@ -4,7 +4,7 @@ import React, {useCallback, useMemo, useState} from 'react';
 
 import {useTranslations} from 'use-intl';
 import {motion} from 'framer-motion';
-import {ProfileId, ProfileOwnedByMe, useActiveProfile, usePublications} from '@lens-protocol/react-web';
+import {ProfileOwnedByMe, useActiveProfile} from '@lens-protocol/react-web';
 
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
@@ -130,7 +130,7 @@ function NewCampaignPage() {
                     key="general-info-preview"
                   />
                 ),
-                title: t('confirm'),
+                title: t('review'),
               },
               {
                 content: <SubmissionStatusStep />,

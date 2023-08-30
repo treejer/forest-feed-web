@@ -6,7 +6,6 @@ import {AppHeader} from '@forest-feed/components/layout/AppHeader';
 import {Navbar} from '@forest-feed/components/layout/Navbar';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
-import {InitLoader} from '@forest-feed/components/layout/InitLoader';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 
 export type LayoutProps = React.PropsWithChildren;
@@ -28,7 +27,7 @@ export function Layout(props: LayoutProps) {
     console.log(web3, 'web3');
   }, []);
 
-  return !initState.loading ? (
+  return (
     <div className="container mx-auto">
       <div className="grid grid-cols-6 gap-20 min-h-screen grid-rows-appLayout">
         <div className="grid col-span-6">
@@ -40,7 +39,5 @@ export function Layout(props: LayoutProps) {
         <div className="col-span-5 pb-5">{children}</div>
       </div>
     </div>
-  ) : (
-    <InitLoader />
   );
 }

@@ -2,7 +2,6 @@ name: Deploy ForestFeed WebApp to GCR
 on:
   push:
     branches:
-      - gcpize  
       - dev
       - main
 

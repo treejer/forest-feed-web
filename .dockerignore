@@ -1,0 +1,12 @@
+.dockerignore
+node_modules
+npm-debug.log
+*.DS_Store
+.next
+.gitignore
+README.md
+.dockerignore
+LICENSE
+.docker
+.vscode
+.github

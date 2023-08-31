@@ -81,7 +81,7 @@ function NewCampaignPage() {
   return (
     <AnimatedPage className="h-full">
       <AuthWrapper className="grid grid-cols-6 gap-10 h-full">
-        <div className="col-span-5">
+        <div className="col-span-6 md:col-span-5">
           <Stepper
             isDependent
             disabled={createPostLoading}
@@ -144,7 +144,7 @@ function NewCampaignPage() {
           animate={{x: 0, opacity: 1}}
           exit={{x: 100, opacity: 0}}
           transition={{duration: 0.5}}
-          className="col-span-1"
+          className="row-start-1 md:row-auto col-span-6 md:col-span-1"
         >
           <TreeCost treeCount={campaignSize} />
         </motion.div>

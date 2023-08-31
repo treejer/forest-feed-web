@@ -8,6 +8,7 @@ import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {Spacer} from '@forest-feed/components/common/Spacer';
+import {TabNavigator} from '@forest-feed/components/layout/TabNavigator';
 
 export type LayoutProps = React.PropsWithChildren;
 
@@ -35,11 +36,12 @@ export function Layout(props: LayoutProps) {
           <AppHeader />
           <Spacer times={10} />
         </div>
-        <div className="col-span-1">
+        <div className="hidden md:block md:col-span-1">
           <Navbar />
         </div>
-        <div className="col-span-5 pb-5">{children}</div>
+        <div className="col-span-6 md:col-span-5 pb-5">{children}</div>
       </div>
+      <TabNavigator />
     </div>
   );
 }

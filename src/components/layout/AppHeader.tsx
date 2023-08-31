@@ -34,7 +34,7 @@ export function AppHeader() {
         <div className="flex items-center">
           <Logo />
           <Spacer times={2} />
-          <p className="font-extrabold text-4xl">{t('forestFeed')}</p>
+          <p className="font-extrabold text-2xl md:text-4xl">{t('forestFeed')}</p>
         </div>
         {['connecting', 'reconnecting'].includes(status) ? (
           <AppHeaderSkeleton />

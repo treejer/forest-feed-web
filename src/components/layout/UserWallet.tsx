@@ -60,7 +60,7 @@ export function UserWallet(props: UserWalletProps) {
           ) : null}
         </AnimatePresence>
       </div>
-      <div className="ml-3 z-10">
+      <div className="hidden md:block ml-3 z-10">
         <TreeIcon />
       </div>
     </div>

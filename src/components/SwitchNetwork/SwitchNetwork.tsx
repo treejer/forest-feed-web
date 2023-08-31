@@ -7,6 +7,7 @@ import {DropDown, DropDownItem} from '@forest-feed/components/kit/DropDown';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {BlockchainNetwork, networks} from '@forest-feed/config';
+import {Color} from 'colors';
 
 export function SwitchNetwork() {
   const {
@@ -54,7 +55,14 @@ export function SwitchNetwork() {
   );
 
   return isSupportedNetwork ? (
-    <DropDown selected={currentNetwork!} items={networksList} onChange={handleSwitchNetwork} disabled={switching} />
+    <DropDown
+      className="w-full"
+      bgColor={Color.primaryBg}
+      selected={currentNetwork!}
+      items={networksList}
+      onChange={handleSwitchNetwork}
+      disabled={switching}
+    />
   ) : (
     <ConnectButton />
   );

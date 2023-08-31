@@ -27,7 +27,7 @@ module.exports = {
       '4xl': '28px',
     },
     gridTemplateRows: {
-      appLayout: '100px 1fr',
+      appLayout: 'auto 1fr',
     },
   },
 };

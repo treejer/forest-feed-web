@@ -23,7 +23,7 @@
   "trees": "Trees",
   "countTrees": "{count} Trees",
   "cost": "Cost",
-  "dollarSign": "{value}$",
+  "dollarSign": "{value} DAI",
   "languages": {
     "en": "EN",
     "fa": "FA",

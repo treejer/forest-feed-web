@@ -40,7 +40,19 @@ export function AppHeader() {
           <AppHeaderSkeleton />
         ) : address && status === 'connected' ? (
           <div className="flex items-center">
-            {lensProfile && !profile ? (
+            {isSupportedNetwork && !lensProfile ? (
+              <Button
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
+                autoSize={false}
+                variant={ButtonVariant.secondary}
+                text={t('lens.login')}
+                icon={<LensIcon />}
+                disabled={lensLoading}
+                loading={lensLoading}
+                onClick={handleLensLogin}
+              />
+            ) : null}
+            {isSupportedNetwork && lensProfile && !profile ? (
               <Button
                 className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
                 autoSize={false}
@@ -51,36 +63,23 @@ export function AppHeader() {
                 onClick={dispatchSignWithForest}
               />
             ) : null}
-            <Spacer />
-            <UserWallet walletAddress={address} onDisconnect={dispatchLogoutAccount} />
+            {address ? (
+              <>
+                <Spacer />
+                <UserWallet
+                  handle={lensProfile?.handle}
+                  address={address}
+                  onDisconnect={dispatchLogoutAccount}
+                  isSupportedNetwork={isSupportedNetwork}
+                />
+              </>
+            ) : null}
           </div>
         ) : (
           <ConnectButton />
         )}
       </div>
-      <div className="flex items-center justify-between mt-1">
-        {address && status === 'connected' ? (
-          <div className="flex items-center">
-            <SwitchNetwork />
-            <Spacer />
-            {isSupportedNetwork ? (
-              lensProfile ? (
-                <SwitchProfile />
-              ) : (
-                <Button
-                  className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
-                  autoSize={false}
-                  variant={ButtonVariant.secondary}
-                  text={t('lens.login')}
-                  icon={<LensIcon />}
-                  disabled={lensLoading}
-                  loading={lensLoading}
-                  onClick={handleLensLogin}
-                />
-              )
-            ) : null}
-          </div>
-        ) : null}
+      <div className="flex items-center justify-end mt-1">
         {unknownError ? <p className="text-error text-sm">{t(`lens.errors.${unknownError}`)}</p> : null}
       </div>
     </div>

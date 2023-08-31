@@ -7,6 +7,7 @@ import {Navbar} from '@forest-feed/components/layout/Navbar';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import {Spacer} from '@forest-feed/components/common/Spacer';
 
 export type LayoutProps = React.PropsWithChildren;
 
@@ -29,9 +30,10 @@ export function Layout(props: LayoutProps) {
 
   return (
     <div className="container mx-auto">
-      <div className="grid grid-cols-6 gap-20 min-h-screen grid-rows-appLayout">
+      <div className="grid grid-cols-6 gap-x-20 min-h-screen grid-rows-appLayout">
         <div className="grid col-span-6">
           <AppHeader />
+          <Spacer times={10} />
         </div>
         <div className="col-span-1">
           <Navbar />

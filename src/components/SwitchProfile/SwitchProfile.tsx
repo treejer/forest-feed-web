@@ -54,7 +54,7 @@ export function SwitchProfile() {
       bgColor={Color.primaryBg}
       activeColor={Color.green}
       shadow={false}
-      width="40"
+      className="w-full"
     />
   ) : null;
 }

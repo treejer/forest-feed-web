@@ -77,7 +77,7 @@ function TableComponent<D extends object>(props: TableProps<D>) {
                   {row.cells.map(cell => {
                     const {key, ...props} = cell.getCellProps();
                     return (
-                      <td {...props} key={key} className="py-5 px-3 text-center text-sm">
+                      <td {...props} key={key} className="py-2 md:py-5 px-3 text-center text-[12px] md:text-sm">
                         <div className="flex justify-center">{cell.render('Cell')}</div>
                       </td>
                     );

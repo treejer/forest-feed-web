@@ -33,7 +33,7 @@ export function Menu(props: MenuProps) {
       animate={{opacity: 1, y: 0}}
       exit={{opacity: 0, y: -10}}
       transition={{duration: 0.2}}
-      className="dropdown-content bg-white z-50 rounded-[5px] w-56"
+      className="dropdown-content right-0 md:right-auto bg-white z-50 rounded-[5px] w-56"
     >
       <div className="shadow-lg p-5">
         <RenderIf condition={lensLoggedIn && isSupportedNetwork}>
@@ -58,6 +58,7 @@ export function Menu(props: MenuProps) {
         <Spacer />
         <Button
           className="h-auto py-2 text-sm w-full"
+          autoSize={false}
           text={t('disconnect')}
           icon={<ArrowLeftOnRectangleIcon className="w-5 h-5" />}
           onClick={onDisconnect}

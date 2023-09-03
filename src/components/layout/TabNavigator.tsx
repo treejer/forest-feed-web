@@ -9,7 +9,7 @@ export function TabNavigator() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed bottom-0 lef-0 right-0 rounded-t-2xl h-16 w-full flex md:sr-only bg-white shadow-lg">
+    <div className="fixed bottom-0 lef-0 right-0 rounded-t-2xl h-16 w-full flex lg:sr-only bg-white shadow-lg">
       {links.map(link => {
         const isActive = pathname.startsWith(link.href);
 

@@ -23,20 +23,20 @@ export function WalletAssets() {
 
   return (
     <div>
-      <span>{t('title')}</span>
+      <span className="text-sm md:text-base">{t('title')}</span>
       <div className="border border-1 border-LightWhite w-full" />
       <Spacer />
       {isLoading ? (
         <AssetSkeleton />
       ) : (
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
+          <div className="flex items-center text-sm md:text-base">
             <DaiIcon />
-            <Spacer />
+            <Spacer times={0.5} />
             <span>{t('dai')}</span>
           </div>
           <Spacer times={2} />
-          <span className="text-green">{dai?.formatted}</span>
+          <span className="text-sm lg:text-base text-green">{dai?.formatted}</span>
         </div>
       )}
     </div>

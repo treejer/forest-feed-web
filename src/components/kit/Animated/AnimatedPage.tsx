@@ -19,7 +19,7 @@ export function AnimatedPage(props: AnimatedPageProps) {
       className={`px-2 ${className}`}
     >
       {children}
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <Spacer times={8} />
       </div>
     </motion.div>

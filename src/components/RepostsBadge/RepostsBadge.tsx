@@ -25,7 +25,7 @@ export function RepostsBadge(props: RepostsBadgeProps) {
 
   return (
     <span
-      className={`block border rounded-md w-[96px] h-[28px] text-lg font-semibold text-white text-center ${className[status]}`}
+      className={`block border rounded-md w-[56px] lg:w-[96px] h-[28px] text-lg font-semibold text-white text-center ${className[status]}`}
     >
       {min}/{max}
     </span>

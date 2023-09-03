@@ -14,12 +14,15 @@ import {useMyCampaigns} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {Campaign, CampaignStatus} from '@forest-feed/types/campaigns';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {CampaignActivation} from '@forest-feed/components/CampaignActivation/CampaignActivation';
+import {useMediaQuery} from '@forest-feed/hooks/useMediaQuery';
 
 function MyCampaigns() {
   const {myCampaigns, loading, pagination, dispatchFetchMyCampaigns} = useMyCampaigns();
   const {profile} = useProfile();
 
   const t = useTranslations('myCampaigns');
+
+  const matches = useMediaQuery('(max-width: 768px)');
 
   useEffect(() => {
     dispatchFetchMyCampaigns();
@@ -73,13 +76,12 @@ function MyCampaigns() {
         Header: t('creationDate'),
         accessor: 'createdAt',
         Cell: ({value}) => {
-          console.log(value, 'value is here');
-          return moment(moment(value).valueOf()).format('MMMM Do YYYY, h:mm:ss a');
+          return moment(value).format(matches ? 'l' : 'MMMM Do YYYY, h:mm:ss a');
         },
         defaultCanSort: true,
       },
     ],
-    [t],
+    [t, matches],
   );
 
   return (

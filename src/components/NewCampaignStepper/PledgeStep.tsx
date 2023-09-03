@@ -76,7 +76,7 @@ export function PledgeStep(props: PledgeStepProps) {
 
   return (
     <div>
-      <p className="text-xl font-extrabold">{t('newCampaign.campaignSize')}</p>
+      <p className="text-lg md:text-xl font-extrabold">{t('newCampaign.campaignSize')}</p>
       <p className="text-sm text-secondary">{t('newCampaign.howManyWantsToPlant')}</p>
       <InputRange value={campaignSize} onChange={handleChangeCampaignSize} />
       <div className="flex items-start justify-between">
@@ -92,7 +92,7 @@ export function PledgeStep(props: PledgeStepProps) {
         </span>
       </div>
       <Spacer times={4} />
-      <p className="text-xl font-extrabold">{t('newCampaign.postSettings')}</p>
+      <p className="text-lg md:text-xl fosnt-extrabold">{t('newCampaign.postSettings')}</p>
       <Spacer times={2} />
       <div className="flex items-center">
         <Switch
@@ -122,7 +122,7 @@ export function PledgeStep(props: PledgeStepProps) {
       <Spacer times={4} />
       <div className="flex items-center">
         <div>
-          <p className="text-xl font-extrabold mb-1">{t('newCampaign.rewardFilters')}</p>
+          <p className="text-lg md:text-xl font-extrabold mb-1">{t('newCampaign.rewardFilters')}</p>
           <p className="text-sm text-secondary">{t('newCampaign.chooseMaxFollowers')}</p>
         </div>
         <Spacer times={6} />

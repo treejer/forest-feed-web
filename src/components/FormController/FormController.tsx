@@ -117,7 +117,7 @@ export function FormController(props: FormControllerProps) {
   return (
     <div>
       <RenderIf condition={!hideLabel}>
-        <label htmlFor={name} className="text-xl font-bold">
+        <label htmlFor={name} className="text-lg md:text-xl font-bold">
           {label}
         </label>
       </RenderIf>

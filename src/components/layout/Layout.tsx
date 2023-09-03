@@ -31,15 +31,17 @@ export function Layout(props: LayoutProps) {
 
   return (
     <div className="container mx-auto">
-      <div className="grid grid-cols-6 gap-x-20 min-h-screen grid-rows-appLayout">
+      <div className="grid grid-cols-6 md:gap-x-20 min-h-screen grid-rows-appLayout">
         <div className="grid col-span-6">
           <AppHeader />
-          <Spacer times={10} />
+          <div className="hidden md:block">
+            <Spacer times={10} />
+          </div>
         </div>
-        <div className="hidden md:block md:col-span-1">
+        <div className="hidden lg:block md:col-span-1">
           <Navbar />
         </div>
-        <div className="col-span-6 md:col-span-5 pb-5">{children}</div>
+        <div className="col-span-6 lg:col-span-5 pb-5">{children}</div>
       </div>
       <TabNavigator />
     </div>

@@ -19,7 +19,7 @@ export function Switch(props: SwitchProps) {
         <input {...restProps} disabled={loading || disabled} type="checkbox" id={id} />
         <label htmlFor={id} />
       </div>
-      {label ? <span className={labelClassName}>{label}</span> : null}
+      {label ? <span className={`text-sm md:text-base ${labelClassName}`}>{label}</span> : null}
     </div>
   );
 }

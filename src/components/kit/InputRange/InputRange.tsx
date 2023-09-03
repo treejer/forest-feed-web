@@ -1,7 +1,7 @@
 import React from 'react';
-import {useTranslations} from 'use-intl';
 
 import './InputRange.scss';
+import {useMediaQuery} from '@forest-feed/hooks/useMediaQuery';
 
 export type InputRangeProps = {
   value: number;
@@ -13,7 +13,7 @@ export type InputRangeProps = {
 export function InputRange(props: InputRangeProps) {
   const {value, min = 1, max = 100, onChange} = props;
 
-  const t = useTranslations();
+  const matches = useMediaQuery('(max-width: 768px)');
 
   const minPos = ((0 - min) / (max - min)) * 100;
 
@@ -27,10 +27,10 @@ export function InputRange(props: InputRangeProps) {
 
       <div className="control-wrapper">
         <div
-          style={{left: `${maxPos - 3}%`}}
-          className="absolute transition-all duration-75 bg-primaryGreen rounded-[5px] bottom-[30px] w-12 opacity-0 group-hover:opacity-100 before:content-['']
+          style={{left: `${maxPos - (matches ? 3.7 : 3)}%`}}
+          className="absolute transition-all duration-75 bg-primaryGreen rounded-[5px] bottom-[30px] w-7 md:w-12 opacity-0 group-hover:opacity-100 before:content-['']
            before:w-0 before:h-0 before:border-x-[transparent] before:border-x-[5px] before:border-t-[5px] before:border-primaryGreen
-            before:absolute before:left-[20px] before:top-full flex justify-center items-center text-white"
+            before:absolute before-left-[14px] md:before:left-[20px] before:top-full flex justify-center items-center text-white"
         >
           {value}
         </div>

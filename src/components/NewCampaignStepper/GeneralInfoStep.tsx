@@ -98,7 +98,12 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
           resetField={resetField}
           disabled={isConfirm}
         />
-        <Spacer times={4} />
+        <div className="hidden md:block">
+          <Spacer times={4} />
+        </div>
+        <div className="block md:hidden">
+          <Spacer times={2} />
+        </div>
       </RenderIf>
       <FormController
         control={control}
@@ -108,7 +113,12 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
         disabled={isConfirm}
         hideLabel
       />
-      <Spacer times={10} />
+      <div className="hidden md:block">
+        <Spacer times={10} />
+      </div>
+      <div className="block md:hidden">
+        <Spacer times={5} />
+      </div>
       <div className="flex items-end justify-end">
         <Button text={t(isConfirm ? 'back' : 'learnMore')} disabled={loading} onClick={handleLearnMore} />
         <Spacer />

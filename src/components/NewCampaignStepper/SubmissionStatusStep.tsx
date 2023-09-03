@@ -185,43 +185,46 @@ export function SubmissionStatusStep() {
   return (
     <div>
       <div className="mb-5">
-        <p className="text-xl font-bold">{t(error ? 'oops' : 'processing')}</p>
+        <p className="text-lg md:text-xl font-bold">{t(error ? 'oops' : 'processing')}</p>
         <p className={`text-sm font-light ${error ? 'text-red' : 'text-secondary'}`}>
           {t(error ? 'failText' : 'bePatient')}
         </p>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between">
         <ul>
           {steps.map(step => (
             <li key={step.key} className="flex items-center mb-2">
-              <div
-                className={`w-8 h-8 rounded-full flex justify-center items-center border-2 ${
-                  activeStep == step.key && loading
-                    ? `${
-                        step.key === activeStep && error
-                          ? 'border-red'
-                          : 'border-l-green border-r-green  border-t-border  border-b-border '
-                      }${loading ? 'animate-spin' : ''}`
-                    : step.key < activeStep
-                    ? 'border-green'
-                    : step.key === activeStep && error
-                    ? 'border-red'
-                    : 'border-border'
-                }`}
-              >
-                {step.key < activeStep ? (
-                  <CheckIcon className="w-5 h-5 text-green" />
-                ) : step.key === activeStep && error ? (
-                  <XMarkIcon className="w-5 h-5 text-red" />
-                ) : (
-                  ''
-                )}
+              <div className="p-1">
+                <div
+                  className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex justify-center items-center border-2 ${
+                    activeStep == step.key && loading
+                      ? `${
+                          step.key === activeStep && error
+                            ? 'border-red'
+                            : 'border-l-green border-r-green  border-t-border  border-b-border '
+                        }${loading ? 'animate-spin' : ''}`
+                      : step.key < activeStep
+                      ? 'border-green'
+                      : step.key === activeStep && error
+                      ? 'border-red'
+                      : 'border-border'
+                  }`}
+                >
+                  {step.key < activeStep ? (
+                    <CheckIcon className="w-3 h-3 md:w-5 md:h-5 text-green" />
+                  ) : step.key === activeStep && error ? (
+                    <XMarkIcon className="w-3 h-3 md:w-5 md:h-5 text-red" />
+                  ) : (
+                    ''
+                  )}
+                </div>
               </div>
+
               <Spacer />
               <div>
-                <p>{t(step.text)}</p>
+                <p className="text-sm md:text-base">{t(step.text)}</p>
                 <div className="flex items-center">
-                  <p className="text-sm text-secondary">{t(step.desc)}</p>
+                  <p className="text-[12px] md:text-sm text-secondary text-align">{t(step.desc)}</p>
                   {!error && !loading && activeStep === 4 && step.key === 4 ? (
                     <div className="flex flex-col relative">
                       <input
@@ -232,7 +235,9 @@ export function SubmissionStatusStep() {
                         onChange={e => setTitle(e.target.value)}
                       />
                       {titleError ? (
-                        <span className="text-sm text-red ml-2 absolute -bottom-5 left-2">{t('titleError')}</span>
+                        <span className="text-[12px] md:text-sm text-red ml-2 absolute -bottom-5 left-2">
+                          {t('titleError')}
+                        </span>
                       ) : null}
                     </div>
                   ) : null}
@@ -241,7 +246,7 @@ export function SubmissionStatusStep() {
             </li>
           ))}
         </ul>
-        <div>
+        <div className="flex justify-center mt-3 md:mt-0 md:block">
           <Circles
             height="80"
             width="80"

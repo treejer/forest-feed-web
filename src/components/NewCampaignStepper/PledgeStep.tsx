@@ -92,7 +92,7 @@ export function PledgeStep(props: PledgeStepProps) {
         </span>
       </div>
       <Spacer times={4} />
-      <p className="text-lg md:text-xl fosnt-extrabold">{t('newCampaign.postSettings')}</p>
+      <p className="text-lg md:text-xl font-extrabold">{t('newCampaign.postSettings')}</p>
       <Spacer times={2} />
       <div className="flex items-center">
         <Switch

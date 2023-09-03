@@ -29,12 +29,12 @@ export function AppHeader() {
   const t = useTranslations();
 
   return (
-    <div className="py-4">
+    <div className="py-4 px-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <Logo />
           <Spacer times={2} />
-          <p className="font-extrabold text-2xl md:text-4xl">{t('forestFeed')}</p>
+          <p className="font-extrabold text-base lg:text-4xl">{t('forestFeed')}</p>
         </div>
         {['connecting', 'reconnecting'].includes(status) ? (
           <AppHeaderSkeleton />
@@ -42,7 +42,7 @@ export function AppHeader() {
           <div className="flex items-center">
             {isSupportedNetwork && !lensProfile ? (
               <Button
-                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex"
                 autoSize={false}
                 variant={ButtonVariant.secondary}
                 text={t('lens.login')}
@@ -54,7 +54,7 @@ export function AppHeader() {
             ) : null}
             {isSupportedNetwork && lensProfile && !profile ? (
               <Button
-                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg"
+                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex"
                 autoSize={false}
                 variant={ButtonVariant.secondary}
                 text={t('signWithForest')}

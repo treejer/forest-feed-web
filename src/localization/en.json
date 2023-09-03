@@ -24,6 +24,9 @@
   "countTrees": "{count} Trees",
   "cost": "Cost",
   "dollarSign": "{value} DAI",
+  "now": "now",
+  "impact": "Impactful Post",
+  "impactMirror": "Mirror this post and plant one tree via <forest> Forest Feed</forest>",
   "languages": {
     "en": "EN",
     "fa": "FA",
@@ -40,6 +43,7 @@
       "review": "Review",
       "finalize": "Finalize"
     },
+    "submit": "Submit",
     "campaignSize": "Campaign Size",
     "howManyWantsToPlant": "How many trees do you want to plant?",
     "postSettings": "Post Settings",

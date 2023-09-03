@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 const {colors} = require('./colors');
+const tailwindColors = require('tailwindcss/colors');
 
 module.exports = {
   plugins: [require('daisyui')],
@@ -13,7 +14,14 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    colors: colors,
+    colors: {
+      ...colors,
+      brand: tailwindColors.violet,
+      pink: tailwindColors.pink,
+      tGray: tailwindColors.gray,
+      tBlue: tailwindColors.blue,
+      tRed: tailwindColors.red,
+    },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

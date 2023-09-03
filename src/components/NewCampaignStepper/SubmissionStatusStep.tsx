@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useQuery} from '@apollo/client';
 import {ProfileId, useActiveProfile} from '@lens-protocol/react-web';
-import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
+import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {useTranslations} from 'use-intl';
 
@@ -29,7 +29,7 @@ export function SubmissionStatusStep() {
   const router = useRouter();
 
   const {data: activeProfile} = useActiveProfile();
-  const {data: publicationQueryData} = useQuery(publicationIds, {
+  const {data: publicationQueryData, refetch} = useQuery(publicationIds, {
     variables: publicationIdsVariables(activeProfile?.id as ProfileId, 1),
     context: {clientName: 'lens'},
   });
@@ -98,6 +98,9 @@ export function SubmissionStatusStep() {
         approveDaiMethod?.();
       }
       if (activeStep === 3 && isDepositReady) {
+        (async () => {
+          await refetch();
+        })();
         depositMethod?.();
       }
     },
@@ -213,7 +216,7 @@ export function SubmissionStatusStep() {
                   {step.key < activeStep ? (
                     <CheckIcon className="w-3 h-3 md:w-5 md:h-5 text-green" />
                   ) : step.key === activeStep && error ? (
-                    <XMarkIcon className="w-3 h-3 md:w-5 md:h-5 text-red" />
+                    <XIcon className="w-3 h-3 md:w-5 md:h-5 text-red" />
                   ) : (
                     ''
                   )}
@@ -271,7 +274,7 @@ export function SubmissionStatusStep() {
               />
             </>
           ) : (
-            <Button text={t('confirm')} onClick={handleConfirmTitle} variant={ButtonVariant.secondary} />
+            <Button text={t('submit')} onClick={handleConfirmTitle} variant={ButtonVariant.secondary} />
           )}
         </div>
       </RenderIf>

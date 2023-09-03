@@ -15,6 +15,7 @@ import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/camp
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
 import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
+import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
 
 function NewCampaignPage() {
   const {
@@ -120,14 +121,13 @@ function NewCampaignPage() {
               },
               {
                 content: (
-                  <GeneralInfoStep
-                    defaultValues={generalInfoState}
-                    isConfirm
+                  <PreviewStep
+                    activeProfile={activeProfile}
+                    generalInfo={generalInfoState}
                     loading={createPostLoading}
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
-                    onProceed={handleApproveReview}
-                    key="general-info-preview"
+                    onApprove={handleApproveReview}
                   />
                 ),
                 title: t('review'),

@@ -2,7 +2,7 @@ import React from 'react';
 
 import {motion} from 'framer-motion';
 import {useTranslations} from 'use-intl';
-import {ArrowLeftOnRectangleIcon} from '@heroicons/react/24/solid';
+import {ArrowLeftIcon} from '@heroicons/react/solid';
 
 import {shortenedString} from '@forest-feed/utils/string';
 import {Spacer} from '@forest-feed/components/common/Spacer';
@@ -60,7 +60,7 @@ export function Menu(props: MenuProps) {
           className="h-auto py-2 text-sm w-full"
           autoSize={false}
           text={t('disconnect')}
-          icon={<ArrowLeftOnRectangleIcon className="w-5 h-5" />}
+          icon={<ArrowLeftIcon className="w-5 h-5" />}
           onClick={onDisconnect}
           variant={ButtonVariant.secondary}
         />

@@ -9,6 +9,7 @@ export type CampaignJourneyState = {
   disableForm: boolean;
   content: string;
   image: File | null;
+  imageBase64: string | null;
   size: number;
   settings: {
     canBeCollected: boolean;
@@ -23,18 +24,23 @@ export type CampaignJourneyState = {
 };
 
 export type CampaignJourneyAction = {
-  approveGeneralInfo: Pick<CampaignJourneyState, 'content' | 'image' | 'termsConditionAgreed'>;
+  approveGeneralInfo: Pick<CampaignJourneyState, 'content' | 'image' | 'termsConditionAgreed'> & {
+    silent?: boolean;
+  };
   approvePledge: Pick<CampaignJourneyState, 'size' | 'reward' | 'settings'>;
   setMinimumFollowerNumber: number;
   setCampaignSize: number;
   setCurrentStep: number;
   setDisableForm: boolean;
+  setImageBase64: string | null;
+  setImageFile: File | null;
 };
 
 export const campaignJourneyInitialState: CampaignJourneyState = {
   disableForm: false,
   content: '',
   image: null,
+  imageBase64: null,
   size: 1,
   settings: {
     canBeCollected: false,
@@ -59,7 +65,17 @@ export const campaignJourneySlice = createSlice({
       state.content = action.payload.content;
       state.image = action.payload.image;
       state.termsConditionAgreed = action.payload.termsConditionAgreed;
-      state.currentStep = 1;
+      state.currentStep = action.payload.silent ? state.currentStep : 1;
+    },
+    setImageBase64: (state, action: PayloadAction<CampaignJourneyAction['setImageBase64']>) => {
+      state.imageBase64 = action.payload;
+    },
+    checkBase64Exist: state => state,
+    setImageFile: (state, action: PayloadAction<CampaignJourneyAction['setImageFile']>) => {
+      return {
+        ...state,
+        image: action.payload,
+      };
     },
     approvePledge: (state, action: PayloadAction<CampaignJourneyAction['approvePledge']>) => {
       state.reward = action.payload.reward;
@@ -104,6 +120,9 @@ export const {
   setCanBeCollected,
   resetCampaignJourney,
   setDisableForm,
+  setImageBase64,
+  setImageFile,
+  checkBase64Exist,
 } = campaignJourneySlice.actions;
 
 export const useCampaignJourney = () => {

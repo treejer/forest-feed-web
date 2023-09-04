@@ -49,6 +49,7 @@
     "redux-fetch-state": "0.2.4",
     "redux-logger": "3.0.6",
     "redux-persist": "6.0.0",
+    "redux-persist-transform-filter": "0.0.22",
     "redux-saga": "1.2.3",
     "sass": "1.64.1",
     "styled-components": "6.0.1",

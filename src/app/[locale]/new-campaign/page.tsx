@@ -11,11 +11,15 @@ import {Stepper} from '@forest-feed/components/kit/Stepper';
 import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
 import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {
+  CampaignJourneyAction,
+  useCampaignJourney,
+} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
 import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
 import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
+import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 
 function NewCampaignPage() {
   const {
@@ -39,8 +43,14 @@ function NewCampaignPage() {
 
   const t = useTranslations('newCampaign.stepper');
 
+  const {
+    tokens: {loading: tokensLoading},
+  } = useTokens({
+    didMount: false,
+  });
+
   const handleApproveGeneralInfo = useCallback(
-    (generalInfo: GeneralInfoStepState) => {
+    (generalInfo: CampaignJourneyAction['approveGeneralInfo']) => {
       dispatchApproveGeneralInfo(generalInfo);
     },
     [dispatchApproveGeneralInfo],
@@ -127,7 +137,7 @@ function NewCampaignPage() {
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
                     onApprove={handleApproveReview}
-                    disabled={campaignJourney.disableForm}
+                    disabled={tokensLoading || campaignJourney.disableForm}
                   />
                 ),
                 title: t('review'),

@@ -6,12 +6,12 @@ import {selectTokens} from '@forest-feed/redux/selectors';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 
 export type TokensInitialState = {
-  DAI: number;
+  DAI: number | undefined;
   loading: boolean;
 };
 
 export const tokensInitialState: TokensInitialState = {
-  DAI: 0,
+  DAI: undefined,
   loading: false,
 };
 

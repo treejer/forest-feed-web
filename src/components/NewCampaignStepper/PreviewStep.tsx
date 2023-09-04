@@ -15,9 +15,10 @@ export type PreviewStepProps = {
   loading: boolean;
   setActiveStep: (step: number) => void;
   activeStep: number;
+  disabled?: boolean;
 };
 export function PreviewStep(props: PreviewStepProps) {
-  const {generalInfo, activeProfile, loading, activeStep, onApprove, setActiveStep} = props;
+  const {generalInfo, activeProfile, loading, activeStep, disabled, onApprove, setActiveStep} = props;
 
   const t = useTranslations();
 
@@ -37,7 +38,7 @@ export function PreviewStep(props: PreviewStepProps) {
         <Button
           variant={ButtonVariant.secondary}
           onClick={onApprove}
-          disabled={loading}
+          disabled={loading || disabled}
           loading={loading}
           text={t('proceed')}
           type="button"

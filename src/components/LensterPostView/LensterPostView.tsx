@@ -27,7 +27,7 @@ export function LensterPostView(props: LensterPostViewProps) {
       <div className="flex items-center pb-4">
         <img
           // @ts-ignore
-          src={activeProfile?.picture.original.url || '/assets/images/no_picture.webp'}
+          src={activeProfile?.picture?.original?.url || '/assets/images/no_picture.webp'}
           alt="profile-picture"
           className="h-10 w-10 rounded-full border border-tGray-200"
         />

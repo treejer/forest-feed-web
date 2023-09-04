@@ -28,7 +28,7 @@ export function WalletAssets(props: WalletAssetsProps) {
   const t = useTranslations();
 
   useEffect(() => {
-    if (salePrice) {
+    if (salePrice && DAI !== undefined) {
       const notEnough = DAI < salePrice;
       setBalanceError(notEnough);
       dispatchSetDisableForm(notEnough);

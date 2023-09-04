@@ -13,9 +13,7 @@ export type TreeCostProps = {
 export function TreeCost(props: TreeCostProps) {
   const {treeCount} = props;
 
-  const salePriceBigNum = useRegularSale();
-
-  const salePrice = useMemo(() => Number(salePriceBigNum?.toString()) / 1e18, [salePriceBigNum]);
+  const {contractValue, salePrice} = useRegularSale();
 
   const t = useTranslations();
 
@@ -32,7 +30,7 @@ export function TreeCost(props: TreeCostProps) {
         <div className="flex flex-1 flex-col text-base">
           <span className="font-bold">{t('cost')}</span>
           <div className="flex items-center justify-center bg-yellow border-border rounded-md w-full h-[64px] md:h-[71px] font-size text-lg font-normal">
-            {salePriceBigNum
+            {contractValue
               ? t('dollarSign', {
                   value: treeCount * salePrice,
                 })

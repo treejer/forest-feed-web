@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 
 import {useTranslations} from 'use-intl';
 
@@ -8,6 +8,8 @@ import {Spacer} from '@forest-feed/components/common/Spacer';
 import {Switch} from '@forest-feed/components/kit/Switch/Switch';
 import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
 
 export type PledgeStepState = Pick<CampaignJourneyState, 'size' | 'reward' | 'settings'>;
 
@@ -37,6 +39,11 @@ export function PledgeStep(props: PledgeStepProps) {
     setActiveStep,
     onProceed,
   } = props;
+
+  const {
+    tokens: {DAI, loading: tokensLoading},
+  } = useTokens({didMount: false});
+  const {salePrice} = useRegularSale();
 
   const t = useTranslations();
 
@@ -74,11 +81,24 @@ export function PledgeStep(props: PledgeStepProps) {
     });
   }, [onProceed, campaignSize, values]);
 
+  const max = useMemo(() => {
+    if (DAI === undefined || DAI >= 1000 || DAI < 10) {
+      return 100;
+    }
+    return Math.floor(DAI / salePrice);
+  }, [DAI, salePrice]);
+
+  useEffect(() => {
+    if (campaignSize > max) {
+      setCampaignSize(1);
+    }
+  }, [max]);
+
   return (
     <div>
       <p className="text-lg md:text-xl font-extrabold">{t('newCampaign.campaignSize')}</p>
       <p className="text-sm text-secondary">{t('newCampaign.howManyWantsToPlant')}</p>
-      <InputRange value={campaignSize} onChange={handleChangeCampaignSize} />
+      <InputRange value={campaignSize} onChange={handleChangeCampaignSize} max={tokensLoading ? 100 : max} />
       <div className="flex items-start justify-between">
         <span className="text-sm text-secondary">
           {t('countTrees', {
@@ -87,7 +107,7 @@ export function PledgeStep(props: PledgeStepProps) {
         </span>
         <span className="text-sm text-secondary">
           {t('countTrees', {
-            count: 100,
+            count: !tokensLoading ? max : '...',
           })}
         </span>
       </div>

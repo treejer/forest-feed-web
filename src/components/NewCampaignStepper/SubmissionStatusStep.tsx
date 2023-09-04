@@ -44,8 +44,11 @@ export function SubmissionStatusStep() {
   const {campaignJourney, dispatchResetCampaignJourney} = useCampaignJourney();
   const {dispatchCreateCampaign} = useCreateCampaign();
 
-  const salePrice = useRegularSale();
-  const amount = useMemo(() => campaignJourney.size * Number(salePrice?.toString()), [campaignJourney.size, salePrice]);
+  const {contractValue} = useRegularSale();
+  const amount = useMemo(
+    () => campaignJourney.size * Number(contractValue?.toString()),
+    [campaignJourney.size, contractValue],
+  );
 
   const handleErrorInProcess = useCallback(() => {
     setError(true);
@@ -76,7 +79,7 @@ export function SubmissionStatusStep() {
 
   const [approveDaiMethod, isApproveReady, approveTxSucceed] = useApproveDai({
     onSuccess: handleSuccessApproveDai,
-    enabled: !!salePrice,
+    enabled: !!contractValue,
     onError: handleErrorInProcess,
     onPrepareError: handleErrorInProcess,
     amount,

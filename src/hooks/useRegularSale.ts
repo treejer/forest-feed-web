@@ -1,3 +1,5 @@
+import {useMemo} from 'react';
+
 import {useContractRead} from 'wagmi';
 import {Abi} from 'viem';
 import {BigNumberish} from 'ethers';
@@ -13,5 +15,7 @@ export function useRegularSale() {
     functionName: 'price',
   });
 
-  return data;
+  const salePrice = useMemo(() => Number(data?.toString()) / 1e18, [data]);
+
+  return {contractValue: data, salePrice};
 }

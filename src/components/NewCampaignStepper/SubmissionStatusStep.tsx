@@ -17,6 +17,7 @@ import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
 import {useCreateCampaign} from '@forest-feed/redux/module/campaign/createCampaign';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
 import {useRouter} from '@forest-feed/lib/router-events';
+import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {colors} from 'colors';
 
 export function SubmissionStatusStep() {
@@ -35,6 +36,10 @@ export function SubmissionStatusStep() {
   });
 
   console.log(publicationQueryData);
+
+  const {dispatchCheckBalance} = useTokens({
+    didMount: false,
+  });
 
   const {campaignJourney, dispatchResetCampaignJourney} = useCampaignJourney();
   const {dispatchCreateCampaign} = useCreateCampaign();
@@ -85,6 +90,12 @@ export function SubmissionStatusStep() {
     amount,
   });
 
+  useEffect(() => {
+    if (depositTxSucceed) {
+      dispatchCheckBalance();
+    }
+  }, [depositTxSucceed]);
+
   const handleStartCreateCampaign = useCallback(
     (byUser: boolean = false) => {
       if (byUser) {
@@ -114,16 +125,6 @@ export function SubmissionStatusStep() {
       return;
     }
     setLoading(true);
-    console.log(
-      {
-        title,
-        minFollower: campaignJourney.reward.minimumFollowerNumber,
-        isFollowerOnly: campaignJourney.reward.onlyFollowers,
-        campaignSize: campaignJourney.size,
-        publicationId: publicationQueryData?.publications?.items?.[0]?.id,
-      },
-      'body',
-    );
     dispatchCreateCampaign({
       title,
       minFollower: campaignJourney.reward.minimumFollowerNumber,
@@ -222,7 +223,6 @@ export function SubmissionStatusStep() {
                   )}
                 </div>
               </div>
-
               <Spacer />
               <div>
                 <p className="text-sm md:text-base">{t(step.text)}</p>

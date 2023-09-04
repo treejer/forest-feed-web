@@ -6,6 +6,7 @@ import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {selectCampaignJourney} from '@forest-feed/redux/selectors';
 
 export type CampaignJourneyState = {
+  disableForm: boolean;
   content: string;
   image: File | null;
   size: number;
@@ -27,9 +28,11 @@ export type CampaignJourneyAction = {
   setMinimumFollowerNumber: number;
   setCampaignSize: number;
   setCurrentStep: number;
+  setDisableForm: boolean;
 };
 
 export const campaignJourneyInitialState: CampaignJourneyState = {
+  disableForm: false,
   content: '',
   image: null,
   size: 1,
@@ -49,6 +52,9 @@ export const campaignJourneySlice = createSlice({
   name: 'campaignJourney',
   initialState: campaignJourneyInitialState,
   reducers: {
+    setDisableForm: (state, action: PayloadAction<CampaignJourneyAction['setDisableForm']>) => {
+      state.disableForm = action.payload;
+    },
     approveGeneralInfo: (state, action: PayloadAction<CampaignJourneyAction['approveGeneralInfo']>) => {
       state.content = action.payload.content;
       state.image = action.payload.image;
@@ -97,6 +103,7 @@ export const {
   setMinimumFollowerNumber,
   setCanBeCollected,
   resetCampaignJourney,
+  setDisableForm,
 } = campaignJourneySlice.actions;
 
 export const useCampaignJourney = () => {
@@ -147,6 +154,13 @@ export const useCampaignJourney = () => {
     dispatch(resetCampaignJourney());
   }, [dispatch]);
 
+  const dispatchSetDisableForm = useCallback(
+    (payload: CampaignJourneyAction['setDisableForm']) => {
+      dispatch(setDisableForm(payload));
+    },
+    [dispatch],
+  );
+
   return {
     campaignJourney,
     dispatchApproveGeneralInfo,
@@ -157,6 +171,7 @@ export const useCampaignJourney = () => {
     dispatchSetOnlyFollowers,
     dispatchSetMinimumFollowerNumber,
     dispatchResetCampaignJourney,
+    dispatchSetDisableForm,
   };
 };
 

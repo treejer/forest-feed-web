@@ -64,7 +64,8 @@
     },
     "assets": {
       "title": "Wallet Assets",
-      "dai": "DAI"
+      "dai": "DAI",
+      "notEnough": "Top up your DAI balance"
     },
     "processing": "Processing...",
     "oops": "Oops!",
@@ -131,5 +132,10 @@
     "connected": "Wallet successfully connected.",
     "lensLoggedIn": "Lens logged in."
   },
-  "emptyTable": "Your {value} list is empty."
+  "emptyTable": "Your {value} list is empty.",
+  "sweetalert": {
+    "notEnoughBalance": {
+      "title": "Your DAI balance isn't enough to create a campaign."
+    }
+  }
 }

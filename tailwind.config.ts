@@ -3,6 +3,7 @@ const {colors} = require('./colors');
 const tailwindColors = require('tailwindcss/colors');
 
 module.exports = {
+  important: true,
   plugins: [require('daisyui')],
   daisyui: {
     themes: [{theme: colors}],

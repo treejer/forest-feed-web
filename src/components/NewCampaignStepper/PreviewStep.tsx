@@ -29,7 +29,7 @@ export function PreviewStep(props: PreviewStepProps) {
   return (
     <div>
       <LensterPostView activeProfile={activeProfile} content={generalInfo.content} image={generalInfo.image} />
-      <Spacer times={3} />
+      <Spacer times={5} />
       <div className="flex items-end justify-end">
         <Button text={t('back')} disabled={loading} onClick={handleBack} />
         <Spacer />

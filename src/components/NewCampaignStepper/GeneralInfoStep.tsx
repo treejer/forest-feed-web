@@ -138,12 +138,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
         disabled={isConfirm}
         hideLabel
       />
-      <div className="hidden md:block">
-        <Spacer times={10} />
-      </div>
-      <div className="block md:hidden">
-        <Spacer times={5} />
-      </div>
+      <Spacer times={5} />
       <div className="flex items-end justify-end">
         <Button text={t(isConfirm ? 'back' : 'learnMore')} disabled={loading} onClick={handleLearnMore} />
         <Spacer />

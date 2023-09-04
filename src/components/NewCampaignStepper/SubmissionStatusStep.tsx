@@ -262,7 +262,8 @@ export function SubmissionStatusStep() {
         </div>
       </div>
       <RenderIf condition={error || activeStep === 4}>
-        <div className="flex justify-end items-center mt-10">
+        <Spacer times={5} />
+        <div className="flex justify-end items-center">
           {error ? (
             <>
               <Button text={t('cancel')} variant={ButtonVariant.primary} />

@@ -141,7 +141,7 @@ export function PledgeStep(props: PledgeStepProps) {
           label={t('newCampaign.rewardOnlyYourFollowers')}
         />
       </div>
-      <Spacer times={10} />
+      <Spacer times={5} />
       <div className="flex items-end justify-end">
         <Button text={t('back')} onClick={handleBack} />
         <Spacer times={2} />

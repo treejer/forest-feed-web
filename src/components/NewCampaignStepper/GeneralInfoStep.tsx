@@ -26,7 +26,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
 
   const {control, resetField, setValue, handleSubmit, formState} = useForm<GeneralInfoForm>({
     defaultValues: {
-      image: defaultValues?.image ? [defaultValues.image] : undefined,
+      image: defaultValues?.image ? [defaultValues.image] : null,
       content: defaultValues?.content || '',
       termsConditionAgreed: defaultValues?.termsConditionAgreed || false,
     },

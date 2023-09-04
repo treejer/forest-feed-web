@@ -97,7 +97,6 @@ function NewCampaignPage() {
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
                     onProceed={handleApproveGeneralInfo}
-                    key="general-info-form"
                   />
                 ),
                 title: t('generalInfo'),

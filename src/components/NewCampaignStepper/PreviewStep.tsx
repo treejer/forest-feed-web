@@ -1,11 +1,12 @@
 import React, {useCallback} from 'react';
-import {GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
+
+import {useTranslations} from 'use-intl';
+import {ProfileOwnedByMe} from '@lens-protocol/react-web';
+
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {useTranslations} from 'use-intl';
 import {LensterPostView} from '@forest-feed/components/LensterPostView/LensterPostView';
-import {ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 
 export type PreviewStepProps = {
   generalInfo: GeneralInfoStepState;
@@ -38,7 +39,7 @@ export function PreviewStep(props: PreviewStepProps) {
           onClick={onApprove}
           disabled={loading}
           loading={loading}
-          text={t('approve')}
+          text={t('proceed')}
           type="button"
         />
       </div>

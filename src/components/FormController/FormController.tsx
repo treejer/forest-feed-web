@@ -92,7 +92,7 @@ export function FormController(props: FormControllerProps) {
               preview={props.preview}
               onChange={e => handleChange(e, {field, fieldState})}
               onDrop={e => props.onDrop?.(e, {field, fieldState})}
-              onDetach={() => props?.resetField?.(field.name)}
+              onDetach={() => props?.resetField?.(field.name, {defaultValue: null})}
               onBlur={() => handleBlur({field, fieldState})}
               disabled={disabled}
             />

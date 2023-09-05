@@ -23,7 +23,7 @@ export type PledgeStepProps = {
   setMinimumFollowerNumber: (count: number) => void;
   activeStep: number;
   setActiveStep: (step: number) => void;
-  onProceed: (pledgeState: PledgeStepState) => void;
+  onProceed: () => void;
 };
 
 export function PledgeStep(props: PledgeStepProps) {
@@ -68,18 +68,8 @@ export function PledgeStep(props: PledgeStepProps) {
   }, [setActiveStep, activeStep]);
 
   const handleSubmit = useCallback(() => {
-    onProceed({
-      size: campaignSize,
-      reward: {
-        minimumFollowerNumber: values.reward.minimumFollowerNumber,
-        onlyFollowers: values.reward.onlyFollowers,
-      },
-      settings: {
-        canBeCollected: values.settings.canBeCollected,
-        canBeCollectedOnlyFollowers: values.settings.canBeCollectedOnlyFollowers,
-      },
-    });
-  }, [onProceed, campaignSize, values]);
+    onProceed();
+  }, [onProceed]);
 
   const max = useMemo(() => {
     if (DAI === undefined || DAI >= 1000 || DAI < 10) {

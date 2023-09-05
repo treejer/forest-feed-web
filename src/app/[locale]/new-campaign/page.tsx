@@ -73,12 +73,9 @@ function NewCampaignPage() {
     }
   }, [createLensPost]);
 
-  const handleApprovePledge = useCallback(
-    (pledgeState: PledgeStepState) => {
-      dispatchApprovePledge(pledgeState);
-    },
-    [dispatchApprovePledge],
-  );
+  const handleApprovePledge = useCallback(() => {
+    dispatchApprovePledge();
+  }, [dispatchApprovePledge]);
 
   const generalInfoState = useMemo(
     () => ({

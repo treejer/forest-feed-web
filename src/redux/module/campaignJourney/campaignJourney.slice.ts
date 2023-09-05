@@ -58,20 +58,11 @@ export const campaignJourneySlice = createSlice({
   name: 'campaignJourney',
   initialState: campaignJourneyInitialState,
   reducers: {
-    setCampaignSize: (state, action: PayloadAction<CampaignJourneyAction['setCampaignSize']>) => {
-      state.size = action.payload;
-    },
     setDisableForm: (state, action: PayloadAction<CampaignJourneyAction['setDisableForm']>) => {
       return {
         ...state,
         disableForm: action.payload,
       };
-    },
-    approveGeneralInfo: (state, action: PayloadAction<CampaignJourneyAction['approveGeneralInfo']>) => {
-      state.content = action.payload.content;
-      state.image = action.payload.image;
-      state.termsConditionAgreed = action.payload.termsConditionAgreed;
-      state.currentStep = action.payload.silent ? state.currentStep : 1;
     },
     setImageBase64: (state, action: PayloadAction<CampaignJourneyAction['setImageBase64']>) => {
       state.imageBase64 = action.payload;
@@ -83,14 +74,17 @@ export const campaignJourneySlice = createSlice({
         image: action.payload,
       };
     },
-    approvePledge: (state, action: PayloadAction<CampaignJourneyAction['approvePledge']>) => {
-      state.reward = action.payload.reward;
-      state.settings = action.payload.settings;
-      state.size = action.payload.size;
-      state.currentStep = 2;
-    },
     setCurrentStep: (state, action: PayloadAction<CampaignJourneyAction['setCurrentStep']>) => {
       state.currentStep = action.payload;
+    },
+    approveGeneralInfo: (state, action: PayloadAction<CampaignJourneyAction['approveGeneralInfo']>) => {
+      state.content = action.payload.content;
+      state.image = action.payload.image;
+      state.termsConditionAgreed = action.payload.termsConditionAgreed;
+      state.currentStep = action.payload.silent ? state.currentStep : 1;
+    },
+    setCampaignSize: (state, action: PayloadAction<CampaignJourneyAction['setCampaignSize']>) => {
+      state.size = action.payload;
     },
     setCanBeCollected: state => {
       state.settings.canBeCollected = !state.settings.canBeCollected;
@@ -118,7 +112,6 @@ export const campaignJourneySlice = createSlice({
 
 export const {
   approveGeneralInfo,
-  approvePledge,
   setCurrentStep,
   setCanBeCollectedOnlyFollowers,
   setOnlyFollowers,
@@ -143,12 +136,9 @@ export const useCampaignJourney = () => {
     [dispatch],
   );
 
-  const dispatchApprovePledge = useCallback(
-    (payload: CampaignJourneyAction['approvePledge']) => {
-      dispatch(approvePledge(payload));
-    },
-    [dispatch],
-  );
+  const dispatchApprovePledge = useCallback(() => {
+    dispatch(setCurrentStep(2));
+  }, [dispatch]);
 
   const dispatchSetCurrentStep = useCallback(
     (payload: CampaignJourneyAction['setCurrentStep']) => {

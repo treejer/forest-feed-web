@@ -58,8 +58,14 @@ export const campaignJourneySlice = createSlice({
   name: 'campaignJourney',
   initialState: campaignJourneyInitialState,
   reducers: {
+    setCampaignSize: (state, action: PayloadAction<CampaignJourneyAction['setCampaignSize']>) => {
+      state.size = action.payload;
+    },
     setDisableForm: (state, action: PayloadAction<CampaignJourneyAction['setDisableForm']>) => {
-      state.disableForm = action.payload;
+      return {
+        ...state,
+        disableForm: action.payload,
+      };
     },
     approveGeneralInfo: (state, action: PayloadAction<CampaignJourneyAction['approveGeneralInfo']>) => {
       state.content = action.payload.content;
@@ -123,6 +129,7 @@ export const {
   setImageBase64,
   setImageFile,
   checkBase64Exist,
+  setCampaignSize,
 } = campaignJourneySlice.actions;
 
 export const useCampaignJourney = () => {
@@ -180,6 +187,13 @@ export const useCampaignJourney = () => {
     [dispatch],
   );
 
+  const dispatchSetCampaignSize = useCallback(
+    (payload: CampaignJourneyAction['setCampaignSize']) => {
+      dispatch(setCampaignSize(payload));
+    },
+    [dispatch],
+  );
+
   return {
     campaignJourney,
     dispatchApproveGeneralInfo,
@@ -191,6 +205,7 @@ export const useCampaignJourney = () => {
     dispatchSetMinimumFollowerNumber,
     dispatchResetCampaignJourney,
     dispatchSetDisableForm,
+    dispatchSetCampaignSize,
   };
 };
 

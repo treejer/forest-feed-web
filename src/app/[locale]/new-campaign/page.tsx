@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 
 import {useTranslations} from 'use-intl';
 import {motion} from 'framer-motion';
@@ -9,7 +9,7 @@ import {ProfileOwnedByMe, useActiveProfile} from '@lens-protocol/react-web';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
 import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
-import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
+import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 import {
   CampaignJourneyAction,
@@ -20,6 +20,7 @@ import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
 import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
 import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+import {usePersistState} from '@forest-feed/hooks/usePersistState';
 
 function NewCampaignPage() {
   const {
@@ -31,9 +32,17 @@ function NewCampaignPage() {
     dispatchSetOnlyFollowers,
     dispatchSetCanBeCollectedOnlyFollowers,
     dispatchSetCanBeCollected,
+    dispatchSetCampaignSize,
   } = useCampaignJourney();
 
-  const [campaignSize, setCampaignSize] = useState<number>(campaignJourney?.size || 1);
+  const [campaignSize, setCampaignSize, debouncedCampaignSize] = usePersistState<number>(
+    campaignJourney?.size || 1,
+    'CAMPAIGN_SIZE',
+  );
+
+  useEffect(() => {
+    dispatchSetCampaignSize(debouncedCampaignSize);
+  }, [debouncedCampaignSize]);
 
   const {data: activeProfile} = useActiveProfile();
 
@@ -62,7 +71,7 @@ function NewCampaignPage() {
     } catch (e: any) {
       console.log(e, 'error in handle approve review');
     }
-  }, [dispatchSetCurrentStep, createLensPost]);
+  }, [createLensPost]);
 
   const handleApprovePledge = useCallback(
     (pledgeState: PledgeStepState) => {
@@ -91,7 +100,7 @@ function NewCampaignPage() {
 
   return (
     <AnimatedPage className="h-full">
-      <AuthWrapper className="grid grid-cols-6 gap-5 md:gap-10 h-full">
+      <AuthWrapper className="grid grid-cols-6 gap-y-5 md:gap-10 h-full">
         <div className="col-span-6 md:col-span-5">
           <Stepper
             isDependent

@@ -73,7 +73,7 @@ export function LensterPostView(props: LensterPostViewProps) {
         <div>
           <p className="text-sm font-bold">{t('impact')}</p>
           <div className="flex items-center">
-            <p className="text-[12px] font-thin  flex items-center">
+            <p className="text-[10px] font-thin  flex items-center">
               {t.rich('impactMirror', {
                 forest: chunk => <span className="text-tBlue-300 ml-1"> {chunk}</span>,
               })}

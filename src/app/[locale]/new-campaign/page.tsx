@@ -10,7 +10,7 @@ import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
 import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
 import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
-import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
+import {PledgeStep} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
 import {
   CampaignJourneyAction,
   useCampaignJourney,
@@ -21,6 +21,7 @@ import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/S
 import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {usePersistState} from '@forest-feed/hooks/usePersistState';
+import {storageKeys} from '@forest-feed/config';
 
 function NewCampaignPage() {
   const {
@@ -38,7 +39,7 @@ function NewCampaignPage() {
 
   const [campaignSize, setCampaignSize, debouncedCampaignSize] = usePersistState<number>(
     campaignJourney?.size || 1,
-    'CAMPAIGN_SIZE',
+    storageKeys.CAMPAIGN_SIZE,
   );
 
   useEffect(() => {

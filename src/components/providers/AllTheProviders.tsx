@@ -24,10 +24,10 @@ export type AllTheProvidersProps = React.PropsWithChildren<{
   messages: AbstractIntlMessages;
 }>;
 
+export const reactQueryClient = new QueryClient();
+
 export function AllTheProviders(props: AllTheProvidersProps) {
   const {locale, messages, children} = props;
-
-  const [client] = React.useState(new QueryClient());
 
   return (
     <WagmiConfig config={wagmiConfig}>
@@ -37,7 +37,7 @@ export function AllTheProviders(props: AllTheProvidersProps) {
             <PersistGate persistor={persistor} loading={null}>
               <LensProvider>
                 <ApolloProvider>
-                  <QueryClientProvider client={client}>
+                  <QueryClientProvider client={reactQueryClient}>
                     <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
                     {children}
                     <ReactQueryDevtools initialIsOpen={false} />

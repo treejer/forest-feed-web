@@ -86,14 +86,23 @@ export function useQueryFetch<Data, Form = any, Params = any>(params: UseQueryFe
         params: fetchParams,
       }),
     keepPreviousData: true,
+    enabled: !!accessToken && !!profile?.walletAddress,
   });
 
   useEffect(() => {
-    (async () => await query.refetch())();
-  }, [profile]);
+    if (!accessToken) {
+      query.remove();
+    }
+  }, [accessToken]);
 
   useEffect(() => {
-    router.push(`/my-campaigns?page=${page}`, {
+    if (profile?.walletAddress && accessToken) {
+      (async () => await query.refetch())();
+    }
+  }, [profile?.walletAddress]);
+
+  useEffect(() => {
+    router.push(`/my-campaigns?${page !== 1 ? `page=${page}` : ''}`, {
       scroll: false,
     });
   }, [page]);

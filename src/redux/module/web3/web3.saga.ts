@@ -10,7 +10,7 @@ import {
 } from '@wagmi/core';
 import {ProfileOwnedByMe} from '@lens-protocol/react-web';
 
-import {config as configs, defaultChainId, NetworkConfig} from '@forest-feed/config';
+import {config as configs, defaultChainId, NetworkConfig, storageKeys} from '@forest-feed/config';
 import {selectConfig, selectLensProfile, selectWeb3} from '@forest-feed/redux/selectors';
 import {
   Web3State,
@@ -34,6 +34,7 @@ import {profileActions} from '@forest-feed/redux/module/profile/profile';
 import {handleSagaFetchError} from '@forest-feed/utils/fetch';
 import {resetCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {resetTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+import {reactQueryClient} from '@forest-feed/components/providers/AllTheProviders';
 
 export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['startConfiguration']>) {
   try {
@@ -88,12 +89,18 @@ export function* watchLoginAccount() {
 
 export function* watchLogoutAccount() {
   try {
+    yield put(setAccessToken({token: ''}));
     yield put(nonceActions.resetCache());
     yield put(signActions.resetCache());
     yield put(profileActions.resetCache());
     yield put(resetCampaignJourney());
     yield put(resetTokens());
-    yield put(setAccessToken({token: ''}));
+    yield reactQueryClient.invalidateQueries();
+    yield reactQueryClient.removeQueries();
+    yield reactQueryClient.clear();
+    for (let key in storageKeys) {
+      window.localStorage.removeItem(storageKeys[key]);
+    }
   } catch (e: any) {
     console.log(e, 'error in logout account');
   }

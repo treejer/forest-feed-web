@@ -21,6 +21,7 @@ import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
+import {storageKeys} from '@forest-feed/config';
 import {colors} from 'colors';
 
 export type SubmissionStatusStepProps = {
@@ -38,8 +39,8 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     dispatchCancelCampaignCreation,
   } = useCampaignJourney();
 
-  const [title, setTitle] = usePersistState<string>('', 'CAMPAIGN_TITLE');
-  const [titleError, setTitleError] = usePersistState<boolean>(false, 'CAMPAIGN_TITLE_ERROR');
+  const [title, setTitle] = usePersistState<string>('', storageKeys.CAMPAIGN_TITLE);
+  const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
   const router = useRouter();
 

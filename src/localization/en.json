@@ -97,7 +97,10 @@
     "goal": "Goal",
     "reposts": "Reposts",
     "creationDate": "Creation Date",
-    "title": "Title"
+    "title": "Title",
+    "generality": "Generality",
+    "public": "Public",
+    "followersOnly": "Followers only"
   },
   "privacyPolicy": {
     "agreeAppTermsConditions": "I agree to the terms and conditions."

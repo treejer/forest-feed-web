@@ -9,6 +9,7 @@ export type Campaign = {
   title: string;
   publicationId: string;
   creator: string;
+  isFollowerOnly: boolean;
   status: CampaignStatus;
   awardedCount: number;
   campaignSize: number;

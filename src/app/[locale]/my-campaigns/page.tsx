@@ -56,6 +56,12 @@ function MyCampaigns() {
         disableSortBy: true,
       },
       {
+        Header: t('generality'),
+        accessor: 'isFollowerOnly',
+        Cell: ({_, value}) => <p>{t(value ? 'followersOnly' : 'public')}</p>,
+        disableSortBy: true,
+      },
+      {
         Header: t('goal'),
         accessor: 'campaignSize',
         disableSortBy: true,

@@ -32,6 +32,7 @@ export function useAuthLens() {
     dispatchLogoutForest,
     dispatchSetLensProfile,
   } = useWeb3();
+
   const {address, isConnected} = useAccount();
   const {execute: login, isPending: loginIsPending} = useWalletLogin();
   const {execute: logout, isPending: logoutIsPending} = useWalletLogout();
@@ -77,6 +78,7 @@ export function useAuthLens() {
     try {
       setUnknownError(null);
       if (address && isConnected) {
+        dispatchLogoutForest();
         const {isSuccess, isFailure} = await login({
           address,
         });
@@ -91,7 +93,7 @@ export function useAuthLens() {
     } catch (e: any) {
       console.log(e, 'error in login with lens');
     }
-  }, [address, login, isConnected, dispatchSignWithForest]);
+  }, [address, isConnected, dispatchLogoutForest, login, dispatchSignWithForest]);
 
   const handleLensLogout = useCallback(
     async (inSaga?: boolean) => {

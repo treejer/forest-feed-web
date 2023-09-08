@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 
@@ -10,7 +10,15 @@ export type UseDepositToForestFeedParams = UseApproveDaiParams;
 export type UseDepositToForestFeedReturnType = UseApproveDaiReturnType;
 
 export function useDepositToForestFeed(params: UseDepositToForestFeedParams): UseDepositToForestFeedReturnType {
-  const {amount, enabled = true, onSuccess, onError, onPrepareSuccess, onPrepareError} = params;
+  const {
+    amount,
+    enabled = true,
+    onTxSuccess,
+    onContractWriteSuccess,
+    onContractWriteError,
+    onPrepareSuccess,
+    onPrepareError,
+  } = params;
 
   const [readyToUse, setReadyToUse] = useState(false);
   const [txHash, setTxHash] = useState('');
@@ -36,12 +44,12 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
   const {write} = useContractWrite({
     ...config,
     onSuccess: data => {
-      onSuccess?.(data);
+      onContractWriteSuccess?.(data);
       setTxHash(data.hash);
       console.log(data, 'success in write deposit');
     },
     onError: err => {
-      onError?.(err);
+      onContractWriteError?.(err);
       console.log(err, 'error in write deposit');
     },
   });
@@ -50,6 +58,12 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
     hash: txHash as `0x${string}`,
     enabled: !!txHash,
   });
+
+  useEffect(() => {
+    if (data) {
+      onTxSuccess?.();
+    }
+  }, [data]);
 
   const canUse = useMemo(() => readyToUse && !!write, [readyToUse, write]);
 

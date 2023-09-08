@@ -68,6 +68,8 @@
       "notEnough": "Top up your DAI balance"
     },
     "processing": "Processing...",
+    "createPost": "Create Post",
+    "pleaseSubmit": "Please submit to create you post on lens protocol",
     "oops": "Oops!",
     "failText": "Something went wrong! Please try again...",
     "bePatient": "Please hold while we're processing your campaign creation.",

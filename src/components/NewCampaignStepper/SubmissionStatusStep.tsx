@@ -1,47 +1,57 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+'use client';
+
+import React, {useCallback, useEffect, useMemo} from 'react';
 
 import {useQuery} from '@apollo/client';
-import {ProfileId, useActiveProfile} from '@lens-protocol/react-web';
+import {ProfileId, ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {useTranslations} from 'use-intl';
 
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {useRouter} from '@forest-feed/lib/router-events';
 import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
 import {useDepositToForestFeed} from '@forest-feed/hooks/useDepositToForestFeed';
 import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
 import {useCreateCampaign} from '@forest-feed/redux/module/campaign/createCampaign';
-import {showToast, ToastType} from '@forest-feed/utils/showToast';
-import {useRouter} from '@forest-feed/lib/router-events';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+import {usePersistState} from '@forest-feed/hooks/usePersistState';
+import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
+import {Spacer} from '@forest-feed/components/common/Spacer';
+import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
+import {showToast, ToastType} from '@forest-feed/utils/showToast';
 import {colors} from 'colors';
 
-export function SubmissionStatusStep() {
-  const [loading, setLoading] = useState(true);
-  const [activeStep, setActiveStep] = useState(1);
-  const [error, setError] = useState(false);
-  const [title, setTitle] = useState('');
-  const [titleError, setTitleError] = useState(false);
+export type SubmissionStatusStepProps = {
+  activeProfile: ProfileOwnedByMe;
+  onCreatePost: () => void;
+  createPostLoading: boolean;
+};
+
+export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
+  const {onCreatePost, createPostLoading, activeProfile} = props;
+
+  const {
+    campaignJourney: {submissionLoading, submissionError, submissionActiveStep, ...campaignJourney},
+    dispatchSetSubmissionState,
+    dispatchCancelCampaignCreation,
+  } = useCampaignJourney();
+
+  const [title, setTitle] = usePersistState<string>('', 'CAMPAIGN_TITLE');
+  const [titleError, setTitleError] = usePersistState<boolean>(false, 'CAMPAIGN_TITLE_ERROR');
 
   const router = useRouter();
 
-  const {data: activeProfile} = useActiveProfile();
   const {data: publicationQueryData, refetch} = useQuery(publicationIds, {
     variables: publicationIdsVariables(activeProfile?.id as ProfileId, 1),
     context: {clientName: 'lens'},
   });
 
-  console.log(publicationQueryData);
-
   const {dispatchCheckBalance} = useTokens({
     didMount: false,
   });
 
-  const {campaignJourney, dispatchResetCampaignJourney} = useCampaignJourney();
   const {dispatchCreateCampaign} = useCreateCampaign();
 
   const {contractValue} = useRegularSale();
@@ -51,83 +61,55 @@ export function SubmissionStatusStep() {
   );
 
   const handleErrorInProcess = useCallback(() => {
-    setError(true);
-    setLoading(false);
-  }, []);
+    dispatchSetSubmissionState({
+      loading: false,
+      error: true,
+    });
+  }, [dispatchSetSubmissionState]);
 
   const handleSuccessDeposit = useCallback(() => {
-    setActiveStep(4);
-    setLoading(false);
-  }, []);
+    dispatchCheckBalance();
+    dispatchSetSubmissionState({
+      loading: false,
+      activeStep: 3,
+    });
+  }, [dispatchCheckBalance, dispatchSetSubmissionState]);
 
   const handleSuccessApproveDai = useCallback(() => {
-    setActiveStep(3);
-  }, []);
+    dispatchSetSubmissionState({
+      activeStep: 2,
+    });
+  }, [dispatchSetSubmissionState]);
 
   const handleSuccessCreateCampaign = useCallback(() => {
-    setActiveStep(5);
-    setLoading(false);
-    showToast({
-      title: 'newCampaign.goodJob',
-      message: 'newCampaign.succeed',
-      type: ToastType.success,
-      translate: true,
-    });
+    setTitle('');
     router.push('/my-campaigns');
-    dispatchResetCampaignJourney();
-  }, [dispatchResetCampaignJourney, router]);
+  }, [router, setTitle]);
 
-  const [approveDaiMethod, isApproveReady, approveTxSucceed] = useApproveDai({
-    onSuccess: handleSuccessApproveDai,
+  const [approveDaiMethod, isApproveReady] = useApproveDai({
+    onTxSuccess: handleSuccessApproveDai,
     enabled: !!contractValue,
-    onError: handleErrorInProcess,
+    onContractWriteError: handleErrorInProcess,
     onPrepareError: handleErrorInProcess,
     amount,
   });
 
-  const [depositMethod, isDepositReady, depositTxSucceed] = useDepositToForestFeed({
-    onSuccess: handleSuccessDeposit,
-    enabled: activeStep === 3 && approveTxSucceed,
-    onError: handleErrorInProcess,
+  const [depositMethod, isDepositReady] = useDepositToForestFeed({
+    onTxSuccess: handleSuccessDeposit,
+    enabled: submissionActiveStep === 2,
+    onContractWriteError: handleErrorInProcess,
     onPrepareError: handleErrorInProcess,
     amount,
   });
-
-  useEffect(() => {
-    if (depositTxSucceed) {
-      dispatchCheckBalance();
-    }
-  }, [depositTxSucceed]);
-
-  const handleStartCreateCampaign = useCallback(
-    (byUser: boolean = false) => {
-      if (byUser) {
-        setLoading(true);
-        setError(false);
-      }
-      if (activeStep === 1) {
-        setActiveStep(2);
-      }
-      if (activeStep === 2 && isApproveReady) {
-        approveDaiMethod?.();
-      }
-      if (activeStep === 3 && isDepositReady) {
-        (async () => {
-          await refetch();
-        })();
-        depositMethod?.();
-      }
-    },
-    [activeStep, approveDaiMethod, depositMethod, isApproveReady, isDepositReady],
-  );
 
   const handleConfirmTitle = useCallback(() => {
-    console.log(title, 'title');
     if (!title) {
       setTitleError(true);
       return;
     }
-    setLoading(true);
+    dispatchSetSubmissionState({
+      loading: true,
+    });
     dispatchCreateCampaign({
       title,
       minFollower: campaignJourney.reward.minimumFollowerNumber,
@@ -138,15 +120,57 @@ export function SubmissionStatusStep() {
       onFailure: handleErrorInProcess,
     });
   }, [
+    title,
+    dispatchSetSubmissionState,
+    dispatchCreateCampaign,
     campaignJourney.reward.minimumFollowerNumber,
     campaignJourney.reward.onlyFollowers,
     campaignJourney.size,
-    dispatchCreateCampaign,
-    handleErrorInProcess,
-    handleSuccessCreateCampaign,
     publicationQueryData?.publications?.items,
-    title,
+    handleSuccessCreateCampaign,
+    handleErrorInProcess,
+    setTitleError,
   ]);
+
+  const handleStartCreateCampaign = useCallback(
+    (byUser: boolean = false) => {
+      if (byUser) {
+        dispatchSetSubmissionState({
+          loading: true,
+          error: false,
+        });
+        if (submissionActiveStep === 0) {
+          onCreatePost();
+        }
+        if (submissionActiveStep === 3) {
+          handleConfirmTitle();
+        }
+      }
+      if (submissionActiveStep === 1 && isApproveReady) {
+        (async () => {
+          await refetch();
+        })();
+        approveDaiMethod?.();
+      }
+      if (submissionActiveStep === 2 && isDepositReady) {
+        (async () => {
+          await refetch();
+        })();
+        depositMethod?.();
+      }
+    },
+    [
+      submissionActiveStep,
+      isApproveReady,
+      isDepositReady,
+      dispatchSetSubmissionState,
+      onCreatePost,
+      handleConfirmTitle,
+      approveDaiMethod,
+      refetch,
+      depositMethod,
+    ],
+  );
 
   useEffect(() => {
     showToast({
@@ -158,30 +182,38 @@ export function SubmissionStatusStep() {
   }, [publicationQueryData]);
 
   useEffect(() => {
-    handleStartCreateCampaign();
-  }, [activeStep, isDepositReady, isApproveReady, depositTxSucceed]);
+    if (!submissionError) {
+      handleStartCreateCampaign();
+    }
+  }, [submissionActiveStep, isDepositReady, isApproveReady]);
+
+  const handleCancelSubmission = useCallback(() => {
+    dispatchCancelCampaignCreation();
+    setTitle('');
+    setTitleError(false);
+  }, [dispatchCancelCampaignCreation, setTitle, setTitleError]);
 
   const t = useTranslations('newCampaign');
 
   const steps = useMemo(
     () => [
       {
-        key: 1,
+        key: 0,
         text: 'createOnLens',
         desc: 'createOnLensDesc',
       },
       {
-        key: 2,
+        key: 1,
         text: 'approveDai',
         desc: 'approveDaiDesc',
       },
       {
-        key: 3,
+        key: 2,
         text: 'deposit',
         desc: 'depositDesc',
       },
       {
-        key: 4,
+        key: 3,
         text: 'finalize',
         desc: 'finalizeDesc',
       },
@@ -192,9 +224,17 @@ export function SubmissionStatusStep() {
   return (
     <div>
       <div className="mb-5">
-        <p className="text-lg md:text-xl font-bold">{t(error ? 'oops' : 'processing')}</p>
-        <p className={`text-sm font-light ${error ? 'text-red' : 'text-secondary'}`}>
-          {t(error ? 'failText' : 'bePatient')}
+        <p className="text-lg md:text-xl font-bold">
+          {t(submissionError ? 'oops' : submissionActiveStep === 0 && !submissionLoading ? 'createPost' : 'processing')}
+        </p>
+        <p className={`text-sm font-light ${submissionError ? 'text-red' : 'text-secondary'}`}>
+          {t(
+            submissionError
+              ? 'failText'
+              : submissionActiveStep === 0 && !submissionLoading
+              ? 'pleaseSubmit'
+              : 'bePatient',
+          )}
         </p>
       </div>
       <div className="flex flex-col md:flex-row md:items-center justify-between">
@@ -204,22 +244,22 @@ export function SubmissionStatusStep() {
               <div className="p-1">
                 <div
                   className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex justify-center items-center border-2 ${
-                    activeStep == step.key && loading
+                    submissionActiveStep == step.key && submissionLoading
                       ? `${
-                          step.key === activeStep && error
+                          step.key === submissionActiveStep && submissionError
                             ? 'border-red'
                             : 'border-l-green border-r-green  border-t-border  border-b-border '
-                        }${loading ? 'animate-spin' : ''}`
-                      : step.key < activeStep
+                        }${submissionLoading ? 'animate-spin' : ''}`
+                      : step.key < submissionActiveStep
                       ? 'border-green'
-                      : step.key === activeStep && error
+                      : step.key === submissionActiveStep && submissionError
                       ? 'border-red'
                       : 'border-border'
                   }`}
                 >
-                  {step.key < activeStep ? (
+                  {step.key < submissionActiveStep ? (
                     <CheckIcon className="w-3 h-3 md:w-5 md:h-5 text-green" />
-                  ) : step.key === activeStep && error ? (
+                  ) : step.key === submissionActiveStep && submissionError ? (
                     <XIcon className="w-3 h-3 md:w-5 md:h-5 text-red" />
                   ) : (
                     ''
@@ -231,7 +271,7 @@ export function SubmissionStatusStep() {
                 <p className="text-sm md:text-base">{t(step.text)}</p>
                 <div className="flex items-center">
                   <p className="text-[12px] md:text-sm text-secondary text-align">{t(step.desc)}</p>
-                  {!error && !loading && activeStep === 4 && step.key === 4 ? (
+                  {!submissionError && !submissionLoading && submissionActiveStep === 3 && step.key === 3 ? (
                     <div className="flex flex-col relative">
                       <input
                         className="border border-border outline-none p-1 rounded-[5px] ml-2 text-green"
@@ -260,16 +300,28 @@ export function SubmissionStatusStep() {
             ariaLabel="circles-loading"
             wrapperStyle={{}}
             wrapperClass=""
-            visible={loading}
+            visible={submissionLoading}
           />
         </div>
       </div>
-      <RenderIf condition={error || activeStep === 4}>
+      <RenderIf condition={!submissionError && submissionActiveStep === 0}>
         <Spacer times={5} />
         <div className="flex justify-end items-center">
-          {error ? (
+          <Button
+            text={t('submit')}
+            onClick={onCreatePost}
+            loading={createPostLoading || submissionLoading}
+            disabled={createPostLoading || submissionLoading}
+            variant={ButtonVariant.secondary}
+          />
+        </div>
+      </RenderIf>
+      <RenderIf condition={submissionError || (submissionActiveStep === 3 && !submissionLoading)}>
+        <Spacer times={5} />
+        <div className="flex justify-end items-center">
+          {submissionError ? (
             <>
-              <Button text={t('cancel')} variant={ButtonVariant.primary} />
+              <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
               <Spacer />
               <Button
                 text={t('tryAgain')}

@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 export const validator = {
   string: (required: boolean = false, message: string = 'errors.required') =>
-    required ? Yup.string().required(message) : Yup.string(),
+    required ? Yup.string().trim().required(message) : Yup.string().trim(),
   bool: (message?: string) =>
     Yup.bool()
       .test('true', message || 'errors.required', value => {

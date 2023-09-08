@@ -12,13 +12,12 @@ export type PreviewStepProps = {
   generalInfo: GeneralInfoStepState;
   activeProfile: ProfileOwnedByMe | null | undefined;
   onApprove: () => void;
-  loading: boolean;
   setActiveStep: (step: number) => void;
   activeStep: number;
   disabled?: boolean;
 };
 export function PreviewStep(props: PreviewStepProps) {
-  const {generalInfo, activeProfile, loading, activeStep, disabled, onApprove, setActiveStep} = props;
+  const {generalInfo, activeProfile, activeStep, disabled, onApprove, setActiveStep} = props;
 
   const t = useTranslations();
 
@@ -31,15 +30,14 @@ export function PreviewStep(props: PreviewStepProps) {
       <LensterPostView activeProfile={activeProfile} content={generalInfo.content} image={generalInfo.image} />
       <Spacer times={5} />
       <div className="flex items-end justify-end">
-        <Button text={t('back')} disabled={loading} onClick={handleBack} />
+        <Button text={t('back')} onClick={handleBack} />
         <Spacer />
-        <Button disabled={loading} text={t('edit')} onClick={() => setActiveStep(0)} />
+        <Button text={t('edit')} onClick={() => setActiveStep(0)} />
         <Spacer />
         <Button
           variant={ButtonVariant.secondary}
           onClick={onApprove}
-          disabled={loading || disabled}
-          loading={loading}
+          disabled={disabled}
           text={t('proceed')}
           type="button"
         />

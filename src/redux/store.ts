@@ -20,7 +20,11 @@ export type AppStore = ReturnType<typeof makeStore>['store'];
 export type AppState = ReturnType<typeof combinedReducers>;
 export type AppDispatch = AppStore['dispatch'];
 
-const saveSubsetBlacklistFilter = createBlacklistFilter('campaignJourney', ['image', 'disableForm']);
+const saveSubsetBlacklistFilter = createBlacklistFilter('campaignJourney', [
+  'image',
+  'disableForm',
+  'submissionLoading',
+]);
 
 const persistConfig = {
   key: 'forestFeedPersist',

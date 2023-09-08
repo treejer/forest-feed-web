@@ -32,10 +32,11 @@ const tokensSlice = createSlice({
       state.DAI = action.payload.DAI;
       state.loading = false;
     },
+    resetTokens: () => tokensInitialState,
   },
 });
 
-export const {updateBalance, checkBalance} = tokensSlice.actions;
+export const {updateBalance, checkBalance, resetTokens} = tokensSlice.actions;
 export default tokensSlice.reducer;
 
 export type UseTokenParams = {

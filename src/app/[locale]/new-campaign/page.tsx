@@ -25,6 +25,7 @@ import {usePersistState} from '@forest-feed/hooks/usePersistState';
 function NewCampaignPage() {
   const {
     campaignJourney,
+    dispatchSetSubmissionState,
     dispatchApproveGeneralInfo,
     dispatchApprovePledge,
     dispatchSetCurrentStep,
@@ -67,11 +68,15 @@ function NewCampaignPage() {
 
   const handleApproveReview = useCallback(async () => {
     try {
-      await createLensPost();
+      dispatchSetCurrentStep(3);
+      dispatchSetSubmissionState({
+        activeStep: 0,
+        error: false,
+      });
     } catch (e: any) {
       console.log(e, 'error in handle approve review');
     }
-  }, [createLensPost]);
+  }, [dispatchSetCurrentStep, dispatchSetSubmissionState]);
 
   const handleApprovePledge = useCallback(() => {
     dispatchApprovePledge();
@@ -95,13 +100,26 @@ function NewCampaignPage() {
     [campaignJourney.size, campaignJourney.reward, campaignJourney.settings],
   );
 
+  const disabledStepper = useMemo(
+    () =>
+      createPostLoading ||
+      campaignJourney.submissionLoading ||
+      (campaignJourney.currentStep === 3 && campaignJourney.submissionActiveStep > 0),
+    [
+      campaignJourney.currentStep,
+      campaignJourney.submissionActiveStep,
+      campaignJourney.submissionLoading,
+      createPostLoading,
+    ],
+  );
+
   return (
     <AnimatedPage className="h-full">
       <AuthWrapper className="grid grid-cols-6 gap-y-5 md:gap-10 h-full">
         <div className="col-span-6 md:col-span-5">
           <Stepper
             isDependent
-            disabled={createPostLoading}
+            disabled={disabledStepper}
             activeStep={campaignJourney.currentStep}
             setActiveStep={dispatchSetCurrentStep}
             contents={[
@@ -139,7 +157,6 @@ function NewCampaignPage() {
                   <PreviewStep
                     activeProfile={activeProfile}
                     generalInfo={generalInfoState}
-                    loading={createPostLoading}
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
                     onApprove={handleApproveReview}
@@ -149,7 +166,13 @@ function NewCampaignPage() {
                 title: t('review'),
               },
               {
-                content: <SubmissionStatusStep />,
+                content: (
+                  <SubmissionStatusStep
+                    onCreatePost={createLensPost}
+                    createPostLoading={createPostLoading}
+                    activeProfile={activeProfile as ProfileOwnedByMe}
+                  />
+                ),
                 title: t('finalize'),
               },
             ]}

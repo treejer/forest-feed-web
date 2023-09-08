@@ -32,6 +32,8 @@ import {nonceActions, nonceActionTypes} from '@forest-feed/redux/module/nonce/no
 import {signActions, signActionTypes} from '@forest-feed/redux/module/sign/sign';
 import {profileActions} from '@forest-feed/redux/module/profile/profile';
 import {handleSagaFetchError} from '@forest-feed/utils/fetch';
+import {resetCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {resetTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 
 export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['startConfiguration']>) {
   try {
@@ -89,6 +91,8 @@ export function* watchLogoutAccount() {
     yield put(nonceActions.resetCache());
     yield put(signActions.resetCache());
     yield put(profileActions.resetCache());
+    yield put(resetCampaignJourney());
+    yield put(resetTokens());
     yield put(setAccessToken({token: ''}));
   } catch (e: any) {
     console.log(e, 'error in logout account');

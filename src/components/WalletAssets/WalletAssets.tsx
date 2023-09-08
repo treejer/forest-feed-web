@@ -32,7 +32,7 @@ export function WalletAssets(props: WalletAssetsProps) {
       const notEnough = DAI < salePrice;
       setBalanceError(notEnough);
       dispatchSetDisableForm(notEnough);
-      if (DAI < salePrice && !campaignJourney.disableForm) {
+      if (DAI < salePrice && !campaignJourney.disableForm && campaignJourney.submissionActiveStep <= 1) {
         notEnoughBalance(t).catch(e => console.log(e, 'error is here'));
       }
     }

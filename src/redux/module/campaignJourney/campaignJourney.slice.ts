@@ -21,6 +21,9 @@ export type CampaignJourneyState = {
   };
   termsConditionAgreed: boolean;
   currentStep: number;
+  submissionLoading: boolean;
+  submissionError: boolean;
+  submissionActiveStep: number;
 };
 
 export type CampaignJourneyAction = {
@@ -34,6 +37,11 @@ export type CampaignJourneyAction = {
   setDisableForm: boolean;
   setImageBase64: string | null;
   setImageFile: File | null;
+  setSubmissionState: {
+    loading?: boolean;
+    error?: boolean;
+    activeStep?: number;
+  };
 };
 
 export const campaignJourneyInitialState: CampaignJourneyState = {
@@ -52,12 +60,23 @@ export const campaignJourneyInitialState: CampaignJourneyState = {
   },
   termsConditionAgreed: false,
   currentStep: 0,
+  submissionLoading: false,
+  submissionActiveStep: 0,
+  submissionError: false,
 };
 
 export const campaignJourneySlice = createSlice({
   name: 'campaignJourney',
   initialState: campaignJourneyInitialState,
   reducers: {
+    mergeJourneyData: state => {
+      return {
+        ...state,
+        image: null,
+        submissionLoading: false,
+        disableForm: false,
+      };
+    },
     setDisableForm: (state, action: PayloadAction<CampaignJourneyAction['setDisableForm']>) => {
       return {
         ...state,
@@ -83,6 +102,12 @@ export const campaignJourneySlice = createSlice({
       state.termsConditionAgreed = action.payload.termsConditionAgreed;
       state.currentStep = action.payload.silent ? state.currentStep : 1;
     },
+    approveReview: state => {
+      state.submissionLoading = campaignJourneyInitialState.submissionLoading;
+      state.submissionActiveStep = campaignJourneyInitialState.submissionActiveStep;
+      state.submissionError = campaignJourneyInitialState.submissionError;
+      state.currentStep = 3;
+    },
     setCampaignSize: (state, action: PayloadAction<CampaignJourneyAction['setCampaignSize']>) => {
       state.size = action.payload;
     },
@@ -104,6 +129,12 @@ export const campaignJourneySlice = createSlice({
     setOnlyFollowers: state => {
       state.reward.onlyFollowers = !state.reward.onlyFollowers;
     },
+    setSubmissionState: (state, action: PayloadAction<CampaignJourneyAction['setSubmissionState']>) => {
+      state.submissionLoading = action.payload.loading !== undefined ? action.payload.loading : state.submissionLoading;
+      state.submissionError = action.payload.error !== undefined ? action.payload.error : state.submissionError;
+      state.submissionActiveStep =
+        action.payload.activeStep !== undefined ? action.payload.activeStep : state.submissionActiveStep;
+    },
     resetCampaignJourney: () => {
       return campaignJourneyInitialState;
     },
@@ -111,6 +142,7 @@ export const campaignJourneySlice = createSlice({
 });
 
 export const {
+  mergeJourneyData,
   approveGeneralInfo,
   setCurrentStep,
   setCanBeCollectedOnlyFollowers,
@@ -123,6 +155,8 @@ export const {
   setImageFile,
   checkBase64Exist,
   setCampaignSize,
+  setSubmissionState,
+  approveReview,
 } = campaignJourneySlice.actions;
 
 export const useCampaignJourney = () => {
@@ -184,6 +218,26 @@ export const useCampaignJourney = () => {
     [dispatch],
   );
 
+  const dispatchSetSubmissionState = useCallback(
+    (payload: CampaignJourneyAction['setSubmissionState']) => {
+      dispatch(setSubmissionState(payload));
+    },
+    [dispatch],
+  );
+
+  const dispatchApproveReview = useCallback(() => {
+    dispatch(approveReview());
+  }, [dispatch]);
+
+  const dispatchCancelCampaignCreation = useCallback(() => {
+    dispatchSetCurrentStep(0);
+    dispatchSetSubmissionState({
+      error: false,
+      loading: false,
+      activeStep: 0,
+    });
+  }, [dispatchSetCurrentStep, dispatchSetSubmissionState]);
+
   return {
     campaignJourney,
     dispatchApproveGeneralInfo,
@@ -196,6 +250,9 @@ export const useCampaignJourney = () => {
     dispatchResetCampaignJourney,
     dispatchSetDisableForm,
     dispatchSetCampaignSize,
+    dispatchSetSubmissionState,
+    dispatchApproveReview,
+    dispatchCancelCampaignCreation,
   };
 };
 

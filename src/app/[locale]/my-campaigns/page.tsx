@@ -1,6 +1,7 @@
 'use client';
 
-import React, {useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
+
 import {useTranslations} from 'use-intl';
 import {TableOptions} from 'react-table';
 import moment from 'moment';
@@ -10,23 +11,28 @@ import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 
-import {useMyCampaigns} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {Campaign, CampaignStatus} from '@forest-feed/types/campaigns';
-import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {CampaignActivation} from '@forest-feed/components/CampaignActivation/CampaignActivation';
 import {useMediaQuery} from '@forest-feed/hooks/useMediaQuery';
+import {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
+import {useQueryFetch} from '@forest-feed/hooks/useQueryFetch';
 
 function MyCampaigns() {
-  const {myCampaigns, loading, pagination, dispatchFetchMyCampaigns} = useMyCampaigns();
-  const {profile} = useProfile();
+  const {
+    data: myCampaigns,
+    isLoading,
+    page,
+    isFetching,
+    handleSetPage,
+    handleNextPrevPage,
+  } = useQueryFetch<MyCampaignsRes>({
+    queryKey: 'myCampaigns',
+    endpoint: '/campaign/my-campaign',
+  });
 
   const t = useTranslations('myCampaigns');
 
   const matches = useMediaQuery('(max-width: 768px)');
-
-  useEffect(() => {
-    dispatchFetchMyCampaigns();
-  }, [profile]);
 
   const columns: TableOptions<Campaign>['columns'] = useMemo(
     () => [
@@ -95,15 +101,15 @@ function MyCampaigns() {
       <AuthWrapper className="h-full">
         <TableWrapper<Campaign>
           initialState={{sortBy: [{id: 'createdAt', desc: true}]}}
-          data={myCampaigns?.campaignList}
+          data={myCampaigns?.result.campaignList}
           columns={columns}
-          loading={loading}
+          loading={isLoading}
           pagination={{
-            page: pagination.page,
-            loading: pagination.loading,
-            count: pagination.total,
-            loadPage: page => pagination.dispatchSetPage({page}),
-            loadNextPrevPage: count => pagination.dispatchNextPrevPage({count}),
+            page: page,
+            loading: isFetching,
+            count: myCampaigns?.result.count,
+            loadPage: page => handleSetPage(page),
+            loadNextPrevPage: count => handleNextPrevPage(count),
             refetching: false,
           }}
         />

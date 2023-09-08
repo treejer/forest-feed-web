@@ -28,6 +28,9 @@ function MyCampaigns() {
   } = useQueryFetch<MyCampaignsRes>({
     queryKey: 'myCampaigns',
     endpoint: '/campaign/my-campaign',
+    params: {
+      sort: JSON.stringify({createdAt: -1}),
+    },
   });
 
   const t = useTranslations('myCampaigns');

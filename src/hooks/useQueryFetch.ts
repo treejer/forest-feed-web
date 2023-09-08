@@ -19,17 +19,28 @@ export type UseQueryFetchParams<Form = any, Params = any> = {
   params?: Params;
 };
 
-export function queryFn<Data, Form = any, Params = any>(
-  endpoint: string,
-  accessToken: string,
-  baseURL: string,
-  method: Method,
-  page: number,
-  limit: number,
-  data?: Form,
-  params?: Params,
-) {
-  return queryFetch<Data>(endpoint, accessToken, {
+export type QueryFnParams<Form = any, Params = any> = {
+  endpoint: string;
+  accessToken: string;
+  baseURL: string;
+  method: Method;
+  page: number;
+  limit: number;
+  data?: Form;
+  params?: Params;
+};
+
+export function queryFn<Data, Form = any>({
+  endpoint,
+  accessToken,
+  baseURL,
+  method,
+  page,
+  limit,
+  data,
+  params,
+}: QueryFnParams) {
+  return queryFetch<Data, Form>(endpoint, accessToken, {
     baseURL,
     method,
     params: {
@@ -42,7 +53,7 @@ export function queryFn<Data, Form = any, Params = any>(
 }
 
 export function useQueryFetch<Data, Form = any, Params = any>(params: UseQueryFetchParams<Form, Params>) {
-  const {queryKey, limit = paginationPageSize, endpoint, method = 'get'} = params;
+  const {queryKey, limit = paginationPageSize, endpoint, method = 'get', params: fetchParams, data: fetchData} = params;
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -63,7 +74,17 @@ export function useQueryFetch<Data, Form = any, Params = any>(params: UseQueryFe
 
   const {data, ...query} = useQuery<FetchResult<Data>>({
     queryKey: [queryKey, page],
-    queryFn: () => queryFn<Data, Form, Params>(endpoint, accessToken, forestFeedApiUrl, method, page, limit),
+    queryFn: () =>
+      queryFn<Data, Form>({
+        endpoint,
+        accessToken,
+        baseURL: forestFeedApiUrl,
+        method,
+        page,
+        limit,
+        data: fetchData,
+        params: fetchParams,
+      }),
     keepPreviousData: true,
   });
 

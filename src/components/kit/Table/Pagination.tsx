@@ -89,7 +89,7 @@ export function Pagination(props: PaginationProps) {
   }, [count, siblingCount, currentPage]);
 
   const itemClassName =
-    'border rounded-full w-[32px] h-[32px] md:w-[36px] md:h-[36px] border-border flex items-center justify-center mx-2 first:ml-0 last:mr-0 disabled:opacity-50 text-sm md:text-lg';
+    'border rounded-full w-[32px] h-[32px] md:w-[36px] md:h-[36px] border-border flex items-center justify-center mx-2 first:ml-0 last:mr-0 text-sm md:text-lg';
 
   return (
     <div className="flex items-end justify-end mt-5">
@@ -109,7 +109,7 @@ export function Pagination(props: PaginationProps) {
           return (
             <button
               className={`${itemClassName} ${
-                pageNumber === currentPage ? 'bg-green/70 text-white disabled:opacity-100' : ''
+                pageNumber === currentPage ? 'bg-green/70 text-white disabled:opacity-100' : ' disabled:opacity-50'
               }`}
               key={`${pageNumber}-${index}-page`}
               onClick={() => onLoadPage(+pageNumber)}

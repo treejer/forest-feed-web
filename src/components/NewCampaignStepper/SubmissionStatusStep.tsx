@@ -272,21 +272,22 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     [setTitle, setTitleError, submissionActiveStep, submissionError, submissionLoading, t, title, titleError],
   );
 
+  const pageTitle = useMemo(
+    () => (submissionError ? 'oops' : submissionActiveStep === 0 && !submissionLoading ? 'createPost' : 'processing'),
+    [submissionActiveStep, submissionError, submissionLoading],
+  );
+
+  const pageDesc = useMemo(
+    () =>
+      submissionError ? 'failText' : submissionActiveStep === 0 && !submissionLoading ? 'pleaseSubmit' : 'bePatient',
+    [submissionActiveStep, submissionError, submissionLoading],
+  );
+
   return (
     <div>
       <div className="mb-5">
-        <p className="text-lg md:text-xl font-bold">
-          {t(submissionError ? 'oops' : submissionActiveStep === 0 && !submissionLoading ? 'createPost' : 'processing')}
-        </p>
-        <p className={`text-sm font-light ${submissionError ? 'text-red' : 'text-secondary'}`}>
-          {t(
-            submissionError
-              ? 'failText'
-              : submissionActiveStep === 0 && !submissionLoading
-              ? 'pleaseSubmit'
-              : 'bePatient',
-          )}
-        </p>
+        <p className="text-lg md:text-xl font-bold">{t(pageTitle)}</p>
+        <p className={`text-sm font-light ${submissionError ? 'text-red' : 'text-secondary'}`}>{t(pageDesc)}</p>
       </div>
       <div className="flex flex-col md:flex-row md:items-center justify-between">
         <ul>

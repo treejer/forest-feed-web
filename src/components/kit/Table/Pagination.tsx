@@ -108,10 +108,12 @@ export function Pagination(props: PaginationProps) {
 
           return (
             <button
-              className={`${itemClassName} ${pageNumber === currentPage ? 'bg-green/70 text-white' : ''}`}
+              className={`${itemClassName} ${
+                pageNumber === currentPage ? 'bg-green/70 text-white disabled:opacity-100' : ''
+              }`}
               key={`${pageNumber}-${index}-page`}
               onClick={() => onLoadPage(+pageNumber)}
-              disabled={disabled}
+              disabled={disabled || pageNumber === currentPage}
             >
               {pageNumber}
             </button>

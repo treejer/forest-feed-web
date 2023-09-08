@@ -21,9 +21,9 @@ export function UserWallet(props: UserWalletProps) {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleToggleMenu = useCallback(() => {
-    setInHover(prevState => !prevState);
-    dropdownRef?.current?.classList.toggle('dropdown-open');
+  const handleOpenMenu = useCallback(() => {
+    setInHover(true);
+    dropdownRef?.current?.classList.add('dropdown-open');
   }, []);
 
   const handleCloseMenu = useCallback(() => {
@@ -39,8 +39,8 @@ export function UserWallet(props: UserWalletProps) {
     <div className="transition-all flex items-center drop-shadow-lg z-50">
       <div
         ref={dropdownRef}
-        onMouseEnter={handleToggleMenu}
-        onMouseLeave={handleToggleMenu}
+        onMouseEnter={handleOpenMenu}
+        onMouseLeave={handleCloseMenu}
         className="flex items-center py-1 dropdown dropdown-hover dropdown-bottom"
       >
         <div className="bg-primaryBg border-2 w-[150px] h-8 rounded-full border-white flex items-center justify-start pl-3 -mr-8 text-sm font-semibold cursor-pointer">

@@ -57,7 +57,7 @@ export function WalletAssets(props: WalletAssetsProps) {
             <span className="text-sm lg:text-base text-green">{DAI}</span>
           </div>
           <RenderIf condition={balanceError}>
-            <p className="text-red text-[10px]">{t('newCampaign.assets.notEnough')}</p>
+            <p className="text-red text-xs">{t('newCampaign.assets.notEnough')}</p>
           </RenderIf>
         </>
       )}

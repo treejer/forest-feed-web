@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 
 import Image from 'next/image';
 import {useTranslations} from 'use-intl';
-import {ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {MediaSet, ProfileOwnedByMe} from '@lens-protocol/react-web';
 
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {Spacer} from '@forest-feed/components/common/Spacer';
@@ -18,16 +18,13 @@ export function LensterPostView(props: LensterPostViewProps) {
 
   const t = useTranslations();
 
-  console.log(content, 'contect');
-
   const previewImage = useMemo(() => (image ? URL.createObjectURL(image as Blob) : ''), [image]);
 
   return (
     <div className="bg-white shadow p-5 rounded-xl">
       <div className="flex items-center pb-4">
         <img
-          // @ts-ignore
-          src={activeProfile?.picture?.original?.url || '/assets/images/no_picture.webp'}
+          src={(activeProfile?.picture as MediaSet)?.original?.url || '/assets/images/no_picture.webp'}
           alt="profile-picture"
           className="h-10 w-10 rounded-full border border-tGray-200"
         />
@@ -39,7 +36,7 @@ export function LensterPostView(props: LensterPostViewProps) {
               @{activeProfile?.handle}
             </p>
             <div className="w-[3px] h-[3px] rounded-full bg-tGray-500 mx-1.5" />
-            <span className="text-[12px] text-tGray-500">{t('now')}</span>
+            <span className="text-xs text-tGray-500">{t('now')}</span>
           </div>
         </div>
       </div>

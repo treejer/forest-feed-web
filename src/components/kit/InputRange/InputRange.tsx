@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import './InputRange.scss';
 
@@ -17,8 +17,16 @@ export function InputRange(props: InputRangeProps) {
 
   const maxPos = ((value - min) / (max - min)) * 100;
 
+  const handleShow = useCallback(() => {
+    setShow(true);
+  }, []);
+
+  const handleHide = useCallback(() => {
+    setShow(false);
+  }, []);
+
   return (
-    <div onMouseDown={() => setShow(true)} onMouseUp={() => setShow(false)} className="group wrapper transition-all">
+    <div onMouseDown={handleShow} onMouseUp={handleHide} className="group wrapper transition-all">
       <div className="input-wrapper">
         <input className="input" type="range" value={value} min={min} max={max} step={1} onChange={onChange} />
       </div>
@@ -29,8 +37,8 @@ export function InputRange(props: InputRangeProps) {
         </div>
         <div className="control relative" style={{left: `${maxPos}%`}}>
           <div
-            onMouseDown={() => setShow(true)}
-            onMouseUp={() => setShow(false)}
+            onMouseDown={handleShow}
+            onMouseUp={handleHide}
             className={`absolute transition-all duration-75 right-12 -left-[5px] md:-left-[17px] bg-primaryGreen rounded-[5px] bottom-[30px] w-7 md:w-12 opacity-0 group-focus:opacity-100 ${
               show ? 'opacity-100' : ''
             } group-hover:opacity-100 before:content-['']

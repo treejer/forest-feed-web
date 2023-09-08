@@ -30,9 +30,11 @@ module.exports = {
       },
     },
     fontSize: {
+      xs: '10px',
       sm: '13px',
       lg: '16px',
       xl: '18px',
+      '2xl': '23px',
       '4xl': '28px',
     },
     gridTemplateRows: {

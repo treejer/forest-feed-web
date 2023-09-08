@@ -36,7 +36,7 @@ function TableComponent<D extends object>(props: TableProps<D>) {
   );
 
   return (
-    <div>
+    <div className="h-full flex flex-col justify-between">
       <div className="w-full border border-tableBorder rounded-[12px] overflow-x-auto">
         <table {...getTableProps()} className="w-full">
           <thead>
@@ -77,7 +77,7 @@ function TableComponent<D extends object>(props: TableProps<D>) {
                   {row.cells.map(cell => {
                     const {key, ...props} = cell.getCellProps();
                     return (
-                      <td {...props} key={key} className="py-2 md:py-5 px-3 text-center text-[12px] md:text-sm">
+                      <td {...props} key={key} className="py-2 md:py-5 px-3 text-center text-xs md:text-sm">
                         <div className="flex justify-center">{cell.render('Cell')}</div>
                       </td>
                     );

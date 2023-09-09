@@ -1,12 +1,13 @@
 'use client';
 
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useQuery} from '@apollo/client';
 import {ProfileId, ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {useTranslations} from 'use-intl';
+import {BigNumberish} from 'ethers';
 
 import {useRouter} from '@forest-feed/lib/router-events';
 import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
@@ -15,6 +16,7 @@ import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
 import {useCreateCampaign} from '@forest-feed/redux/module/campaign/createCampaign';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {usePersistState} from '@forest-feed/hooks/usePersistState';
+import {useAllowanceDaiInForestFeed} from '@forest-feed/hooks/useAllowanceDaiInForestFeed';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
@@ -42,6 +44,8 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const [title, setTitle] = usePersistState<string>('', storageKeys.CAMPAIGN_TITLE);
   const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
+  const [allowanceChecked, setAllowanceChecked] = useState(false);
+
   const router = useRouter();
 
   const {data: publicationQueryData, refetch} = useQuery(publicationIds, {
@@ -55,10 +59,10 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const {dispatchCreateCampaign} = useCreateCampaign();
 
-  const {contractValue} = useRegularSale();
+  const {contractValue: salePriceBigNum} = useRegularSale();
   const amount = useMemo(
-    () => campaignJourney.size * Number(contractValue?.toString()),
-    [campaignJourney.size, contractValue],
+    () => campaignJourney.size * Number(salePriceBigNum?.toString()),
+    [campaignJourney.size, salePriceBigNum],
   );
 
   const handleErrorInProcess = useCallback(() => {
@@ -82,14 +86,33 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     });
   }, [dispatchSetSubmissionState]);
 
+  const handleSuccessAllowance = useCallback(
+    (_: BigNumberish, value: number) => {
+      setAllowanceChecked(true);
+      if (value >= amount / 1e18) {
+        dispatchSetSubmissionState({
+          activeStep: 2,
+          error: false,
+        });
+      }
+    },
+    [amount, dispatchSetSubmissionState],
+  );
+
   const handleSuccessCreateCampaign = useCallback(() => {
     setTitle('');
     router.push('/my-campaigns');
   }, [router, setTitle]);
 
+  const {allowance} = useAllowanceDaiInForestFeed({
+    onSuccess: handleSuccessAllowance,
+    onError: handleErrorInProcess,
+    enabled: submissionActiveStep === 1,
+  });
+
   const [approveDaiMethod, isApproveReady] = useApproveDai({
     onTxSuccess: handleSuccessApproveDai,
-    enabled: !!contractValue,
+    enabled: !!salePriceBigNum && allowanceChecked,
     onContractWriteError: handleErrorInProcess,
     onPrepareError: handleErrorInProcess,
     amount,
@@ -187,7 +210,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       handleStartCreateCampaign();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submissionActiveStep, isDepositReady, isApproveReady]);
+  }, [submissionActiveStep, isDepositReady, isApproveReady, allowance]);
 
   const handleCancelSubmission = useCallback(() => {
     dispatchCancelCampaignCreation();
@@ -341,6 +364,8 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       <RenderIf condition={!submissionError && submissionActiveStep === 3 && !submissionLoading}>
         <Spacer times={5} />
         <div className="flex justify-end items-center">
+          <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
+          <Spacer />
           <Button
             text={t('submit')}
             loading={submissionLoading}

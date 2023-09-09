@@ -210,7 +210,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       handleStartCreateCampaign();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submissionActiveStep, isDepositReady, isApproveReady, allowance]);
+  }, [submissionActiveStep, isDepositReady, isApproveReady]);
 
   const handleCancelSubmission = useCallback(() => {
     dispatchCancelCampaignCreation();

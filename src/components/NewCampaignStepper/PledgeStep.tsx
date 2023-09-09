@@ -10,12 +10,13 @@ import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
+import {usePersistState} from '@forest-feed/hooks/usePersistState';
+import {storageKeys} from '@forest-feed/config';
 
 export type PledgeStepState = Pick<CampaignJourneyState, 'size' | 'reward' | 'settings'>;
 
 export type PledgeStepProps = {
-  campaignSize: number;
-  setCampaignSize: React.Dispatch<React.SetStateAction<number>>;
+  setCampaignSize: (size: number) => void;
   values: PledgeStepState;
   setCanBeCollected: () => void;
   setCanBeCollectedOnlyFollowers: () => void;
@@ -29,7 +30,6 @@ export type PledgeStepProps = {
 export function PledgeStep(props: PledgeStepProps) {
   const {
     values,
-    campaignSize,
     setCampaignSize,
     activeStep,
     setCanBeCollected,
@@ -40,6 +40,12 @@ export function PledgeStep(props: PledgeStepProps) {
     onProceed,
   } = props;
 
+  const [size, setSize, debouncedSize] = usePersistState<number>(values?.size || 1, storageKeys.CAMPAIGN_SIZE, 100);
+
+  useEffect(() => {
+    setCampaignSize(debouncedSize);
+  }, [debouncedSize]);
+
   const {
     tokens: {DAI, loading: tokensLoading},
   } = useTokens({didMount: false});
@@ -49,9 +55,9 @@ export function PledgeStep(props: PledgeStepProps) {
 
   const handleChangeCampaignSize = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      setCampaignSize(+e.target.value);
+      setSize(+e.target.value);
     },
-    [setCampaignSize],
+    [setSize],
   );
 
   const handleChangeMinFollowers = useCallback(
@@ -79,7 +85,7 @@ export function PledgeStep(props: PledgeStepProps) {
   }, [DAI, salePrice]);
 
   useEffect(() => {
-    if (campaignSize > max) {
+    if (size > max) {
       setCampaignSize(1);
     }
   }, [max]);
@@ -88,7 +94,7 @@ export function PledgeStep(props: PledgeStepProps) {
     <div>
       <p className="text-lg md:text-xl font-extrabold">{t('newCampaign.campaignSize')}</p>
       <p className="text-sm text-secondary">{t('newCampaign.howManyWantsToPlant')}</p>
-      <InputRange value={campaignSize} onChange={handleChangeCampaignSize} max={tokensLoading ? 100 : max} />
+      <InputRange value={size} onChange={handleChangeCampaignSize} max={tokensLoading ? 100 : max} />
       <div className="flex items-start justify-between">
         <span className="text-sm text-secondary">
           {t('countTrees', {

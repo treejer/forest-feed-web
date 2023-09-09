@@ -12,9 +12,9 @@ import {
 } from '@forest-feed/webServices/campaign/createCampaign';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {selectCreateCampaign} from '@forest-feed/redux/selectors';
-import {myCampaignsActions, myCampaignsActionTypes} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {resetCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {showSagaToast, ToastType} from '@forest-feed/utils/showToast';
+import {storageKeys} from '@forest-feed/config';
 
 const CreateCampaign = new ReduxFetchState<CreateCampaignRes, CreateCampaignPayload, string>('createCampaign');
 
@@ -37,9 +37,8 @@ export function* watchCreateCampaign({payload}: CreateCampaignAction) {
       type: ToastType.success,
       translate: true,
     });
-    yield put(myCampaignsActions.load());
-    yield take([myCampaignsActionTypes.loadSuccess, myCampaignsActionTypes.loadFailure]);
     yield put(resetCampaignJourney());
+    window.localStorage.removeItem(storageKeys.CAMPAIGN_SIZE);
     onSuccess?.();
     yield put(CreateCampaign.actions.loadSuccess(res.result));
   } catch (e: any) {

@@ -8,6 +8,7 @@ import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {useTranslations} from 'use-intl';
 import {BigNumberish} from 'ethers';
+import moment from 'moment';
 
 import {useRouter} from '@forest-feed/lib/router-events';
 import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
@@ -23,6 +24,7 @@ import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
+import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTimer';
 import {storageKeys} from '@forest-feed/config';
 import {colors} from 'colors';
 
@@ -45,6 +47,8 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
   const [allowanceChecked, setAllowanceChecked] = useState(false);
+
+  const [delay, setDelay] = usePersistState(true, storageKeys.CAMPAIGN_DELAY);
 
   const router = useRouter();
 
@@ -101,10 +105,12 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const handleSuccessCreateCampaign = useCallback(() => {
     setTitle('');
+    setDelay(true);
+    setTitleError(false);
     router.push('/my-campaigns');
-  }, [router, setTitle]);
+  }, [router, setDelay, setTitle, setTitleError]);
 
-  const {allowance} = useAllowanceDaiInForestFeed({
+  useAllowanceDaiInForestFeed({
     onSuccess: handleSuccessAllowance,
     onError: handleErrorInProcess,
     enabled: submissionActiveStep === 1,
@@ -296,6 +302,16 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     [setTitle, setTitleError, submissionActiveStep, submissionError, submissionLoading, t, title, titleError],
   );
 
+  const submitTitleButton = useCallback(
+    () =>
+      delay ? (
+        <CountDownTimer deadline={moment().add(31, 'seconds').toString()} onEndTime={() => setDelay(false)} />
+      ) : (
+        t('submit')
+      ),
+    [delay, t, setDelay],
+  );
+
   const pageTitle = useMemo(
     () => (submissionError ? 'oops' : submissionActiveStep === 0 && !submissionLoading ? 'createPost' : 'processing'),
     [submissionActiveStep, submissionError, submissionLoading],
@@ -367,9 +383,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
           <Spacer />
           <Button
-            text={t('submit')}
+            text={submitTitleButton()}
             loading={submissionLoading}
-            disabled={submissionLoading}
+            disabled={submissionLoading || delay}
             onClick={handleConfirmTitle}
             variant={ButtonVariant.secondary}
           />

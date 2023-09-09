@@ -2,10 +2,14 @@ import React, {useEffect, useState} from 'react';
 
 import {useDebounce} from '@forest-feed/hooks/useDebounce';
 
-export function usePersistState<T>(value: T, key: string): [T, React.Dispatch<React.SetStateAction<T>>, T] {
+export function usePersistState<T>(
+  value: T,
+  key: string,
+  debounceTimer?: number,
+): [T, React.Dispatch<React.SetStateAction<T>>, T] {
   const [state, setState] = useState<T>(value);
 
-  const debouncedState = useDebounce(state);
+  const debouncedState = useDebounce(state, debounceTimer);
 
   useEffect(() => {
     if (window !== undefined) {

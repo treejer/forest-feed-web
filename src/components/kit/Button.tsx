@@ -14,7 +14,7 @@ export enum ButtonVariant {
 
 export type ButtonProps = {
   icon?: React.ReactNode;
-  text: string;
+  text: React.ReactNode | string;
   className?: string;
   variant?: ButtonVariant;
   onClick?: () => void;

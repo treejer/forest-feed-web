@@ -6,15 +6,18 @@ import {useTranslations} from 'use-intl';
 import {usePathname} from 'next-intl/client';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
+import {PlusIcon, TableIcon} from '@heroicons/react/solid';
 
-const links = [
+export const links = [
   {
     href: `/new-campaign`,
     name: 'newCampaign',
+    icon: <PlusIcon className="w-8 h-8" />,
   },
   {
     href: `/my-campaigns`,
     name: 'myCampaigns',
+    icon: <TableIcon className="w-8 h-8" />,
   },
 ];
 

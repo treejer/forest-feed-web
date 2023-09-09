@@ -47,6 +47,26 @@ export function fetch<Data, Form = any>(
   });
 }
 
+export function queryFetch<Data, Form = any>(url: string, accessToken: string, options: AxiosRequestConfig<Form> = {}) {
+  options = {
+    ...options,
+    baseURL: options.baseURL,
+  };
+
+  if (accessToken) {
+    options = {
+      ...options,
+      headers: {
+        ...(options.headers || {}),
+        Authorization: `Bearer ${accessToken}`,
+        Accept: 'application/json',
+      },
+    };
+  }
+
+  return fetch<Data, Form>(url, options);
+}
+
 export function* sagaFetch<Data, Form = any>(url: string, options: AxiosRequestConfig<Form> = {}) {
   const {forestFeedApiUrl}: NetworkConfig = yield select(selectConfig);
   const accessToken = yield select(selectAccessToken);

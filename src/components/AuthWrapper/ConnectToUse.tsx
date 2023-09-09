@@ -24,7 +24,7 @@ export function ConnectToUse() {
 
   return (
     <div className="col-span-full w-full h-full flex flex-col items-center">
-      <Image src="/assets/images/trees.svg" alt="trees" width={300} height={300} draggable={false} />
+      <Image className="-z-10" src="/assets/images/trees.svg" alt="trees" width={300} height={300} draggable={false} />
       <p className="my-4 text-secondary drop-shadow max-w-2xl text-center">{t('connectToUse.text')}</p>
       {address && status === 'connected' ? (
         <>

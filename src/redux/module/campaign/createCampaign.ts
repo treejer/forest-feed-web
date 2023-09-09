@@ -1,7 +1,7 @@
 import {useCallback} from 'react';
 
 import ReduxFetchState from 'redux-fetch-state';
-import {put, takeEvery} from 'redux-saga/effects';
+import {put, take, takeEvery} from 'redux-saga/effects';
 
 import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@forest-feed/utils/fetch';
 import {
@@ -12,6 +12,9 @@ import {
 } from '@forest-feed/webServices/campaign/createCampaign';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {selectCreateCampaign} from '@forest-feed/redux/selectors';
+import {myCampaignsActions, myCampaignsActionTypes} from '@forest-feed/redux/module/campaign/myCampaigns';
+import {resetCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {showSagaToast, ToastType} from '@forest-feed/utils/showToast';
 
 const CreateCampaign = new ReduxFetchState<CreateCampaignRes, CreateCampaignPayload, string>('createCampaign');
 
@@ -28,8 +31,17 @@ export function* watchCreateCampaign({payload}: CreateCampaignAction) {
         publicationId,
       },
     });
-    yield put(CreateCampaign.actions.loadSuccess(res.result));
+    yield showSagaToast({
+      title: 'newCampaign.goodJob',
+      message: 'newCampaign.succeed',
+      type: ToastType.success,
+      translate: true,
+    });
+    yield put(myCampaignsActions.load());
+    yield take([myCampaignsActionTypes.loadSuccess, myCampaignsActionTypes.loadFailure]);
+    yield put(resetCampaignJourney());
     onSuccess?.();
+    yield put(CreateCampaign.actions.loadSuccess(res.result));
   } catch (e: any) {
     console.log(e, 'error in create campaign module');
     const {message} = handleFetchError(e);

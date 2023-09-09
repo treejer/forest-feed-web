@@ -23,7 +23,10 @@
   "trees": "Trees",
   "countTrees": "{count} Trees",
   "cost": "Cost",
-  "dollarSign": "{value}$",
+  "dollarSign": "{value} DAI",
+  "now": "now",
+  "impact": "Impactful Post",
+  "impactMirror": "Mirror this post and plant one tree via <forest> Forest Feed</forest>",
   "languages": {
     "en": "EN",
     "fa": "FA",
@@ -40,6 +43,8 @@
       "review": "Review",
       "finalize": "Finalize"
     },
+    "submit": "Submit",
+    "proceed": "Proceed",
     "campaignSize": "Campaign Size",
     "howManyWantsToPlant": "How many trees do you want to plant?",
     "postSettings": "Post Settings",
@@ -59,9 +64,12 @@
     },
     "assets": {
       "title": "Wallet Assets",
-      "dai": "DAI"
+      "dai": "DAI",
+      "notEnough": "Top up your DAI balance"
     },
     "processing": "Processing...",
+    "createPost": "Create Post",
+    "pleaseSubmit": "Please submit to create you post on lens protocol",
     "oops": "Oops!",
     "failText": "Something went wrong! Please try again...",
     "bePatient": "Please hold while we're processing your campaign creation.",
@@ -89,7 +97,10 @@
     "goal": "Goal",
     "reposts": "Reposts",
     "creationDate": "Creation Date",
-    "title": "Title"
+    "title": "Title",
+    "generality": "Generality",
+    "public": "Public",
+    "followersOnly": "Followers only"
   },
   "privacyPolicy": {
     "agreeAppTermsConditions": "I agree to the terms and conditions."
@@ -126,5 +137,10 @@
     "connected": "Wallet successfully connected.",
     "lensLoggedIn": "Lens logged in."
   },
-  "emptyTable": "Your {value} list is empty."
+  "emptyTable": "Your {value} list is empty.",
+  "sweetalert": {
+    "notEnoughBalance": {
+      "title": "Your DAI balance isn't enough to create a campaign."
+    }
+  }
 }

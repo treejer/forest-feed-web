@@ -92,7 +92,7 @@ export function FormController(props: FormControllerProps) {
               preview={props.preview}
               onChange={e => handleChange(e, {field, fieldState})}
               onDrop={e => props.onDrop?.(e, {field, fieldState})}
-              onDetach={() => props?.resetField?.(field.name)}
+              onDetach={() => props?.resetField?.(field.name, {defaultValue: null})}
               onBlur={() => handleBlur({field, fieldState})}
               disabled={disabled}
             />
@@ -117,7 +117,7 @@ export function FormController(props: FormControllerProps) {
   return (
     <div>
       <RenderIf condition={!hideLabel}>
-        <label htmlFor={name} className="text-xl font-bold">
+        <label htmlFor={name} className="text-lg md:text-xl font-bold">
           {label}
         </label>
       </RenderIf>

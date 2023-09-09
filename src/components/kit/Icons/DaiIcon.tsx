@@ -1,3 +1,3 @@
 export function DaiIcon() {
-  return <img src="/assets/images/daiToken.svg" alt="Dai" width={30} height={30} />;
+  return <img className="w-[20px] h-[20px] lg:w-[30px] lg:h-[30px]" src="/assets/images/daiToken.svg" alt="Dai" />;
 }

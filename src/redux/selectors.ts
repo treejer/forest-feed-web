@@ -13,3 +13,4 @@ export const selectNonce = (state: AppState) => state.nonce;
 export const selectSign = (state: AppState) => state.sign;
 export const selectMyCampaign = (state: AppState) => state.myCampaigns;
 export const selectCreateCampaign = (state: AppState) => state.createCampaign;
+export const selectTokens = (state: AppState) => state.tokens;

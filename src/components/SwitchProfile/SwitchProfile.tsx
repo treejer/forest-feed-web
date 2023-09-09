@@ -45,7 +45,7 @@ export function SwitchProfile() {
   );
 
   return profilesLoading ? (
-    <SkeletonBox width={160} />
+    <SkeletonBox width="100%" height={36} />
   ) : profilesList?.length ? (
     <DropDown
       selected={currentProfile!}
@@ -54,7 +54,7 @@ export function SwitchProfile() {
       bgColor={Color.primaryBg}
       activeColor={Color.green}
       shadow={false}
-      width="40"
+      className="w-full"
     />
   ) : null;
 }

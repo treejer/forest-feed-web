@@ -2,6 +2,7 @@ import createSagaMiddleware, {Task} from 'redux-saga';
 import {createWrapper} from 'next-redux-wrapper';
 import {configureStore, PreloadedState, Store, Middleware} from '@reduxjs/toolkit';
 import {persistReducer, persistStore} from 'redux-persist';
+import {createBlacklistFilter} from 'redux-persist-transform-filter';
 import logger from 'redux-logger';
 
 import {combinedReducers, reducer} from '@forest-feed/redux/reducer';
@@ -19,10 +20,17 @@ export type AppStore = ReturnType<typeof makeStore>['store'];
 export type AppState = ReturnType<typeof combinedReducers>;
 export type AppDispatch = AppStore['dispatch'];
 
+const saveSubsetBlacklistFilter = createBlacklistFilter('campaignJourney', [
+  'image',
+  'disableForm',
+  'submissionLoading',
+]);
+
 const persistConfig = {
   key: 'forestFeedPersist',
   storage,
-  whitelist: ['web3', 'appInfo', 'profile'],
+  whitelist: ['web3', 'appInfo', 'profile', 'campaignJourney'],
+  transforms: [saveSubsetBlacklistFilter],
 };
 
 const persistedReducer = persistReducer(persistConfig, (state: any, action: {type: string; payload: any}) => {

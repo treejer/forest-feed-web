@@ -109,7 +109,7 @@ export function Uploader(props: UploaderProps) {
           <RenderIf condition={!preview}>
             <AttachIcon color={colors.primaryGreen} />
           </RenderIf>
-          <p className="text-secondary text-lg font-medium ml-1">
+          <p className="text-secondary md:text-lg font-medium ml-1 text-sm">
             <span className="text-primaryGreen">
               {t(preview ? 'attachedPhoto' : previewFile ? 'changePhoto' : 'addPhoto')}
             </span>{' '}

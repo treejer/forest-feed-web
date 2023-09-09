@@ -148,11 +148,12 @@ export function useWeb3() {
   }, [dispatch]);
 
   const dispatchLogoutForest = useCallback(() => {
-    dispatchRemoveAccessToken();
-    dispatch(profileActions.resetCache());
-    dispatch(nonceActions.resetCache());
-    dispatch(signActions.resetCache());
-  }, [dispatchRemoveAccessToken, dispatch]);
+    // dispatchRemoveAccessToken();
+    // dispatch(profileActions.resetCache());
+    // dispatch(nonceActions.resetCache());
+    // dispatch(signActions.resetCache());
+    dispatch(logoutAccount());
+  }, [dispatch]);
 
   const dispatchSignWithForest = useCallback(() => {
     dispatch(loginAccount());

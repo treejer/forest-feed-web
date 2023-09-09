@@ -9,6 +9,8 @@ import {profileSagas} from '@forest-feed/redux/module/profile/profile';
 import {paginationSagas} from '@forest-feed/redux/module/pagination/pagination.saga';
 import {myCampaignsSagas} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {createCampaignSagas} from '@forest-feed/redux/module/campaign/createCampaign';
+import {tokensSagas} from '@forest-feed/redux/module/tokens/tokens.saga';
+import {campaignJourneySagas} from '@forest-feed/redux/module/campaignJourney/campaignJourney.saga';
 
 export function* rootSaga(store: SagaStore) {
   yield all([
@@ -20,5 +22,7 @@ export function* rootSaga(store: SagaStore) {
     paginationSagas(),
     myCampaignsSagas(),
     createCampaignSagas(),
+    tokensSagas(),
+    campaignJourneySagas(),
   ]);
 }

@@ -35,7 +35,7 @@ export function useProfile() {
 
   const {disconnectAsync} = useDisconnect();
   const {handleLensLogout} = useAuthLens();
-  const {dispatchRemoveAccessToken} = useWeb3();
+  const {dispatchLogoutForest} = useWeb3();
 
   const dispatchProfile = useCallback(() => {
     dispatch(Profile.actions.load());
@@ -48,9 +48,8 @@ export function useProfile() {
   const dispatchLogoutAccount = useCallback(async () => {
     await handleLensLogout();
     await disconnectAsync();
-    dispatchResetProfile();
-    dispatchRemoveAccessToken();
-  }, [handleLensLogout, disconnectAsync, dispatchResetProfile, dispatchRemoveAccessToken]);
+    dispatchLogoutForest();
+  }, [handleLensLogout, disconnectAsync, dispatchLogoutForest]);
 
   return {
     profile,

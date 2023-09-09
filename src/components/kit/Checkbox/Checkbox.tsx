@@ -16,7 +16,7 @@ export function Checkbox(props: CheckBoxProps) {
 
   return (
     <label className="container-checkbox">
-      <span className="text-lg">{text}</span>
+      <span className="text-sm md:text-lg">{text}</span>
       <input type="checkbox" checked={checked} onChange={onChange} onBlur={onBlur} disabled={disabled} />
       <span className="checkmark"></span>
     </label>

@@ -6,7 +6,7 @@ import {validator} from '@forest-feed/validators/yup';
 
 export type GeneralInfoForm = {
   content: string;
-  image: Yup.MixedSchema;
+  image: Yup.MixedSchema | null;
   termsConditionAgreed: boolean;
 };
 

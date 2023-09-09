@@ -16,7 +16,7 @@
 
 @layer components {
     .counter-btn {
-        @apply border rounded-lg w-[48px] h-[48px] flex items-center justify-center;
+        @apply border rounded-lg w-[32px] h-[32px] md:w-[48px] md:h-[48px] flex items-center justify-center;
     }
     .counter-icon {
         @apply border rounded-full w-[16px] h-[16px] border-primary flex items-center justify-center text-primary;

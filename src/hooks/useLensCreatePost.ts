@@ -41,13 +41,17 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
   const {publisher} = props;
 
   const config = useConfig();
-  const {campaignJourney, dispatchSetCurrentStep} = useCampaignJourney();
+  const {campaignJourney, dispatchSetSubmissionState} = useCampaignJourney();
 
   const {execute: create, ...createPostState} = useCreatePost({publisher, upload: uploadLens(config)});
   const [loading, setLoading] = useState(false);
 
   const createLensPost = useCallback(async () => {
     setLoading(true);
+    dispatchSetSubmissionState({
+      loading: true,
+      error: false,
+    });
     try {
       const {content, image, settings, reward, size} = campaignJourney;
 
@@ -129,13 +133,21 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
           translate: true,
           type: ToastType.success,
         });
-        dispatchSetCurrentStep(3);
+        dispatchSetSubmissionState({
+          activeStep: 1,
+          error: false,
+        });
       }
       if (result.isFailure()) {
         showToast({
           message: 'lens.postFailure',
           translate: true,
           type: ToastType.error,
+        });
+        dispatchSetSubmissionState({
+          loading: false,
+          activeStep: 0,
+          error: true,
         });
       }
     } catch (e: any) {
@@ -144,7 +156,7 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
       console.log('create post finally');
       setLoading(false);
     }
-  }, [campaignJourney, create, config.ipfsPostURL, config.ipfsGetURL, dispatchSetCurrentStep]);
+  }, [campaignJourney, config.ipfsPostURL, config.ipfsGetURL, create, dispatchSetSubmissionState]);
 
   return {
     ...createPostState,

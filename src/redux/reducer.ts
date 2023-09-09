@@ -5,6 +5,7 @@ import campaignJourneyReducer from '@forest-feed/redux/module/campaignJourney/ca
 import web3Reducer from '@forest-feed/redux/module/web3/web3.slice';
 import initReducer from '@forest-feed/redux/module/init/init.slice';
 import appInfoReducer from '@forest-feed/redux/module/appInfo/appInfo.slice';
+import tokensReducer from '@forest-feed/redux/module/tokens/tokens.slice';
 import {nonceReducer} from '@forest-feed/redux/module/nonce/nonce';
 import {signReducer} from '@forest-feed/redux/module/sign/sign';
 import {profileReducer} from '@forest-feed/redux/module/profile/profile';
@@ -23,6 +24,7 @@ export const combinedReducers = combineReducers({
   pagination: paginationReducer,
   myCampaigns: myCampaignsReducer,
   createCampaign: createCampaignReducer,
+  tokens: tokensReducer,
 });
 
 export const reducer = (state: any, action: any) => {

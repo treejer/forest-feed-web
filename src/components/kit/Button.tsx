@@ -30,15 +30,15 @@ type VariantClassNames = {
 
 const classNames: (autoSize: boolean) => VariantClassNames = autoSize => ({
   [ButtonVariant.primary]: `${
-    autoSize ? 'h-14 w-[144px]' : ''
+    autoSize ? 'h-10 w-[104px] lg:h-14 lg:w-[144px]' : ''
   } bg-white border-primary border-2 text-lg font-medium disabled:bg-white/60`,
   [ButtonVariant.secondary]: `${
-    autoSize ? 'h-14 w-[160px]' : ''
+    autoSize ? 'h-10 w-[104px] lg:h-14 lg:w-[160px]' : ''
   } bg-primaryGreen text-white text-lg font-medium disabled:bg-primaryGreen/60`,
   [ButtonVariant.menu]: `${
-    autoSize ? 'h-[48px] w-[100%]' : ''
+    autoSize ? 'h-10 w-[104px] lg:h-[48px] lg:w-[100%]' : ''
   } bg-activeGray border-activeGray border-2 text-sm font-normal disabled:bg-activeGray/60`,
-  [ButtonVariant.text]: `${autoSize ? 'w-[100%] h-14' : ''} text-sm disabled:bg-opacity/50`,
+  [ButtonVariant.text]: `${autoSize ? 'w-[100%] h-10 lg:h-14' : ''} text-sm disabled:bg-opacity/50`,
 });
 
 export function Button(props: ButtonProps) {
@@ -56,7 +56,7 @@ export function Button(props: ButtonProps) {
 
   return (
     <button
-      className={`rounded-[8px] flex items-center justify-center hover:shadow-lg transition-all ${
+      className={`rounded-[8px] flex items-center justify-center hover:shadow-lg transition-all text-sm md:text-base ${
         classNames(autoSize)[variant]
       } ${className}`}
       disabled={disabled}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useCallback, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 
 import {useTranslations} from 'use-intl';
 import {motion} from 'framer-motion';
@@ -9,16 +9,24 @@ import {ProfileOwnedByMe, useActiveProfile} from '@lens-protocol/react-web';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
 import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
-import {GeneralInfoStep, GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
-import {PledgeStep, PledgeStepState} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
+import {PledgeStep} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
+import {
+  CampaignJourneyAction,
+  useCampaignJourney,
+} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
 import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
 import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
+import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
+import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+import {usePersistState} from '@forest-feed/hooks/usePersistState';
+import {storageKeys} from '@forest-feed/config';
 
 function NewCampaignPage() {
   const {
     campaignJourney,
+    dispatchSetSubmissionState,
     dispatchApproveGeneralInfo,
     dispatchApprovePledge,
     dispatchSetCurrentStep,
@@ -26,9 +34,17 @@ function NewCampaignPage() {
     dispatchSetOnlyFollowers,
     dispatchSetCanBeCollectedOnlyFollowers,
     dispatchSetCanBeCollected,
+    dispatchSetCampaignSize,
   } = useCampaignJourney();
 
-  const [campaignSize, setCampaignSize] = useState<number>(campaignJourney?.size || 1);
+  const [campaignSize, setCampaignSize, debouncedCampaignSize] = usePersistState<number>(
+    campaignJourney?.size || 1,
+    storageKeys.CAMPAIGN_SIZE,
+  );
+
+  useEffect(() => {
+    dispatchSetCampaignSize(debouncedCampaignSize);
+  }, [debouncedCampaignSize]);
 
   const {data: activeProfile} = useActiveProfile();
 
@@ -38,8 +54,14 @@ function NewCampaignPage() {
 
   const t = useTranslations('newCampaign.stepper');
 
+  const {
+    tokens: {loading: tokensLoading},
+  } = useTokens({
+    didMount: false,
+  });
+
   const handleApproveGeneralInfo = useCallback(
-    (generalInfo: GeneralInfoStepState) => {
+    (generalInfo: CampaignJourneyAction['approveGeneralInfo']) => {
       dispatchApproveGeneralInfo(generalInfo);
     },
     [dispatchApproveGeneralInfo],
@@ -47,18 +69,19 @@ function NewCampaignPage() {
 
   const handleApproveReview = useCallback(async () => {
     try {
-      await createLensPost();
+      dispatchSetCurrentStep(3);
+      dispatchSetSubmissionState({
+        activeStep: 0,
+        error: false,
+      });
     } catch (e: any) {
       console.log(e, 'error in handle approve review');
     }
-  }, [dispatchSetCurrentStep, createLensPost]);
+  }, [dispatchSetCurrentStep, dispatchSetSubmissionState]);
 
-  const handleApprovePledge = useCallback(
-    (pledgeState: PledgeStepState) => {
-      dispatchApprovePledge(pledgeState);
-    },
-    [dispatchApprovePledge],
-  );
+  const handleApprovePledge = useCallback(() => {
+    dispatchApprovePledge();
+  }, [dispatchApprovePledge]);
 
   const generalInfoState = useMemo(
     () => ({
@@ -78,13 +101,26 @@ function NewCampaignPage() {
     [campaignJourney.size, campaignJourney.reward, campaignJourney.settings],
   );
 
+  const disabledStepper = useMemo(
+    () =>
+      createPostLoading ||
+      campaignJourney.submissionLoading ||
+      (campaignJourney.currentStep === 3 && campaignJourney.submissionActiveStep > 0),
+    [
+      campaignJourney.currentStep,
+      campaignJourney.submissionActiveStep,
+      campaignJourney.submissionLoading,
+      createPostLoading,
+    ],
+  );
+
   return (
     <AnimatedPage className="h-full">
-      <AuthWrapper className="grid grid-cols-6 gap-10 h-full">
-        <div className="col-span-5">
+      <AuthWrapper className="grid grid-cols-6 gap-y-5 md:gap-10 h-full">
+        <div className="col-span-6 md:col-span-5">
           <Stepper
             isDependent
-            disabled={createPostLoading}
+            disabled={disabledStepper}
             activeStep={campaignJourney.currentStep}
             setActiveStep={dispatchSetCurrentStep}
             contents={[
@@ -96,7 +132,6 @@ function NewCampaignPage() {
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
                     onProceed={handleApproveGeneralInfo}
-                    key="general-info-form"
                   />
                 ),
                 title: t('generalInfo'),
@@ -120,20 +155,25 @@ function NewCampaignPage() {
               },
               {
                 content: (
-                  <GeneralInfoStep
-                    defaultValues={generalInfoState}
-                    isConfirm
-                    loading={createPostLoading}
+                  <PreviewStep
+                    activeProfile={activeProfile}
+                    generalInfo={generalInfoState}
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
-                    onProceed={handleApproveReview}
-                    key="general-info-preview"
+                    onApprove={handleApproveReview}
+                    disabled={tokensLoading || campaignJourney.disableForm}
                   />
                 ),
                 title: t('review'),
               },
               {
-                content: <SubmissionStatusStep />,
+                content: (
+                  <SubmissionStatusStep
+                    onCreatePost={createLensPost}
+                    createPostLoading={createPostLoading}
+                    activeProfile={activeProfile as ProfileOwnedByMe}
+                  />
+                ),
                 title: t('finalize'),
               },
             ]}
@@ -144,7 +184,7 @@ function NewCampaignPage() {
           animate={{x: 0, opacity: 1}}
           exit={{x: 100, opacity: 0}}
           transition={{duration: 0.5}}
-          className="col-span-1"
+          className="row-start-1 md:row-auto col-span-6 md:col-span-1"
         >
           <TreeCost treeCount={campaignSize} />
         </motion.div>

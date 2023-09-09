@@ -25,13 +25,13 @@ export type DropDownProps = {
   disabled?: boolean;
   bgColor?: Color;
   shadow?: boolean;
-  width?: string;
+  className?: string;
 };
 
 const possibleColors = Object.keys(colors);
 
 export function DropDown(props: DropDownProps) {
-  const {selected, items, hideText, color, activeColor, disabled, bgColor = Color.white, width, onChange} = props;
+  const {selected, items, hideText, color, activeColor, disabled, bgColor = Color.white, className, onChange} = props;
 
   const [open, setOpen] = useState(false);
 
@@ -58,11 +58,11 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div className="transition-all">
-      <div ref={dropdownRef} style={{minWidth: width ? +width * 4 : 'auto'}} className="dropdown dropdown-end">
+      <div ref={dropdownRef} className={`dropdown dropdown-end ${className}`}>
         <button
           tabIndex={0}
           onClick={() => handleClick()}
-          className={`bg-${bgColor} p-2 shadow-lg rounded-[5px] flex items-center justify-between disabled:opacity-50 w-full`}
+          className={`bg-${bgColor} p-2 shadow-lg rounded-[5px] flex items-center justify-between disabled:opacity-50 ${className}`}
           disabled={disabled}
         >
           <div className="flex items-center">
@@ -71,7 +71,7 @@ export function DropDown(props: DropDownProps) {
               <Spacer />
             </RenderIf>
             <RenderIf condition={!hideText}>
-              <span className={`text-${activeColor}`}>{selected.text}</span>
+              <span className={`text-${activeColor} text-sm`}>{selected.text}</span>
             </RenderIf>
           </div>
           <Spacer />

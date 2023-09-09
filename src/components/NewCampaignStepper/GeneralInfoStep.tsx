@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import {useTranslations} from 'use-intl';
 import {useForm} from 'react-hook-form';
@@ -6,9 +6,13 @@ import {useForm} from 'react-hook-form';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {
+  CampaignJourneyAction,
+  CampaignJourneyState,
+} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {FormController} from '@forest-feed/components/FormController/FormController';
 import {GeneralInfoForm, generalInfoYup} from '@forest-feed/validators/generalInfo';
+import {useDebounce} from '@forest-feed/hooks/useDebounce';
 
 export type GeneralInfoStepState = Pick<CampaignJourneyState, 'content' | 'image' | 'termsConditionAgreed'>;
 
@@ -17,16 +21,16 @@ export type GeneralInfoStepProps = {
   activeStep: number;
   setActiveStep: (step: number) => void;
   isConfirm: boolean;
-  onProceed: (generalInfo: GeneralInfoStepState) => void;
+  onProceed: (generalInfo: CampaignJourneyAction['approveGeneralInfo']) => void;
   loading?: boolean;
 };
 
 export function GeneralInfoStep(props: GeneralInfoStepProps) {
   const {defaultValues, isConfirm, activeStep, setActiveStep, onProceed, loading} = props;
 
-  const {control, resetField, setValue, handleSubmit, formState} = useForm<GeneralInfoForm>({
+  const {control, resetField, setValue, watch, handleSubmit, formState} = useForm<GeneralInfoForm>({
     defaultValues: {
-      image: defaultValues?.image ? [defaultValues.image] : undefined,
+      image: defaultValues?.image ? [defaultValues.image] : null,
       content: defaultValues?.content || '',
       termsConditionAgreed: defaultValues?.termsConditionAgreed || false,
     },
@@ -34,6 +38,26 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
     reValidateMode: 'onChange',
     resolver: generalInfoYup,
   });
+
+  const {content, image, termsConditionAgreed} = watch();
+  const debouncedContent = useDebounce(content);
+  const debouncedImage = useDebounce(image);
+  const debouncedTermsCondition = useDebounce(termsConditionAgreed);
+
+  useEffect(() => {
+    onProceed({
+      content: debouncedContent,
+      image: debouncedImage?.[0],
+      termsConditionAgreed: debouncedTermsCondition,
+      silent: true,
+    });
+  }, [debouncedContent, debouncedImage, debouncedTermsCondition]);
+
+  useEffect(() => {
+    if (defaultValues?.image) {
+      setValue('image', [defaultValues.image] as any);
+    }
+  }, [defaultValues?.image]);
 
   const t = useTranslations();
 
@@ -71,6 +95,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
         content,
         image: image?.[0],
         termsConditionAgreed,
+        silent: false,
       });
     },
     [onProceed],
@@ -98,7 +123,12 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
           resetField={resetField}
           disabled={isConfirm}
         />
-        <Spacer times={4} />
+        <div className="hidden md:block">
+          <Spacer times={4} />
+        </div>
+        <div className="block md:hidden">
+          <Spacer times={2} />
+        </div>
       </RenderIf>
       <FormController
         control={control}
@@ -108,7 +138,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
         disabled={isConfirm}
         hideLabel
       />
-      <Spacer times={10} />
+      <Spacer times={5} />
       <div className="flex items-end justify-end">
         <Button text={t(isConfirm ? 'back' : 'learnMore')} disabled={loading} onClick={handleLearnMore} />
         <Spacer />

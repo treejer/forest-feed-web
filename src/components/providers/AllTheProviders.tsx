@@ -10,6 +10,9 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import {ToastContainer} from 'react-toastify';
 
+import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+
 import {Locale} from '@forest-feed/languages';
 import {appInfo, chains, forestFeedTheme, wagmiConfig} from '@forest-feed/connectWallet';
 import {ApolloProvider} from '@forest-feed/components/providers/Apollo';
@@ -20,6 +23,8 @@ export type AllTheProvidersProps = React.PropsWithChildren<{
   locale: Locale;
   messages: AbstractIntlMessages;
 }>;
+
+export const reactQueryClient = new QueryClient();
 
 export function AllTheProviders(props: AllTheProvidersProps) {
   const {locale, messages, children} = props;
@@ -32,8 +37,11 @@ export function AllTheProviders(props: AllTheProvidersProps) {
             <PersistGate persistor={persistor} loading={null}>
               <LensProvider>
                 <ApolloProvider>
-                  <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
-                  {children}
+                  <QueryClientProvider client={reactQueryClient}>
+                    <ToastContainer pauseOnHover position="bottom-center" hideProgressBar />
+                    {children}
+                    <ReactQueryDevtools initialIsOpen={false} />
+                  </QueryClientProvider>
                 </ApolloProvider>
               </LensProvider>
             </PersistGate>

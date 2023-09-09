@@ -1,126 +1,116 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+'use client';
+
+import React, {useCallback, useEffect, useMemo} from 'react';
 
 import {useQuery} from '@apollo/client';
-import {ProfileId, useActiveProfile} from '@lens-protocol/react-web';
-import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
+import {ProfileId, ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {useTranslations} from 'use-intl';
 
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {useRouter} from '@forest-feed/lib/router-events';
 import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
 import {useDepositToForestFeed} from '@forest-feed/hooks/useDepositToForestFeed';
 import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
 import {useCreateCampaign} from '@forest-feed/redux/module/campaign/createCampaign';
+import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+import {usePersistState} from '@forest-feed/hooks/usePersistState';
+import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
+import {Spacer} from '@forest-feed/components/common/Spacer';
+import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
-import {useRouter} from '@forest-feed/lib/router-events';
+import {storageKeys} from '@forest-feed/config';
 import {colors} from 'colors';
 
-export function SubmissionStatusStep() {
-  const [loading, setLoading] = useState(true);
-  const [activeStep, setActiveStep] = useState(1);
-  const [error, setError] = useState(false);
-  const [title, setTitle] = useState('');
-  const [titleError, setTitleError] = useState(false);
+export type SubmissionStatusStepProps = {
+  activeProfile: ProfileOwnedByMe;
+  onCreatePost: () => void;
+  createPostLoading: boolean;
+};
+
+export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
+  const {onCreatePost, createPostLoading, activeProfile} = props;
+
+  const {
+    campaignJourney: {submissionLoading, submissionError, submissionActiveStep, ...campaignJourney},
+    dispatchSetSubmissionState,
+    dispatchCancelCampaignCreation,
+  } = useCampaignJourney();
+
+  const [title, setTitle] = usePersistState<string>('', storageKeys.CAMPAIGN_TITLE);
+  const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
   const router = useRouter();
 
-  const {data: activeProfile} = useActiveProfile();
-  const {data: publicationQueryData} = useQuery(publicationIds, {
+  const {data: publicationQueryData, refetch} = useQuery(publicationIds, {
     variables: publicationIdsVariables(activeProfile?.id as ProfileId, 1),
     context: {clientName: 'lens'},
   });
 
-  console.log(publicationQueryData);
+  const {dispatchCheckBalance} = useTokens({
+    didMount: false,
+  });
 
-  const {campaignJourney, dispatchResetCampaignJourney} = useCampaignJourney();
   const {dispatchCreateCampaign} = useCreateCampaign();
 
-  const salePrice = useRegularSale();
-  const amount = useMemo(() => campaignJourney.size * Number(salePrice?.toString()), [campaignJourney.size, salePrice]);
-
-  const handleErrorInProcess = useCallback(() => {
-    setError(true);
-    setLoading(false);
-  }, []);
-
-  const handleSuccessDeposit = useCallback(() => {
-    setActiveStep(4);
-    setLoading(false);
-  }, []);
-
-  const handleSuccessApproveDai = useCallback(() => {
-    setActiveStep(3);
-  }, []);
-
-  const handleSuccessCreateCampaign = useCallback(() => {
-    setActiveStep(5);
-    setLoading(false);
-    showToast({
-      title: 'newCampaign.goodJob',
-      message: 'newCampaign.succeed',
-      type: ToastType.success,
-      translate: true,
-    });
-    router.push('/my-campaigns');
-    dispatchResetCampaignJourney();
-  }, [dispatchResetCampaignJourney, router]);
-
-  const [approveDaiMethod, isApproveReady, approveTxSucceed] = useApproveDai({
-    onSuccess: handleSuccessApproveDai,
-    enabled: !!salePrice,
-    onError: handleErrorInProcess,
-    onPrepareError: handleErrorInProcess,
-    amount,
-  });
-
-  const [depositMethod, isDepositReady, depositTxSucceed] = useDepositToForestFeed({
-    onSuccess: handleSuccessDeposit,
-    enabled: activeStep === 3 && approveTxSucceed,
-    onError: handleErrorInProcess,
-    onPrepareError: handleErrorInProcess,
-    amount,
-  });
-
-  const handleStartCreateCampaign = useCallback(
-    (byUser: boolean = false) => {
-      if (byUser) {
-        setLoading(true);
-        setError(false);
-      }
-      if (activeStep === 1) {
-        setActiveStep(2);
-      }
-      if (activeStep === 2 && isApproveReady) {
-        approveDaiMethod?.();
-      }
-      if (activeStep === 3 && isDepositReady) {
-        depositMethod?.();
-      }
-    },
-    [activeStep, approveDaiMethod, depositMethod, isApproveReady, isDepositReady],
+  const {contractValue} = useRegularSale();
+  const amount = useMemo(
+    () => campaignJourney.size * Number(contractValue?.toString()),
+    [campaignJourney.size, contractValue],
   );
 
+  const handleErrorInProcess = useCallback(() => {
+    dispatchSetSubmissionState({
+      loading: false,
+      error: true,
+    });
+  }, [dispatchSetSubmissionState]);
+
+  const handleSuccessDeposit = useCallback(() => {
+    dispatchCheckBalance();
+    dispatchSetSubmissionState({
+      loading: false,
+      activeStep: 3,
+    });
+  }, [dispatchCheckBalance, dispatchSetSubmissionState]);
+
+  const handleSuccessApproveDai = useCallback(() => {
+    dispatchSetSubmissionState({
+      activeStep: 2,
+    });
+  }, [dispatchSetSubmissionState]);
+
+  const handleSuccessCreateCampaign = useCallback(() => {
+    setTitle('');
+    router.push('/my-campaigns');
+  }, [router, setTitle]);
+
+  const [approveDaiMethod, isApproveReady] = useApproveDai({
+    onTxSuccess: handleSuccessApproveDai,
+    enabled: !!contractValue,
+    onContractWriteError: handleErrorInProcess,
+    onPrepareError: handleErrorInProcess,
+    amount,
+  });
+
+  const [depositMethod, isDepositReady] = useDepositToForestFeed({
+    onTxSuccess: handleSuccessDeposit,
+    enabled: submissionActiveStep === 2,
+    onContractWriteError: handleErrorInProcess,
+    onPrepareError: handleErrorInProcess,
+    amount,
+  });
+
   const handleConfirmTitle = useCallback(() => {
-    console.log(title, 'title');
     if (!title) {
       setTitleError(true);
       return;
     }
-    setLoading(true);
-    console.log(
-      {
-        title,
-        minFollower: campaignJourney.reward.minimumFollowerNumber,
-        isFollowerOnly: campaignJourney.reward.onlyFollowers,
-        campaignSize: campaignJourney.size,
-        publicationId: publicationQueryData?.publications?.items?.[0]?.id,
-      },
-      'body',
-    );
+    dispatchSetSubmissionState({
+      loading: true,
+    });
     dispatchCreateCampaign({
       title,
       minFollower: campaignJourney.reward.minimumFollowerNumber,
@@ -131,15 +121,57 @@ export function SubmissionStatusStep() {
       onFailure: handleErrorInProcess,
     });
   }, [
+    title,
+    dispatchSetSubmissionState,
+    dispatchCreateCampaign,
     campaignJourney.reward.minimumFollowerNumber,
     campaignJourney.reward.onlyFollowers,
     campaignJourney.size,
-    dispatchCreateCampaign,
-    handleErrorInProcess,
-    handleSuccessCreateCampaign,
     publicationQueryData?.publications?.items,
-    title,
+    handleSuccessCreateCampaign,
+    handleErrorInProcess,
+    setTitleError,
   ]);
+
+  const handleStartCreateCampaign = useCallback(
+    (byUser: boolean = false) => {
+      if (byUser) {
+        dispatchSetSubmissionState({
+          loading: true,
+          error: false,
+        });
+        if (submissionActiveStep === 0) {
+          onCreatePost();
+        }
+        if (submissionActiveStep === 3) {
+          handleConfirmTitle();
+        }
+      }
+      if (submissionActiveStep === 1 && isApproveReady) {
+        (async () => {
+          await refetch();
+        })();
+        approveDaiMethod?.();
+      }
+      if (submissionActiveStep === 2 && isDepositReady) {
+        (async () => {
+          await refetch();
+        })();
+        depositMethod?.();
+      }
+    },
+    [
+      submissionActiveStep,
+      isApproveReady,
+      isDepositReady,
+      dispatchSetSubmissionState,
+      onCreatePost,
+      handleConfirmTitle,
+      approveDaiMethod,
+      refetch,
+      depositMethod,
+    ],
+  );
 
   useEffect(() => {
     showToast({
@@ -151,30 +183,39 @@ export function SubmissionStatusStep() {
   }, [publicationQueryData]);
 
   useEffect(() => {
-    handleStartCreateCampaign();
-  }, [activeStep, isDepositReady, isApproveReady, depositTxSucceed]);
+    if (!submissionError) {
+      handleStartCreateCampaign();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submissionActiveStep, isDepositReady, isApproveReady]);
+
+  const handleCancelSubmission = useCallback(() => {
+    dispatchCancelCampaignCreation();
+    setTitle('');
+    setTitleError(false);
+  }, [dispatchCancelCampaignCreation, setTitle, setTitleError]);
 
   const t = useTranslations('newCampaign');
 
   const steps = useMemo(
     () => [
       {
-        key: 1,
+        key: 0,
         text: 'createOnLens',
         desc: 'createOnLensDesc',
       },
       {
-        key: 2,
+        key: 1,
         text: 'approveDai',
         desc: 'approveDaiDesc',
       },
       {
-        key: 3,
+        key: 2,
         text: 'deposit',
         desc: 'depositDesc',
       },
       {
-        key: 4,
+        key: 3,
         text: 'finalize',
         desc: 'finalizeDesc',
       },
@@ -182,66 +223,98 @@ export function SubmissionStatusStep() {
     [],
   );
 
+  const stepIcon = useCallback(
+    (step: number) => {
+      return step < submissionActiveStep ? (
+        <CheckIcon className="w-3 h-3 md:w-5 md:h-5 text-green" />
+      ) : step === submissionActiveStep && submissionError ? (
+        <XIcon className="w-3 h-3 md:w-5 md:h-5 text-red" />
+      ) : (
+        ''
+      );
+    },
+    [submissionActiveStep, submissionError],
+  );
+
+  const stepDynamicClassNames = useCallback(
+    (step: number) => {
+      return submissionActiveStep == step && submissionLoading
+        ? `${
+            step === submissionActiveStep && submissionError
+              ? 'border-red'
+              : 'border-l-green border-r-green  border-t-border  border-b-border '
+          }${submissionLoading ? 'animate-spin' : ''}`
+        : step < submissionActiveStep
+        ? 'border-green'
+        : step === submissionActiveStep && submissionError
+        ? 'border-red'
+        : 'border-border';
+    },
+    [submissionActiveStep, submissionError, submissionLoading],
+  );
+
+  const titleCampaignInput = useCallback(
+    (step: number) => {
+      return !submissionError && !submissionLoading && submissionActiveStep === 3 && step === 3 ? (
+        <div className="flex flex-col relative">
+          <input
+            className="border border-border outline-none p-1 rounded-[5px] ml-2 text-green"
+            type="text"
+            value={title}
+            onFocus={() => setTitleError(false)}
+            onChange={e => setTitle(e.target.value)}
+          />
+          {titleError ? (
+            <span className="text-xs md:text-sm text-red ml-2 absolute -bottom-5 left-2">{t('titleError')}</span>
+          ) : null}
+        </div>
+      ) : null;
+    },
+    [setTitle, setTitleError, submissionActiveStep, submissionError, submissionLoading, t, title, titleError],
+  );
+
+  const pageTitle = useMemo(
+    () => (submissionError ? 'oops' : submissionActiveStep === 0 && !submissionLoading ? 'createPost' : 'processing'),
+    [submissionActiveStep, submissionError, submissionLoading],
+  );
+
+  const pageDesc = useMemo(
+    () =>
+      submissionError ? 'failText' : submissionActiveStep === 0 && !submissionLoading ? 'pleaseSubmit' : 'bePatient',
+    [submissionActiveStep, submissionError, submissionLoading],
+  );
+
   return (
     <div>
       <div className="mb-5">
-        <p className="text-xl font-bold">{t(error ? 'oops' : 'processing')}</p>
-        <p className={`text-sm font-light ${error ? 'text-red' : 'text-secondary'}`}>
-          {t(error ? 'failText' : 'bePatient')}
-        </p>
+        <p className="text-lg md:text-xl font-bold">{t(pageTitle)}</p>
+        <p className={`text-sm font-light ${submissionError ? 'text-red' : 'text-secondary'}`}>{t(pageDesc)}</p>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between">
         <ul>
           {steps.map(step => (
             <li key={step.key} className="flex items-center mb-2">
-              <div
-                className={`w-8 h-8 rounded-full flex justify-center items-center border-2 ${
-                  activeStep == step.key && loading
-                    ? `${
-                        step.key === activeStep && error
-                          ? 'border-red'
-                          : 'border-l-green border-r-green  border-t-border  border-b-border '
-                      }${loading ? 'animate-spin' : ''}`
-                    : step.key < activeStep
-                    ? 'border-green'
-                    : step.key === activeStep && error
-                    ? 'border-red'
-                    : 'border-border'
-                }`}
-              >
-                {step.key < activeStep ? (
-                  <CheckIcon className="w-5 h-5 text-green" />
-                ) : step.key === activeStep && error ? (
-                  <XMarkIcon className="w-5 h-5 text-red" />
-                ) : (
-                  ''
-                )}
+              <div className="p-1">
+                <div
+                  className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex justify-center items-center border-2 ${stepDynamicClassNames(
+                    step.key,
+                  )}`}
+                >
+                  {stepIcon(step.key)}
+                </div>
               </div>
               <Spacer />
               <div>
-                <p>{t(step.text)}</p>
+                <p className="text-sm md:text-base">{t(step.text)}</p>
                 <div className="flex items-center">
-                  <p className="text-sm text-secondary">{t(step.desc)}</p>
-                  {!error && !loading && activeStep === 4 && step.key === 4 ? (
-                    <div className="flex flex-col relative">
-                      <input
-                        className="border border-border outline-none p-1 rounded-[5px] ml-2 text-green"
-                        type="text"
-                        value={title}
-                        onFocus={() => setTitleError(false)}
-                        onChange={e => setTitle(e.target.value)}
-                      />
-                      {titleError ? (
-                        <span className="text-sm text-red ml-2 absolute -bottom-5 left-2">{t('titleError')}</span>
-                      ) : null}
-                    </div>
-                  ) : null}
+                  <p className="text-xs md:text-sm text-secondary text-align">{t(step.desc)}</p>
+                  {titleCampaignInput(step.key)}
                 </div>
               </div>
             </li>
           ))}
         </ul>
-        <div>
+        <div className="flex justify-center mt-3 md:mt-0 md:block">
           <Circles
             height="80"
             width="80"
@@ -249,25 +322,46 @@ export function SubmissionStatusStep() {
             ariaLabel="circles-loading"
             wrapperStyle={{}}
             wrapperClass=""
-            visible={loading}
+            visible={submissionLoading}
           />
         </div>
       </div>
-      <RenderIf condition={error || activeStep === 4}>
-        <div className="flex justify-end items-center mt-10">
-          {error ? (
-            <>
-              <Button text={t('cancel')} variant={ButtonVariant.primary} />
-              <Spacer />
-              <Button
-                text={t('tryAgain')}
-                onClick={() => handleStartCreateCampaign(true)}
-                variant={ButtonVariant.secondary}
-              />
-            </>
-          ) : (
-            <Button text={t('confirm')} onClick={handleConfirmTitle} variant={ButtonVariant.secondary} />
-          )}
+      <RenderIf condition={!submissionError && submissionActiveStep === 0}>
+        <Spacer times={5} />
+        <div className="flex justify-end items-center">
+          <Button
+            text={t('submit')}
+            onClick={onCreatePost}
+            loading={createPostLoading || submissionLoading}
+            disabled={createPostLoading || submissionLoading}
+            variant={ButtonVariant.secondary}
+          />
+        </div>
+      </RenderIf>
+      <RenderIf condition={!submissionError && submissionActiveStep === 3 && !submissionLoading}>
+        <Spacer times={5} />
+        <div className="flex justify-end items-center">
+          <Button
+            text={t('submit')}
+            loading={submissionLoading}
+            disabled={submissionLoading}
+            onClick={handleConfirmTitle}
+            variant={ButtonVariant.secondary}
+          />
+        </div>
+      </RenderIf>
+      <RenderIf condition={submissionError}>
+        <Spacer times={5} />
+        <div className="flex justify-end items-center">
+          <>
+            <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
+            <Spacer />
+            <Button
+              text={t('tryAgain')}
+              onClick={() => handleStartCreateCampaign(true)}
+              variant={ButtonVariant.secondary}
+            />
+          </>
         </div>
       </RenderIf>
     </div>

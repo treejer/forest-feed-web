@@ -5,15 +5,16 @@ import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 
 export type SkeletonBoxProps = {
-  width?: number;
-  height?: number;
+  wrapperClassName?: string;
+  width?: number | string;
+  height?: number | string;
 };
 
 export function SkeletonBox(props: SkeletonBoxProps) {
-  const {height = 40, width = 200} = props;
+  const {wrapperClassName, height = 40, width = 200} = props;
 
   return (
-    <div>
+    <div className={wrapperClassName}>
       <Skeleton height={height} width={width} />
     </div>
   );
@@ -25,11 +26,7 @@ export function AppHeaderSkeleton() {
       <div className="flex items-center">
         <SkeletonBox />
         <Spacer />
-        <SkeletonBox width={160} />
-        <Spacer />
-        <SkeletonBox width={160} />
-        <Spacer />
-        <SkeletonBox width={30} />
+        <SkeletonBox wrapperClassName="hidden md:block" width={160} />
       </div>
     </SkeletonTheme>
   );

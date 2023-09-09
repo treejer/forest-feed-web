@@ -28,6 +28,7 @@ export function* watchMyCampaigns() {
       params: {
         skip: page - 1,
         limit: perPage,
+        sort: JSON.stringify({createdAt: -1}),
       },
     });
     const totalPageCount = Math.ceil(res.result.count / paginationPageSize);

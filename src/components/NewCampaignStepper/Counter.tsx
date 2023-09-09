@@ -17,12 +17,12 @@ export function Counter(props: CounterProps) {
       >
         <span className="counter-icon border-primary">-</span>
       </button>
-      <span className="flex items-center mx-2">{count}</span>
+      <span className="flex items-center mx-2 text-sm md:text-base">{count}</span>
       <button
         className="counter-btn border-lightWhite transition-shadow hover:shadow-lg"
         onClick={() => handleChangeCount(1)}
       >
-        <span className="counter-icon  border-primary">+</span>
+        <span className="counter-icon border-primary">+</span>
       </button>
     </div>
   );

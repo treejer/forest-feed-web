@@ -27,7 +27,7 @@ export function Stepper(props: StepperProps) {
           <div key={`${item.title}-${index}`} className="flex flex-col justify-between relative">
             <button
               onClick={() => (isDependent && index >= activeStep ? undefined : setActiveStep(index))}
-              className="flex cursor-pointer mb-6"
+              className="flex flex-col md:flex-row cursor-pointer justify-center items-center mb-2 md:mb-6"
               disabled={disabled}
             >
               <div
@@ -38,7 +38,7 @@ export function Stepper(props: StepperProps) {
                 {index + 1}
               </div>
               <Spacer />
-              <span className="text-lg font-medium">{item.title}</span>
+              <span className="text-sm md:text-lg font-medium">{item.title}</span>
             </button>
             {activeStep === index ? (
               <motion.div className="h-[4px] rounded-md underline bg-primary" layoutId="underline" />

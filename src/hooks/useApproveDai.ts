@@ -1,4 +1,4 @@
-import {useMemo, useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 
 import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 import {PrepareWriteContractResult, WriteContractResult} from '@wagmi/core';
@@ -6,8 +6,9 @@ import {PrepareWriteContractResult, WriteContractResult} from '@wagmi/core';
 import {useDaiTokenContract, useForestFeedContract} from '@forest-feed/redux/module/web3/web3.slice';
 
 export type UseApproveDaiParams = {
-  onSuccess?: (data: WriteContractResult) => void;
-  onError?: (error: Error) => void;
+  onTxSuccess?: () => void;
+  onContractWriteSuccess?: (data: WriteContractResult) => void;
+  onContractWriteError?: (error: Error) => void;
   onPrepareSuccess?: (data: PrepareWriteContractResult<any, 'approve', number>) => void;
   onPrepareError?: (error: Error) => void;
   enabled?: boolean;
@@ -17,8 +18,15 @@ export type UseApproveDaiParams = {
 export type UseApproveDaiReturnType = [(() => void) | undefined, boolean, boolean];
 
 export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnType {
-  const {amount, enabled = true, onSuccess, onError, onPrepareSuccess, onPrepareError} = params;
-
+  const {
+    amount,
+    enabled = true,
+    onTxSuccess,
+    onContractWriteSuccess,
+    onContractWriteError,
+    onPrepareSuccess,
+    onPrepareError,
+  } = params;
   const [readyToUse, setReadyToUse] = useState(false);
   const [txHash, setTxHash] = useState('');
 
@@ -44,12 +52,12 @@ export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnT
   const {write} = useContractWrite({
     ...config,
     onSuccess: data => {
-      onSuccess?.(data);
+      onContractWriteSuccess?.(data);
       setTxHash(data.hash);
       console.log(data, 'data in write approve');
     },
     onError: err => {
-      onError?.(err);
+      onContractWriteError?.(err);
       console.log(err, 'error in write approve');
     },
   });
@@ -59,7 +67,13 @@ export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnT
     enabled: !!txHash,
   });
 
-  const canUse = useMemo(() => readyToUse && !!write, [readyToUse, write, data]);
+  useEffect(() => {
+    if (data) {
+      onTxSuccess?.();
+    }
+  }, [data]);
+
+  const canUse = useMemo(() => readyToUse && !!write, [readyToUse, write]);
 
   return [write, canUse, !!data];
 }

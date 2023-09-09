@@ -168,5 +168,11 @@ export const networks: Networks = {
   },
 };
 
+export const storageKeys = {
+  CAMPAIGN_SIZE: 'FOREST_FEED_STORAGE_CAMPAIGN_SIZE',
+  CAMPAIGN_TITLE: 'FOREST_FEED_STORAGE_CAMPAIGN_TITLE',
+  CAMPAIGN_TITLE_ERROR: 'FOREST_FEED_STORAGE_CAMPAIGN_TITLE_ERROR',
+};
+
 export const debugFetch = true;
 export const reduxLogger = false;

@@ -72,6 +72,13 @@ export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchN
 
 export function* watchLoginAccount() {
   try {
+    yield put(resetCampaignJourney());
+    yield reactQueryClient.invalidateQueries();
+    yield reactQueryClient.removeQueries();
+    yield reactQueryClient.clear();
+    for (let key in storageKeys) {
+      window.localStorage.removeItem(storageKeys[key]);
+    }
     yield put(nonceActions.load());
     const {payload: nonce} = yield take(nonceActionTypes.loadSuccess);
     if (!nonce.message) return;

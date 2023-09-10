@@ -1,12 +1,14 @@
 'use client';
 
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useQuery} from '@apollo/client';
 import {ProfileId, ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {useTranslations} from 'use-intl';
+import {BigNumberish} from 'ethers';
+import moment from 'moment';
 
 import {useRouter} from '@forest-feed/lib/router-events';
 import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
@@ -15,12 +17,14 @@ import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
 import {useCreateCampaign} from '@forest-feed/redux/module/campaign/createCampaign';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {usePersistState} from '@forest-feed/hooks/usePersistState';
+import {useAllowanceDaiInForestFeed} from '@forest-feed/hooks/useAllowanceDaiInForestFeed';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
+import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTimer';
 import {storageKeys} from '@forest-feed/config';
 import {colors} from 'colors';
 
@@ -42,6 +46,10 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const [title, setTitle] = usePersistState<string>('', storageKeys.CAMPAIGN_TITLE);
   const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
+  const [allowanceChecked, setAllowanceChecked] = useState(false);
+
+  const [delay, setDelay] = usePersistState(true, storageKeys.CAMPAIGN_DELAY);
+
   const router = useRouter();
 
   const {data: publicationQueryData, refetch} = useQuery(publicationIds, {
@@ -55,10 +63,10 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const {dispatchCreateCampaign} = useCreateCampaign();
 
-  const {contractValue} = useRegularSale();
+  const {contractValue: salePriceBigNum} = useRegularSale();
   const amount = useMemo(
-    () => campaignJourney.size * Number(contractValue?.toString()),
-    [campaignJourney.size, contractValue],
+    () => campaignJourney.size * Number(salePriceBigNum?.toString()),
+    [campaignJourney.size, salePriceBigNum],
   );
 
   const handleErrorInProcess = useCallback(() => {
@@ -82,14 +90,35 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     });
   }, [dispatchSetSubmissionState]);
 
+  const handleSuccessAllowance = useCallback(
+    (_: BigNumberish, value: number) => {
+      setAllowanceChecked(true);
+      if (value >= amount / 1e18) {
+        dispatchSetSubmissionState({
+          activeStep: 2,
+          error: false,
+        });
+      }
+    },
+    [amount, dispatchSetSubmissionState],
+  );
+
   const handleSuccessCreateCampaign = useCallback(() => {
     setTitle('');
+    setDelay(true);
+    setTitleError(false);
     router.push('/my-campaigns');
-  }, [router, setTitle]);
+  }, [router, setDelay, setTitle, setTitleError]);
+
+  useAllowanceDaiInForestFeed({
+    onSuccess: handleSuccessAllowance,
+    onError: handleErrorInProcess,
+    enabled: submissionActiveStep === 1,
+  });
 
   const [approveDaiMethod, isApproveReady] = useApproveDai({
     onTxSuccess: handleSuccessApproveDai,
-    enabled: !!contractValue,
+    enabled: !!salePriceBigNum && allowanceChecked,
     onContractWriteError: handleErrorInProcess,
     onPrepareError: handleErrorInProcess,
     amount,
@@ -273,6 +302,16 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     [setTitle, setTitleError, submissionActiveStep, submissionError, submissionLoading, t, title, titleError],
   );
 
+  const submitTitleButton = useCallback(
+    () =>
+      delay ? (
+        <CountDownTimer deadline={moment().add(31, 'seconds').toString()} onEndTime={() => setDelay(false)} />
+      ) : (
+        t('submit')
+      ),
+    [delay, t, setDelay],
+  );
+
   const pageTitle = useMemo(
     () => (submissionError ? 'oops' : submissionActiveStep === 0 && !submissionLoading ? 'createPost' : 'processing'),
     [submissionActiveStep, submissionError, submissionLoading],
@@ -341,10 +380,12 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       <RenderIf condition={!submissionError && submissionActiveStep === 3 && !submissionLoading}>
         <Spacer times={5} />
         <div className="flex justify-end items-center">
+          <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
+          <Spacer />
           <Button
-            text={t('submit')}
+            text={submitTitleButton()}
             loading={submissionLoading}
-            disabled={submissionLoading}
+            disabled={submissionLoading || delay}
             onClick={handleConfirmTitle}
             variant={ButtonVariant.secondary}
           />

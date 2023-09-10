@@ -37,15 +37,6 @@ function NewCampaignPage() {
     dispatchSetCampaignSize,
   } = useCampaignJourney();
 
-  const [campaignSize, setCampaignSize, debouncedCampaignSize] = usePersistState<number>(
-    campaignJourney?.size || 1,
-    storageKeys.CAMPAIGN_SIZE,
-  );
-
-  useEffect(() => {
-    dispatchSetCampaignSize(debouncedCampaignSize);
-  }, [debouncedCampaignSize]);
-
   const {data: activeProfile} = useActiveProfile();
 
   const {createLensPost, allLoading: createPostLoading} = useLensCreatePost({
@@ -139,8 +130,7 @@ function NewCampaignPage() {
               {
                 content: (
                   <PledgeStep
-                    campaignSize={campaignSize}
-                    setCampaignSize={setCampaignSize}
+                    setCampaignSize={dispatchSetCampaignSize}
                     setCanBeCollected={dispatchSetCanBeCollected}
                     setCanBeCollectedOnlyFollowers={dispatchSetCanBeCollectedOnlyFollowers}
                     setMinimumFollowerNumber={dispatchSetMinimumFollowerNumber}
@@ -186,7 +176,7 @@ function NewCampaignPage() {
           transition={{duration: 0.5}}
           className="row-start-1 md:row-auto col-span-6 md:col-span-1"
         >
-          <TreeCost treeCount={campaignSize} />
+          <TreeCost treeCount={campaignJourney.size} />
         </motion.div>
       </AuthWrapper>
     </AnimatedPage>

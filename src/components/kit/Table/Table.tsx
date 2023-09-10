@@ -36,7 +36,7 @@ function TableComponent<D extends object>(props: TableProps<D>) {
   );
 
   return (
-    <div className="h-full flex flex-col justify-between">
+    <div className="h-full flex flex-col lg:justify-between">
       <div className="w-full border border-tableBorder rounded-[12px] overflow-x-auto">
         <table {...getTableProps()} className="w-full">
           <thead>

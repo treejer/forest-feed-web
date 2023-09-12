@@ -152,6 +152,11 @@ export type Networks = {
   [key in BlockchainNetwork]: NetworkInfo;
 };
 
+export const polygonBuyDaiUrl = process.env.NEXT_PUBLIC_POLYGON_BUY_DAI_EXPLORE_URL || '';
+export const polygonSwapDaiUrl = process.env.NEXT_PUBLIC_POLYGON_SWAP_DAI_EXPLORE_URL || '';
+export const mumbaiBuyDaiUrl = process.env.NEXT_PUBLIC_MUMBAI_BUY_DAI_EXPLORE_URL || '';
+export const mumbaiSwapDaiUrl = process.env.NEXT_PUBLIC_MUMBAI_SWAP_DAI_EXPLORE_URL || '';
+
 export const networks: Networks = {
   [BlockchainNetwork.Polygon]: {
     title: 'Polygon',

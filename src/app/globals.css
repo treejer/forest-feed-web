@@ -48,7 +48,7 @@
     /*  range slider component style  */
 
     /* stepper active tab underline style */
-    .underline {
+    .underline-stepper {
         @apply absolute -bottom-[1px] h-[1px] left-0 right-0
     }
     /* stepper active tab underline style */

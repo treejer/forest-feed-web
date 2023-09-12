@@ -222,7 +222,23 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     dispatchCancelCampaignCreation();
     setTitle('');
     setTitleError(false);
-  }, [dispatchCancelCampaignCreation, setTitle, setTitleError]);
+    setDelay(true);
+  }, [dispatchCancelCampaignCreation, setDelay, setTitle, setTitleError]);
+
+  const handleChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTitle(e.target.value);
+    },
+    [setTitle],
+  );
+
+  const handleFocusInput = useCallback(() => {
+    setTitleError(false);
+  }, [setTitleError]);
+
+  const handleEndTime = useCallback(() => {
+    setDelay(false);
+  }, [setDelay]);
 
   const t = useTranslations('newCampaign');
 
@@ -290,8 +306,8 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
             className="border border-border outline-none p-1 rounded-[5px] ml-2 text-green"
             type="text"
             value={title}
-            onFocus={() => setTitleError(false)}
-            onChange={e => setTitle(e.target.value)}
+            onFocus={handleFocusInput}
+            onChange={handleChangeTitle}
           />
           {titleError ? (
             <span className="text-xs md:text-sm text-red ml-2 absolute -bottom-5 left-2">{t('titleError')}</span>
@@ -299,17 +315,24 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         </div>
       ) : null;
     },
-    [setTitle, setTitleError, submissionActiveStep, submissionError, submissionLoading, t, title, titleError],
+    [
+      handleChangeTitle,
+      handleFocusInput,
+      submissionActiveStep,
+      submissionError,
+      submissionLoading,
+      t,
+      title,
+      titleError,
+    ],
   );
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const delayTime = useMemo(() => moment().add(31, 'seconds').toString(), [delay]);
+
   const submitTitleButton = useCallback(
-    () =>
-      delay ? (
-        <CountDownTimer deadline={moment().add(31, 'seconds').toString()} onEndTime={() => setDelay(false)} />
-      ) : (
-        t('submit')
-      ),
-    [delay, t, setDelay],
+    () => (delay ? <CountDownTimer deadline={delayTime} onEndTime={handleEndTime} /> : t('submit')),
+    [delay, t, delayTime, handleEndTime],
   );
 
   const pageTitle = useMemo(

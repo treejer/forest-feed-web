@@ -10,10 +10,10 @@ export async function notEnoughBalance(t: any) {
     await MySwal.fire({
       title: t('sweetalert.notEnoughBalance.title'),
       icon: 'info',
-      iconColor: colors.green,
+      iconColor: colors.primary,
       buttonsStyling: false,
       customClass: {
-        confirmButton: 'bg-green text-white focus:outline-none focus:border-none py-2 px-3 rounded-lg text-lg',
+        confirmButton: 'bg-primary text-white focus:outline-none focus:border-none py-2 p-5 rounded-lg text-lg',
       },
     });
   } catch (e: any) {

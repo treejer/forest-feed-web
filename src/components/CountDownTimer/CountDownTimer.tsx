@@ -1,12 +1,12 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
-const SECOND = 1000;
-const MINUTE = SECOND * 60;
-const HOUR = MINUTE * 60;
-const DAY = HOUR * 24;
+import moment from 'moment/moment';
+
+import {checkTime, DAY, diffTimeInSec, HOUR, MINUTE, SECOND} from '@forest-feed/utils/time';
 
 export type CountDownTimerProps = {
-  deadline: string;
+  start?: string;
+  deadline: number;
   onEndTime: () => void;
 };
 
@@ -18,9 +18,20 @@ export type TimeState = {
 };
 
 export function CountDownTimer(props: CountDownTimerProps) {
-  const {deadline, onEndTime} = props;
+  const {start, deadline, onEndTime} = props;
 
-  const parsedDeadline = useMemo(() => Date.parse(deadline), [deadline]);
+  const diffSec = useMemo(() => {
+    if (start) {
+      const diff = Math.floor(deadline - diffTimeInSec(start, moment().toDate().toString()));
+      if (diff > 0) return diff;
+      else return 0;
+    } else {
+      return deadline;
+    }
+  }, [start, deadline]);
+
+  const parsedDeadline = useMemo(() => Date.parse(moment().add(diffSec, 'seconds').toString()), [diffSec]);
+
   const [time, setTime] = useState<TimeState>({
     day: (parsedDeadline - Date.now()) / DAY,
     hours: ((parsedDeadline - Date.now()) / HOUR) % 24,
@@ -34,30 +45,19 @@ export function CountDownTimer(props: CountDownTimerProps) {
 
   const interval = useRef<NodeJS.Timer | null>(null);
 
-  const checkTime = useCallback(
-    (unit: number, percent?: number) => {
-      const current = parsedDeadline - Date.now();
-
-      const time = Math.floor(current / unit);
-
-      return percent ? (time % percent <= 0 ? 0 : time % percent) : time <= 0 ? 0 : time;
-    },
-    [parsedDeadline],
-  );
-
   useEffect(() => {
     const mountTime = parsedDeadline - Date.now();
     interval.current = setInterval(() => {
       setTime({
-        day: checkTime(DAY),
-        hours: checkTime(HOUR, 24),
-        minutes: checkTime(MINUTE, 60),
-        seconds: checkTime(SECOND, 60),
+        day: checkTime(parsedDeadline, DAY),
+        hours: checkTime(parsedDeadline, HOUR, 24),
+        minutes: checkTime(parsedDeadline, MINUTE, 60),
+        seconds: checkTime(parsedDeadline, SECOND, 60),
       });
     }, 1000);
     setHideCounter({
-      day: Math.floor(mountTime / DAY) === 0,
-      hours: Math.floor(mountTime / HOUR) % 24 === 0,
+      day: Math.floor(mountTime / DAY) <= 0,
+      hours: Math.floor(mountTime / HOUR) % 24 <= 0,
     });
     return () => {
       if (interval?.current) {
@@ -71,6 +71,7 @@ export function CountDownTimer(props: CountDownTimerProps) {
       if (interval.current) clearInterval(interval.current);
       onEndTime();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [time]);
 
   return (

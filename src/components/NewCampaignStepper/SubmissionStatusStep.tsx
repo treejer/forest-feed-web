@@ -8,7 +8,6 @@ import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {useTranslations} from 'use-intl';
 import {BigNumberish} from 'ethers';
-import moment from 'moment';
 
 import {useRouter} from '@forest-feed/lib/router-events';
 import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
@@ -48,6 +47,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const [allowanceChecked, setAllowanceChecked] = useState(false);
 
+  const [depositTime, setDepositTime] = usePersistState<Date | null>(null, storageKeys.CAMPAIGN_DEPOSIT_SUCCEED);
   const [delay, setDelay] = usePersistState(true, storageKeys.CAMPAIGN_DELAY);
 
   const router = useRouter();
@@ -78,11 +78,12 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const handleSuccessDeposit = useCallback(() => {
     dispatchCheckBalance();
+    setDepositTime(new Date());
     dispatchSetSubmissionState({
       loading: false,
       activeStep: 3,
     });
-  }, [dispatchCheckBalance, dispatchSetSubmissionState]);
+  }, [setDepositTime, dispatchCheckBalance, dispatchSetSubmissionState]);
 
   const handleSuccessApproveDai = useCallback(() => {
     dispatchSetSubmissionState({
@@ -107,8 +108,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setTitle('');
     setDelay(true);
     setTitleError(false);
+    setDepositTime(null);
     router.push('/my-campaigns');
-  }, [router, setDelay, setTitle, setTitleError]);
+  }, [router, setDelay, setTitle, setTitleError, setDepositTime]);
 
   useAllowanceDaiInForestFeed({
     onSuccess: handleSuccessAllowance,
@@ -223,7 +225,8 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setTitle('');
     setTitleError(false);
     setDelay(true);
-  }, [dispatchCancelCampaignCreation, setDelay, setTitle, setTitleError]);
+    setDepositTime(null);
+  }, [dispatchCancelCampaignCreation, setDepositTime, setDelay, setTitle, setTitleError]);
 
   const handleChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -327,12 +330,14 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     ],
   );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const delayTime = useMemo(() => moment().add(31, 'seconds').toString(), [delay]);
-
   const submitTitleButton = useCallback(
-    () => (delay ? <CountDownTimer deadline={delayTime} onEndTime={handleEndTime} /> : t('submit')),
-    [delay, t, delayTime, handleEndTime],
+    () =>
+      delay && depositTime ? (
+        <CountDownTimer start={depositTime?.toString()} deadline={31} onEndTime={handleEndTime} />
+      ) : (
+        t('submit')
+      ),
+    [depositTime, delay, t, handleEndTime],
   );
 
   const pageTitle = useMemo(

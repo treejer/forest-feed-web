@@ -46,7 +46,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
   const [allowanceChecked, setAllowanceChecked] = useState(false);
-
+  const [approveSucceed, setApproveSucceed] = usePersistState(false, storageKeys.CAMPAIGN_APPROVE_SUCCEED);
   const [depositTime, setDepositTime] = usePersistState<Date | null>(null, storageKeys.CAMPAIGN_DEPOSIT_SUCCEED);
   const [delay, setDelay] = usePersistState(true, storageKeys.CAMPAIGN_DELAY);
 
@@ -86,22 +86,24 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   }, [setDepositTime, dispatchCheckBalance, dispatchSetSubmissionState]);
 
   const handleSuccessApproveDai = useCallback(() => {
+    setApproveSucceed(true);
     dispatchSetSubmissionState({
       activeStep: 2,
     });
-  }, [dispatchSetSubmissionState]);
+  }, [dispatchSetSubmissionState, setApproveSucceed]);
 
   const handleSuccessAllowance = useCallback(
     (_: BigNumberish, value: number) => {
       setAllowanceChecked(true);
       if (value >= amount / 1e18) {
+        setApproveSucceed(true);
         dispatchSetSubmissionState({
           activeStep: 2,
           error: false,
         });
       }
     },
-    [amount, dispatchSetSubmissionState],
+    [amount, dispatchSetSubmissionState, setApproveSucceed],
   );
 
   const handleSuccessCreateCampaign = useCallback(() => {
@@ -109,8 +111,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDelay(true);
     setTitleError(false);
     setDepositTime(null);
+    setApproveSucceed(false);
     router.push('/my-campaigns');
-  }, [router, setDelay, setTitle, setTitleError, setDepositTime]);
+  }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, router]);
 
   useAllowanceDaiInForestFeed({
     onSuccess: handleSuccessAllowance,
@@ -128,7 +131,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const [depositMethod, isDepositReady] = useDepositToForestFeed({
     onTxSuccess: handleSuccessDeposit,
-    enabled: submissionActiveStep === 2,
+    enabled: submissionActiveStep === 2 && approveSucceed,
     onContractWriteError: handleErrorInProcess,
     onPrepareError: handleErrorInProcess,
     amount,
@@ -226,7 +229,8 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setTitleError(false);
     setDelay(true);
     setDepositTime(null);
-  }, [dispatchCancelCampaignCreation, setDepositTime, setDelay, setTitle, setTitleError]);
+    setApproveSucceed(false);
+  }, [dispatchCancelCampaignCreation, setTitle, setTitleError, setDelay, setDepositTime, setApproveSucceed]);
 
   const handleChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

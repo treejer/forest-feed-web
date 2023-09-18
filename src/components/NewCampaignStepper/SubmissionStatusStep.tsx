@@ -247,8 +247,18 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     if (!submissionError && submitPressed) {
       handleStartCreateCampaign();
     }
+    // return () => {
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submissionActiveStep]);
+
+  useEffect(() => {
+    return () => {
+      dispatchSetSubmissionState({
+        loading: false,
+      });
+    };
+  }, []);
 
   const handleCancelSubmission = useCallback(() => {
     dispatchCancelCampaignCreation();
@@ -442,6 +452,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       <RenderIf
         condition={
           !submissionError &&
+          !submissionLoading &&
           !submitPressed &&
           [
             SubmitCampaignSteps.PrepareApprove,

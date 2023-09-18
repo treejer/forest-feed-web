@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 import {PrepareWriteContractResult, WriteContractResult} from '@wagmi/core';
@@ -73,7 +73,5 @@ export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnT
     }
   }, [data]);
 
-  const canUse = useMemo(() => readyToUse && !!write, [readyToUse, write]);
-
-  return [write, canUse, !!data];
+  return [write, readyToUse, !!data];
 }

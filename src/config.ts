@@ -182,5 +182,15 @@ export const storageKeys = {
   CAMPAIGN_APPROVE_SUCCEED: 'FOREST_FEED_STORAGE_CAMPAIGN_APPROVE_SUCCEED',
 };
 
+export enum SubmitCampaignSteps {
+  CreatePost,
+  CheckAllowance,
+  PrepareApprove,
+  Approve,
+  PrepareDeposit,
+  Deposit,
+  Finalize,
+}
+
 export const debugFetch = true;
 export const reduxLogger = false;

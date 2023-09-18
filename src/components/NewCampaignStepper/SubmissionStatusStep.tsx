@@ -42,10 +42,12 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     dispatchCancelCampaignCreation,
   } = useCampaignJourney();
 
+  const [allowanceChecked, setAllowanceChecked] = useState(false);
+  const [submitPressed, setSubmitPressed] = useState(false);
+
   const [title, setTitle] = usePersistState<string>('', storageKeys.CAMPAIGN_TITLE);
   const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
-  const [allowanceChecked, setAllowanceChecked] = useState(false);
   const [approveSucceed, setApproveSucceed] = usePersistState(false, storageKeys.CAMPAIGN_APPROVE_SUCCEED);
   const [depositTime, setDepositTime] = usePersistState<Date | null>(null, storageKeys.CAMPAIGN_DEPOSIT_SUCCEED);
   const [delay, setDelay] = usePersistState(true, storageKeys.CAMPAIGN_DELAY);
@@ -112,6 +114,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setTitleError(false);
     setDepositTime(null);
     setApproveSucceed(false);
+    setSubmitPressed(false);
     router.push('/my-campaigns');
   }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, router]);
 
@@ -169,6 +172,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const handleStartCreateCampaign = useCallback(
     (byUser: boolean = false) => {
+      setSubmitPressed(true);
       if (byUser) {
         dispatchSetSubmissionState({
           loading: true,
@@ -207,6 +211,11 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     ],
   );
 
+  const handleCreatePost = useCallback(() => {
+    setSubmitPressed(true);
+    onCreatePost();
+  }, [onCreatePost]);
+
   useEffect(() => {
     showToast({
       title: 'Is it correct?',
@@ -217,7 +226,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   }, [publicationQueryData]);
 
   useEffect(() => {
-    if (!submissionError) {
+    if (!submissionError && submitPressed) {
       handleStartCreateCampaign();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,6 +239,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDelay(true);
     setDepositTime(null);
     setApproveSucceed(false);
+    setSubmitPressed(false);
   }, [dispatchCancelCampaignCreation, setTitle, setTitleError, setDelay, setDepositTime, setApproveSucceed]);
 
   const handleChangeTitle = useCallback(
@@ -345,8 +355,15 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   );
 
   const pageTitle = useMemo(
-    () => (submissionError ? 'oops' : submissionActiveStep === 0 && !submissionLoading ? 'createPost' : 'processing'),
-    [submissionActiveStep, submissionError, submissionLoading],
+    () =>
+      submissionError
+        ? 'oops'
+        : submissionActiveStep === 0 && !submissionLoading
+        ? 'createPost'
+        : !submitPressed
+        ? 'continue'
+        : 'processing',
+    [submissionActiveStep, submissionError, submissionLoading, submitPressed],
   );
 
   const pageDesc = useMemo(
@@ -397,12 +414,21 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           />
         </div>
       </div>
+      <RenderIf condition={!submissionError && !submitPressed && [1, 2].includes(submissionActiveStep)}>
+        <div className="flex justify-end items-center">
+          <Button
+            text={t('continue')}
+            onClick={() => handleStartCreateCampaign(true)}
+            variant={ButtonVariant.secondary}
+          />
+        </div>
+      </RenderIf>
       <RenderIf condition={!submissionError && submissionActiveStep === 0}>
         <Spacer times={5} />
         <div className="flex justify-end items-center">
           <Button
             text={t('submit')}
-            onClick={onCreatePost}
+            onClick={handleCreatePost}
             loading={createPostLoading || submissionLoading}
             disabled={createPostLoading || submissionLoading}
             variant={ButtonVariant.secondary}

@@ -57,7 +57,7 @@ export function ConnectToUse() {
             <p className="text-green text-sm font-thin">{t('connectToUse.lensLoggedIn')}</p>
           ) : null}
         </>
-      ) : (
+      ) : ['reconnecting', 'connecting'].includes(status) ? null : (
         <ConnectButton />
       )}
     </div>

@@ -81,7 +81,7 @@ export function WalletAssets(props: WalletAssetsProps) {
               {exploreUrls.map(item => (
                 <li key={item.url}>
                   <Link
-                    className="underline text-green text-xs lg:text-sm"
+                    className="wallet-assets-link"
                     href={item.url}
                     {...(item.url === '#' ? {} : {target: '_blank'})}
                   >

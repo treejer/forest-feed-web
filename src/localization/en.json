@@ -71,6 +71,7 @@
       "mintDai": "Mint DAI"
     },
     "processing": "Processing...",
+    "continue": "Continue",
     "createPost": "Create Post",
     "pleaseSubmit": "Please submit to create you post on lens protocol",
     "oops": "Oops!",

@@ -237,7 +237,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   useEffect(() => {
     showToast({
       title: 'Is it correct?',
-      message: publicationQueryData?.publications?.items?.[0].metadata?.content,
+      message: publicationQueryData?.publications?.items?.[0]?.metadata?.content,
       type: ToastType.info,
       translate: false,
     });
@@ -378,7 +378,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const submitTitleButton = useCallback(
     () =>
       delay && depositTime ? (
-        <CountDownTimer start={depositTime?.toString()} deadline={31} onEndTime={handleEndTime} />
+        <CountDownTimer start={depositTime?.toString()} deadline={41} onEndTime={handleEndTime} />
       ) : (
         t('submit')
       ),

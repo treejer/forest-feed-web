@@ -72,6 +72,7 @@
     },
     "processing": "Processing...",
     "continue": "Continue",
+    "pleaseReject": "If there is an open transaction, please reject it, otherwise click continue",
     "createPost": "Create Post",
     "pleaseSubmit": "Please submit to create you post on lens protocol",
     "oops": "Oops!",

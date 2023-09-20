@@ -80,7 +80,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const handlePrepareSuccessDeposit = useCallback(() => {
     dispatchSetSubmissionState({
+      error: false,
       activeStep: SubmitCampaignSteps.Deposit,
+      loading: true,
     });
   }, [dispatchSetSubmissionState]);
 
@@ -88,6 +90,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     dispatchCheckBalance();
     setDepositTime(new Date());
     dispatchSetSubmissionState({
+      error: false,
       loading: false,
       activeStep: SubmitCampaignSteps.Finalize,
     });
@@ -95,14 +98,18 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const handlePrepareSuccessApproveDai = useCallback(() => {
     dispatchSetSubmissionState({
+      error: false,
       activeStep: SubmitCampaignSteps.Approve,
+      loading: true,
     });
   }, [dispatchSetSubmissionState]);
 
   const handleSuccessApproveDai = useCallback(() => {
     setApproveSucceed(true);
     dispatchSetSubmissionState({
+      error: false,
       activeStep: SubmitCampaignSteps.PrepareDeposit,
+      loading: true,
     });
   }, [dispatchSetSubmissionState, setApproveSucceed]);
 
@@ -112,13 +119,15 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       if (value >= amount / 1e18) {
         setApproveSucceed(true);
         dispatchSetSubmissionState({
-          activeStep: SubmitCampaignSteps.PrepareDeposit,
           error: false,
+          activeStep: SubmitCampaignSteps.PrepareDeposit,
+          loading: true,
         });
       } else {
         dispatchSetSubmissionState({
-          activeStep: SubmitCampaignSteps.PrepareApprove,
           error: false,
+          activeStep: SubmitCampaignSteps.PrepareApprove,
+          loading: true,
         });
       }
     },
@@ -165,6 +174,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       return;
     }
     dispatchSetSubmissionState({
+      error: false,
       loading: true,
     });
     dispatchCreateCampaign({
@@ -191,7 +201,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const handleStartCreateCampaign = useCallback(
     (byUser: boolean = false) => {
-      console.log(submissionActiveStep, 'step');
       setSubmitPressed(true);
       if (byUser) {
         dispatchSetSubmissionState({
@@ -216,6 +225,11 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           await refetch();
         })();
         depositMethod?.();
+      }
+      if ([SubmitCampaignSteps.PrepareApprove, SubmitCampaignSteps.PrepareDeposit].includes(submissionActiveStep)) {
+        (async () => {
+          await refetch();
+        })();
       }
     },
     [
@@ -247,8 +261,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     if (!submissionError && submitPressed) {
       handleStartCreateCampaign();
     }
-    // return () => {
-    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submissionActiveStep]);
 
@@ -258,6 +270,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         loading: false,
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCancelSubmission = useCallback(() => {
@@ -462,12 +475,13 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           ].includes(submissionActiveStep)
         }
       >
-        <div className="flex justify-end items-center">
+        <div className="flex flex-col items-end justify-center">
           <Button
             text={t('continue')}
             onClick={() => handleStartCreateCampaign(true)}
             variant={ButtonVariant.secondary}
           />
+          <span className="text-right text-red text-xs md:text-sm">{t('pleaseReject')}</span>
         </div>
       </RenderIf>
       <RenderIf condition={!submissionError && submissionActiveStep === SubmitCampaignSteps.CreatePost}>

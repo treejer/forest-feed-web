@@ -60,7 +60,7 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
   });
 
   useEffect(() => {
-    if (data) {
+    if (data && data?.status === 'success') {
       onTxSuccess?.();
     }
   }, [data]);

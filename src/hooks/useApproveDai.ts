@@ -68,7 +68,7 @@ export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnT
   });
 
   useEffect(() => {
-    if (data) {
+    if (data && data?.status === 'success') {
       onTxSuccess?.();
     }
   }, [data]);

@@ -36,10 +36,11 @@ export function WalletAssets(props: WalletAssetsProps) {
       const notEnough = DAI < salePrice;
       setBalanceError(notEnough);
       dispatchSetDisableForm(notEnough);
-      if (DAI < salePrice && !campaignJourney.disableForm && campaignJourney.submissionActiveStep <= 1) {
+      if (notEnough && !campaignJourney.disableForm && campaignJourney.submissionActiveStep <= 1) {
         notEnoughBalance(t).catch(e => console.log(e, 'error is here'));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [salePrice, DAI]);
 
   const exploreUrls = useMemo(

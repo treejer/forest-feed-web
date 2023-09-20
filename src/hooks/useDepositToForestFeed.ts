@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 
@@ -60,12 +60,10 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
   });
 
   useEffect(() => {
-    if (data) {
+    if (data && data?.status === 'success') {
       onTxSuccess?.();
     }
   }, [data]);
 
-  const canUse = useMemo(() => readyToUse && !!write, [readyToUse, write]);
-
-  return [write, canUse, !!data];
+  return [write, readyToUse, !!data];
 }

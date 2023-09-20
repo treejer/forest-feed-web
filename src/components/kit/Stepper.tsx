@@ -41,7 +41,7 @@ export function Stepper(props: StepperProps) {
               <span className="text-sm md:text-lg font-medium">{item.title}</span>
             </button>
             {activeStep === index ? (
-              <motion.div className="h-[4px] rounded-md underline bg-primary" layoutId="underline" />
+              <motion.div className="h-[4px] rounded-md underline-stepper bg-primary" layoutId="underline" />
             ) : null}
             <div className="h-[2px] rounded-md bg-activeGray" />
           </div>

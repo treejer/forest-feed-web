@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 
+import Link from 'next/link';
 import {useTranslations} from 'use-intl';
 
 import {Spacer} from '@forest-feed/components/common/Spacer';
@@ -9,6 +10,8 @@ import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/camp
 import {notEnoughBalance} from '@forest-feed/utils/sweetalert';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
+import {mumbaiBuyDaiUrl, mumbaiSwapDaiUrl, polygonBuyDaiUrl, polygonSwapDaiUrl} from '@forest-feed/config';
 
 export type WalletAssetsProps = {
   salePrice: number;
@@ -20,6 +23,7 @@ export function WalletAssets(props: WalletAssetsProps) {
   const [balanceError, setBalanceError] = useState(false);
 
   const {campaignJourney, dispatchSetDisableForm} = useCampaignJourney();
+  const {isMainnet} = useConfig();
 
   const {
     tokens: {DAI, loading},
@@ -32,11 +36,26 @@ export function WalletAssets(props: WalletAssetsProps) {
       const notEnough = DAI < salePrice;
       setBalanceError(notEnough);
       dispatchSetDisableForm(notEnough);
-      if (DAI < salePrice && !campaignJourney.disableForm && campaignJourney.submissionActiveStep <= 1) {
+      if (notEnough && !campaignJourney.disableForm && campaignJourney.submissionActiveStep <= 1) {
         notEnoughBalance(t).catch(e => console.log(e, 'error is here'));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [salePrice, DAI]);
+
+  const exploreUrls = useMemo(
+    () => [
+      {
+        url: isMainnet ? polygonBuyDaiUrl : mumbaiBuyDaiUrl,
+        text: 'buyDai',
+      },
+      {
+        url: isMainnet ? polygonSwapDaiUrl : mumbaiSwapDaiUrl,
+        text: isMainnet ? 'swapDai' : 'mintDai',
+      },
+    ],
+    [isMainnet],
+  );
 
   return (
     <div>
@@ -58,6 +77,20 @@ export function WalletAssets(props: WalletAssetsProps) {
           </div>
           <RenderIf condition={balanceError}>
             <p className="text-red text-xs">{t('newCampaign.assets.notEnough')}</p>
+            <Spacer />
+            <ul>
+              {exploreUrls.map(item => (
+                <li key={item.url}>
+                  <Link
+                    className="wallet-assets-link"
+                    href={item.url}
+                    {...(item.url === '#' ? {} : {target: '_blank'})}
+                  >
+                    {t(`newCampaign.assets.${item.text}`)}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </RenderIf>
         </>
       )}

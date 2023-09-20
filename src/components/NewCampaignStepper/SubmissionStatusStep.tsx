@@ -8,7 +8,6 @@ import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {useTranslations} from 'use-intl';
 import {BigNumberish} from 'ethers';
-import moment from 'moment';
 
 import {useRouter} from '@forest-feed/lib/router-events';
 import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
@@ -25,7 +24,7 @@ import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
 import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTimer';
-import {storageKeys} from '@forest-feed/config';
+import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {colors} from 'colors';
 
 export type SubmissionStatusStepProps = {
@@ -43,11 +42,14 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     dispatchCancelCampaignCreation,
   } = useCampaignJourney();
 
+  const [_allowanceChecked, setAllowanceChecked] = useState(false);
+  const [submitPressed, setSubmitPressed] = useState(false);
+
   const [title, setTitle] = usePersistState<string>('', storageKeys.CAMPAIGN_TITLE);
   const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
-  const [allowanceChecked, setAllowanceChecked] = useState(false);
-
+  const [_approveSucceed, setApproveSucceed] = usePersistState(false, storageKeys.CAMPAIGN_APPROVE_SUCCEED);
+  const [depositTime, setDepositTime] = usePersistState<Date | null>(null, storageKeys.CAMPAIGN_DEPOSIT_SUCCEED);
   const [delay, setDelay] = usePersistState(true, storageKeys.CAMPAIGN_DELAY);
 
   const router = useRouter();
@@ -76,57 +78,91 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     });
   }, [dispatchSetSubmissionState]);
 
-  const handleSuccessDeposit = useCallback(() => {
-    dispatchCheckBalance();
+  const handlePrepareSuccessDeposit = useCallback(() => {
     dispatchSetSubmissionState({
-      loading: false,
-      activeStep: 3,
-    });
-  }, [dispatchCheckBalance, dispatchSetSubmissionState]);
-
-  const handleSuccessApproveDai = useCallback(() => {
-    dispatchSetSubmissionState({
-      activeStep: 2,
+      error: false,
+      activeStep: SubmitCampaignSteps.Deposit,
+      loading: true,
     });
   }, [dispatchSetSubmissionState]);
+
+  const handleSuccessDeposit = useCallback(() => {
+    dispatchCheckBalance();
+    setDepositTime(new Date());
+    dispatchSetSubmissionState({
+      error: false,
+      loading: false,
+      activeStep: SubmitCampaignSteps.Finalize,
+    });
+  }, [setDepositTime, dispatchCheckBalance, dispatchSetSubmissionState]);
+
+  const handlePrepareSuccessApproveDai = useCallback(() => {
+    dispatchSetSubmissionState({
+      error: false,
+      activeStep: SubmitCampaignSteps.Approve,
+      loading: true,
+    });
+  }, [dispatchSetSubmissionState]);
+
+  const handleSuccessApproveDai = useCallback(() => {
+    setApproveSucceed(true);
+    dispatchSetSubmissionState({
+      error: false,
+      activeStep: SubmitCampaignSteps.PrepareDeposit,
+      loading: true,
+    });
+  }, [dispatchSetSubmissionState, setApproveSucceed]);
 
   const handleSuccessAllowance = useCallback(
     (_: BigNumberish, value: number) => {
       setAllowanceChecked(true);
       if (value >= amount / 1e18) {
+        setApproveSucceed(true);
         dispatchSetSubmissionState({
-          activeStep: 2,
           error: false,
+          activeStep: SubmitCampaignSteps.PrepareDeposit,
+          loading: true,
+        });
+      } else {
+        dispatchSetSubmissionState({
+          error: false,
+          activeStep: SubmitCampaignSteps.PrepareApprove,
+          loading: true,
         });
       }
     },
-    [amount, dispatchSetSubmissionState],
+    [amount, dispatchSetSubmissionState, setApproveSucceed],
   );
 
   const handleSuccessCreateCampaign = useCallback(() => {
     setTitle('');
     setDelay(true);
     setTitleError(false);
+    setDepositTime(null);
+    setApproveSucceed(false);
+    setSubmitPressed(false);
     router.push('/my-campaigns');
-  }, [router, setDelay, setTitle, setTitleError]);
+  }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, router]);
 
   useAllowanceDaiInForestFeed({
     onSuccess: handleSuccessAllowance,
     onError: handleErrorInProcess,
-    enabled: submissionActiveStep === 1,
+    enabled: submissionActiveStep === SubmitCampaignSteps.CheckAllowance,
   });
 
-  const [approveDaiMethod, isApproveReady] = useApproveDai({
+  const [approveDaiMethod] = useApproveDai({
     onTxSuccess: handleSuccessApproveDai,
-    enabled: !!salePriceBigNum && allowanceChecked,
+    onPrepareSuccess: handlePrepareSuccessApproveDai,
+    enabled: submissionActiveStep === SubmitCampaignSteps.PrepareApprove,
     onContractWriteError: handleErrorInProcess,
     onPrepareError: handleErrorInProcess,
     amount,
   });
 
-  const [depositMethod, isDepositReady] = useDepositToForestFeed({
+  const [depositMethod] = useDepositToForestFeed({
     onTxSuccess: handleSuccessDeposit,
-    enabled: submissionActiveStep === 2,
+    enabled: submissionActiveStep === SubmitCampaignSteps.PrepareDeposit,
+    onPrepareSuccess: handlePrepareSuccessDeposit,
     onContractWriteError: handleErrorInProcess,
     onPrepareError: handleErrorInProcess,
     amount,
@@ -138,6 +174,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       return;
     }
     dispatchSetSubmissionState({
+      error: false,
       loading: true,
     });
     dispatchCreateCampaign({
@@ -164,35 +201,39 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const handleStartCreateCampaign = useCallback(
     (byUser: boolean = false) => {
+      setSubmitPressed(true);
       if (byUser) {
         dispatchSetSubmissionState({
           loading: true,
           error: false,
         });
-        if (submissionActiveStep === 0) {
+        if (submissionActiveStep === SubmitCampaignSteps.CreatePost) {
           onCreatePost();
         }
-        if (submissionActiveStep === 3) {
+        if (submissionActiveStep === SubmitCampaignSteps.Finalize) {
           handleConfirmTitle();
         }
       }
-      if (submissionActiveStep === 1 && isApproveReady) {
+      if (submissionActiveStep === SubmitCampaignSteps.Approve) {
         (async () => {
           await refetch();
         })();
         approveDaiMethod?.();
       }
-      if (submissionActiveStep === 2 && isDepositReady) {
+      if (submissionActiveStep === SubmitCampaignSteps.Deposit) {
         (async () => {
           await refetch();
         })();
         depositMethod?.();
       }
+      if ([SubmitCampaignSteps.PrepareApprove, SubmitCampaignSteps.PrepareDeposit].includes(submissionActiveStep)) {
+        (async () => {
+          await refetch();
+        })();
+      }
     },
     [
       submissionActiveStep,
-      isApproveReady,
-      isDepositReady,
       dispatchSetSubmissionState,
       onCreatePost,
       handleConfirmTitle,
@@ -202,49 +243,82 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     ],
   );
 
+  const handleCreatePost = useCallback(() => {
+    setSubmitPressed(true);
+    onCreatePost();
+  }, [onCreatePost]);
+
   useEffect(() => {
     showToast({
       title: 'Is it correct?',
-      message: publicationQueryData?.publications?.items?.[0].metadata?.content,
+      message: publicationQueryData?.publications?.items?.[0]?.metadata?.content,
       type: ToastType.info,
       translate: false,
     });
   }, [publicationQueryData]);
 
   useEffect(() => {
-    if (!submissionError) {
+    if (!submissionError && submitPressed) {
       handleStartCreateCampaign();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submissionActiveStep, isDepositReady, isApproveReady]);
+  }, [submissionActiveStep]);
+
+  useEffect(() => {
+    return () => {
+      dispatchSetSubmissionState({
+        loading: false,
+      });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCancelSubmission = useCallback(() => {
     dispatchCancelCampaignCreation();
     setTitle('');
     setTitleError(false);
-  }, [dispatchCancelCampaignCreation, setTitle, setTitleError]);
+    setDelay(true);
+    setDepositTime(null);
+    setApproveSucceed(false);
+    setSubmitPressed(false);
+  }, [dispatchCancelCampaignCreation, setTitle, setTitleError, setDelay, setDepositTime, setApproveSucceed]);
+
+  const handleChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTitle(e.target.value);
+    },
+    [setTitle],
+  );
+
+  const handleFocusInput = useCallback(() => {
+    setTitleError(false);
+  }, [setTitleError]);
+
+  const handleEndTime = useCallback(() => {
+    setDelay(false);
+  }, [setDelay]);
 
   const t = useTranslations('newCampaign');
 
   const steps = useMemo(
     () => [
       {
-        key: 0,
+        key: SubmitCampaignSteps.CreatePost,
         text: 'createOnLens',
         desc: 'createOnLensDesc',
       },
       {
-        key: 1,
+        key: SubmitCampaignSteps.Approve,
         text: 'approveDai',
         desc: 'approveDaiDesc',
       },
       {
-        key: 2,
+        key: SubmitCampaignSteps.Deposit,
         text: 'deposit',
         desc: 'depositDesc',
       },
       {
-        key: 3,
+        key: SubmitCampaignSteps.Finalize,
         text: 'finalize',
         desc: 'finalizeDesc',
       },
@@ -284,14 +358,17 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const titleCampaignInput = useCallback(
     (step: number) => {
-      return !submissionError && !submissionLoading && submissionActiveStep === 3 && step === 3 ? (
+      return !submissionError &&
+        !submissionLoading &&
+        submissionActiveStep === SubmitCampaignSteps.Finalize &&
+        step === SubmitCampaignSteps.Finalize ? (
         <div className="flex flex-col relative">
           <input
             className="border border-border outline-none p-1 rounded-[5px] ml-2 text-green"
             type="text"
             value={title}
-            onFocus={() => setTitleError(false)}
-            onChange={e => setTitle(e.target.value)}
+            onFocus={handleFocusInput}
+            onChange={handleChangeTitle}
           />
           {titleError ? (
             <span className="text-xs md:text-sm text-red ml-2 absolute -bottom-5 left-2">{t('titleError')}</span>
@@ -299,27 +376,47 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         </div>
       ) : null;
     },
-    [setTitle, setTitleError, submissionActiveStep, submissionError, submissionLoading, t, title, titleError],
+    [
+      handleChangeTitle,
+      handleFocusInput,
+      submissionActiveStep,
+      submissionError,
+      submissionLoading,
+      t,
+      title,
+      titleError,
+    ],
   );
 
   const submitTitleButton = useCallback(
     () =>
-      delay ? (
-        <CountDownTimer deadline={moment().add(31, 'seconds').toString()} onEndTime={() => setDelay(false)} />
+      delay && depositTime ? (
+        <CountDownTimer start={depositTime?.toString()} deadline={41} onEndTime={handleEndTime} />
       ) : (
         t('submit')
       ),
-    [delay, t, setDelay],
+    [depositTime, delay, t, handleEndTime],
   );
 
   const pageTitle = useMemo(
-    () => (submissionError ? 'oops' : submissionActiveStep === 0 && !submissionLoading ? 'createPost' : 'processing'),
-    [submissionActiveStep, submissionError, submissionLoading],
+    () =>
+      submissionError
+        ? 'oops'
+        : submissionActiveStep === SubmitCampaignSteps.CreatePost && !submissionLoading
+        ? 'createPost'
+        : !submitPressed
+        ? 'continue'
+        : 'processing',
+    [submissionActiveStep, submissionError, submissionLoading, submitPressed],
   );
 
   const pageDesc = useMemo(
     () =>
-      submissionError ? 'failText' : submissionActiveStep === 0 && !submissionLoading ? 'pleaseSubmit' : 'bePatient',
+      submissionError
+        ? 'failText'
+        : submissionActiveStep === SubmitCampaignSteps.CreatePost && !submissionLoading
+        ? 'pleaseSubmit'
+        : 'bePatient',
     [submissionActiveStep, submissionError, submissionLoading],
   );
 
@@ -365,19 +462,43 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           />
         </div>
       </div>
-      <RenderIf condition={!submissionError && submissionActiveStep === 0}>
+      <RenderIf
+        condition={
+          !submissionError &&
+          !submissionLoading &&
+          !submitPressed &&
+          [
+            SubmitCampaignSteps.PrepareApprove,
+            SubmitCampaignSteps.Approve,
+            SubmitCampaignSteps.PrepareDeposit,
+            SubmitCampaignSteps.Deposit,
+          ].includes(submissionActiveStep)
+        }
+      >
+        <div className="flex flex-col items-end justify-center">
+          <Button
+            text={t('continue')}
+            onClick={() => handleStartCreateCampaign(true)}
+            variant={ButtonVariant.secondary}
+          />
+          <span className="text-right text-red text-xs md:text-sm">{t('pleaseReject')}</span>
+        </div>
+      </RenderIf>
+      <RenderIf condition={!submissionError && submissionActiveStep === SubmitCampaignSteps.CreatePost}>
         <Spacer times={5} />
         <div className="flex justify-end items-center">
           <Button
             text={t('submit')}
-            onClick={onCreatePost}
+            onClick={handleCreatePost}
             loading={createPostLoading || submissionLoading}
             disabled={createPostLoading || submissionLoading}
             variant={ButtonVariant.secondary}
           />
         </div>
       </RenderIf>
-      <RenderIf condition={!submissionError && submissionActiveStep === 3 && !submissionLoading}>
+      <RenderIf
+        condition={!submissionError && submissionActiveStep === SubmitCampaignSteps.Finalize && !submissionLoading}
+      >
         <Spacer times={5} />
         <div className="flex justify-end items-center">
           <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />

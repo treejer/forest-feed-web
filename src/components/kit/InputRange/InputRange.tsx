@@ -5,12 +5,13 @@ import './InputRange.scss';
 export type InputRangeProps = {
   value: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
   min?: number;
   max?: number;
 };
 
 export function InputRange(props: InputRangeProps) {
-  const {value, min = 1, max = 100, onChange} = props;
+  const {value, min = 1, max = 100, disabled, onChange} = props;
   const [show, setShow] = useState(false);
 
   const minPos = ((0 - min) / (max - min)) * 100;
@@ -28,7 +29,16 @@ export function InputRange(props: InputRangeProps) {
   return (
     <div onMouseDown={handleShow} onMouseUp={handleHide} className="group wrapper transition-all">
       <div className="input-wrapper">
-        <input className="input" type="range" value={value} min={min} max={max} step={1} onChange={onChange} />
+        <input
+          className="input"
+          type="range"
+          value={value}
+          min={min}
+          max={max}
+          step={1}
+          onChange={onChange}
+          disabled={disabled}
+        />
       </div>
 
       <div className="control-wrapper">

@@ -7,6 +7,7 @@ export function usePersistState<T>(
   key: string,
   debounceTimer?: number,
 ): [T, React.Dispatch<React.SetStateAction<T>>, T] {
+  const [mounted, setMounted] = useState(false);
   const [state, setState] = useState<T>(value);
 
   const debouncedState = useDebounce(state, debounceTimer);
@@ -16,10 +17,13 @@ export function usePersistState<T>(
       const persistValue = window.localStorage.getItem(key);
       setState(persistValue ? JSON.parse(persistValue) : state);
     }
+    setMounted(true);
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem(key, JSON.stringify(state));
+    if (mounted) {
+      window.localStorage.setItem(key, JSON.stringify(state));
+    }
   }, [state]);
 
   return [state, setState, debouncedState];

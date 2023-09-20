@@ -152,6 +152,11 @@ export type Networks = {
   [key in BlockchainNetwork]: NetworkInfo;
 };
 
+export const polygonBuyDaiUrl = process.env.NEXT_PUBLIC_POLYGON_BUY_DAI_EXPLORE_URL || '';
+export const polygonSwapDaiUrl = process.env.NEXT_PUBLIC_POLYGON_SWAP_DAI_EXPLORE_URL || '';
+export const mumbaiBuyDaiUrl = process.env.NEXT_PUBLIC_MUMBAI_BUY_DAI_EXPLORE_URL || '';
+export const mumbaiSwapDaiUrl = process.env.NEXT_PUBLIC_MUMBAI_SWAP_DAI_EXPLORE_URL || '';
+
 export const networks: Networks = {
   [BlockchainNetwork.Polygon]: {
     title: 'Polygon',
@@ -173,7 +178,19 @@ export const storageKeys = {
   CAMPAIGN_TITLE: 'FOREST_FEED_STORAGE_CAMPAIGN_TITLE',
   CAMPAIGN_TITLE_ERROR: 'FOREST_FEED_STORAGE_CAMPAIGN_TITLE_ERROR',
   CAMPAIGN_DELAY: 'FOREST_FEED_STORAGE_CAMPAIGN_DELAY',
+  CAMPAIGN_DEPOSIT_SUCCEED: 'FOREST_FEED_STORAGE_CAMPAIGN_DEPOSIT_SUCCEED',
+  CAMPAIGN_APPROVE_SUCCEED: 'FOREST_FEED_STORAGE_CAMPAIGN_APPROVE_SUCCEED',
 };
+
+export enum SubmitCampaignSteps {
+  CreatePost,
+  CheckAllowance,
+  PrepareApprove,
+  Approve,
+  PrepareDeposit,
+  Deposit,
+  Finalize,
+}
 
 export const debugFetch = true;
 export const reduxLogger = false;

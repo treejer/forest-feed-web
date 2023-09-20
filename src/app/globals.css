@@ -48,10 +48,14 @@
     /*  range slider component style  */
 
     /* stepper active tab underline style */
-    .underline {
+    .underline-stepper {
         @apply absolute -bottom-[1px] h-[1px] left-0 right-0
     }
     /* stepper active tab underline style */
+
+    .wallet-assets-link {
+        @apply bg-gradient-to-r from-[#3fb1d6b3] py-1.5 from-5% to-[#bf8bdf] rounded-md mb-2 text-center block text-white text-xs lg:text-sm
+    }
 }
 
 

@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export function LensTree() {
-  return <img src="/assets/images/LensTree.png" alt="logo" />;
+  return <Image src="/assets/images/LensTree.png" alt="logo" width={122} height={23} />;
 }

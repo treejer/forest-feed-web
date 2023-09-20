@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Image from 'next/image';
+
 export enum ChevronIconDirection {
   left = 'left',
   right = 'right',
@@ -23,11 +25,12 @@ const directionClassNames = {
 export function ChevronIcon(props: ChevronIconProps) {
   const {size = 16, className, direction} = props;
   return (
-    <img
+    <Image
       src="/assets/images/ChevronRight.png"
       alt="add"
       className={`transition-all inline ${directionClassNames[direction]} ${className}`}
-      style={{width: size, height: size}}
+      width={size}
+      height={size}
     />
   );
 }

@@ -78,7 +78,7 @@ export function PledgeStep(props: PledgeStepProps) {
   }, [onProceed]);
 
   const max = useMemo(() => {
-    if (DAI === undefined || DAI >= 1000 || DAI < 10) {
+    if (DAI === undefined || DAI >= 1000) {
       return 100;
     }
     return Math.floor(DAI / salePrice);
@@ -94,7 +94,12 @@ export function PledgeStep(props: PledgeStepProps) {
     <div>
       <p className="text-lg md:text-xl font-extrabold">{t('newCampaign.campaignSize')}</p>
       <p className="text-sm text-secondary">{t('newCampaign.howManyWantsToPlant')}</p>
-      <InputRange value={size} onChange={handleChangeCampaignSize} max={tokensLoading ? 100 : max} />
+      <InputRange
+        value={size}
+        onChange={handleChangeCampaignSize}
+        max={tokensLoading ? 100 : max}
+        disabled={max === 0}
+      />
       <div className="flex items-start justify-between">
         <span className="text-sm text-secondary">
           {t('countTrees', {
@@ -103,7 +108,7 @@ export function PledgeStep(props: PledgeStepProps) {
         </span>
         <span className="text-sm text-secondary">
           {t('countTrees', {
-            count: !tokensLoading ? max : '...',
+            count: !tokensLoading ? (max === 0 ? 100 : max) : '...',
           })}
         </span>
       </div>

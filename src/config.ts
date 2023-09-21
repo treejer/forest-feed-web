@@ -192,5 +192,5 @@ export enum SubmitCampaignSteps {
   Finalize,
 }
 
-export const debugFetch = true;
+export const debugFetch = false;
 export const reduxLogger = false;

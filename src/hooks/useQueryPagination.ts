@@ -1,4 +1,4 @@
-import {Dispatch, useCallback, useEffect, useMemo, useState} from 'react';
+import {Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState} from 'react';
 
 import {OperationVariables, useQuery} from '@apollo/client';
 import {paginationPageSize} from '@forest-feed/config';
@@ -38,12 +38,10 @@ export function useQueryPagination<TQueryData, TVariables extends OperationVaria
 
   useEffect(() => {
     (async function () {
-      // console.log(query.data, 'data is here');
       if (query.data?.[dataKey] !== undefined) {
         if (keepData && page !== 0) {
           if (query.data?.[dataKey]?.length > 0) {
-            // @ts-ignore
-            setPersistedData([...persistedData, ...query.data[dataKey]]);
+            setPersistedData([...(persistedData || []), ...query.data[dataKey]]);
           }
         } else {
           setPersistedData(query.data[dataKey]);
@@ -123,8 +121,10 @@ export function useQueryPagination<TQueryData, TVariables extends OperationVaria
   };
 }
 
-export function usePersistedData<TData>(storageKey: string): [TData | null, Dispatch<TData | null>] {
-  const [data, setData] = useState<TData | null>(null);
+export function usePersistedData<TData>(
+  storageKey: string,
+): [TData[] | null, Dispatch<SetStateAction<TData[] | null>>] {
+  const [data, setData] = useState<TData[] | null>(null);
 
   useEffect(() => {
     (async function () {

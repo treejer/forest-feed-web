@@ -39,7 +39,6 @@ import {reactQueryClient} from '@forest-feed/components/providers/AllTheProvider
 export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['startConfiguration']>) {
   try {
     const {newNetwork, userInApp, onSuccess} = payload || {};
-    console.log(newNetwork, 'newNetwork');
     let config: NetworkConfig = yield select(selectConfig);
     if (newNetwork) {
       if (config.chainId !== newNetwork && userInApp) {

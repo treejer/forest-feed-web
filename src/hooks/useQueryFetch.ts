@@ -55,6 +55,8 @@ export function queryFn<Data, Form = any>({
 export function useQueryFetch<Data, Form = any, Params = any>(params: UseQueryFetchParams<Form, Params>) {
   const {queryKey, limit = paginationPageSize, endpoint, method = 'get', params: fetchParams, data: fetchData} = params;
 
+  const [mounted, setMounted] = useState(false);
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -102,9 +104,14 @@ export function useQueryFetch<Data, Form = any, Params = any>(params: UseQueryFe
   }, [profile?.walletAddress]);
 
   useEffect(() => {
-    router.push(`/my-campaigns?${page !== 1 ? `page=${page}` : ''}`, {
-      scroll: false,
-    });
+    if (mounted) {
+      const href = `/my-campaigns?${page !== 1 ? `page=${page}` : ''}`;
+      router.push(href, {
+        scroll: false,
+      });
+    }
+
+    setMounted(true);
   }, [page]);
 
   const handleSetPage = useCallback((page: number) => {

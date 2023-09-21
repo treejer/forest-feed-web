@@ -22,7 +22,6 @@ import {lensProtocolAppId, NetworkConfig} from '@forest-feed/config';
 import {getHttpDownloadUrl, upload, uploadContent} from '@forest-feed/utils/ipfs';
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {showToast, ToastType} from '@forest-feed/utils/showToast';
 
 export type UseLensCreatePostParams = {
   publisher: ProfileOwnedByMe;
@@ -128,22 +127,22 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
       }
 
       if (result.isSuccess()) {
-        showToast({
-          message: 'lens.postCreated',
-          translate: true,
-          type: ToastType.success,
-        });
+        // showToast({
+        //   message: 'lens.postCreated',
+        //   translate: true,
+        //   type: ToastType.success,
+        // });
         dispatchSetSubmissionState({
           activeStep: 1,
           error: false,
         });
       }
       if (result.isFailure()) {
-        showToast({
-          message: 'lens.postFailure',
-          translate: true,
-          type: ToastType.error,
-        });
+        // showToast({
+        //   message: 'lens.postFailure',
+        //   translate: true,
+        //   type: ToastType.error,
+        // });
         dispatchSetSubmissionState({
           loading: false,
           activeStep: 0,
@@ -153,7 +152,6 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
     } catch (e: any) {
       console.log(e, 'error in create post');
     } finally {
-      console.log('create post finally');
       setLoading(false);
     }
   }, [campaignJourney, config.ipfsPostURL, config.ipfsGetURL, create, dispatchSetSubmissionState]);

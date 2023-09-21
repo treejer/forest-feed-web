@@ -33,7 +33,6 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
     onSuccess: data => {
       onPrepareSuccess?.(data);
       setReadyToUse(true);
-      console.log(data, 'success in deposit config');
     },
     onError: err => {
       onPrepareError?.(err);
@@ -46,7 +45,6 @@ export function useDepositToForestFeed(params: UseDepositToForestFeedParams): Us
     onSuccess: data => {
       onContractWriteSuccess?.(data);
       setTxHash(data.hash);
-      console.log(data, 'success in write deposit');
     },
     onError: err => {
       onContractWriteError?.(err);

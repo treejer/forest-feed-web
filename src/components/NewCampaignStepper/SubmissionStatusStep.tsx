@@ -22,7 +22,6 @@ import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
-import {showToast, ToastType} from '@forest-feed/utils/showToast';
 import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTimer';
 import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {colors} from 'colors';
@@ -248,14 +247,14 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     onCreatePost();
   }, [onCreatePost]);
 
-  useEffect(() => {
-    showToast({
-      title: 'Is it correct?',
-      message: publicationQueryData?.publications?.items?.[0]?.metadata?.content,
-      type: ToastType.info,
-      translate: false,
-    });
-  }, [publicationQueryData]);
+  // useEffect(() => {
+  //   showToast({
+  //     title: 'Is it correct?',
+  //     message: publicationQueryData?.publications?.items?.[0]?.metadata?.content,
+  //     type: ToastType.info,
+  //     translate: false,
+  //   });
+  // }, [publicationQueryData]);
 
   useEffect(() => {
     if (!submissionError && submitPressed) {

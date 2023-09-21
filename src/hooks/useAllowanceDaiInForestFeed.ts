@@ -26,7 +26,6 @@ export function useAllowanceDaiInForestFeed(params: UseAllowanceDaiInForestFeedP
     functionName: 'allowance',
     onSuccess: data => {
       onSuccess?.(data, Number(data?.toString()) / 1e18);
-      console.log(data, 'data in allowance read');
     },
     onError: err => {
       onError?.(err);

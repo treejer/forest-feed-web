@@ -40,7 +40,6 @@ export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnT
     onSuccess: data => {
       onPrepareSuccess?.(data);
       setReadyToUse(true);
-      console.log(data, 'success in approve config');
     },
     onError: err => {
       onPrepareError?.(err);
@@ -54,7 +53,6 @@ export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnT
     onSuccess: data => {
       onContractWriteSuccess?.(data);
       setTxHash(data.hash);
-      console.log(data, 'data in write approve');
     },
     onError: err => {
       onContractWriteError?.(err);

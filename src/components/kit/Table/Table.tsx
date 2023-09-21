@@ -49,7 +49,7 @@ function TableComponent<D extends object>(props: TableProps<D>) {
                     return (
                       <th {...props} key={key} className="py-2 px-3 font-normal text-sm">
                         <div className="flex justify-center items-center">
-                          {column.render('Header')}
+                          {column.render('Header') as React.ReactNode}
                           {column.isSorted ? (
                             <span className="flex items-center">
                               <Spacer />
@@ -78,7 +78,7 @@ function TableComponent<D extends object>(props: TableProps<D>) {
                     const {key, ...props} = cell.getCellProps();
                     return (
                       <td {...props} key={key} className="py-2 md:py-5 px-3 text-center text-xs md:text-sm">
-                        <div className="flex justify-center">{cell.render('Cell')}</div>
+                        <div className="flex justify-center">{cell.render('Cell') as React.ReactNode}</div>
                       </td>
                     );
                   })}

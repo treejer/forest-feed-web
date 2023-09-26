@@ -5,6 +5,7 @@
       "title": "Forest Feed"
     }
   },
+  "finished": "Finished",
   "campaign": "Campaign",
   "signWithForest": "Sign With Forest",
   "Polygon": "Polygon",
@@ -96,7 +97,9 @@
   },
   "myCampaigns": {
     "status": "Status",
-    "campaignId": "Campaign ID",
+    "postId": "Post ID",
+    "campaignId": "campaign ID",
+    "publicationId": "Publication ID",
     "type": "TYPE",
     "budget": "Budget",
     "goal": "Goal",

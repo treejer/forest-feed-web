@@ -1,5 +1,35 @@
+import {useMemo} from 'react';
+
 import Image from 'next/image';
 
-export function AssetIcon() {
-  return <Image src="/assets/images/Asset.png" alt="logo" width={42} height={42} />;
+import {NoPicture, Asset} from 'public/assets/images';
+
+export type AssetIconProps = {
+  loggedIn?: boolean;
+  avatar?: string;
+};
+
+export function AssetIcon(props: AssetIconProps) {
+  const {loggedIn, avatar} = props;
+
+  const src = useMemo(() => (loggedIn ? avatar || NoPicture : Asset), [avatar, loggedIn]);
+  const blurDataUrl = useMemo(
+    () => (loggedIn ? avatar || NoPicture.blurDataURL : Asset.blurDataURL),
+    [avatar, loggedIn],
+  );
+  const size = useMemo(() => (!loggedIn ? 42 : undefined), [loggedIn]);
+
+  return (
+    <Image
+      src={src}
+      alt="avatar"
+      width={size}
+      height={size}
+      loading="lazy"
+      placeholder="blur"
+      layout={loggedIn ? 'fill' : undefined}
+      objectFit={loggedIn ? 'contain' : undefined}
+      blurDataURL={blurDataUrl}
+    />
+  );
 }

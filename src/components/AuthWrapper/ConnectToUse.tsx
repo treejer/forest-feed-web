@@ -10,6 +10,7 @@ import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {LensIcon} from '@forest-feed/components/kit/Icons/LensIcon';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import {Trees} from 'public/assets/images';
 
 export function ConnectToUse() {
   const {address, status} = useAccount();
@@ -24,7 +25,16 @@ export function ConnectToUse() {
 
   return (
     <div className="col-span-full w-full h-full flex flex-col items-center">
-      <Image className="-z-10" src="/assets/images/trees.svg" alt="trees" width={300} height={300} draggable={false} />
+      <Image
+        className="-z-10"
+        src={Trees}
+        alt="trees"
+        width={300}
+        height={300}
+        placeholder="blur"
+        blurDataURL="/assets/images/trees.svg"
+        draggable={false}
+      />
       <p className="my-4 text-secondary drop-shadow max-w-2xl text-center">{t('connectToUse.text')}</p>
       {address && status === 'connected' ? (
         <>

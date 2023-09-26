@@ -58,7 +58,7 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div className="transition-all">
-      <div ref={dropdownRef} className={`dropdown dropdown-end ${className}`}>
+      <div ref={dropdownRef} className={`z-50 dropdown dropdown-end ${className}`}>
         <button
           tabIndex={0}
           onClick={() => handleClick()}
@@ -95,7 +95,13 @@ export function DropDown(props: DropDownProps) {
                 >
                   <div className="flex flex-row justify-start items-center w-full">
                     <RenderIf condition={!!item.image}>
-                      <Image src={item.image!} alt={item.text.toString()} {...imageStyles} />
+                      <Image
+                        src={item.image!}
+                        alt={item.text.toString()}
+                        {...imageStyles}
+                        placeholder="blur"
+                        blurDataURL={item.image as string}
+                      />
                     </RenderIf>
                     <span className={`text-${selected.id === item.id ? activeColor : color} flex justify-start`}>
                       {item.text}

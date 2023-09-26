@@ -151,6 +151,11 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
       }
     } catch (e: any) {
       console.log(e, 'error in create post');
+      dispatchSetSubmissionState({
+        loading: false,
+        activeStep: 0,
+        error: true,
+      });
     } finally {
       setLoading(false);
     }

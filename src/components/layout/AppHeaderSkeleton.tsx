@@ -23,7 +23,7 @@ export function SkeletonBox(props: SkeletonBoxProps) {
 export function AppHeaderSkeleton() {
   return (
     <SkeletonTheme>
-      <div className="flex items-center">
+      <div className="flex items-center -z-10">
         <SkeletonBox />
         <Spacer />
         <SkeletonBox wrapperClassName="hidden md:block" width={160} />

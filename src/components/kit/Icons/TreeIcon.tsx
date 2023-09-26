@@ -1,5 +1,7 @@
 import Image from 'next/image';
 
+import {TreePng} from 'public/assets/images';
+
 export function TreeIcon() {
-  return <Image src="/assets/images/tree.png" alt="tree" width={28} height={36} />;
+  return <Image src={TreePng} alt="tree" width={28} height={36} placeholder="blur" blurDataURL={TreePng.blurDataURL} />;
 }

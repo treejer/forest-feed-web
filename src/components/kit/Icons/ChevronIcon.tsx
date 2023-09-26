@@ -2,6 +2,8 @@ import React from 'react';
 
 import Image from 'next/image';
 
+import {ChevronRight} from 'public/assets/images';
+
 export enum ChevronIconDirection {
   left = 'left',
   right = 'right',
@@ -26,11 +28,13 @@ export function ChevronIcon(props: ChevronIconProps) {
   const {size = 16, className, direction} = props;
   return (
     <Image
-      src="/assets/images/ChevronRight.png"
+      src={ChevronRight}
       alt="add"
       className={`transition-all inline ${directionClassNames[direction]} ${className}`}
       width={size}
       height={size}
+      placeholder="blur"
+      blurDataURL={ChevronRight.blurDataURL}
     />
   );
 }

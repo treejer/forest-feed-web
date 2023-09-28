@@ -7,6 +7,7 @@ import {MediaSet, ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {HeartIcon, SwitchHorizontalIcon, ChatAlt2Icon} from '@heroicons/react/outline';
+import {NoPicture} from 'public/assets/images';
 
 export type LensterPostViewProps = {
   content: string;
@@ -23,10 +24,12 @@ export function LensterPostView(props: LensterPostViewProps) {
   return (
     <div className="bg-white shadow p-5 rounded-xl">
       <div className="flex items-center pb-4">
-        <img
-          src={(activeProfile?.picture as MediaSet)?.original?.url || '/assets/images/no_picture.webp'}
+        <Image
+          src={(activeProfile?.picture as MediaSet)?.original?.url || NoPicture}
           alt="profile-picture"
-          className="h-10 w-10 rounded-full border border-tGray-200"
+          width={40}
+          height={40}
+          className="rounded-full border border-tGray-200"
         />
         <Spacer times={1.5} />
         <div>

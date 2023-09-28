@@ -85,7 +85,7 @@ export function DropDown(props: DropDownProps) {
               animate={{opacity: 1, y: 0}}
               exit={{opacity: 0, y: -10}}
               transition={{duration: 0.2}}
-              className={`dropdown-content z-[1] menu shadow-lg rounded-[5px] w-52 bg-${bgColor} p-0 mt-1`}
+              className={`dropdown-content z-50 menu shadow-lg rounded-[5px] w-52 bg-${bgColor} p-0 mt-1`}
             >
               {items.map(item => (
                 <li
@@ -95,7 +95,13 @@ export function DropDown(props: DropDownProps) {
                 >
                   <div className="flex flex-row justify-start items-center w-full">
                     <RenderIf condition={!!item.image}>
-                      <Image src={item.image!} alt={item.text.toString()} {...imageStyles} />
+                      <Image
+                        src={item.image!}
+                        alt={item.text.toString()}
+                        {...imageStyles}
+                        placeholder="blur"
+                        blurDataURL={item.image as string}
+                      />
                     </RenderIf>
                     <span className={`text-${selected.id === item.id ? activeColor : color} flex justify-start`}>
                       {item.text}

@@ -2,6 +2,7 @@
 
 import React, {useMemo} from 'react';
 
+import Link from 'next/link';
 import {useTranslations} from 'use-intl';
 import {TableOptions} from 'react-table';
 import moment from 'moment';
@@ -16,6 +17,7 @@ import {CampaignActivation} from '@forest-feed/components/CampaignActivation/Cam
 import {useMediaQuery} from '@forest-feed/hooks/useMediaQuery';
 import {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
 import {useQueryFetch} from '@forest-feed/hooks/useQueryFetch';
+import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 
 function MyCampaigns() {
   const {
@@ -33,6 +35,8 @@ function MyCampaigns() {
     },
   });
 
+  const {lensterPublicationUrl} = useConfig();
+
   const t = useTranslations('myCampaigns');
 
   const matches = useMediaQuery('(max-width: 768px)');
@@ -48,16 +52,21 @@ function MyCampaigns() {
               campaignId={cell.row.original._id}
               checked={value === CampaignStatus.active}
               disabled={value === CampaignStatus.finished}
-              value={value.toString()}
+              value={value}
             />
           );
         },
         disableSortBy: true,
       },
       {
-        Header: t('campaignId'),
+        Header: t('postId'),
         accessor: 'publicationId',
         disableSortBy: true,
+        Cell: ({value}) => (
+          <Link href={`${lensterPublicationUrl}/${value}`} target="_blank" className="font-bold underline">
+            {value}
+          </Link>
+        ),
       },
       {
         Header: t('title'),
@@ -96,7 +105,7 @@ function MyCampaigns() {
         defaultCanSort: true,
       },
     ],
-    [t, matches],
+    [t, lensterPublicationUrl, matches],
   );
 
   return (

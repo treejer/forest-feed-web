@@ -61,6 +61,7 @@ export interface NetworkConfig {
   network: BlockchainNetworkName;
   chainId: BlockchainNetwork;
   explorerUrl: string;
+  lensterPublicationUrl: string;
 }
 
 export interface Config {
@@ -104,6 +105,7 @@ export const config: Config = {
     network: BlockchainNetworkName.Polygon,
     chainId: BlockchainNetwork.Polygon,
     explorerUrl: '',
+    lensterPublicationUrl: formatUrl(process.env.NEXT_PUBLIC_POLYGON_LENSTER_PUBLICATION_URL || ''),
   },
   [BlockchainNetwork.Mumbai]: {
     name: projectName,
@@ -138,6 +140,7 @@ export const config: Config = {
     network: BlockchainNetworkName.Mumbai,
     chainId: BlockchainNetwork.Mumbai,
     explorerUrl: '',
+    lensterPublicationUrl: formatUrl(process.env.NEXT_PUBLIC_MUMBAI_LENSTER_PUBLICATION_URL || ''),
   },
 };
 
@@ -180,10 +183,12 @@ export const storageKeys = {
   CAMPAIGN_DELAY: 'FOREST_FEED_STORAGE_CAMPAIGN_DELAY',
   CAMPAIGN_DEPOSIT_SUCCEED: 'FOREST_FEED_STORAGE_CAMPAIGN_DEPOSIT_SUCCEED',
   CAMPAIGN_APPROVE_SUCCEED: 'FOREST_FEED_STORAGE_CAMPAIGN_APPROVE_SUCCEED',
+  PUBLICATION_STATE: 'FOREST_FEED_STORAGE_PUBLICATION_STATE',
 };
 
 export enum SubmitCampaignSteps {
   CreatePost,
+  CheckPost,
   CheckAllowance,
   PrepareApprove,
   Approve,

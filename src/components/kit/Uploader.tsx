@@ -19,10 +19,11 @@ export type UploaderProps = {
   preview?: boolean;
   file: File | null;
   disabled?: boolean;
+  accept?: string;
 };
 
 export function Uploader(props: UploaderProps) {
-  const {preview, file, disabled, onChange, onDrop, onBlur, onDetach} = props;
+  const {preview, file, disabled, accept, onChange, onDrop, onBlur, onDetach} = props;
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
   const [dragActive, setDragActive] = useState(false);
@@ -102,6 +103,7 @@ export function Uploader(props: UploaderProps) {
             className="hidden"
             id="file-uploader"
             type="file"
+            accept={accept || 'image/gif, image/png, image/jpeg, image/webp'}
             onChange={onChange}
             onBlur={onBlur}
             multiple={false}

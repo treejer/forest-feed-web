@@ -1,5 +1,15 @@
 import Image from 'next/image';
+import {LensTree as LensTreeImage} from 'public/assets/images/index';
 
 export function LensTree() {
-  return <Image src="/assets/images/LensTree.png" alt="logo" width={122} height={23} />;
+  return (
+    <Image
+      src={LensTreeImage}
+      alt="logo"
+      width={122}
+      height={23}
+      placeholder="blur"
+      blurDataURL={LensTreeImage.blurDataURL}
+    />
+  );
 }

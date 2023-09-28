@@ -10,6 +10,7 @@ import {colors} from 'colors';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {ConnectToUse} from '@forest-feed/components/AuthWrapper/ConnectToUse';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
+import {useInit} from '@forest-feed/redux/module/init/init.slice';
 import './AuthWrapper.scss';
 
 export type AuthLoaderProps = {
@@ -50,6 +51,8 @@ export function AuthWrapper(props: AuthWrapperProps) {
 
   const {lensProfile, lensProfileLoading} = useAuthLens();
 
+  const {initState} = useInit();
+
   const renderLoader = useCallback((loading: boolean, disable?: boolean) => {
     return (
       <RenderIf condition={loading || !!disable}>
@@ -59,13 +62,13 @@ export function AuthWrapper(props: AuthWrapperProps) {
   }, []);
 
   const loading = useMemo(
-    () => isConnecting || switching || lensProfileLoading || forestLoading,
-    [forestLoading, isConnecting, lensProfileLoading, switching],
+    () => initState.loading || isConnecting || switching || lensProfileLoading || forestLoading,
+    [forestLoading, initState.loading, isConnecting, lensProfileLoading, switching],
   );
 
   const canAccessToApp = useMemo(
-    () => address && lensProfile && isConnected && isSupportedNetwork && forestProfile,
-    [address, forestProfile, isConnected, isSupportedNetwork, lensProfile],
+    () => !initState.loading && address && lensProfile && isConnected && isSupportedNetwork && forestProfile,
+    [address, forestProfile, initState.loading, isConnected, isSupportedNetwork, lensProfile],
   );
 
   return (

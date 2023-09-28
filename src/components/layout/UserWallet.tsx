@@ -10,12 +10,14 @@ import {useTabFocus} from '@forest-feed/hooks/useTabFocus';
 
 export type UserWalletProps = {
   handle?: string;
+  avatar?: string;
   address: string;
   isSupportedNetwork: boolean;
   onDisconnect: () => void;
 };
+
 export function UserWallet(props: UserWalletProps) {
-  const {handle, address, isSupportedNetwork, onDisconnect} = props;
+  const {handle, avatar, address, isSupportedNetwork, onDisconnect} = props;
 
   const [inHover, setInHover] = useState(false);
 
@@ -43,11 +45,11 @@ export function UserWallet(props: UserWalletProps) {
         onMouseLeave={handleCloseMenu}
         className="flex items-center py-1 dropdown dropdown-hover dropdown-bottom"
       >
-        <div className="bg-primaryBg border-2 w-[150px] h-8 rounded-full border-white flex items-center justify-start pl-3 -mr-8 text-sm font-semibold cursor-pointer">
+        <div className="bg-primaryBg border-2 min-w-[150px] h-8 rounded-full border-white flex items-center justify-start pl-3 -mr-8 text-sm font-semibold cursor-pointer">
           {handle ? <span className="text-green">@{handle}</span> : shortenedString(address, 14, 4)}
         </div>
-        <div className="border-2 w-[42px] h-[42px] rounded-full border-white flex items-end justify-end bg-red mb-30">
-          <AssetIcon />
+        <div className="border-2 w-[42px] h-[42px] rounded-full border-white relative bg-primaryBg overflow-hidden mb-30">
+          <AssetIcon loggedIn={!!handle} avatar={avatar} />
         </div>
         <AnimatePresence>
           {inHover ? (

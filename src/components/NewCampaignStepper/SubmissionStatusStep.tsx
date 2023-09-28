@@ -26,6 +26,11 @@ import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTi
 import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {colors} from 'colors';
 
+export type TPublicationState = {
+  publicationId: string;
+  succeed: boolean;
+};
+
 export type SubmissionStatusStepProps = {
   activeProfile: ProfileOwnedByMe;
   onCreatePost: () => void;
@@ -47,9 +52,19 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const [title, setTitle] = usePersistState<string>('', storageKeys.CAMPAIGN_TITLE);
   const [titleError, setTitleError] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_TITLE_ERROR);
 
-  const [_approveSucceed, setApproveSucceed] = usePersistState(false, storageKeys.CAMPAIGN_APPROVE_SUCCEED);
+  const [_approveSucceed, setApproveSucceed] = usePersistState<boolean>(false, storageKeys.CAMPAIGN_APPROVE_SUCCEED);
   const [depositTime, setDepositTime] = usePersistState<Date | null>(null, storageKeys.CAMPAIGN_DEPOSIT_SUCCEED);
-  const [delay, setDelay] = usePersistState(true, storageKeys.CAMPAIGN_DELAY);
+  const [delay, setDelay] = usePersistState<boolean>(true, storageKeys.CAMPAIGN_DELAY);
+
+  const [checkTime, setCheckTime] = useState(0);
+
+  const [publicationState, setPublicationState] = usePersistState<TPublicationState>(
+    {
+      publicationId: '',
+      succeed: false,
+    },
+    storageKeys.PUBLICATION_STATE,
+  );
 
   const router = useRouter();
 
@@ -140,8 +155,12 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDepositTime(null);
     setApproveSucceed(false);
     setSubmitPressed(false);
+    setPublicationState({
+      publicationId: '',
+      succeed: false,
+    });
     router.push('/my-campaigns');
-  }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, router]);
+  }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, setPublicationState, router]);
 
   useAllowanceDaiInForestFeed({
     onSuccess: handleSuccessAllowance,
@@ -181,7 +200,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       minFollower: campaignJourney.reward.minimumFollowerNumber,
       isFollowerOnly: campaignJourney.reward.onlyFollowers,
       campaignSize: campaignJourney.size,
-      publicationId: publicationQueryData?.publications?.items[0]?.id,
+      publicationId: publicationState.publicationId,
       onSuccess: handleSuccessCreateCampaign,
       onFailure: handleErrorInProcess,
     });
@@ -192,11 +211,62 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     campaignJourney.reward.minimumFollowerNumber,
     campaignJourney.reward.onlyFollowers,
     campaignJourney.size,
-    publicationQueryData?.publications?.items,
+    publicationState.publicationId,
     handleSuccessCreateCampaign,
     handleErrorInProcess,
     setTitleError,
   ]);
+
+  const handleCreatePost = useCallback(() => {
+    setSubmitPressed(true);
+    onCreatePost();
+  }, [onCreatePost]);
+
+  const handleCheckPublication = useCallback(async () => {
+    try {
+      const checkWith = publicationQueryData?.publications?.items?.[0]?.id;
+      console.log({
+        oldID: publicationState.publicationId,
+        newID: checkWith,
+      });
+      if (!publicationState.publicationId || !checkWith) {
+        await refetch();
+        setPublicationState(prevState => ({
+          ...prevState,
+          publicationId: checkWith || prevState.publicationId,
+        }));
+        if (!publicationState.publicationId) setCheckTime(prevState => prevState + 1);
+      } else {
+        setSubmitPressed(true);
+        if (publicationState.publicationId === checkWith) {
+          await refetch();
+          setPublicationState(prevState => ({
+            ...prevState,
+            succeed: false,
+          }));
+          setCheckTime(prevState => prevState + 1);
+        } else {
+          setPublicationState({
+            publicationId: checkWith,
+            succeed: true,
+          });
+          dispatchSetSubmissionState({
+            activeStep: SubmitCampaignSteps.CheckAllowance,
+            error: false,
+            loading: true,
+          });
+        }
+      }
+    } catch (e: any) {
+      console.log(e, 'error in check publication');
+      setSubmitPressed(false);
+      dispatchSetSubmissionState({
+        error: true,
+        loading: false,
+        activeStep: SubmitCampaignSteps.CheckPost,
+      });
+    }
+  }, [publicationQueryData, publicationState.publicationId, refetch, setPublicationState, dispatchSetSubmissionState]);
 
   const handleStartCreateCampaign = useCallback(
     (byUser: boolean = false) => {
@@ -213,48 +283,26 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           handleConfirmTitle();
         }
       }
+      if (submissionActiveStep === SubmitCampaignSteps.CheckPost) {
+        (async () => await handleCheckPublication())();
+      }
       if (submissionActiveStep === SubmitCampaignSteps.Approve) {
-        (async () => {
-          await refetch();
-        })();
         approveDaiMethod?.();
       }
       if (submissionActiveStep === SubmitCampaignSteps.Deposit) {
-        (async () => {
-          await refetch();
-        })();
         depositMethod?.();
-      }
-      if ([SubmitCampaignSteps.PrepareApprove, SubmitCampaignSteps.PrepareDeposit].includes(submissionActiveStep)) {
-        (async () => {
-          await refetch();
-        })();
       }
     },
     [
       submissionActiveStep,
       dispatchSetSubmissionState,
       onCreatePost,
+      handleCheckPublication,
       handleConfirmTitle,
       approveDaiMethod,
-      refetch,
       depositMethod,
     ],
   );
-
-  const handleCreatePost = useCallback(() => {
-    setSubmitPressed(true);
-    onCreatePost();
-  }, [onCreatePost]);
-
-  // useEffect(() => {
-  //   showToast({
-  //     title: 'Is it correct?',
-  //     message: publicationQueryData?.publications?.items?.[0]?.metadata?.content,
-  //     type: ToastType.info,
-  //     translate: false,
-  //   });
-  // }, [publicationQueryData]);
 
   useEffect(() => {
     if (!submissionError && submitPressed) {
@@ -272,6 +320,16 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (
+      (submissionActiveStep < SubmitCampaignSteps.CheckAllowance && !publicationState.publicationId) ||
+      submissionActiveStep === SubmitCampaignSteps.CheckPost
+    ) {
+      (async () => await handleCheckPublication())();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [checkTime]);
+
   const handleCancelSubmission = useCallback(() => {
     dispatchCancelCampaignCreation();
     setTitle('');
@@ -280,7 +338,19 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDepositTime(null);
     setApproveSucceed(false);
     setSubmitPressed(false);
-  }, [dispatchCancelCampaignCreation, setTitle, setTitleError, setDelay, setDepositTime, setApproveSucceed]);
+    setPublicationState({
+      publicationId: '',
+      succeed: false,
+    });
+  }, [
+    dispatchCancelCampaignCreation,
+    setTitle,
+    setTitleError,
+    setDelay,
+    setDepositTime,
+    setApproveSucceed,
+    setPublicationState,
+  ]);
 
   const handleChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

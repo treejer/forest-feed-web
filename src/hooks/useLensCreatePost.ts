@@ -18,8 +18,8 @@ import {
   WalletConnectionError,
 } from '@lens-protocol/react-web';
 
-import {lensProtocolAppId, NetworkConfig} from '@forest-feed/config';
-import {getHttpDownloadUrl, upload, uploadContent} from '@forest-feed/utils/ipfs';
+import {lensProtocolAppId, NetworkConfig, SubmitCampaignSteps} from '@forest-feed/config';
+import {getHttpDownloadUrl, IPFSUploadResponse, upload, uploadContent} from '@forest-feed/utils/ipfs';
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 
@@ -52,9 +52,9 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
       error: false,
     });
     try {
-      const {content, image, settings, reward, size} = campaignJourney;
+      const {content, image, settings, size} = campaignJourney;
 
-      let photoMetaData;
+      let photoMetaData: IPFSUploadResponse | undefined = undefined;
 
       if (image) {
         photoMetaData = await upload(config.ipfsPostURL, image);
@@ -107,12 +107,12 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
         BroadcastingError | PendingSigningRequestError | UserRejectedError | WalletConnectionError | FailedUploadError
       >;
 
-      if (image) {
+      if (image && photoMetaData) {
         result = await create({
           contentFocus: ContentFocus.IMAGE,
           media: [
             {
-              url: getHttpDownloadUrl(config.ipfsGetURL, photoMetaData.Hash),
+              url: getHttpDownloadUrl(config.ipfsGetURL, photoMetaData?.Hash),
               mimeType: image?.type as SupportedPublicationMediaType,
               altTag: image?.name,
             },
@@ -133,7 +133,7 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
         //   type: ToastType.success,
         // });
         dispatchSetSubmissionState({
-          activeStep: 1,
+          activeStep: SubmitCampaignSteps.CheckPost,
           error: false,
         });
       }
@@ -145,12 +145,17 @@ export function useLensCreatePost(props: UseLensCreatePostParams) {
         // });
         dispatchSetSubmissionState({
           loading: false,
-          activeStep: 0,
+          activeStep: SubmitCampaignSteps.CreatePost,
           error: true,
         });
       }
     } catch (e: any) {
       console.log(e, 'error in create post');
+      dispatchSetSubmissionState({
+        loading: false,
+        activeStep: SubmitCampaignSteps.CreatePost,
+        error: true,
+      });
     } finally {
       setLoading(false);
     }

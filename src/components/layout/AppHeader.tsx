@@ -2,6 +2,7 @@ import React from 'react';
 
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
+import {MediaSet} from '@lens-protocol/react-web';
 import {useTranslations} from 'use-intl';
 
 import {Logo} from '@forest-feed/components/kit/Icons/LogoIcon';
@@ -67,6 +68,7 @@ export function AppHeader() {
                 <UserWallet
                   handle={lensProfile?.handle}
                   address={address}
+                  avatar={(lensProfile?.picture as MediaSet)?.original?.url}
                   onDisconnect={dispatchLogoutAccount}
                   isSupportedNetwork={isSupportedNetwork}
                 />

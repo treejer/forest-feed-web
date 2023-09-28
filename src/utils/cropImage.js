@@ -83,7 +83,7 @@ export default async function getCroppedImg(
   return new Promise(resolve => {
     canvas.toBlob(file => {
       // eslint-disable-next-line no-undef
-      resolve(new File([file], name));
+      resolve(new File([file], name, {type: file.type}));
     }, 'image/jpeg');
     // const file = canvas.toDataURL('image/jpeg');
     // console.log(file, 'file');

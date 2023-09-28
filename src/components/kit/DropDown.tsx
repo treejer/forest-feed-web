@@ -58,7 +58,7 @@ export function DropDown(props: DropDownProps) {
 
   return (
     <div className="transition-all">
-      <div ref={dropdownRef} className={`z-50 dropdown dropdown-end ${className}`}>
+      <div ref={dropdownRef} className={`dropdown dropdown-end ${className}`}>
         <button
           tabIndex={0}
           onClick={() => handleClick()}
@@ -85,7 +85,7 @@ export function DropDown(props: DropDownProps) {
               animate={{opacity: 1, y: 0}}
               exit={{opacity: 0, y: -10}}
               transition={{duration: 0.2}}
-              className={`dropdown-content z-[1] menu shadow-lg rounded-[5px] w-52 bg-${bgColor} p-0 mt-1`}
+              className={`dropdown-content z-50 menu shadow-lg rounded-[5px] w-52 bg-${bgColor} p-0 mt-1`}
             >
               {items.map(item => (
                 <li

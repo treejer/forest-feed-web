@@ -8,6 +8,7 @@ import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {BlockchainNetwork, networks} from '@forest-feed/config';
 import {Color} from 'colors';
+import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 
 export function SwitchNetwork() {
   const {
@@ -15,6 +16,8 @@ export function SwitchNetwork() {
     dispatchSwitchNetwork,
   } = useWeb3();
   const {handleLensLogout} = useAuthLens();
+
+  const {campaignJourney} = useCampaignJourney();
 
   const t = useTranslations();
 
@@ -61,7 +64,7 @@ export function SwitchNetwork() {
       selected={currentNetwork!}
       items={networksList}
       onChange={handleSwitchNetwork}
-      disabled={switching}
+      disabled={switching || campaignJourney.submissionLoading}
     />
   ) : (
     <ConnectButton />

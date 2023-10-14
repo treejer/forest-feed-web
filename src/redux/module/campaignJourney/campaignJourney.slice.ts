@@ -4,6 +4,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
 import {selectCampaignJourney} from '@forest-feed/redux/selectors';
+import {SubmitCampaignSteps} from '@forest-feed/config';
 
 export type CampaignJourneyState = {
   disableForm: boolean;
@@ -42,6 +43,7 @@ export type CampaignJourneyAction = {
     error?: boolean;
     activeStep?: number;
   };
+  removeTermsAndConditions?: boolean;
 };
 
 export const campaignJourneyInitialState: CampaignJourneyState = {
@@ -61,7 +63,7 @@ export const campaignJourneyInitialState: CampaignJourneyState = {
   termsConditionAgreed: false,
   currentStep: 0,
   submissionLoading: false,
-  submissionActiveStep: 0,
+  submissionActiveStep: SubmitCampaignSteps.CreatePost,
   submissionError: false,
 };
 
@@ -135,8 +137,11 @@ export const campaignJourneySlice = createSlice({
       state.submissionActiveStep =
         action.payload.activeStep !== undefined ? action.payload.activeStep : state.submissionActiveStep;
     },
-    resetCampaignJourney: () => {
-      return campaignJourneyInitialState;
+    resetCampaignJourney: (state, action: PayloadAction<CampaignJourneyAction['removeTermsAndConditions']>) => {
+      return {
+        ...campaignJourneyInitialState,
+        termsConditionAgreed: action.payload ? false : state.termsConditionAgreed,
+      };
     },
   },
 });
@@ -200,9 +205,12 @@ export const useCampaignJourney = () => {
     [dispatch],
   );
 
-  const dispatchResetCampaignJourney = useCallback(() => {
-    dispatch(resetCampaignJourney());
-  }, [dispatch]);
+  const dispatchResetCampaignJourney = useCallback(
+    (payload?: CampaignJourneyAction['removeTermsAndConditions']) => {
+      dispatch(resetCampaignJourney(payload));
+    },
+    [dispatch],
+  );
 
   const dispatchSetDisableForm = useCallback(
     (payload: CampaignJourneyAction['setDisableForm']) => {
@@ -234,7 +242,7 @@ export const useCampaignJourney = () => {
     dispatchSetSubmissionState({
       error: false,
       loading: false,
-      activeStep: 0,
+      activeStep: SubmitCampaignSteps.CreatePost,
     });
   }, [dispatchSetCurrentStep, dispatchSetSubmissionState]);
 

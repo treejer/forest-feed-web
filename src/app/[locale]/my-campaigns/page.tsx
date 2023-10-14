@@ -35,7 +35,7 @@ function MyCampaigns() {
     },
   });
 
-  const {lensterPublicationUrl} = useConfig();
+  const {heyPublicationUrl} = useConfig();
 
   const t = useTranslations('myCampaigns');
 
@@ -63,7 +63,7 @@ function MyCampaigns() {
         accessor: 'publicationId',
         disableSortBy: true,
         Cell: ({value}) => (
-          <Link href={`${lensterPublicationUrl}/${value}`} target="_blank" className="font-bold underline">
+          <Link href={`${heyPublicationUrl}/${value}`} target="_blank" className="font-bold underline">
             {value}
           </Link>
         ),
@@ -105,7 +105,7 @@ function MyCampaigns() {
         defaultCanSort: true,
       },
     ],
-    [t, lensterPublicationUrl, matches],
+    [t, heyPublicationUrl, matches],
   );
 
   return (

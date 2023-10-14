@@ -71,7 +71,7 @@ export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchN
 
 export function* watchLoginAccount() {
   try {
-    yield put(resetCampaignJourney());
+    yield put(resetCampaignJourney(true));
     yield reactQueryClient.invalidateQueries();
     yield reactQueryClient.removeQueries();
     yield reactQueryClient.clear();
@@ -99,7 +99,7 @@ export function* watchLogoutAccount() {
     yield put(nonceActions.resetCache());
     yield put(signActions.resetCache());
     yield put(profileActions.resetCache());
-    yield put(resetCampaignJourney());
+    yield put(resetCampaignJourney(true));
     yield put(resetTokens());
     yield reactQueryClient.invalidateQueries();
     yield reactQueryClient.removeQueries();

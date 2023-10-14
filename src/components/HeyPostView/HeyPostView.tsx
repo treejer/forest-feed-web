@@ -7,14 +7,15 @@ import {MediaSet, ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {HeartIcon, SwitchHorizontalIcon, ChatAlt2Icon} from '@heroicons/react/outline';
-import {NoPicture} from 'public/assets/images';
+import {ForestTree, NoPicture, TreeSvg} from 'public/assets/images';
 
-export type LensterPostViewProps = {
+export type HeyPostViewProps = {
   content: string;
   image: CampaignJourneyState['image'];
   activeProfile: ProfileOwnedByMe | null | undefined;
 };
-export function LensterPostView(props: LensterPostViewProps) {
+
+export function HeyPostView(props: HeyPostViewProps) {
   const {activeProfile, content, image} = props;
 
   const t = useTranslations();
@@ -65,7 +66,14 @@ export function LensterPostView(props: LensterPostViewProps) {
             <HeartIcon className="w-[15px] sm:w-[18px] text-pink-500" />
           </div>
           <div className="p-1.5">
-            <img src="/assets/images/tree.svg" className="w-[15px] sm:w-[18px]" />
+            <Image
+              alt="tree"
+              src={TreeSvg}
+              width={20}
+              height={20}
+              className="w-[15px] sm:w-[18px] select-none"
+              draggable={false}
+            />
           </div>
         </div>
       </div>
@@ -77,7 +85,7 @@ export function LensterPostView(props: LensterPostViewProps) {
               {t.rich('impactMirror', {
                 forest: chunk => <span className="text-tBlue-300 ml-1"> {chunk}</span>,
               })}
-              <img className="ml-1" src="/assets/images/forestTree.svg" />
+              <Image className="ml-1" src={ForestTree} alt="lesnter" width={20} height={20} draggable={false} />
             </p>
           </div>
         </div>

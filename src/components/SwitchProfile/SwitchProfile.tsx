@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 
 import {ProfileId, useActiveProfile, useActiveProfileSwitch, useProfilesOwnedByMe} from '@lens-protocol/react-web';
 
@@ -6,20 +6,16 @@ import {DropDown, DropDownItem} from '@forest-feed/components/kit/DropDown';
 import {SkeletonBox} from '@forest-feed/components/layout/AppHeaderSkeleton';
 import {Color} from 'colors';
 import {useDebounce} from '@forest-feed/hooks/useDebounce';
+import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 
 export function SwitchProfile() {
   const {data: lensProfile} = useActiveProfile();
-  const {data: profiles, loading: profilesLoading, hasMore, next} = useProfilesOwnedByMe();
-  const {execute: switchProfile} = useActiveProfileSwitch();
+  const {data: profiles, loading: profilesLoading} = useProfilesOwnedByMe();
+  const {execute: switchProfile, isPending} = useActiveProfileSwitch();
+
+  const {campaignJourney} = useCampaignJourney();
 
   const debouncedProfiles = useDebounce(profiles);
-  // useEffect(() => {
-  //   if (hasMore) {
-  //     (async () => {
-  //       await next();
-  //     })();
-  //   }
-  // }, [debouncedProfiles]);
 
   const profilesList = useMemo(
     () =>
@@ -55,6 +51,7 @@ export function SwitchProfile() {
       activeColor={Color.green}
       shadow={false}
       className="w-full"
+      disabled={isPending || campaignJourney.submissionLoading}
     />
   ) : null;
 }

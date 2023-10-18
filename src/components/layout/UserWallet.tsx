@@ -1,7 +1,9 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 
+import {MediaSet, useActiveProfile} from '@lens-protocol/react-web';
 import {AnimatePresence} from 'framer-motion';
 
+import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {shortenedString} from '@forest-feed/utils/string';
 import {AssetIcon} from '@forest-feed/components/kit/Icons/AssetIcon';
 import {TreeIcon} from '@forest-feed/components/kit/Icons/TreeIcon';
@@ -9,17 +11,20 @@ import {Menu} from '@forest-feed/components/layout/Menu';
 import {useTabFocus} from '@forest-feed/hooks/useTabFocus';
 
 export type UserWalletProps = {
-  handle?: string;
-  avatar?: string;
   address: string;
   isSupportedNetwork: boolean;
   onDisconnect: () => void;
 };
 
 export function UserWallet(props: UserWalletProps) {
-  const {handle, avatar, address, isSupportedNetwork, onDisconnect} = props;
+  const {address, isSupportedNetwork, onDisconnect} = props;
 
   const [inHover, setInHover] = useState(false);
+
+  const {data: lensProfile} = useActiveProfile();
+  const {
+    web3: {lensProfile: persistLensProfile},
+  } = useWeb3();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -36,6 +41,12 @@ export function UserWallet(props: UserWalletProps) {
   useTabFocus({
     blur: handleCloseMenu,
   });
+
+  const handle = useMemo(() => (lensProfile || persistLensProfile)?.handle, [lensProfile, persistLensProfile]);
+  const avatar = useMemo(
+    () => ((lensProfile || persistLensProfile)?.picture as MediaSet)?.original?.url,
+    [lensProfile, persistLensProfile],
+  );
 
   return (
     <div className="transition-all flex items-center drop-shadow-lg z-50">
@@ -55,7 +66,7 @@ export function UserWallet(props: UserWalletProps) {
           {inHover ? (
             <Menu
               address={address}
-              lensLoggedIn={!!handle}
+              lensLoggedIn={!!lensProfile?.handle}
               isSupportedNetwork={isSupportedNetwork}
               onDisconnect={onDisconnect}
             />

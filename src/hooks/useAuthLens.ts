@@ -39,7 +39,9 @@ export function useAuthLens() {
   const {data: lensProfile, loading: lensProfileLoading, error: lensProfileError} = useActiveProfile();
 
   useEffect(() => {
-    dispatchSetLensProfile({profile: lensProfile});
+    if (!lensProfileLoading) {
+      dispatchSetLensProfile({profile: lensProfile});
+    }
   }, [lensProfile]);
 
   const loading = useMemo(

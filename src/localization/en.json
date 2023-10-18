@@ -126,7 +126,7 @@
     "required": "{value} is required.",
     "tooLarge": "The file is too large",
     "401": "Unauthorized, Please Login",
-    "403": "You don't have permission to access"
+    "403": "Forbidden Error"
   },
   "lens": {
     "login": "Login with lens",

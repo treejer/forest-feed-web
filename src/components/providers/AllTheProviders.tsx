@@ -5,7 +5,6 @@ import React from 'react';
 import {WagmiConfig} from 'wagmi';
 import {polygonMumbai} from 'wagmi/chains';
 import {RainbowKitProvider} from '@rainbow-me/rainbowkit';
-import {AbstractIntlMessages, NextIntlClientProvider} from 'next-intl';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import {ToastContainer} from 'react-toastify';
@@ -18,21 +17,21 @@ import {appInfo, chains, forestFeedTheme, wagmiConfig} from '@forest-feed/connec
 import {ApolloProvider} from '@forest-feed/components/providers/Apollo';
 import {LensProvider} from '@forest-feed/components/providers/Lens';
 import {store, persistor} from '@forest-feed/redux/store';
+import {I18nProviderClient} from '@forest-feed/locales/client';
 
 export type AllTheProvidersProps = React.PropsWithChildren<{
   locale: Locale;
-  messages: AbstractIntlMessages;
 }>;
 
 export const reactQueryClient = new QueryClient();
 
 export function AllTheProviders(props: AllTheProvidersProps) {
-  const {locale, messages, children} = props;
+  const {locale, children} = props;
 
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains} appInfo={appInfo} theme={forestFeedTheme} initialChain={polygonMumbai}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <I18nProviderClient locale={locale}>
           <Provider store={store}>
             <PersistGate persistor={persistor} loading={null}>
               <LensProvider>
@@ -46,7 +45,7 @@ export function AllTheProviders(props: AllTheProvidersProps) {
               </LensProvider>
             </PersistGate>
           </Provider>
-        </NextIntlClientProvider>
+        </I18nProviderClient>
       </RainbowKitProvider>
     </WagmiConfig>
   );

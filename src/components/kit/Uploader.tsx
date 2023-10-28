@@ -2,13 +2,13 @@
 
 import React, {useCallback, useMemo, useState} from 'react';
 import Image from 'next/image';
-import {useTranslations} from 'use-intl';
 
 import {AttachIcon} from '@forest-feed/components/kit/Icons/AttachIcon';
 import {DeleteIcon} from '@forest-feed/components/kit/Icons/DeleteIcon';
 import {Modal} from '@forest-feed/components/kit/Modal/Modal';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Spacer} from '@forest-feed/components/common/Spacer';
+import {useScopedI18n} from '@forest-feed/locales/client';
 import {colors} from 'colors';
 
 export type UploaderProps = {
@@ -28,7 +28,7 @@ export function Uploader(props: UploaderProps) {
   const [openPreviewModal, setOpenPreviewModal] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
-  const t = useTranslations('newCampaign');
+  const t = useScopedI18n('newCampaign');
 
   const previewFile = useMemo(() => (file ? URL.createObjectURL(file as Blob) : ''), [file]);
 

@@ -3,7 +3,6 @@
 import React, {useMemo} from 'react';
 
 import Link from 'next/link';
-import {useTranslations} from 'use-intl';
 import {TableOptions} from 'react-table';
 import moment from 'moment';
 
@@ -18,6 +17,7 @@ import {useMediaQuery} from '@forest-feed/hooks/useMediaQuery';
 import {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
 import {useQueryFetch} from '@forest-feed/hooks/useQueryFetch';
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
+import {useScopedI18n} from '@forest-feed/locales/client';
 
 function MyCampaigns() {
   const {
@@ -37,7 +37,7 @@ function MyCampaigns() {
 
   const {heyPublicationUrl} = useConfig();
 
-  const t = useTranslations('myCampaigns');
+  const t = useScopedI18n('myCampaigns');
 
   const matches = useMediaQuery('(max-width: 768px)');
 

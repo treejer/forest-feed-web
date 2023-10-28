@@ -11,7 +11,7 @@ import {Color, colors} from 'colors';
 
 export type DropDownItem = {
   id: string | number;
-  text: number | string | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactNodeArray;
+  text: React.ReactNode;
   image?: ImageProps['src'];
 };
 
@@ -67,7 +67,7 @@ export function DropDown(props: DropDownProps) {
         >
           <div className="flex items-center">
             <RenderIf condition={!!selected.image}>
-              <Image src={selected.image!} alt={selected.text.toString()} {...imageStyles} />
+              <Image src={selected.image!} alt={String(selected.text)} {...imageStyles} />
               <Spacer />
             </RenderIf>
             <RenderIf condition={!hideText}>
@@ -89,7 +89,7 @@ export function DropDown(props: DropDownProps) {
             >
               {items.map(item => (
                 <li
-                  key={item.text.toString()}
+                  key={item.text?.toString()}
                   className="flex flex-row justify-start items-center"
                   onClick={() => handleClick(item)}
                 >
@@ -97,7 +97,7 @@ export function DropDown(props: DropDownProps) {
                     <RenderIf condition={!!item.image}>
                       <Image
                         src={item.image!}
-                        alt={item.text.toString()}
+                        alt={String(item.text)}
                         {...imageStyles}
                         placeholder="blur"
                         blurDataURL={item.image as string}

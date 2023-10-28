@@ -1,14 +1,14 @@
 import React, {useCallback, useMemo} from 'react';
 
-import {useTranslations} from 'use-intl';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
 import {DropDown, DropDownItem} from '@forest-feed/components/kit/DropDown';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {BlockchainNetwork, networks} from '@forest-feed/config';
-import {Color} from 'colors';
 import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import {useI18n} from '@forest-feed/locales/client';
+import {Color} from 'colors';
 
 export function SwitchNetwork() {
   const {
@@ -19,7 +19,7 @@ export function SwitchNetwork() {
 
   const {campaignJourney} = useCampaignJourney();
 
-  const t = useTranslations();
+  const t = useI18n();
 
   const handleSwitchNetwork = useCallback(
     async (network: DropDownItem) => {
@@ -29,22 +29,20 @@ export function SwitchNetwork() {
         onSuccess: handleLensLogout,
       });
     },
-    [dispatchSwitchNetwork],
+    [dispatchSwitchNetwork, handleLensLogout],
   );
 
   const networksList: DropDownItem[] = useMemo(
     () => [
       {
         id: networks[BlockchainNetwork.Polygon].network,
-        text: t.rich(`switchNetwork.${networks[BlockchainNetwork.Polygon].title}`, {
-          red: chunk => <span className="text-red">{chunk}</span>,
-        }),
+        text: t(`switchNetwork.${networks[BlockchainNetwork.Polygon].title}` as any, {}),
         image: networks[BlockchainNetwork.Polygon].logo,
       },
       {
         id: networks[BlockchainNetwork.Mumbai].network,
-        text: t.rich(`switchNetwork.${networks[BlockchainNetwork.Mumbai].title}`, {
-          red: chunk => <span className="ml-1 text-red">{chunk}</span>,
+        text: t(`switchNetwork.${networks[BlockchainNetwork.Mumbai].title}` as any, {
+          text: <span className="ml-1 text-red">{t('switchNetwork.testnet')}</span>,
         }),
         image: networks[BlockchainNetwork.Mumbai].logo,
       },

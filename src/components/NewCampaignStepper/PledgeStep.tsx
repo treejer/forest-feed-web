@@ -1,7 +1,5 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {useTranslations} from 'use-intl';
-
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {InputRange} from '@forest-feed/components/kit/InputRange/InputRange';
 import {Spacer} from '@forest-feed/components/common/Spacer';
@@ -12,6 +10,7 @@ import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
 import {usePersistState} from '@forest-feed/hooks/usePersistState';
 import {storageKeys} from '@forest-feed/config';
+import {useI18n} from '@forest-feed/locales/client';
 
 export type PledgeStepState = Pick<CampaignJourneyState, 'size' | 'reward' | 'settings'>;
 
@@ -51,7 +50,7 @@ export function PledgeStep(props: PledgeStepProps) {
   } = useTokens({didMount: false});
   const {salePrice} = useRegularSale();
 
-  const t = useTranslations();
+  const t = useI18n();
 
   const handleChangeCampaignSize = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

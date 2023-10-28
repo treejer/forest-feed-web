@@ -6,7 +6,6 @@ import {useQuery} from '@apollo/client';
 import {ProfileId, ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
-import {useTranslations} from 'use-intl';
 import {BigNumberish} from 'ethers';
 
 import {useRouter} from '@forest-feed/lib/router-events';
@@ -24,6 +23,7 @@ import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
 import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTimer';
 import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
+import {useScopedI18n} from '@forest-feed/locales/client';
 import {colors} from 'colors';
 
 export type TPublicationState = {
@@ -367,7 +367,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDelay(false);
   }, [setDelay]);
 
-  const t = useTranslations('newCampaign');
+  const t = useScopedI18n('newCampaign');
 
   const steps = useMemo(
     () => [
@@ -510,9 +510,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
               </div>
               <Spacer />
               <div>
-                <p className="text-sm md:text-base">{t(step.text)}</p>
+                <p className="text-sm md:text-base">{t(step.text as any)}</p>
                 <div className="flex items-center">
-                  <p className="text-xs md:text-sm text-secondary text-align">{t(step.desc)}</p>
+                  <p className="text-xs md:text-sm text-secondary text-align">{t(step.desc as any)}</p>
                   {titleCampaignInput(step.key)}
                 </div>
               </div>

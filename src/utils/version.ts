@@ -1,4 +1,4 @@
-import {version} from 'package.json';
+const {version} = require('../../package.json');
 
 export function versionToNumber(versionWithDot: string) {
   return Number(versionWithDot.split('-')[0].split('.').join(''));

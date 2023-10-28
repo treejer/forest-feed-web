@@ -16,6 +16,7 @@ import PolygonMatic from './Polygon-MATIC.svg';
 import TreePng from './tree.png';
 import TreeSvg from './tree.svg';
 import Trees from './trees.svg';
+import NotFoundSvg from './404.svg';
 
 export {
   Asset,
@@ -36,4 +37,5 @@ export {
   TreePng,
   TreeSvg,
   Trees,
+  NotFoundSvg,
 };

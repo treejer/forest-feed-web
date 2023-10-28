@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo, useState} from 'react';
 
 import Link from 'next/link';
-import {useTranslations} from 'use-intl';
 
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {DaiIcon} from '@forest-feed/components/kit/Icons/DaiIcon';
@@ -12,6 +11,7 @@ import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {mumbaiBuyDaiUrl, mumbaiSwapDaiUrl, polygonBuyDaiUrl, polygonSwapDaiUrl} from '@forest-feed/config';
+import {useI18n} from '@forest-feed/locales/client';
 
 export type WalletAssetsProps = {
   salePrice: number;
@@ -29,7 +29,7 @@ export function WalletAssets(props: WalletAssetsProps) {
     tokens: {DAI, loading},
   } = useTokens();
 
-  const t = useTranslations();
+  const t = useI18n();
 
   useEffect(() => {
     if (salePrice && DAI !== undefined) {
@@ -86,7 +86,7 @@ export function WalletAssets(props: WalletAssetsProps) {
                     href={item.url}
                     {...(item.url === '#' ? {} : {target: '_blank'})}
                   >
-                    {t(`newCampaign.assets.${item.text}`)}
+                    {t(`newCampaign.assets.${item.text}` as any, {})}
                   </Link>
                 </li>
               ))}

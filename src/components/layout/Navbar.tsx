@@ -2,11 +2,11 @@
 
 import React from 'react';
 import {Link} from '@forest-feed/lib/router-events';
-import {useTranslations} from 'use-intl';
 import {usePathname} from 'next-intl/client';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {PlusIcon, TableIcon} from '@heroicons/react/solid';
+import {useScopedI18n} from '@forest-feed/locales/client';
 
 export const links = [
   {
@@ -24,7 +24,7 @@ export const links = [
 export function Navbar() {
   const pathname = usePathname();
 
-  const t = useTranslations('navbar');
+  const t = useScopedI18n('navbar');
 
   return (
     <div>
@@ -32,7 +32,7 @@ export function Navbar() {
         const isActive = pathname.startsWith(link.href);
         return (
           <Link className="block mb-2 last:mb-0" key={link.href} href={link.href}>
-            <Button text={t(link.name)} variant={isActive ? ButtonVariant.menu : ButtonVariant.text} />
+            <Button text={t(link.name as any)} variant={isActive ? ButtonVariant.menu : ButtonVariant.text} />
           </Link>
         );
       })}

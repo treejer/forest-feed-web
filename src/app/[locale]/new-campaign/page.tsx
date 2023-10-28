@@ -1,8 +1,7 @@
 'use client';
 
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 
-import {useTranslations} from 'use-intl';
 import {motion} from 'framer-motion';
 import {ProfileOwnedByMe, useActiveProfile} from '@lens-protocol/react-web';
 
@@ -20,8 +19,7 @@ import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
 import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
 import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
-import {usePersistState} from '@forest-feed/hooks/usePersistState';
-import {storageKeys} from '@forest-feed/config';
+import {useScopedI18n} from '@forest-feed/locales/client';
 
 function NewCampaignPage() {
   const {
@@ -43,7 +41,7 @@ function NewCampaignPage() {
     publisher: activeProfile as ProfileOwnedByMe,
   });
 
-  const t = useTranslations('newCampaign.stepper');
+  const t = useScopedI18n('newCampaign.stepper');
 
   const {
     tokens: {loading: tokensLoading},

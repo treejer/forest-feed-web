@@ -1,12 +1,12 @@
 import React, {useCallback} from 'react';
 
-import {useTranslations} from 'use-intl';
 import {ProfileOwnedByMe} from '@lens-protocol/react-web';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {HeyPostView} from '@forest-feed/components/HeyPostView/HeyPostView';
 import {GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
+import {useI18n} from '@forest-feed/locales/client';
 
 export type PreviewStepProps = {
   generalInfo: GeneralInfoStepState;
@@ -20,7 +20,7 @@ export type PreviewStepProps = {
 export function PreviewStep(props: PreviewStepProps) {
   const {generalInfo, activeProfile, activeStep, disabled, onApprove, setActiveStep} = props;
 
-  const t = useTranslations();
+  const t = useI18n();
 
   const handleBack = useCallback(() => {
     setActiveStep(activeStep - 1);

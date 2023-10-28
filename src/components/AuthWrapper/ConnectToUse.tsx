@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Image from 'next/image';
-import {useTranslations} from 'use-intl';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 import {useAccount} from 'wagmi';
 
@@ -10,6 +9,7 @@ import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {LensIcon} from '@forest-feed/components/kit/Icons/LensIcon';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import {useI18n} from '@forest-feed/locales/client';
 import {Trees} from 'public/assets/images';
 
 export function ConnectToUse() {
@@ -21,7 +21,7 @@ export function ConnectToUse() {
     dispatchSignWithForest,
   } = useWeb3();
 
-  const t = useTranslations();
+  const t = useI18n();
 
   return (
     <div className="col-span-full w-full h-full flex flex-col items-center">

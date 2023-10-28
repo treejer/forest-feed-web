@@ -1,7 +1,6 @@
 'use client';
 
 import React, {useState} from 'react';
-import {useTranslations} from 'use-intl';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {TextArea} from '@forest-feed/components/kit/TextArea';
@@ -11,13 +10,14 @@ import {ChangeLanguage} from '@forest-feed/components/kit/ChangeLanguage';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Modal} from '@forest-feed/components/kit/Modal/Modal';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
+import {useI18n} from '@forest-feed/locales/client';
 
 function KitPage() {
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
 
   const [file, setFile] = useState<File | null>(null);
-  const t = useTranslations();
+  const t = useI18n();
 
   return (
     <AnimatedPage>

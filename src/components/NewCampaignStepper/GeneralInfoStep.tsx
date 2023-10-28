@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect} from 'react';
 
-import {useTranslations} from 'use-intl';
 import {useForm} from 'react-hook-form';
 
 import {Spacer} from '@forest-feed/components/common/Spacer';
@@ -13,6 +12,7 @@ import {
 import {FormController} from '@forest-feed/components/FormController/FormController';
 import {GeneralInfoForm, generalInfoYup} from '@forest-feed/validators/generalInfo';
 import {useDebounce} from '@forest-feed/hooks/useDebounce';
+import {useI18n} from '@forest-feed/locales/client';
 
 export type GeneralInfoStepState = Pick<CampaignJourneyState, 'content' | 'image' | 'termsConditionAgreed'>;
 
@@ -57,9 +57,9 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
     if (defaultValues?.image) {
       setValue('image', [defaultValues.image] as any);
     }
-  }, [defaultValues?.image]);
+  }, [defaultValues?.image, setValue]);
 
-  const t = useTranslations();
+  const t = useI18n();
 
   const handleChangeUploadedFile = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

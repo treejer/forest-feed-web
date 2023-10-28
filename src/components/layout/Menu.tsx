@@ -1,7 +1,6 @@
 import React from 'react';
 
 import {motion} from 'framer-motion';
-import {useTranslations} from 'use-intl';
 import {ArrowLeftIcon} from '@heroicons/react/solid';
 
 import {shortenedString} from '@forest-feed/utils/string';
@@ -11,6 +10,7 @@ import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {SwitchNetwork} from '@forest-feed/components/SwitchNetwork/SwitchNetwork';
 import {SwitchProfile} from '@forest-feed/components/SwitchProfile/SwitchProfile';
 import {useCopyToClipboard} from '@forest-feed/hooks/useCopyToClipboard';
+import {useI18n} from '@forest-feed/locales/client';
 
 export type MenuProps = {
   address: string;
@@ -24,7 +24,7 @@ export function Menu(props: MenuProps) {
 
   const [copiedValue, copy] = useCopyToClipboard();
 
-  const t = useTranslations();
+  const t = useI18n();
 
   return (
     <motion.div

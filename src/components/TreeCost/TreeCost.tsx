@@ -1,10 +1,9 @@
-import React, {useMemo} from 'react';
-
-import {useTranslations} from 'use-intl';
+import React from 'react';
 
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {WalletAssets} from '@forest-feed/components/WalletAssets/WalletAssets';
 import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
+import {useI18n} from '@forest-feed/locales/client';
 
 export type TreeCostProps = {
   treeCount: number;
@@ -15,7 +14,7 @@ export function TreeCost(props: TreeCostProps) {
 
   const {contractValue, salePrice} = useRegularSale();
 
-  const t = useTranslations();
+  const t = useI18n();
 
   return (
     <div>

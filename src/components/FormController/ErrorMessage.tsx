@@ -2,7 +2,7 @@
 
 import React, {memo} from 'react';
 
-import {useTranslations} from 'use-intl';
+import {useI18n} from '@forest-feed/locales/client';
 
 export type ErrorMessageProps = {
   name: string;
@@ -14,12 +14,12 @@ export type ErrorMessageProps = {
 export const ErrorMessage = memo(function ErrorMessage(props: ErrorMessageProps) {
   const {name, touched, error, isSubmitted} = props;
 
-  const t = useTranslations();
+  const t = useI18n();
 
   return (isSubmitted || touched) && error && name ? (
     <p className="text-red text-xs md:text-sm">
-      {t(error, {
-        value: t(`labels.${name}`),
+      {t(error as any, {
+        value: t(`labels.${name}` as any, {}),
       })}
     </p>
   ) : null;

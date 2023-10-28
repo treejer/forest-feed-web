@@ -2,7 +2,6 @@ import React from 'react';
 
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
-import {useTranslations} from 'use-intl';
 
 import {Logo} from '@forest-feed/components/kit/Icons/LogoIcon';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
@@ -13,6 +12,7 @@ import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleto
 import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import {useI18n} from '@forest-feed/locales/client';
 
 export function AppHeader() {
   const {address, status} = useAccount();
@@ -24,7 +24,7 @@ export function AppHeader() {
     dispatchSignWithForest,
   } = useWeb3();
 
-  const t = useTranslations();
+  const t = useI18n();
 
   return (
     <div className="py-4 px-2">

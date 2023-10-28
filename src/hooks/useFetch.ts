@@ -2,7 +2,6 @@ import {useEffect, useMemo, useState} from 'react';
 
 import ReduxFetchState from 'redux-fetch-state';
 import {AxiosRequestConfig} from 'axios';
-import {useTranslations} from 'use-intl';
 
 import {fetch, handleFetchError} from '@forest-feed/utils/fetch';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
@@ -42,8 +41,6 @@ export function useFetch<Data>(
 ): [UseHttpState<Data>, (options?: UseFetchOptions) => Promise<any>, () => void] {
   const token = useAccessToken();
   const {actions, reducer} = useMemo(() => new ReduxFetchState(url), [url]);
-
-  const t = useTranslations();
 
   const initialState = useMemo(() => reducer(undefined, {type: ''}), [reducer]);
   const [state, setState] = useState(initialState);

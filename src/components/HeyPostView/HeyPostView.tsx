@@ -1,13 +1,13 @@
 import React, {useMemo} from 'react';
 
 import Image from 'next/image';
-import {useTranslations} from 'use-intl';
 import {MediaSet, ProfileOwnedByMe} from '@lens-protocol/react-web';
 
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {HeartIcon, SwitchHorizontalIcon, ChatAlt2Icon} from '@heroicons/react/outline';
 import {ForestTree, NoPicture, TreeSvg} from 'public/assets/images';
+import {useI18n} from '@forest-feed/locales/client';
 
 export type HeyPostViewProps = {
   content: string;
@@ -18,7 +18,7 @@ export type HeyPostViewProps = {
 export function HeyPostView(props: HeyPostViewProps) {
   const {activeProfile, content, image} = props;
 
-  const t = useTranslations();
+  const t = useI18n();
 
   const previewImage = useMemo(() => (image ? URL.createObjectURL(image as Blob) : ''), [image]);
 
@@ -82,8 +82,8 @@ export function HeyPostView(props: HeyPostViewProps) {
           <p className="text-sm font-bold">{t('impact')}</p>
           <div className="flex items-center">
             <p className="text-[10px] font-thin  flex items-center">
-              {t.rich('impactMirror', {
-                forest: chunk => <span className="text-tBlue-300 ml-1"> {chunk}</span>,
+              {t('impactMirror', {
+                appName: <span className="text-tBlue-300 ml-1"> {t('forestFeed')}</span>,
               })}
               <Image className="ml-1" src={ForestTree} alt="lesnter" width={20} height={20} draggable={false} />
             </p>

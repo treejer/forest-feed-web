@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-import {version} from 'package.json';
+const {version} = require('../../../../package.json');
 
 export type AppInfoState = {
   version: string;

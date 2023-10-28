@@ -1,0 +1,68 @@
+export default {
+  metadata: {
+    root: {
+      title: 'فارست فید',
+    },
+  },
+  hello: 'سلام دنیا',
+  proceed: 'ادامه',
+  back: 'بازگشت',
+  value: 'تعداد:',
+  learnMore: 'بیشتر بدانید',
+  approve: 'تایید',
+  tree: 'درخت',
+  trees: 'درخت ها',
+  countTrees: 'درخت {count}',
+  cost: 'هزینه',
+  dollarSign: '{value}$',
+  languages: {
+    en: 'انگلیسی',
+    fa: 'فارسی',
+    English: 'انگلیسی',
+  },
+  navbar: {
+    newCampaign: 'کمپین جدید',
+    myCampaigns: 'کمپین های من',
+  },
+  newCampaign: {
+    stepper: {
+      generalInfo: 'اطلاعات عمومی',
+      pledge: 'تعهد',
+      confirm: 'تایید',
+      share: 'اشتراک گذاری',
+    },
+    campaignSize: 'اندازه کمپین',
+    howManyWantsToPlant: 'چند درخت می خواهید بکارید؟',
+    postSettings: 'تنظیمات پست',
+    canBeCollected: 'این پست قابل جمع آوری است',
+    collectedOnlyFollowers: 'این پست قابل جمع آوری است، فقط دنبال کنندگان',
+    rewardFilters: 'فیلترهای پاداش',
+    chooseMaxFollowers: 'حداقل تعداد فالوورهایی که حساب ها باید داشته باشند را انتخاب کنید',
+    rewardOnlyYourFollowers: 'فقط به دنبال کنندگان خود پاداش دهید',
+    postPreview: 'پیش نمایش پست',
+    content: 'محتوا',
+    addPhoto: 'افزودن عکس',
+    changePhoto: 'تغییر عکس',
+    attachedPhoto: 'عکس پیوست شده',
+    dropPhoto: 'عکس را اینجا رها کنید',
+    placeholder: {
+      writePost: '...پست خود را اینجا بنویسید',
+    },
+    walletAssets: 'دارایی کیف پول',
+  },
+  myCampaigns: {
+    status: 'وضعیت',
+    campaignId: 'شناسه کمپین',
+    type: 'نوع',
+    budget: 'بودجه',
+    goal: 'هدف',
+    reposts: 'بازنشر',
+    creationDate: 'تاریخ ساخت',
+  },
+  privacyPolicy: {
+    agreeAppTermsConditions: '.شرایط را قبول دارم',
+  },
+  notFound: {
+    desc: 'صفحه مورد نظر یافت نشد',
+  },
+} as const;

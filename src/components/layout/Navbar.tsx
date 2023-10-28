@@ -1,12 +1,14 @@
 'use client';
 
 import React from 'react';
+
+import {usePathname} from 'next/navigation';
 import {Link} from '@forest-feed/lib/router-events';
-import {usePathname} from 'next-intl/client';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {PlusIcon, TableIcon} from '@heroicons/react/solid';
-import {useScopedI18n} from '@forest-feed/locales/client';
+import {useCurrentLocale, useScopedI18n} from '@forest-feed/locales/client';
+import {Locale} from '@forest-feed/languages';
 
 export const links = [
   {
@@ -23,15 +25,18 @@ export const links = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const locale = useCurrentLocale();
 
   const t = useScopedI18n('navbar');
 
   return (
     <div>
       {links.map(link => {
-        const isActive = pathname.startsWith(link.href);
+        const href = locale === Locale.EN ? link.href : `/${locale}${link.href}`;
+        const isActive = pathname.startsWith(href);
+
         return (
-          <Link className="block mb-2 last:mb-0" key={link.href} href={link.href}>
+          <Link className="block mb-2 last:mb-0" key={link.href} href={href}>
             <Button text={t(link.name as any)} variant={isActive ? ButtonVariant.menu : ButtonVariant.text} />
           </Link>
         );

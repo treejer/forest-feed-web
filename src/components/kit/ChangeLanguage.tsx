@@ -1,26 +1,22 @@
 import React, {useCallback, useTransition} from 'react';
 
-import {useRouter} from 'next/navigation';
-import {usePathname} from 'next-intl/client';
-import {useLocale} from 'use-intl';
-
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {languages} from '@forest-feed/languages';
+import {languages, Locale} from '@forest-feed/languages';
+import {useChangeLocale, useCurrentLocale} from '@forest-feed/locales/client';
 
 export function ChangeLanguage() {
   const [isPending, startTransition] = useTransition();
 
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
+  const locale = useCurrentLocale();
+  const changeLocale = useChangeLocale();
 
   const handleChangeLanguage = useCallback(
-    (locale: string) => {
+    (locale: Locale) => {
       startTransition(() => {
-        router.replace(`/${locale}${pathname}`);
+        changeLocale(locale);
       });
     },
-    [pathname, router],
+    [changeLocale],
   );
 
   return (

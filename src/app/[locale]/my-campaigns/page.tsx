@@ -27,7 +27,7 @@ function MyCampaigns() {
     handleNextPrevPage,
   } = useQueryFetch<MyCampaignsRes>({
     queryKey: 'myCampaigns',
-    endpoint: '/campaign/my-campaign',
+    endpoint: '/users/me/campaigns',
     params: {
       sort: JSON.stringify({createdAt: -1}),
     },

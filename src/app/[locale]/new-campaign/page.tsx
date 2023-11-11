@@ -20,6 +20,12 @@ import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/S
 import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {useScopedI18n} from '@forest-feed/locales/client';
+import {
+  LimitType,
+  ExplorePublicationType,
+  ExplorePublicationsOrderByType,
+  useExplorePublicationsQuery,
+} from '@forest-feed/graphql/generated';
 
 function NewCampaignPage() {
   const {

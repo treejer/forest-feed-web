@@ -2,8 +2,7 @@
 
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {useQuery} from '@apollo/client';
-import {ProfileId, ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {BigNumberish} from 'ethers';
@@ -20,11 +19,16 @@ import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/camp
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
 import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTimer';
 import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {useScopedI18n} from '@forest-feed/locales/client';
 import {colors} from 'colors';
+import {
+  LimitType,
+  PublicationType,
+  ExplorePublicationsOrderByType,
+  usePublicationsQuery,
+} from '@forest-feed/graphql/generated';
 
 export type TPublicationState = {
   publicationId: string;
@@ -68,10 +72,20 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   const router = useRouter();
 
-  const {data: publicationQueryData, refetch} = useQuery(publicationIds, {
-    variables: publicationIdsVariables(activeProfile?.id as ProfileId, 1),
+  const {data: publicationQueryData, refetch: publicationQueryRefetch} = usePublicationsQuery({
+    variables: {
+      request: {
+        limit: LimitType.Ten,
+        where: {
+          publicationTypes: [PublicationType.Post],
+          ...(activeProfile?.id ? {from: [activeProfile?.id]} : {}),
+        },
+      },
+    },
     context: {clientName: 'lens'},
   });
+
+  console.log(publicationQueryData?.publications?.items, 'publicationqueryData explore items');
 
   const {dispatchCheckBalance} = useTokens({
     didMount: false,
@@ -230,7 +244,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         newID: checkWith,
       });
       if (!publicationState.publicationId || !checkWith) {
-        await refetch();
+        await publicationQueryRefetch();
         setPublicationState(prevState => ({
           ...prevState,
           publicationId: checkWith || prevState.publicationId,
@@ -239,7 +253,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       } else {
         setSubmitPressed(true);
         if (publicationState.publicationId === checkWith) {
-          await refetch();
+          await publicationQueryRefetch();
           setPublicationState(prevState => ({
             ...prevState,
             succeed: false,
@@ -266,7 +280,13 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         activeStep: SubmitCampaignSteps.CheckPost,
       });
     }
-  }, [publicationQueryData, publicationState.publicationId, refetch, setPublicationState, dispatchSetSubmissionState]);
+  }, [
+    publicationQueryData,
+    publicationState.publicationId,
+    publicationQueryRefetch,
+    setPublicationState,
+    dispatchSetSubmissionState,
+  ]);
 
   const handleStartCreateCampaign = useCallback(
     (byUser: boolean = false) => {

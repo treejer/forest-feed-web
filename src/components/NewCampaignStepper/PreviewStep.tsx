@@ -1,6 +1,6 @@
 import React, {useCallback} from 'react';
 
-import {ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {Profile} from '@lens-protocol/react-web';
 
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {Spacer} from '@forest-feed/components/common/Spacer';
@@ -10,7 +10,7 @@ import {useI18n} from '@forest-feed/locales/client';
 
 export type PreviewStepProps = {
   generalInfo: GeneralInfoStepState;
-  activeProfile: ProfileOwnedByMe | null | undefined;
+  activeProfile: Profile | null | undefined;
   onApprove: () => void;
   setActiveStep: (step: number) => void;
   activeStep: number;

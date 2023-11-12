@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
-import {MediaSet, useActiveProfile} from '@lens-protocol/react-web';
+import {ProfilePictureSet} from '@lens-protocol/react-web';
 import {AnimatePresence} from 'framer-motion';
 
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
@@ -9,6 +9,7 @@ import {AssetIcon} from '@forest-feed/components/kit/Icons/AssetIcon';
 import {TreeIcon} from '@forest-feed/components/kit/Icons/TreeIcon';
 import {Menu} from '@forest-feed/components/layout/Menu';
 import {useTabFocus} from '@forest-feed/hooks/useTabFocus';
+import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
 
 export type UserWalletProps = {
   address: string;
@@ -21,7 +22,8 @@ export function UserWallet(props: UserWalletProps) {
 
   const [inHover, setInHover] = useState(false);
 
-  const {data: lensProfile} = useActiveProfile();
+  const {data: lensProfile} = useLensProfile();
+
   const {
     web3: {lensProfile: persistLensProfile},
   } = useWeb3();
@@ -42,9 +44,12 @@ export function UserWallet(props: UserWalletProps) {
     blur: handleCloseMenu,
   });
 
-  const handle = useMemo(() => (lensProfile || persistLensProfile)?.handle, [lensProfile, persistLensProfile]);
+  const handle = useMemo(
+    () => (lensProfile || persistLensProfile)?.handle?.fullHandle,
+    [lensProfile, persistLensProfile],
+  );
   const avatar = useMemo(
-    () => ((lensProfile || persistLensProfile)?.picture as MediaSet)?.original?.url,
+    () => ((lensProfile || persistLensProfile)?.metadata?.picture as ProfilePictureSet)?.optimized?.uri,
     [lensProfile, persistLensProfile],
   );
 
@@ -57,7 +62,7 @@ export function UserWallet(props: UserWalletProps) {
         className="flex items-center py-1 dropdown dropdown-hover dropdown-bottom"
       >
         <div className="bg-primaryBg border-2 min-w-[150px] h-8 rounded-full border-white flex items-center justify-start pl-3 -mr-8 text-sm font-semibold cursor-pointer">
-          {handle ? <span className="text-green">@{handle}</span> : shortenedString(address, 14, 4)}
+          {handle ? <span className="text-green">{handle}</span> : shortenedString(address, 14, 4)}
         </div>
         <div className="border-2 w-[42px] h-[42px] rounded-full border-white relative bg-primaryBg overflow-hidden mb-30">
           <AssetIcon loggedIn={!!handle} avatar={avatar} />

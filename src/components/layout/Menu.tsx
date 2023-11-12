@@ -8,7 +8,6 @@ import {Spacer} from '@forest-feed/components/common/Spacer';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {SwitchNetwork} from '@forest-feed/components/SwitchNetwork/SwitchNetwork';
-import {SwitchProfile} from '@forest-feed/components/SwitchProfile/SwitchProfile';
 import {useCopyToClipboard} from '@forest-feed/hooks/useCopyToClipboard';
 import {useI18n} from '@forest-feed/locales/client';
 
@@ -51,10 +50,6 @@ export function Menu(props: MenuProps) {
           <Spacer />
         </RenderIf>
         <SwitchNetwork />
-        <RenderIf condition={lensLoggedIn && isSupportedNetwork}>
-          <Spacer />
-          <SwitchProfile />
-        </RenderIf>
         <Spacer />
         <Button
           className="h-auto py-2 text-sm w-full"

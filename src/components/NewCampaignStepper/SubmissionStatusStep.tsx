@@ -2,7 +2,6 @@
 
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {BigNumberish} from 'ethers';
@@ -23,26 +22,16 @@ import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTi
 import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {useScopedI18n} from '@forest-feed/locales/client';
 import {colors} from 'colors';
-import {
-  LimitType,
-  PublicationType,
-  ExplorePublicationsOrderByType,
-  usePublicationsQuery,
-} from '@forest-feed/graphql/generated';
-
-export type TPublicationState = {
-  publicationId: string;
-  succeed: boolean;
-};
 
 export type SubmissionStatusStepProps = {
-  activeProfile: ProfileOwnedByMe;
+  createdPubId: string | null;
+  setCreatedPubId: React.Dispatch<React.SetStateAction<string | null>>;
   onCreatePost: () => void;
   createPostLoading: boolean;
 };
 
 export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
-  const {onCreatePost, createPostLoading, activeProfile} = props;
+  const {createPostLoading, createdPubId, setCreatedPubId, onCreatePost} = props;
 
   const {
     campaignJourney: {submissionLoading, submissionError, submissionActiveStep, ...campaignJourney},
@@ -60,32 +49,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const [depositTime, setDepositTime] = usePersistState<Date | null>(null, storageKeys.CAMPAIGN_DEPOSIT_SUCCEED);
   const [delay, setDelay] = usePersistState<boolean>(true, storageKeys.CAMPAIGN_DELAY);
 
-  const [checkTime, setCheckTime] = useState(0);
-
-  const [publicationState, setPublicationState] = usePersistState<TPublicationState>(
-    {
-      publicationId: '',
-      succeed: false,
-    },
-    storageKeys.PUBLICATION_STATE,
-  );
-
   const router = useRouter();
-
-  const {data: publicationQueryData, refetch: publicationQueryRefetch} = usePublicationsQuery({
-    variables: {
-      request: {
-        limit: LimitType.Ten,
-        where: {
-          publicationTypes: [PublicationType.Post],
-          ...(activeProfile?.id ? {from: [activeProfile?.id]} : {}),
-        },
-      },
-    },
-    context: {clientName: 'lens'},
-  });
-
-  console.log(publicationQueryData?.publications?.items, 'publicationqueryData explore items');
 
   const {dispatchCheckBalance} = useTokens({
     didMount: false,
@@ -169,12 +133,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDepositTime(null);
     setApproveSucceed(false);
     setSubmitPressed(false);
-    setPublicationState({
-      publicationId: '',
-      succeed: false,
-    });
+    setCreatedPubId(null);
     router.push('/my-campaigns');
-  }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, setPublicationState, router]);
+  }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, setCreatedPubId, router]);
 
   useAllowanceDaiInForestFeed({
     onSuccess: handleSuccessAllowance,
@@ -201,7 +162,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   });
 
   const handleConfirmTitle = useCallback(() => {
-    if (!title) {
+    if (!title || !createdPubId) {
       setTitleError(true);
       return;
     }
@@ -214,7 +175,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       minFollower: campaignJourney.reward.minimumFollowerNumber,
       isFollowerOnly: campaignJourney.reward.onlyFollowers,
       campaignSize: campaignJourney.size,
-      publicationId: publicationState.publicationId,
+      publicationId: createdPubId,
       onSuccess: handleSuccessCreateCampaign,
       onFailure: handleErrorInProcess,
     });
@@ -225,7 +186,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     campaignJourney.reward.minimumFollowerNumber,
     campaignJourney.reward.onlyFollowers,
     campaignJourney.size,
-    publicationState.publicationId,
+    createdPubId,
     handleSuccessCreateCampaign,
     handleErrorInProcess,
     setTitleError,
@@ -235,58 +196,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setSubmitPressed(true);
     onCreatePost();
   }, [onCreatePost]);
-
-  const handleCheckPublication = useCallback(async () => {
-    try {
-      const checkWith = publicationQueryData?.publications?.items?.[0]?.id;
-      console.log({
-        oldID: publicationState.publicationId,
-        newID: checkWith,
-      });
-      if (!publicationState.publicationId || !checkWith) {
-        await publicationQueryRefetch();
-        setPublicationState(prevState => ({
-          ...prevState,
-          publicationId: checkWith || prevState.publicationId,
-        }));
-        if (!publicationState.publicationId) setCheckTime(prevState => prevState + 1);
-      } else {
-        setSubmitPressed(true);
-        if (publicationState.publicationId === checkWith) {
-          await publicationQueryRefetch();
-          setPublicationState(prevState => ({
-            ...prevState,
-            succeed: false,
-          }));
-          setCheckTime(prevState => prevState + 1);
-        } else {
-          setPublicationState({
-            publicationId: checkWith,
-            succeed: true,
-          });
-          dispatchSetSubmissionState({
-            activeStep: SubmitCampaignSteps.CheckAllowance,
-            error: false,
-            loading: true,
-          });
-        }
-      }
-    } catch (e: any) {
-      console.log(e, 'error in check publication');
-      setSubmitPressed(false);
-      dispatchSetSubmissionState({
-        error: true,
-        loading: false,
-        activeStep: SubmitCampaignSteps.CheckPost,
-      });
-    }
-  }, [
-    publicationQueryData,
-    publicationState.publicationId,
-    publicationQueryRefetch,
-    setPublicationState,
-    dispatchSetSubmissionState,
-  ]);
 
   const handleStartCreateCampaign = useCallback(
     (byUser: boolean = false) => {
@@ -303,9 +212,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           handleConfirmTitle();
         }
       }
-      if (submissionActiveStep === SubmitCampaignSteps.CheckPost) {
-        (async () => await handleCheckPublication())();
-      }
       if (submissionActiveStep === SubmitCampaignSteps.Approve) {
         approveDaiMethod?.();
       }
@@ -317,7 +223,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       submissionActiveStep,
       dispatchSetSubmissionState,
       onCreatePost,
-      handleCheckPublication,
       handleConfirmTitle,
       approveDaiMethod,
       depositMethod,
@@ -340,16 +245,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (
-      (submissionActiveStep < SubmitCampaignSteps.CheckAllowance && !publicationState.publicationId) ||
-      submissionActiveStep === SubmitCampaignSteps.CheckPost
-    ) {
-      (async () => await handleCheckPublication())();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkTime]);
-
   const handleCancelSubmission = useCallback(() => {
     dispatchCancelCampaignCreation();
     setTitle('');
@@ -358,10 +253,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDepositTime(null);
     setApproveSucceed(false);
     setSubmitPressed(false);
-    setPublicationState({
-      publicationId: '',
-      succeed: false,
-    });
+    setCreatedPubId(null);
   }, [
     dispatchCancelCampaignCreation,
     setTitle,
@@ -369,7 +261,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDelay,
     setDepositTime,
     setApproveSucceed,
-    setPublicationState,
+    setCreatedPubId,
   ]);
 
   const handleChangeTitle = useCallback(

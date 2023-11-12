@@ -3,7 +3,6 @@
 import React, {useCallback, useMemo} from 'react';
 
 import {motion} from 'framer-motion';
-import {ProfileOwnedByMe, useActiveProfile} from '@lens-protocol/react-web';
 
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {Stepper} from '@forest-feed/components/kit/Stepper';
@@ -20,6 +19,7 @@ import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/S
 import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {useScopedI18n} from '@forest-feed/locales/client';
+import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 
 function NewCampaignPage() {
   const {
@@ -35,11 +35,11 @@ function NewCampaignPage() {
     dispatchSetCampaignSize,
   } = useCampaignJourney();
 
-  const {data: activeProfile} = useActiveProfile();
+  const {
+    web3: {lensProfile},
+  } = useWeb3();
 
-  const {createLensPost, allLoading: createPostLoading} = useLensCreatePost({
-    publisher: activeProfile as ProfileOwnedByMe,
-  });
+  const {createLensPost, allLoading: createPostLoading, createdPubId, setCreatedPubId} = useLensCreatePost();
 
   const t = useScopedI18n('newCampaign.stepper');
 
@@ -144,7 +144,7 @@ function NewCampaignPage() {
               {
                 content: (
                   <PreviewStep
-                    activeProfile={activeProfile}
+                    activeProfile={lensProfile}
                     generalInfo={generalInfoState}
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
@@ -159,7 +159,8 @@ function NewCampaignPage() {
                   <SubmissionStatusStep
                     onCreatePost={createLensPost}
                     createPostLoading={createPostLoading}
-                    activeProfile={activeProfile as ProfileOwnedByMe}
+                    createdPubId={createdPubId}
+                    setCreatedPubId={setCreatedPubId}
                   />
                 ),
                 title: t('finalize'),

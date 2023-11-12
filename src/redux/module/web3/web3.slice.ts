@@ -2,7 +2,7 @@ import {useCallback} from 'react';
 
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {GetAccountResult} from '@wagmi/core';
-import {ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {Profile, ProfileId} from '@lens-protocol/react-web';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
 import {
@@ -14,9 +14,6 @@ import {
   selectWeb3,
 } from '@forest-feed/redux/selectors';
 import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
-import {profileActions} from '@forest-feed/redux/module/profile/profile';
-import {nonceActions} from '@forest-feed/redux/module/nonce/nonce';
-import {signActions} from '@forest-feed/redux/module/sign/sign';
 import {InitAction} from '@forest-feed/redux/module/init/init.slice';
 
 export type Web3State = {
@@ -28,7 +25,9 @@ export type Web3State = {
   accessToken: string;
   lensLoading: boolean;
   forestLoading: boolean;
-  lensProfile: ProfileOwnedByMe | null | undefined;
+  lensProfile: Profile | null | undefined;
+  showSelectProfile: boolean;
+  selectedProfileId: ProfileId | null;
 };
 
 export type SwitchNetworkAction = {
@@ -47,7 +46,9 @@ export type Web3Action = {
   checkAccount: {account: GetAccountResult} & InitAction['init'];
   setLensLoading: {loading: boolean};
   setAccessToken: {token: string};
-  setLensProfile: {profile: ProfileOwnedByMe | null | undefined};
+  setLensProfile: {profile: Profile | null | undefined};
+  setShowSelectProfile?: boolean;
+  setSelectedProfileId: ProfileId;
 };
 
 export const web3InitialState: Web3State = {
@@ -60,6 +61,8 @@ export const web3InitialState: Web3State = {
   lensLoading: false,
   forestLoading: false,
   lensProfile: null,
+  showSelectProfile: false,
+  selectedProfileId: null,
 };
 
 export const web3Slice = createSlice({
@@ -89,7 +92,10 @@ export const web3Slice = createSlice({
     },
     connectedWallet: (state, action: PayloadAction<Web3Action['connectedWallet']>) => {
       state.isConnected = !!action.payload.address;
+      state.selectedProfileId = !action.payload.address ? null : state.selectedProfileId;
+      state.lensProfile = !action.payload.address ? null : state.lensProfile;
       state.address = action.payload.address || null;
+      state.showSelectProfile = !state.lensProfile && !state.selectedProfileId && !!action.payload.address;
     },
     setLensLoading: (state, action: PayloadAction<Web3Action['setLensLoading']>) => {
       state.lensLoading = action.payload.loading;
@@ -100,6 +106,18 @@ export const web3Slice = createSlice({
     },
     setLensProfile: (state, action: PayloadAction<Web3Action['setLensProfile']>) => {
       state.lensProfile = action.payload.profile;
+    },
+    setShowSelectProfile: (state, action: PayloadAction<Web3Action['setShowSelectProfile']>) => {
+      state.showSelectProfile = !!action.payload;
+    },
+    toggleShowSelectProfile: state => {
+      state.showSelectProfile = !state.showSelectProfile;
+    },
+    setSelectedProfileId: (state, action: PayloadAction<Web3Action['setSelectedProfileId']>) => {
+      state.selectedProfileId = action.payload;
+    },
+    removeSelectedProfileId: state => {
+      state.selectedProfileId = null;
     },
   },
 });
@@ -118,6 +136,10 @@ export const {
   setLensLoading,
   setAccessToken,
   setLensProfile,
+  toggleShowSelectProfile,
+  setShowSelectProfile,
+  setSelectedProfileId,
+  removeSelectedProfileId,
 } = web3Slice.actions;
 export default web3Slice.reducer;
 
@@ -166,6 +188,28 @@ export function useWeb3() {
     [dispatch],
   );
 
+  const dispatchSetSelectedProfileId = useCallback(
+    (payload: Web3Action['setSelectedProfileId']) => {
+      dispatch(setSelectedProfileId(payload));
+    },
+    [dispatch],
+  );
+
+  const dispatchRemoveSelectedProfileId = useCallback(() => {
+    dispatch(removeSelectedProfileId());
+  }, [dispatch]);
+
+  const dispatchSetShowSelectProfile = useCallback(
+    (payload: Web3Action['setShowSelectProfile']) => {
+      dispatch(setShowSelectProfile(payload));
+    },
+    [dispatch],
+  );
+
+  const dispatchToggleShowSelectProfile = useCallback(() => {
+    dispatch(toggleShowSelectProfile());
+  }, [dispatch]);
+
   return {
     web3,
     dispatchSwitchNetwork,
@@ -175,6 +219,10 @@ export function useWeb3() {
     dispatchSignWithForest,
     dispatchLogoutForest,
     dispatchSetLensProfile,
+    dispatchSetSelectedProfileId,
+    dispatchRemoveSelectedProfileId,
+    dispatchSetShowSelectProfile,
+    dispatchToggleShowSelectProfile,
   };
 }
 

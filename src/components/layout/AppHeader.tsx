@@ -13,15 +13,18 @@ import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useI18n} from '@forest-feed/locales/client';
+import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
 
 export function AppHeader() {
   const {address, status} = useAccount();
-  const {lensProfile, lensLoading, handleLensLogin, unknownError} = useAuthLens();
-  const {dispatchLogoutAccount, profile} = useProfile();
+  const {lensLoading, unknownError} = useAuthLens();
+  const {dispatchLogoutAccount, profile: forestProfile} = useProfile();
+  const {data: lensProfile} = useLensProfile();
 
   const {
     web3: {forestLoading, isSupportedNetwork},
     dispatchSignWithForest,
+    dispatchSetShowSelectProfile,
   } = useWeb3();
 
   const t = useI18n();
@@ -47,10 +50,10 @@ export function AppHeader() {
                 icon={<LensIcon />}
                 disabled={lensLoading}
                 loading={lensLoading}
-                onClick={handleLensLogin}
+                onClick={() => dispatchSetShowSelectProfile(true)}
               />
             ) : null}
-            {isSupportedNetwork && lensProfile && !profile ? (
+            {isSupportedNetwork && lensProfile && !forestProfile ? (
               <Button
                 className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex"
                 autoSize={false}

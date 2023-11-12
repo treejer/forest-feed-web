@@ -11,6 +11,7 @@ import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
 import {ConnectToUse} from '@forest-feed/components/AuthWrapper/ConnectToUse';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
+import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
 import './AuthWrapper.scss';
 
 export type AuthLoaderProps = {
@@ -49,7 +50,8 @@ export function AuthWrapper(props: AuthWrapperProps) {
 
   const {profile: forestProfile} = useProfile();
 
-  const {lensProfile, lensProfileLoading} = useAuthLens();
+  const {loginLoading} = useAuthLens();
+  const {data: lensProfile} = useLensProfile();
 
   const {initState} = useInit();
 
@@ -62,8 +64,8 @@ export function AuthWrapper(props: AuthWrapperProps) {
   }, []);
 
   const loading = useMemo(
-    () => initState.loading || isConnecting || switching || lensProfileLoading || forestLoading,
-    [forestLoading, initState.loading, isConnecting, lensProfileLoading, switching],
+    () => initState.loading || isConnecting || switching || loginLoading || forestLoading,
+    [forestLoading, initState.loading, isConnecting, loginLoading, switching],
   );
 
   const canAccessToApp = useMemo(

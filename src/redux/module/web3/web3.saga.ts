@@ -8,7 +8,7 @@ import {
   watchAccount,
   watchNetwork,
 } from '@wagmi/core';
-import {ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {Profile} from '@lens-protocol/react-web';
 
 import {config as configs, defaultChainId, NetworkConfig, storageKeys} from '@forest-feed/config';
 import {selectConfig, selectLensProfile, selectWeb3} from '@forest-feed/redux/selectors';
@@ -58,7 +58,7 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
 
 export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchNetwork']>) {
   const {newNetwork, userInApp, onSuccess, lensLogout, inInit} = payload || {};
-  const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
+  const lensProfile: Profile = yield select(selectLensProfile);
   try {
     if (!userInApp && lensProfile && !inInit) {
       yield lensLogout?.(true);
@@ -73,8 +73,8 @@ export function* watchLoginAccount() {
   try {
     yield put(resetCampaignJourney(true));
     yield reactQueryClient.invalidateQueries();
-    yield reactQueryClient.removeQueries();
-    yield reactQueryClient.clear();
+    reactQueryClient.removeQueries();
+    reactQueryClient.clear();
     for (let key in storageKeys) {
       window.localStorage.removeItem(storageKeys[key]);
     }
@@ -102,8 +102,8 @@ export function* watchLogoutAccount() {
     yield put(resetCampaignJourney(true));
     yield put(resetTokens());
     yield reactQueryClient.invalidateQueries();
-    yield reactQueryClient.removeQueries();
-    yield reactQueryClient.clear();
+    reactQueryClient.removeQueries();
+    reactQueryClient.clear();
     for (let key in storageKeys) {
       window.localStorage.removeItem(storageKeys[key]);
     }
@@ -115,7 +115,7 @@ export function* watchLogoutAccount() {
 export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAccount']>) {
   const {account, lensLogout} = payload || {};
   const {address, accessToken}: Web3State = yield select(selectWeb3);
-  const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
+  const lensProfile: Profile = yield select(selectLensProfile);
   try {
     if (!accessToken || address?.toLowerCase() !== account?.address?.toLowerCase()) {
       if (lensProfile) yield lensLogout(true);

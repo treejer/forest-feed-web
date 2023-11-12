@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 
 import Image from 'next/image';
-import {MediaSet, ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {Profile, ProfilePictureSet} from '@lens-protocol/react-web';
 
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {Spacer} from '@forest-feed/components/common/Spacer';
@@ -12,7 +12,7 @@ import {useI18n} from '@forest-feed/locales/client';
 export type HeyPostViewProps = {
   content: string;
   image: CampaignJourneyState['image'];
-  activeProfile: ProfileOwnedByMe | null | undefined;
+  activeProfile: Profile | null | undefined;
 };
 
 export function HeyPostView(props: HeyPostViewProps) {
@@ -26,7 +26,7 @@ export function HeyPostView(props: HeyPostViewProps) {
     <div className="bg-white shadow p-5 rounded-xl">
       <div className="flex items-center pb-4">
         <Image
-          src={(activeProfile?.picture as MediaSet)?.original?.url || NoPicture}
+          src={(activeProfile?.metadata?.picture as ProfilePictureSet).optimized?.uri || NoPicture}
           alt="profile-picture"
           width={40}
           height={40}
@@ -34,10 +34,10 @@ export function HeyPostView(props: HeyPostViewProps) {
         />
         <Spacer times={1.5} />
         <div>
-          <p>{activeProfile?.name || activeProfile?.handle}</p>
+          <p>{activeProfile?.metadata?.displayName || activeProfile?.handle?.fullHandle}</p>
           <div className="flex items-center">
             <p className="from-brand-600 dark:from-brand-400 bg-gradient-to-r to-pink-600 bg-clip-text text-transparent dark:to-pink-400 text-sm font-bold">
-              @{activeProfile?.handle}
+              {activeProfile?.handle?.fullHandle}
             </p>
             <div className="w-[3px] h-[3px] rounded-full bg-tGray-500 mx-1.5" />
             <span className="text-xs text-tGray-500">{t('now')}</span>

@@ -10,15 +10,18 @@ import {LensIcon} from '@forest-feed/components/kit/Icons/LensIcon';
 import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useI18n} from '@forest-feed/locales/client';
+import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
 import {Trees} from 'public/assets/images';
 
 export function ConnectToUse() {
   const {address, status} = useAccount();
-  const {lensLoading, handleLensLogin, lensProfile} = useAuthLens();
+  const {lensLoading} = useAuthLens();
   const {profile} = useProfile();
+  const {error: lensProfile} = useLensProfile();
   const {
     web3: {forestLoading, isSupportedNetwork},
     dispatchSignWithForest,
+    dispatchSetShowSelectProfile,
   } = useWeb3();
 
   const t = useI18n();
@@ -48,7 +51,7 @@ export function ConnectToUse() {
                 icon={<LensIcon />}
                 disabled={lensLoading}
                 loading={lensLoading}
-                onClick={handleLensLogin}
+                onClick={() => dispatchSetShowSelectProfile(true)}
               />
             ) : !profile ? (
               <Button

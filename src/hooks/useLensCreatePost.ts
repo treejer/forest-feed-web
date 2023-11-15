@@ -129,13 +129,15 @@ export function useLensCreatePost() {
 
         result = await create({
           metadata: metadataUrl,
-          actions: [
-            {
-              type: OpenActionType.SIMPLE_COLLECT,
-              collectLimit: size,
-              followerOnly: settings.canBeCollectedOnlyFollowers,
-            },
-          ],
+          actions: settings.canBeCollected
+            ? [
+                {
+                  type: OpenActionType.SIMPLE_COLLECT,
+                  collectLimit: size,
+                  followerOnly: settings.canBeCollectedOnlyFollowers,
+                },
+              ]
+            : undefined,
         });
       } else {
         const metadata = textOnlyMetadata({
@@ -148,13 +150,22 @@ export function useLensCreatePost() {
 
         result = await create({
           metadata: metadataUrl,
+          actions: settings.canBeCollected
+            ? [
+                {
+                  type: OpenActionType.SIMPLE_COLLECT,
+                  collectLimit: size,
+                  followerOnly: settings.canBeCollectedOnlyFollowers,
+                },
+              ]
+            : undefined,
         });
       }
 
       if (result.isSuccess()) {
         const completion = await result.value.waitForCompletion();
         if (completion.isSuccess()) {
-          console.log(completion.value, 'jeheheheh');
+          console.log(completion.value, 'Created Post');
           setCreatedPubId(completion.value.id);
           dispatchSetSubmissionState({
             activeStep: SubmitCampaignSteps.CheckAllowance,

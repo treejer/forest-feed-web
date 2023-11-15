@@ -1,4 +1,4 @@
-import {useProfile} from '@lens-protocol/react-web';
+import {useProfile, useSession} from '@lens-protocol/react-web';
 
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 
@@ -7,9 +7,11 @@ export function useLensProfile() {
     web3: {selectedProfileId},
   } = useWeb3();
 
-  return useProfile({
+  const {data: session} = useSession();
+
+  const profile = useProfile({
     forProfileId: selectedProfileId,
   });
-}
 
-//TODO: check authenticated
+  return session?.authenticated ? profile : {data: undefined, loading: false, error: true};
+}

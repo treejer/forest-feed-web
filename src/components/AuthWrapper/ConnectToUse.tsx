@@ -17,7 +17,7 @@ export function ConnectToUse() {
   const {address, status} = useAccount();
   const {lensLoading} = useAuthLens();
   const {profile} = useProfile();
-  const {error: lensProfile} = useLensProfile();
+  const {data: lensProfile} = useLensProfile();
   const {
     web3: {forestLoading, isSupportedNetwork},
     dispatchSignWithForest,

@@ -1,7 +1,7 @@
 import React from 'react';
 
+import cn from '@forest-feed/utils/tailwind';
 import './Checkbox.css';
-import {cn} from '@forest-feed/utils/tailwind';
 
 export type CheckBoxProps = {
   text?: string;
@@ -12,7 +12,7 @@ export type CheckBoxProps = {
   label?: string;
 };
 
-export function Checkbox(props: CheckBoxProps) {
+export default function Checkbox(props: CheckBoxProps) {
   const {text, checked, disabled, onChange, onBlur} = props;
 
   return (

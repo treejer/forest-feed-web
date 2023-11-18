@@ -3,22 +3,21 @@ import React, {useCallback, useMemo} from 'react';
 import {useAccount} from 'wagmi';
 import {RotatingLines} from 'react-loader-spinner';
 
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {colors} from 'colors';
-
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
-import {ConnectToUse} from '@forest-feed/components/AuthWrapper/ConnectToUse';
-import {useProfile} from '@forest-feed/redux/module/profile/profile';
-import {useInit} from '@forest-feed/redux/module/init/init.slice';
-import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import useAuthLens from '@forest-feed/hooks/useAuthLens';
+import ConnectToUse from '@forest-feed/components/AuthWrapper/ConnectToUse';
+import useLensProfile from '@forest-feed/hooks/useLensProfile';
+import useInit from '@forest-feed/hooks/useInit';
+import useForestProfile from '@forest-feed/hooks/useForestProfile';
+import cn from '@forest-feed/utils/tailwind';
+import colors from 'colors';
 import './AuthWrapper.scss';
-import {cn} from '@forest-feed/utils/tailwind';
 
 export type AuthLoaderProps = {
   hideLoader: boolean;
 };
-export function AuthLoader(props: AuthLoaderProps) {
+function AuthLoader(props: AuthLoaderProps) {
   const {hideLoader = false} = props;
 
   return (
@@ -41,7 +40,7 @@ export type AuthWrapperProps = React.PropsWithChildren<{
   disabled?: boolean;
 }>;
 
-export function AuthWrapper(props: AuthWrapperProps) {
+export default function AuthWrapper(props: AuthWrapperProps) {
   const {className, children, disabled} = props;
 
   const {address, isConnected, isConnecting} = useAccount();
@@ -49,7 +48,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
     web3: {isSupportedNetwork, switching, forestLoading},
   } = useWeb3();
 
-  const {profile: forestProfile} = useProfile();
+  const {profile: forestProfile} = useForestProfile();
 
   const {loginLoading} = useAuthLens();
   const {data: lensProfile} = useLensProfile();

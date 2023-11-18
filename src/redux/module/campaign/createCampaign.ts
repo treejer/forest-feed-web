@@ -54,29 +54,6 @@ export function* createCampaignSagas() {
   yield takeEvery(CreateCampaign.actionTypes.load, watchCreateCampaign);
 }
 
-export function useCreateCampaign() {
-  const {data: createCampaign, ...createCampaignState} = useAppSelector(selectCreateCampaign);
-  const dispatch = useAppDispatch();
-
-  const dispatchCreateCampaign = useCallback(
-    (payload: CreateCampaignPayload) => {
-      dispatch(CreateCampaign.actions.load(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchResetCreateCampaign = useCallback(() => {
-    dispatch(CreateCampaign.actions.resetCache());
-  }, [dispatch]);
-
-  return {
-    createCampaign,
-    ...createCampaignState,
-    dispatchCreateCampaign,
-    dispatchResetCreateCampaign,
-  };
-}
-
 export const {
   reducer: createCampaignReducer,
   actions: createCampaignActions,

@@ -2,11 +2,11 @@ import React from 'react';
 import {Inter} from 'next/font/google';
 
 import {Locale} from '@forest-feed/languages';
-import {AllTheProviders} from '@forest-feed/components/providers/AllTheProviders';
-import {Layout} from '@forest-feed/components/layout/Layout';
-import {HandleOnComplete} from '@forest-feed/lib/router-events';
+import AllTheProviders from '@forest-feed/components/providers/AllTheProviders';
+import Layout from '@forest-feed/components/layout/Layout';
+import HandleOnComplete from '@forest-feed/lib/router-events/wrapper';
 import {getScopedI18n} from '@forest-feed/locales/server';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 const inter = Inter({subsets: ['latin']});
 

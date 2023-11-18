@@ -5,7 +5,7 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 import {useAccount} from 'wagmi';
 
 import {ProfileId, useLazyProfile, useLogin, useLogout} from '@lens-protocol/react-web';
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
 
 export type LensStatus = {
   isSuccess: boolean;
@@ -16,7 +16,7 @@ export enum LensUnknownErrors {
   NoAccount = 1, // when login return success but profile is null
 }
 
-export function useAuthLens() {
+export default function useAuthLens() {
   const [loginStatus, setLoginStatus] = useState<LensStatus | null>(null);
   const [logoutStatus, setLogoutStatus] = useState<LensStatus | null>(null);
   const [unknownError, setUnknownError] = useState<LensUnknownErrors | null>(null);

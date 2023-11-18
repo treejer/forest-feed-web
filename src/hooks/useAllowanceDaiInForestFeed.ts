@@ -11,7 +11,7 @@ export type UseAllowanceDaiInForestFeedParams = {
   onError?: (err: Error) => void;
 };
 
-export function useAllowanceDaiInForestFeed(params: UseAllowanceDaiInForestFeedParams = {}) {
+export default function useAllowanceDaiInForestFeed(params: UseAllowanceDaiInForestFeedParams = {}) {
   const {enabled = true, onError, onSuccess} = params;
 
   const {address: walletAddress} = useAccount();

@@ -2,12 +2,12 @@ import React, {useCallback} from 'react';
 
 import {Profile} from '@lens-protocol/react-web';
 
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {HeyPostView} from '@forest-feed/components/HeyPostView/HeyPostView';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import Spacer from '@forest-feed/components/common/Spacer';
+import HeyPostView from '@forest-feed/components/HeyPostView/HeyPostView';
 import {GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type PreviewStepProps = {
   generalInfo: GeneralInfoStepState;
@@ -18,7 +18,7 @@ export type PreviewStepProps = {
   disabled?: boolean;
 };
 
-export function PreviewStep(props: PreviewStepProps) {
+export default function PreviewStep(props: PreviewStepProps) {
   const {generalInfo, activeProfile, activeStep, disabled, onApprove, setActiveStep} = props;
 
   const t = useI18n();

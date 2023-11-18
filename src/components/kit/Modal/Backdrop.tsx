@@ -1,13 +1,13 @@
 import React from 'react';
 
 import {motion} from 'framer-motion';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type BackdropProps = React.PropsWithChildren<{
   onClick?: () => void;
 }>;
 
-export function Backdrop(props: BackdropProps) {
+export default function Backdrop(props: BackdropProps) {
   const {onClick, children} = props;
 
   return (

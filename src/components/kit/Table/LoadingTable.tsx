@@ -2,10 +2,10 @@ import React from 'react';
 
 import {Circles} from 'react-loader-spinner';
 
-import {colors} from 'colors';
-import {cn} from '@forest-feed/utils/tailwind';
+import colors from 'colors';
+import cn from '@forest-feed/utils/tailwind';
 
-export function LoadingTable() {
+export default function LoadingTable() {
   return (
     <div className={cn('flex justify-center items-center h-full')}>
       <Circles

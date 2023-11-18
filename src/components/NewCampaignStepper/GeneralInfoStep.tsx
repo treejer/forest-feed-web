@@ -2,18 +2,19 @@ import React, {useCallback, useEffect} from 'react';
 
 import {useForm} from 'react-hook-form';
 
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {
+import Spacer from '@forest-feed/components/common/Spacer';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import type {
   CampaignJourneyAction,
   CampaignJourneyState,
 } from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {FormController} from '@forest-feed/components/FormController/FormController';
-import {GeneralInfoForm, generalInfoYup} from '@forest-feed/validators/generalInfo';
-import {useDebounce} from '@forest-feed/hooks/useDebounce';
+import FormController from '@forest-feed/components/FormController/FormController';
+import generalInfoYup from '@forest-feed/validators/generalInfo';
+import type {GeneralInfoForm} from '@forest-feed/validators/generalInfo';
+import useDebounce from '@forest-feed/hooks/useDebounce';
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type GeneralInfoStepState = Pick<CampaignJourneyState, 'content' | 'image' | 'termsConditionAgreed'>;
 
@@ -26,7 +27,7 @@ export type GeneralInfoStepProps = {
   loading?: boolean;
 };
 
-export function GeneralInfoStep(props: GeneralInfoStepProps) {
+export default function GeneralInfoStep(props: GeneralInfoStepProps) {
   const {defaultValues, isConfirm, activeStep, setActiveStep, onProceed, loading} = props;
 
   const {control, resetField, setValue, watch, handleSubmit, formState} = useForm<GeneralInfoForm>({
@@ -52,6 +53,7 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
       termsConditionAgreed: debouncedTermsCondition,
       silent: true,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedContent, debouncedImage, debouncedTermsCondition]);
 
   useEffect(() => {

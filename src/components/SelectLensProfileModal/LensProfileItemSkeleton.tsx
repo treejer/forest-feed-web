@@ -2,11 +2,11 @@ import React from 'react';
 
 import {SkeletonTheme} from 'react-loading-skeleton';
 
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {SkeletonBox} from '@forest-feed/components/layout/AppHeaderSkeleton';
-import {cn} from '@forest-feed/utils/tailwind';
+import Spacer from '@forest-feed/components/common/Spacer';
+import SkeletonBox from '@forest-feed/components/layout/AppHeaderSkeleton';
+import cn from '@forest-feed/utils/tailwind';
 
-export function LensProfileItemSkeleton() {
+export default function LensProfileItemSkeleton() {
   return (
     <SkeletonTheme>
       <div

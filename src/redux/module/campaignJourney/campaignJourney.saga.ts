@@ -9,7 +9,7 @@ import {
   setImageBase64,
   setImageFile,
 } from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {photoToBase64} from '@forest-feed/utils/photoToBase64';
+import photoToBase64 from '@forest-feed/utils/photoToBase64';
 import {selectCampaignJourney} from '@forest-feed/redux/selectors';
 import getCroppedImg from '@forest-feed/utils/cropImage';
 

@@ -1,8 +1,8 @@
 import {useProfile, useSession} from '@lens-protocol/react-web';
 
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
 
-export function useLensProfile() {
+export default function useLensProfile() {
   const {
     web3: {selectedProfileId},
   } = useWeb3();

@@ -1,12 +1,9 @@
-import {useCallback} from 'react';
 import ReduxFetchState from 'redux-fetch-state';
 import {put, takeEvery} from 'redux-saga/effects';
 import {getAccount} from '@wagmi/core';
 
-import {SignAction, SignPayload, SignRes} from '@forest-feed/webServices/sign/sign';
+import type {SignAction, SignPayload, SignRes} from '@forest-feed/webServices/sign/sign';
 import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@forest-feed/utils/fetch';
-import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
-import {selectSign} from '@forest-feed/redux/selectors';
 
 const Sign = new ReduxFetchState<SignRes, SignPayload, string>('sign');
 
@@ -32,24 +29,6 @@ export function* watchSign({payload}: SignAction) {
 
 export function* signSagas() {
   yield takeEvery(Sign.actionTypes.load, watchSign);
-}
-
-export function useSign() {
-  const {data: sign, ...signState} = useAppSelector(selectSign);
-  const dispatch = useAppDispatch();
-
-  const dispatchSign = useCallback(
-    (form: SignPayload) => {
-      dispatch(Sign.actions.load(form));
-    },
-    [dispatch],
-  );
-
-  const dispatchResetSign = useCallback(() => {
-    dispatch(Sign.actions.resetCache());
-  }, [dispatch]);
-
-  return {sign, ...signState, dispatchSign, dispatchResetSign};
 }
 
 export const {reducer: signReducer, actions: signActions, actionTypes: signActionTypes} = Sign;

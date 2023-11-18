@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 import {yupResolver} from '@hookform/resolvers/yup';
 
-import {validator} from '@forest-feed/validators/yup';
+import validator from '@forest-feed/validators/yup';
 
 export type GeneralInfoForm = {
   content: string;
@@ -16,4 +16,6 @@ export const generalInfoFormSchema = Yup.object({
   termsConditionAgreed: validator.bool('errors.privacyPolicy'),
 });
 
-export const generalInfoYup = yupResolver(generalInfoFormSchema);
+const generalInfoYup = yupResolver(generalInfoFormSchema);
+
+export default generalInfoYup;

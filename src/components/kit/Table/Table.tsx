@@ -2,10 +2,10 @@ import React, {memo, useMemo} from 'react';
 
 import {TableOptions, useSortBy, useTable} from 'react-table';
 
-import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {Pagination} from '@forest-feed/components/kit/Table/Pagination';
-import {cn} from '@forest-feed/utils/tailwind';
+import ChevronIcon, {ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
+import Spacer from '@forest-feed/components/common/Spacer';
+import Pagination from '@forest-feed/components/kit/Table/Pagination';
+import cn from '@forest-feed/utils/tailwind';
 
 export type TableProps<D extends object> = {
   columns: TableOptions<D>['columns'];
@@ -103,4 +103,4 @@ function TableComponent<D extends object>(props: TableProps<D>) {
   );
 }
 
-export const Table = memo(TableComponent) as typeof TableComponent;
+export default memo(TableComponent) as typeof TableComponent;

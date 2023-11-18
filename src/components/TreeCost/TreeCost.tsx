@@ -1,16 +1,16 @@
 import React from 'react';
 
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {WalletAssets} from '@forest-feed/components/WalletAssets/WalletAssets';
-import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
+import Spacer from '@forest-feed/components/common/Spacer';
+import WalletAssets from '@forest-feed/components/WalletAssets/WalletAssets';
+import useRegularSale from '@forest-feed/hooks/useRegularSale';
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type TreeCostProps = {
   treeCount: number;
 };
 
-export function TreeCost(props: TreeCostProps) {
+export default function TreeCost(props: TreeCostProps) {
   const {treeCount} = props;
 
   const {contractValue, salePrice} = useRegularSale();

@@ -1,5 +1,5 @@
 import React from 'react';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type TextAreaProps = {
   value: string;
@@ -10,7 +10,7 @@ export type TextAreaProps = {
   disabled?: boolean;
 };
 
-export function TextArea(props: TextAreaProps) {
+export default function TextArea(props: TextAreaProps) {
   const {id, value, placeholder, disabled, onChange, onBlur} = props;
   return (
     <div className={cn('flex flex-col items-start')}>

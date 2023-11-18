@@ -1,12 +1,12 @@
 import Image from 'next/image';
 
 import {Logo as ForestLogo} from 'public/assets/images/index';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type LogoProps = {
   small?: boolean;
 };
-export function Logo(props: LogoProps) {
+export default function Logo(props: LogoProps) {
   const {small} = props;
 
   return (

@@ -1,5 +1,3 @@
-import {useCallback} from 'react';
-
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {GetAccountResult} from '@wagmi/core';
 import {Profile, ProfileId} from '@lens-protocol/react-web';
@@ -11,9 +9,8 @@ import {
   selectDaiTokenContract,
   selectForestFeedContract,
   selectRegularSaleContract,
-  selectWeb3,
 } from '@forest-feed/redux/selectors';
-import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
+import {useAppSelector} from '@forest-feed/hooks/redux';
 import {InitAction} from '@forest-feed/redux/module/init/init.slice';
 
 export type Web3State = {
@@ -142,89 +139,6 @@ export const {
   removeSelectedProfileId,
 } = web3Slice.actions;
 export default web3Slice.reducer;
-
-export function useWeb3() {
-  const web3 = useAppSelector(selectWeb3);
-  const dispatch = useAppDispatch();
-
-  const dispatchSwitchNetwork = useCallback(
-    (payload: Web3Action['switchNetwork']) => {
-      dispatch(switchNetwork(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchNotSupportedNetwork = useCallback(() => {
-    dispatch(notSupportedNetwork());
-  }, [dispatch]);
-
-  const dispatchSetLensLoading = useCallback(
-    (payload: Web3Action['setLensLoading']) => {
-      dispatch(setLensLoading(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchRemoveAccessToken = useCallback(() => {
-    dispatch(setAccessToken({token: ''}));
-  }, [dispatch]);
-
-  const dispatchLogoutForest = useCallback(() => {
-    // dispatchRemoveAccessToken();
-    // dispatch(profileActions.resetCache());
-    // dispatch(nonceActions.resetCache());
-    // dispatch(signActions.resetCache());
-    dispatch(logoutAccount());
-  }, [dispatch]);
-
-  const dispatchSignWithForest = useCallback(() => {
-    dispatch(loginAccount());
-  }, [dispatch]);
-
-  const dispatchSetLensProfile = useCallback(
-    (payload: Web3Action['setLensProfile']) => {
-      dispatch(setLensProfile(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchSetSelectedProfileId = useCallback(
-    (payload: Web3Action['setSelectedProfileId']) => {
-      dispatch(setSelectedProfileId(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchRemoveSelectedProfileId = useCallback(() => {
-    dispatch(removeSelectedProfileId());
-  }, [dispatch]);
-
-  const dispatchSetShowSelectProfile = useCallback(
-    (payload: Web3Action['setShowSelectProfile']) => {
-      dispatch(setShowSelectProfile(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchToggleShowSelectProfile = useCallback(() => {
-    dispatch(toggleShowSelectProfile());
-  }, [dispatch]);
-
-  return {
-    web3,
-    dispatchSwitchNetwork,
-    dispatchNotSupportedNetwork,
-    dispatchSetLensLoading,
-    dispatchRemoveAccessToken,
-    dispatchSignWithForest,
-    dispatchLogoutForest,
-    dispatchSetLensProfile,
-    dispatchSetSelectedProfileId,
-    dispatchRemoveSelectedProfileId,
-    dispatchSetShowSelectProfile,
-    dispatchToggleShowSelectProfile,
-  };
-}
 
 export const useConfig = () => useAppSelector(selectConfig);
 export const useRegularSaleContract = () => useAppSelector(selectRegularSaleContract);

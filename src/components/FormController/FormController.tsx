@@ -10,13 +10,13 @@ import {
   UseFormStateReturn,
 } from 'react-hook-form';
 
-import {TextArea} from '@forest-feed/components/kit/TextArea';
-import {ErrorMessage} from '@forest-feed/components/FormController/ErrorMessage';
-import {Uploader} from '@forest-feed/components/kit/Uploader';
-import {Checkbox} from '@forest-feed/components/kit/Checkbox/Checkbox';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {cn} from '@forest-feed/utils/tailwind';
+import TextArea from '@forest-feed/components/kit/TextArea';
+import ErrorMessage from '@forest-feed/components/FormController/ErrorMessage';
+import Uploader from '@forest-feed/components/kit/Uploader';
+import Checkbox from '@forest-feed/components/kit/Checkbox/Checkbox';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import Spacer from '@forest-feed/components/common/Spacer';
+import cn from '@forest-feed/utils/tailwind';
 
 export type FormControllerRender = {
   field: ControllerRenderProps<FieldValues, string>;
@@ -54,7 +54,7 @@ export type FileProps = {
   resetField?: UseFormResetField<any>;
 };
 
-export function FormController(props: FormControllerProps) {
+export default function FormController(props: FormControllerProps) {
   const {control, type, label, hideLabel, name, placeholder, disabled, onChange, onBlur} = props;
 
   const handleChange = useCallback(

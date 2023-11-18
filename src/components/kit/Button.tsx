@@ -1,10 +1,10 @@
 import React from 'react';
 import {Circles} from 'react-loader-spinner';
 
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {colors} from 'colors';
-import {cn} from '@forest-feed/utils/tailwind';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import Spacer from '@forest-feed/components/common/Spacer';
+import cn from '@forest-feed/utils/tailwind';
+import colors from 'colors';
 
 export enum ButtonVariant {
   primary = 'primary',
@@ -42,7 +42,7 @@ const classNames: (autoSize: boolean) => VariantClassNames = autoSize => ({
   [ButtonVariant.text]: `${autoSize ? 'w-[100%] h-10 lg:h-14' : ''} text-sm disabled:bg-opacity/50`,
 });
 
-export function Button(props: ButtonProps) {
+export default function Button(props: ButtonProps) {
   const {
     variant = ButtonVariant.primary,
     autoSize = true,

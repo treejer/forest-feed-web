@@ -1,8 +1,8 @@
 import {Profile, ProfilePictureSet} from '@lens-protocol/react-web';
 import Image from 'next/image';
 
+import cn from '@forest-feed/utils/tailwind';
 import {NoPicture} from '../../../public/assets/images';
-import {cn} from '@forest-feed/utils/tailwind';
 
 export type LensProfileItemProps = {
   profile: Profile;
@@ -10,7 +10,7 @@ export type LensProfileItemProps = {
   onClick: () => void;
   loading: boolean;
 };
-export function LensProfileItem(props: LensProfileItemProps) {
+export default function LensProfileItem(props: LensProfileItemProps) {
   const {profile, disabled, loading, onClick} = props;
 
   return (

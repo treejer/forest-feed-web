@@ -3,14 +3,14 @@ import React from 'react';
 import {motion} from 'framer-motion';
 import {ArrowLeftIcon} from '@heroicons/react/solid';
 
-import {shortenedString} from '@forest-feed/utils/string';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {SwitchNetwork} from '@forest-feed/components/SwitchNetwork/SwitchNetwork';
-import {useCopyToClipboard} from '@forest-feed/hooks/useCopyToClipboard';
+import shortenedString from '@forest-feed/utils/string';
+import Spacer from '@forest-feed/components/common/Spacer';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import SwitchNetwork from '@forest-feed/components/SwitchNetwork/SwitchNetwork';
+import useCopyToClipboard from '@forest-feed/hooks/useCopyToClipboard';
+import cn from '@forest-feed/utils/tailwind';
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
 
 export type MenuProps = {
   address: string;
@@ -19,7 +19,7 @@ export type MenuProps = {
   onDisconnect: () => void;
 };
 
-export function Menu(props: MenuProps) {
+export default function Menu(props: MenuProps) {
   const {address, lensLoggedIn, isSupportedNetwork, onDisconnect} = props;
 
   const [copiedValue, copy] = useCopyToClipboard();

@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import {LensLogo} from 'public/assets/images';
 
-export function LensIcon() {
+export default function LensIcon() {
   return (
     <Image
       src={LensLogo}

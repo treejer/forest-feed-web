@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 
 import './InputRange.scss';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type InputRangeProps = {
   value: number;
@@ -11,7 +11,7 @@ export type InputRangeProps = {
   max?: number;
 };
 
-export function InputRange(props: InputRangeProps) {
+export default function InputRange(props: InputRangeProps) {
   const {value, min = 1, max = 100, disabled, onChange} = props;
   const [show, setShow] = useState(false);
 

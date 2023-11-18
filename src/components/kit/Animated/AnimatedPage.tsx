@@ -2,14 +2,14 @@ import React from 'react';
 
 import {motion} from 'framer-motion';
 
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {cn} from '@forest-feed/utils/tailwind';
+import Spacer from '@forest-feed/components/common/Spacer';
+import cn from '@forest-feed/utils/tailwind';
 
 export type AnimatedPageProps = React.PropsWithChildren<{
   className?: string;
 }>;
 
-export function AnimatedPage(props: AnimatedPageProps) {
+export default function AnimatedPage(props: AnimatedPageProps) {
   const {children, className} = props;
 
   return (

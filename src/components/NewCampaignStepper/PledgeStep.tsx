@@ -1,17 +1,17 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {InputRange} from '@forest-feed/components/kit/InputRange/InputRange';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {Switch} from '@forest-feed/components/kit/Switch/Switch';
-import {Counter} from '@forest-feed/components/NewCampaignStepper/Counter';
-import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
-import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
-import {usePersistState} from '@forest-feed/hooks/usePersistState';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import InputRange from '@forest-feed/components/kit/InputRange/InputRange';
+import Spacer from '@forest-feed/components/common/Spacer';
+import Switch from '@forest-feed/components/kit/Switch/Switch';
+import Counter from '@forest-feed/components/NewCampaignStepper/Counter';
+import type {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import useTokens from '@forest-feed/hooks/useToken';
+import useRegularSale from '@forest-feed/hooks/useRegularSale';
+import usePersistState from '@forest-feed/hooks/usePersistState';
 import {storageKeys} from '@forest-feed/config';
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type PledgeStepState = Pick<CampaignJourneyState, 'size' | 'reward' | 'settings'>;
 
@@ -27,7 +27,7 @@ export type PledgeStepProps = {
   onProceed: () => void;
 };
 
-export function PledgeStep(props: PledgeStepProps) {
+export default function PledgeStep(props: PledgeStepProps) {
   const {
     values,
     setCampaignSize,

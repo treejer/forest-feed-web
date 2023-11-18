@@ -7,22 +7,22 @@ import {Circles} from 'react-loader-spinner';
 import {BigNumberish} from 'ethers';
 
 import {useRouter} from '@forest-feed/lib/router-events';
-import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
-import {useDepositToForestFeed} from '@forest-feed/hooks/useDepositToForestFeed';
-import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
-import {useCreateCampaign} from '@forest-feed/redux/module/campaign/createCampaign';
-import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
-import {usePersistState} from '@forest-feed/hooks/usePersistState';
-import {useAllowanceDaiInForestFeed} from '@forest-feed/hooks/useAllowanceDaiInForestFeed';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTimer';
+import useApproveDai from '@forest-feed/hooks/useApproveDai';
+import useDepositToForestFeed from '@forest-feed/hooks/useDepositToForestFeed';
+import useRegularSale from '@forest-feed/hooks/useRegularSale';
+import usePersistState from '@forest-feed/hooks/usePersistState';
+import useAllowanceDaiInForestFeed from '@forest-feed/hooks/useAllowanceDaiInForestFeed';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import Spacer from '@forest-feed/components/common/Spacer';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import CountDownTimer from '@forest-feed/components/CountDownTimer/CountDownTimer';
+import useCampaignJourney from '@forest-feed/hooks/useCampaignJourney';
+import useTokens from '@forest-feed/hooks/useToken';
+import useCreateCampaign from '@forest-feed/hooks/useCreateCampaign';
+import cn from '@forest-feed/utils/tailwind';
+import colors from 'colors';
 import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {useScopedI18n} from '@forest-feed/locales/client';
-import {colors} from 'colors';
-import {cn} from '@forest-feed/utils/tailwind';
 
 export type SubmissionStatusStepProps = {
   createdPubId: string | null;
@@ -31,7 +31,7 @@ export type SubmissionStatusStepProps = {
   createPostLoading: boolean;
 };
 
-export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
+export default function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const {createPostLoading, createdPubId, setCreatedPubId, onCreatePost} = props;
 
   const {

@@ -7,7 +7,7 @@ import Image from 'next/image';
 import {useI18n} from '@forest-feed/locales/client';
 import {NotFoundSvg} from 'public/assets/images';
 import {useRouter} from '@forest-feed/lib/router-events';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export default function NotFound() {
   const t = useI18n();

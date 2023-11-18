@@ -1,5 +1,5 @@
 import {put, select, take, takeEvery} from 'redux-saga/effects';
-import {PayloadAction} from '@reduxjs/toolkit';
+import type {PayloadAction} from '@reduxjs/toolkit';
 
 import {updateNetwork, watchCurrentWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {InitAction, initApp, initAppCompleted} from '@forest-feed/redux/module/init/init.slice';

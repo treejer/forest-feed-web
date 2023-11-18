@@ -1,6 +1,6 @@
-import {ToastType} from '@forest-feed/utils/showToast';
+import type {ToastType} from '@forest-feed/utils/showToast';
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type CustomToastProps<T = any, V = any> = {
   title?: string;
@@ -15,7 +15,7 @@ export type CustomToastProps<T = any, V = any> = {
 
 const possibleColors = ['text-error', 'text-success'];
 
-export function CustomToast<T = any, V = any>(props: CustomToastProps<T, V>) {
+export default function CustomToast<T = any, V = any>(props: CustomToastProps<T, V>) {
   const {title, message, type, translate, variables} = props;
 
   const t = useI18n();

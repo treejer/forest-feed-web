@@ -4,23 +4,21 @@ import React, {useCallback, useMemo} from 'react';
 
 import {motion} from 'framer-motion';
 
-import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
-import {Stepper} from '@forest-feed/components/kit/Stepper';
-import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
-import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
-import {PledgeStep} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
-import {
-  CampaignJourneyAction,
-  useCampaignJourney,
-} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
-import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
-import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
-import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
-import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+import AnimatedPage from '@forest-feed/components/kit/Animated/AnimatedPage';
+import Stepper from '@forest-feed/components/kit/Stepper';
+import TreeCost from '@forest-feed/components/TreeCost/TreeCost';
+import GeneralInfoStep from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
+import PledgeStep from '@forest-feed/components/NewCampaignStepper/PledgeStep';
+import type {CampaignJourneyAction} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import useCampaignJourney from '@forest-feed/hooks/useCampaignJourney';
+import AuthWrapper from '@forest-feed/components/AuthWrapper/AuthWrapper';
+import useLensCreatePost from '@forest-feed/hooks/useLensCreatePost';
+import SubmissionStatusStep from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
+import PreviewStep from '@forest-feed/components/NewCampaignStepper/PreviewStep';
+import useTokens from '@forest-feed/hooks/useToken';
 import {useScopedI18n} from '@forest-feed/locales/client';
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {cn} from '@forest-feed/utils/tailwind';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import cn from '@forest-feed/utils/tailwind';
 
 function NewCampaignPage() {
   const {

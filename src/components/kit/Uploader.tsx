@@ -3,14 +3,14 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import Image from 'next/image';
 
-import {AttachIcon} from '@forest-feed/components/kit/Icons/AttachIcon';
-import {DeleteIcon} from '@forest-feed/components/kit/Icons/DeleteIcon';
-import {Modal} from '@forest-feed/components/kit/Modal/Modal';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {Spacer} from '@forest-feed/components/common/Spacer';
+import AttachIcon from '@forest-feed/components/kit/Icons/AttachIcon';
+import DeleteIcon from '@forest-feed/components/kit/Icons/DeleteIcon';
+import Modal from '@forest-feed/components/kit/Modal/Modal';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import Spacer from '@forest-feed/components/common/Spacer';
+import cn from '@forest-feed/utils/tailwind';
 import {useScopedI18n} from '@forest-feed/locales/client';
-import {colors} from 'colors';
-import {cn} from '@forest-feed/utils/tailwind';
+import colors from 'colors';
 
 export type UploaderProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,7 +23,7 @@ export type UploaderProps = {
   accept?: string;
 };
 
-export function Uploader(props: UploaderProps) {
+export default function Uploader(props: UploaderProps) {
   const {preview, file, disabled, accept, onChange, onDrop, onBlur, onDetach} = props;
 
   const [openPreviewModal, setOpenPreviewModal] = useState(false);

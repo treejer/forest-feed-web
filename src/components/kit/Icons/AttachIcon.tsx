@@ -1,10 +1,10 @@
-import {colors} from 'colors';
+import colors from 'colors';
 
 export type AttachIconProps = {
   color?: string;
 };
 
-export function AttachIcon(props: AttachIconProps) {
+export default function AttachIcon(props: AttachIconProps) {
   const {color = colors.primaryGreen} = props;
 
   return (

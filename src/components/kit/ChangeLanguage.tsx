@@ -1,11 +1,11 @@
 import React, {useCallback, useTransition} from 'react';
 
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
 import {languages, Locale} from '@forest-feed/languages';
 import {useChangeLocale, useCurrentLocale} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
-export function ChangeLanguage() {
+export default function ChangeLanguage() {
   const [isPending, startTransition] = useTransition();
 
   const locale = useCurrentLocale();

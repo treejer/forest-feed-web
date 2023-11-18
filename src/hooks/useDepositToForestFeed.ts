@@ -9,7 +9,7 @@ export type UseDepositToForestFeedParams = UseApproveDaiParams;
 
 export type UseDepositToForestFeedReturnType = UseApproveDaiReturnType;
 
-export function useDepositToForestFeed(params: UseDepositToForestFeedParams): UseDepositToForestFeedReturnType {
+export default function useDepositToForestFeed(params: UseDepositToForestFeedParams): UseDepositToForestFeedReturnType {
   const {
     amount,
     enabled = true,

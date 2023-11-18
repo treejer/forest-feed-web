@@ -2,13 +2,13 @@ import React from 'react';
 
 import {usePathname} from 'next/navigation';
 
+import cn from '@forest-feed/utils/tailwind';
 import {links} from '@forest-feed/components/layout/Navbar';
 import {Link} from '@forest-feed/lib/router-events';
 import {Locale} from '@forest-feed/languages';
 import {useCurrentLocale} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
 
-export function TabNavigator() {
+export default function TabNavigator() {
   const pathname = usePathname();
   const locale = useCurrentLocale();
 

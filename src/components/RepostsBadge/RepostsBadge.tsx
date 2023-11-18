@@ -1,5 +1,5 @@
 import React from 'react';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export enum RepostsStatus {
   active = 'active',
@@ -21,7 +21,7 @@ const className: VariantClassNames = {
   [RepostsStatus.stopped]: 'bg-red',
 };
 
-export function RepostsBadge(props: RepostsBadgeProps) {
+export default function RepostsBadge(props: RepostsBadgeProps) {
   const {min, max, status} = props;
 
   return (

@@ -1,4 +1,4 @@
-import {PayloadAction} from '@reduxjs/toolkit';
+import type {PayloadAction} from '@reduxjs/toolkit';
 import {put, select, take, takeEvery} from 'redux-saga/effects';
 import {
   getAccount,
@@ -8,7 +8,7 @@ import {
   watchAccount,
   watchNetwork,
 } from '@wagmi/core';
-import {Profile} from '@lens-protocol/react-web';
+import type {Profile} from '@lens-protocol/react-web';
 
 import {config as configs, defaultChainId, NetworkConfig, storageKeys} from '@forest-feed/config';
 import {selectConfig, selectLensProfile, selectWeb3} from '@forest-feed/redux/selectors';

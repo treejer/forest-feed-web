@@ -1,19 +1,16 @@
-// 'use client';
-
 import axios, {AxiosError, AxiosRequestConfig} from 'axios';
-import {call, put, select} from 'redux-saga/effects';
+import {call, select} from 'redux-saga/effects';
 
 import {showSagaToast, ToastType} from '@forest-feed/utils/showToast';
 import {debugFetch, NetworkConfig} from '@forest-feed/config';
 import {selectAccessToken, selectConfig} from '@forest-feed/redux/selectors';
-import {logoutAccount} from '@forest-feed/redux/module/web3/web3.slice';
 
 export type FetchResult<Data> = {
   result: Data;
   status: number;
 };
 
-export function fetch<Data, Form = any>(
+export default function fetch<Data, Form = any>(
   url: string,
   options: AxiosRequestConfig<Form> = {},
 ): Promise<FetchResult<Data>> {

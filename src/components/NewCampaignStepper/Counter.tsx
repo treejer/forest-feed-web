@@ -1,5 +1,5 @@
 import React from 'react';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type CounterProps = {
   count: number;
@@ -7,7 +7,7 @@ export type CounterProps = {
   handleChangeCount: (value: -1 | 1) => void;
 };
 
-export function Counter(props: CounterProps) {
+export default function Counter(props: CounterProps) {
   const {count, handleChangeCount} = props;
 
   return (

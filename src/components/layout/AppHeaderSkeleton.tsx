@@ -2,8 +2,8 @@ import React from 'react';
 
 import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
 
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {cn} from '@forest-feed/utils/tailwind';
+import Spacer from '@forest-feed/components/common/Spacer';
+import cn from '@forest-feed/utils/tailwind';
 
 export type SkeletonBoxProps = {
   wrapperClassName?: string;
@@ -11,7 +11,7 @@ export type SkeletonBoxProps = {
   height?: number | string;
 };
 
-export function SkeletonBox(props: SkeletonBoxProps) {
+export default function SkeletonBox(props: SkeletonBoxProps) {
   const {wrapperClassName, height = 40, width = 200} = props;
 
   return (

@@ -5,18 +5,18 @@ import React, {useMemo} from 'react';
 import Link from 'next/link';
 import moment from 'moment';
 
-import {TableWrapper} from '@forest-feed/components/kit/Table/TableWrapper';
-import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
+import TableWrapper from '@forest-feed/components/kit/Table/TableWrapper';
+import RepostsBadge, {RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
 import {Campaign, CampaignStatus} from '@forest-feed/types/campaigns';
-import {CampaignActivation} from '@forest-feed/components/CampaignActivation/CampaignActivation';
-import {useMediaQuery} from '@forest-feed/hooks/useMediaQuery';
-import {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
-import {useQueryFetch} from '@forest-feed/hooks/useQueryFetch';
+import CampaignActivation from '@forest-feed/components/CampaignActivation/CampaignActivation';
+import useMediaQuery from '@forest-feed/hooks/useMediaQuery';
+import type {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
+import useQueryFetch from '@forest-feed/hooks/useQueryFetch';
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {useScopedI18n} from '@forest-feed/locales/client';
-import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
-import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
-import {cn} from '@forest-feed/utils/tailwind';
+import AnimatedPage from '@forest-feed/components/kit/Animated/AnimatedPage';
+import AuthWrapper from '@forest-feed/components/AuthWrapper/AuthWrapper';
+import cn from '@forest-feed/utils/tailwind';
 
 function MyCampaigns() {
   const {

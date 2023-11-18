@@ -4,11 +4,11 @@ import Image from 'next/image';
 import {Profile, ProfilePictureSet} from '@lens-protocol/react-web';
 
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {Spacer} from '@forest-feed/components/common/Spacer';
+import Spacer from '@forest-feed/components/common/Spacer';
 import {HeartIcon, SwitchHorizontalIcon, ChatAlt2Icon} from '@heroicons/react/outline';
 import {ForestTree, NoPicture, TreeSvg} from 'public/assets/images';
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type HeyPostViewProps = {
   content: string;
@@ -16,7 +16,7 @@ export type HeyPostViewProps = {
   activeProfile: Profile | null | undefined;
 };
 
-export function HeyPostView(props: HeyPostViewProps) {
+export default function HeyPostView(props: HeyPostViewProps) {
   const {activeProfile, content, image} = props;
 
   const t = useI18n();

@@ -3,12 +3,12 @@ import React, {useCallback, useMemo, useRef, useState} from 'react';
 import Image, {ImageProps} from 'next/image';
 import {AnimatePresence, motion} from 'framer-motion';
 
-import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {useOnClickOutSide} from '@forest-feed/hooks/useOnClickOutSide';
-import {Color, colors} from 'colors';
-import {cn} from '@forest-feed/utils/tailwind';
+import ChevronIcon, {ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import Spacer from '@forest-feed/components/common/Spacer';
+import useOnClickOutSide from '@forest-feed/hooks/useOnClickOutSide';
+import colors, {Color} from 'colors';
+import cn from '@forest-feed/utils/tailwind';
 
 export type DropDownItem = {
   id: string | number;
@@ -31,7 +31,7 @@ export type DropDownProps = {
 
 const possibleColors = Object.keys(colors);
 
-export function DropDown(props: DropDownProps) {
+export default function DropDown(props: DropDownProps) {
   const {selected, items, hideText, color, activeColor, disabled, bgColor = Color.white, className, onChange} = props;
 
   const [open, setOpen] = useState(false);

@@ -3,21 +3,21 @@ import {useCallback} from 'react';
 import {ProfileId, useProfiles} from '@lens-protocol/react-web';
 import {useDisconnect} from 'wagmi';
 
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
 import {useI18n} from '@forest-feed/locales/client';
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
-import {Modal} from '@forest-feed/components/kit/Modal/Modal';
-import {LensProfileItem} from '@forest-feed/components/SelectLensProfileModal/LensProfileItem';
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {LensProfileItemSkeleton} from '@forest-feed/components/SelectLensProfileModal/LensProfileItemSkeleton';
-import {Logo} from '@forest-feed/components/kit/Icons/LogoIcon';
-import {cn} from '@forest-feed/utils/tailwind';
+import useAuthLens from '@forest-feed/hooks/useAuthLens';
+import Modal from '@forest-feed/components/kit/Modal/Modal';
+import LensProfileItem from '@forest-feed/components/SelectLensProfileModal/LensProfileItem';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import LensProfileItemSkeleton from '@forest-feed/components/SelectLensProfileModal/LensProfileItemSkeleton';
+import Logo from '@forest-feed/components/kit/Icons/LogoIcon';
+import cn from '@forest-feed/utils/tailwind';
 
 export type SelectLensProfileModalProps = {
   visible: boolean;
 };
 
-export function SelectLensProfileModal(props: SelectLensProfileModalProps) {
+export default function SelectLensProfileModal(props: SelectLensProfileModalProps) {
   const {visible} = props;
 
   const {handleLensLogin, loginLoading} = useAuthLens();

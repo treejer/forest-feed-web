@@ -1,7 +1,7 @@
 import React from 'react';
 
 import './Switch.css';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type SwitchProps = {
   id: string;
@@ -11,7 +11,7 @@ export type SwitchProps = {
   containerClassName?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-export function Switch(props: SwitchProps) {
+export default function Switch(props: SwitchProps) {
   const {id, label, labelClassName, containerClassName, className, loading, disabled, ...restProps} = props;
 
   return (

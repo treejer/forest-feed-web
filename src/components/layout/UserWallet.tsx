@@ -1,16 +1,16 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 
-import {ProfilePictureSet} from '@lens-protocol/react-web';
+import type {ProfilePictureSet} from '@lens-protocol/react-web';
 import {AnimatePresence} from 'framer-motion';
 
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {shortenedString} from '@forest-feed/utils/string';
-import {AssetIcon} from '@forest-feed/components/kit/Icons/AssetIcon';
-import {TreeIcon} from '@forest-feed/components/kit/Icons/TreeIcon';
-import {Menu} from '@forest-feed/components/layout/Menu';
-import {useTabFocus} from '@forest-feed/hooks/useTabFocus';
-import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
-import {cn} from '@forest-feed/utils/tailwind';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import shortenedString from '@forest-feed/utils/string';
+import AssetIcon from '@forest-feed/components/kit/Icons/AssetIcon';
+import TreeIcon from '@forest-feed/components/kit/Icons/TreeIcon';
+import Menu from '@forest-feed/components/layout/Menu';
+import useTabFocus from '@forest-feed/hooks/useTabFocus';
+import useLensProfile from '@forest-feed/hooks/useLensProfile';
+import cn from '@forest-feed/utils/tailwind';
 
 export type UserWalletProps = {
   address: string;
@@ -18,7 +18,7 @@ export type UserWalletProps = {
   onDisconnect: () => void;
 };
 
-export function UserWallet(props: UserWalletProps) {
+export default function UserWallet(props: UserWalletProps) {
   const {address, isSupportedNetwork, onDisconnect} = props;
 
   const [inHover, setInHover] = useState(false);

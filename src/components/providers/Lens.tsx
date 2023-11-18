@@ -15,7 +15,7 @@ import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {lensProtocolAppId} from '@forest-feed/config';
 
 export type LensProviderProps = React.PropsWithChildren;
-export function LensProvider(props: LensProviderProps) {
+export default function LensProvider(props: LensProviderProps) {
   const {children} = props;
 
   const config = useConfig();

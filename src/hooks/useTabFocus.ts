@@ -12,7 +12,7 @@ export type JustBlur = {
 
 export type UseTabFocusParams = JustFocus | JustBlur;
 
-export function useTabFocus(params: UseTabFocusParams) {
+export default function useTabFocus(params: UseTabFocusParams) {
   const {blur, focus} = params;
 
   useEffect(() => {

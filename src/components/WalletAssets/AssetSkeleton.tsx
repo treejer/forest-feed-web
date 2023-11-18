@@ -1,11 +1,11 @@
 import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type AssetSkeletonProps = {
   count?: number;
 };
 
-export function AssetSkeleton(props: AssetSkeletonProps) {
+export default function AssetSkeleton(props: AssetSkeletonProps) {
   const {count = 1} = props;
 
   return (

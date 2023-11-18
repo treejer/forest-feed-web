@@ -1,9 +1,9 @@
 import React from 'react';
 import {Hearts} from 'react-loader-spinner';
-import {colors} from 'colors';
-import {cn} from '@forest-feed/utils/tailwind';
+import colors from 'colors';
+import cn from '@forest-feed/utils/tailwind';
 
-export function InitLoader() {
+export default function InitLoader() {
   return (
     <div className={cn('absolute inset-0 bg-primaryBg flex justify-center items-center z-50')}>
       <Hearts

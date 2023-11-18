@@ -4,9 +4,9 @@ import React from 'react';
 
 import {motion} from 'framer-motion';
 
-import {ExitBeforeEnter} from '@forest-feed/components/kit/Animated/ExitBeforeEnter';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {cn} from '@forest-feed/utils/tailwind';
+import ExitBeforeEnter from '@forest-feed/components/kit/Animated/ExitBeforeEnter';
+import Spacer from '@forest-feed/components/common/Spacer';
+import cn from '@forest-feed/utils/tailwind';
 
 export type StepperProps = {
   contents: {title: string; content: React.ReactNode}[];
@@ -18,7 +18,7 @@ export type StepperProps = {
 
 const possibleGridCols = ['grid-cols-1', 'grid-cols-2', 'grid-cols-3', 'grid-cols-4', 'grid-cols-5', 'grid-cols-6'];
 
-export function Stepper(props: StepperProps) {
+export default function Stepper(props: StepperProps) {
   const {contents, activeStep, setActiveStep, isDependent, disabled} = props;
 
   return (

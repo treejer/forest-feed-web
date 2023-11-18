@@ -1,9 +1,9 @@
 import React, {useMemo} from 'react';
 
-import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import ChevronIcon, {ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
+import RenderIf from '@forest-feed/components/common/RenderIf';
 import {paginationPageSize} from '@forest-feed/config';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type PaginationProps = {
   count?: number;
@@ -27,7 +27,7 @@ function range(start: number, end: number) {
   return Array.from({length}, (_, idx) => idx + start);
 }
 
-export function Pagination(props: PaginationProps) {
+export default function Pagination(props: PaginationProps) {
   const {count, currentPage, disabled, hidePrev, siblingCount = 1, onPrevPage, onNextPage, onLoadPage} = props;
 
   const paginationRange = useMemo(() => {

@@ -3,7 +3,7 @@
 import React, {memo} from 'react';
 
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type ErrorMessageProps = {
   name: string;
@@ -12,7 +12,7 @@ export type ErrorMessageProps = {
   isSubmitted: boolean;
 };
 
-export const ErrorMessage = memo(function ErrorMessage(props: ErrorMessageProps) {
+const ErrorMessage = memo(function ErrorMessage(props: ErrorMessageProps) {
   const {name, touched, error, isSubmitted} = props;
 
   const t = useI18n();
@@ -25,3 +25,5 @@ export const ErrorMessage = memo(function ErrorMessage(props: ErrorMessageProps)
     </p>
   ) : null;
 });
+
+export default ErrorMessage;

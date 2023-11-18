@@ -6,8 +6,6 @@ import {web3Sagas} from '@forest-feed/redux/module/web3/web3.saga';
 import {nonceSagas} from '@forest-feed/redux/module/nonce/nonce';
 import {signSagas} from '@forest-feed/redux/module/sign/sign';
 import {profileSagas} from '@forest-feed/redux/module/profile/profile';
-import {paginationSagas} from '@forest-feed/redux/module/pagination/pagination.saga';
-import {myCampaignsSagas} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {createCampaignSagas} from '@forest-feed/redux/module/campaign/createCampaign';
 import {tokensSagas} from '@forest-feed/redux/module/tokens/tokens.saga';
 import {campaignJourneySagas} from '@forest-feed/redux/module/campaignJourney/campaignJourney.saga';
@@ -19,8 +17,6 @@ export function* rootSaga(store: SagaStore) {
     nonceSagas(),
     signSagas(),
     profileSagas(),
-    paginationSagas(),
-    myCampaignsSagas(),
     createCampaignSagas(),
     tokensSagas(),
     campaignJourneySagas(),

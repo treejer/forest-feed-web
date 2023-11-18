@@ -17,7 +17,7 @@ export type UseApproveDaiParams = {
 
 export type UseApproveDaiReturnType = [(() => void) | undefined, boolean, boolean];
 
-export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnType {
+export default function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnType {
   const {
     amount,
     enabled = true,

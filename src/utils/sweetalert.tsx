@@ -1,12 +1,12 @@
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import {colors} from 'colors';
-import {cn} from '@forest-feed/utils/tailwind';
+import colors from 'colors';
+import cn from '@forest-feed/utils/tailwind';
 
 const MySwal = withReactContent(Swal);
 
-export async function notEnoughBalance(t: any) {
+export default async function notEnoughBalance(t: any) {
   try {
     await MySwal.fire({
       title: t('sweetalert.notEnoughBalance.title'),

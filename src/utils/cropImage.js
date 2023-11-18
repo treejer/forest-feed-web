@@ -90,18 +90,3 @@ export default async function getCroppedImg(
     // resolve(file);
   });
 }
-
-export function urlToFile(url, name) {
-  return new Promise((resolve, reject) => {
-    try {
-      fetch(url)
-        .then(res => res.blob())
-        .then(blob => {
-          const file = new File([blob], name || 'File name', {type: 'image/png'});
-          resolve(file);
-        });
-    } catch (e) {
-      reject(e);
-    }
-  });
-}

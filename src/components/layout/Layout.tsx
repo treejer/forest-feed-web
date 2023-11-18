@@ -2,20 +2,20 @@
 
 import React, {useEffect} from 'react';
 
-import {AppHeader} from '@forest-feed/components/layout/AppHeader';
-import {Navbar} from '@forest-feed/components/layout/Navbar';
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
-import {useInit} from '@forest-feed/redux/module/init/init.slice';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {TabNavigator} from '@forest-feed/components/layout/TabNavigator';
-import {SelectLensProfileModal} from '@forest-feed/components/SelectLensProfileModal/SelectLensProfileModal';
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
-import {cn} from '@forest-feed/utils/tailwind';
+import AppHeader from '@forest-feed/components/layout/AppHeader';
+import Navbar from '@forest-feed/components/layout/Navbar';
+import useAuthLens from '@forest-feed/hooks/useAuthLens';
+import Spacer from '@forest-feed/components/common/Spacer';
+import TabNavigator from '@forest-feed/components/layout/TabNavigator';
+import SelectLensProfileModal from '@forest-feed/components/SelectLensProfileModal/SelectLensProfileModal';
+import useLensProfile from '@forest-feed/hooks/useLensProfile';
+import useInit from '@forest-feed/hooks/useInit';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import cn from '@forest-feed/utils/tailwind';
 
 export type LayoutProps = React.PropsWithChildren;
 
-export function Layout(props: LayoutProps) {
+export default function Layout(props: LayoutProps) {
   const {children} = props;
 
   const {handleLensLogout} = useAuthLens();

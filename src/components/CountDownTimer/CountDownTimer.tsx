@@ -3,7 +3,7 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import moment from 'moment/moment';
 
 import {checkTime, DAY, diffTimeInSec, HOUR, MINUTE, SECOND} from '@forest-feed/utils/time';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export type CountDownTimerProps = {
   start?: string;
@@ -18,7 +18,7 @@ export type TimeState = {
   seconds: number;
 };
 
-export function CountDownTimer(props: CountDownTimerProps) {
+export default function CountDownTimer(props: CountDownTimerProps) {
   const {start, deadline, onEndTime} = props;
 
   const diffSec = useMemo(() => {

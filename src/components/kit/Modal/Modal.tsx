@@ -4,8 +4,8 @@ import React, {useRef} from 'react';
 
 import {AnimatePresence, motion} from 'framer-motion';
 
-import {Backdrop} from '@forest-feed/components/kit/Modal/Backdrop';
-import {cn} from '@forest-feed/utils/tailwind';
+import Backdrop from '@forest-feed/components/kit/Modal/Backdrop';
+import cn from '@forest-feed/utils/tailwind';
 
 const dropIn = {
   hidden: {
@@ -32,7 +32,7 @@ export type ModalProps = React.PropsWithChildren<{
   onClose?: () => void;
 }>;
 
-export function Modal(props: ModalProps) {
+export default function Modal(props: ModalProps) {
   const {visible, onClose, children} = props;
 
   const dragAreaRef = useRef(null);

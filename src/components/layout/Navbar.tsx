@@ -5,11 +5,11 @@ import React from 'react';
 import {usePathname} from 'next/navigation';
 import {Link} from '@forest-feed/lib/router-events';
 
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
 import {PlusIcon, TableIcon} from '@heroicons/react/solid';
 import {useCurrentLocale, useScopedI18n} from '@forest-feed/locales/client';
 import {Locale} from '@forest-feed/languages';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 
 export const links = [
   {
@@ -24,7 +24,7 @@ export const links = [
   },
 ];
 
-export function Navbar() {
+export default function Navbar() {
   const pathname = usePathname();
   const locale = useCurrentLocale();
 

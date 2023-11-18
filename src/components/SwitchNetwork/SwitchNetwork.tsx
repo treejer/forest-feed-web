@@ -2,16 +2,16 @@ import React, {useCallback, useMemo} from 'react';
 
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
-import {DropDown, DropDownItem} from '@forest-feed/components/kit/DropDown';
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
+import DropDown, {DropDownItem} from '@forest-feed/components/kit/DropDown';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import useAuthLens from '@forest-feed/hooks/useAuthLens';
 import {BlockchainNetwork, networks} from '@forest-feed/config';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import useCampaignJourney from '@forest-feed/hooks/useCampaignJourney';
 import {useI18n} from '@forest-feed/locales/client';
-import {cn} from '@forest-feed/utils/tailwind';
+import cn from '@forest-feed/utils/tailwind';
 import {Color} from 'colors';
 
-export function SwitchNetwork() {
+export default function SwitchNetwork() {
   const {
     web3: {config, switching, isSupportedNetwork},
     dispatchSwitchNetwork,

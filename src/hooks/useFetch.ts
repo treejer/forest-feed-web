@@ -3,7 +3,7 @@ import {useEffect, useMemo, useState} from 'react';
 import ReduxFetchState from 'redux-fetch-state';
 import {AxiosRequestConfig} from 'axios';
 
-import {fetch, handleFetchError} from '@forest-feed/utils/fetch';
+import fetch, {handleFetchError} from '@forest-feed/utils/fetch';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
 import {useAccessToken} from '@forest-feed/redux/module/web3/web3.slice';
 
@@ -35,7 +35,7 @@ export interface UseHttpState<Data> {
   error: any;
 }
 
-export function useFetch<Data>(
+export default function useFetch<Data>(
   url: string,
   options: UseFetchOptions = {},
 ): [UseHttpState<Data>, (options?: UseFetchOptions) => Promise<any>, () => void] {

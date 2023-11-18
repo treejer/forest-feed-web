@@ -3,23 +3,23 @@ import React from 'react';
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
-import {Logo} from '@forest-feed/components/kit/Icons/LogoIcon';
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {LensIcon} from '@forest-feed/components/kit/Icons/LensIcon';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {UserWallet} from '@forest-feed/components/layout/UserWallet';
+import Logo from '@forest-feed/components/kit/Icons/LogoIcon';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import LensIcon from '@forest-feed/components/kit/Icons/LensIcon';
+import Spacer from '@forest-feed/components/common/Spacer';
+import UserWallet from '@forest-feed/components/layout/UserWallet';
 import {AppHeaderSkeleton} from '@forest-feed/components/layout/AppHeaderSkeleton';
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
-import {useProfile} from '@forest-feed/redux/module/profile/profile';
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import useAuthLens from '@forest-feed/hooks/useAuthLens';
 import {useI18n} from '@forest-feed/locales/client';
-import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
-import {cn} from '@forest-feed/utils/tailwind';
+import useLensProfile from '@forest-feed/hooks/useLensProfile';
+import useForestProfile from '@forest-feed/hooks/useForestProfile';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import cn from '@forest-feed/utils/tailwind';
 
-export function AppHeader() {
+export default function AppHeader() {
   const {address, status} = useAccount();
   const {lensLoading, unknownError} = useAuthLens();
-  const {dispatchLogoutAccount, profile: forestProfile} = useProfile();
+  const {dispatchLogoutAccount, profile: forestProfile} = useForestProfile();
   const {data: lensProfile} = useLensProfile();
 
   const {

@@ -2,13 +2,13 @@
 
 import React, {useState} from 'react';
 
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {TextArea} from '@forest-feed/components/kit/TextArea';
-import {Uploader} from '@forest-feed/components/kit/Uploader';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {ChangeLanguage} from '@forest-feed/components/kit/ChangeLanguage';
-import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
-import {Modal} from '@forest-feed/components/kit/Modal/Modal';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import TextArea from '@forest-feed/components/kit/TextArea';
+import Uploader from '@forest-feed/components/kit/Uploader';
+import Spacer from '@forest-feed/components/common/Spacer';
+import ChangeLanguage from '@forest-feed/components/kit/ChangeLanguage';
+import AnimatedPage from '@forest-feed/components/kit/Animated/AnimatedPage';
+import Modal from '@forest-feed/components/kit/Modal/Modal';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
 import {useI18n} from '@forest-feed/locales/client';
 

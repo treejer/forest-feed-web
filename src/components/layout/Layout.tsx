@@ -11,6 +11,7 @@ import {TabNavigator} from '@forest-feed/components/layout/TabNavigator';
 import {SelectLensProfileModal} from '@forest-feed/components/SelectLensProfileModal/SelectLensProfileModal';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type LayoutProps = React.PropsWithChildren;
 
@@ -32,18 +33,18 @@ export function Layout(props: LayoutProps) {
   }, [loading]);
 
   return (
-    <div className="container mx-auto">
-      <div className="grid grid-cols-6 md:gap-x-20 min-h-screen grid-rows-appLayout">
-        <div className="grid col-span-6">
+    <div className={cn('container mx-auto')}>
+      <div className={cn('grid grid-cols-6 md:gap-x-20 min-h-screen grid-rows-appLayout')}>
+        <div className={cn('grid col-span-6')}>
           <AppHeader />
-          <div className="hidden md:block">
+          <div className={cn('hidden md:block')}>
             <Spacer times={10} />
           </div>
         </div>
-        <div className="hidden lg:block md:col-span-1">
+        <div className={cn('hidden lg:block md:col-span-1')}>
           <Navbar />
         </div>
-        <div className="col-span-6 lg:col-span-5 pb-5">{children}</div>
+        <div className={cn('col-span-6 lg:col-span-5 pb-5')}>{children}</div>
       </div>
       <TabNavigator />
       <SelectLensProfileModal visible={showSelectProfile} />

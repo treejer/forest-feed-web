@@ -2,6 +2,7 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
 import {colors} from 'colors';
+import {cn} from '@forest-feed/utils/tailwind';
 
 const MySwal = withReactContent(Swal);
 
@@ -13,7 +14,7 @@ export async function notEnoughBalance(t: any) {
       iconColor: colors.primary,
       buttonsStyling: false,
       customClass: {
-        confirmButton: 'bg-primary text-white focus:outline-none focus:border-none py-2 p-5 rounded-lg text-lg',
+        confirmButton: cn('bg-primary text-white focus:outline-none focus:border-none py-2 p-5 rounded-lg text-lg'),
       },
     });
   } catch (e: any) {

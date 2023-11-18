@@ -2,6 +2,7 @@ import React from 'react';
 
 import Image from 'next/image';
 
+import {cn} from '@forest-feed/utils/tailwind';
 import {ChevronRight} from 'public/assets/images';
 
 export enum ChevronIconDirection {
@@ -30,7 +31,7 @@ export function ChevronIcon(props: ChevronIconProps) {
     <Image
       src={ChevronRight}
       alt="add"
-      className={`transition-all inline ${directionClassNames[direction]} ${className}`}
+      className={cn('transition-all inline', directionClassNames[direction], className)}
       width={size}
       height={size}
       placeholder="blur"

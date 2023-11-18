@@ -20,6 +20,7 @@ import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewSte
 import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {useScopedI18n} from '@forest-feed/locales/client';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import {cn} from '@forest-feed/utils/tailwind';
 
 function NewCampaignPage() {
   const {
@@ -104,9 +105,9 @@ function NewCampaignPage() {
   );
 
   return (
-    <AnimatedPage className="h-full">
-      <AuthWrapper className="grid grid-cols-6 gap-y-5 md:gap-10 h-full">
-        <div className="col-span-6 md:col-span-5">
+    <AnimatedPage className={cn('h-full')}>
+      <AuthWrapper className={cn('grid grid-cols-6 gap-y-5 md:gap-10 h-full')}>
+        <div className={cn('col-span-6 md:col-span-5')}>
           <Stepper
             isDependent
             disabled={disabledStepper}
@@ -173,7 +174,7 @@ function NewCampaignPage() {
           animate={{x: 0, opacity: 1}}
           exit={{x: 100, opacity: 0}}
           transition={{duration: 0.5}}
-          className="row-start-1 md:row-auto col-span-6 md:col-span-1"
+          className={cn('row-start-1 md:row-auto col-span-6 md:col-span-1')}
         >
           <TreeCost treeCount={campaignJourney.size} />
         </motion.div>

@@ -12,6 +12,7 @@ import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {mumbaiBuyDaiUrl, mumbaiSwapDaiUrl, polygonBuyDaiUrl, polygonSwapDaiUrl} from '@forest-feed/config';
 import {useI18n} from '@forest-feed/locales/client';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type WalletAssetsProps = {
   salePrice: number;
@@ -59,30 +60,30 @@ export function WalletAssets(props: WalletAssetsProps) {
 
   return (
     <div>
-      <span className="text-sm md:text-base">{t('newCampaign.assets.title')}</span>
-      <div className="border border-1 border-LightWhite w-full" />
+      <span className={cn('text-sm md:text-base')}>{t('newCampaign.assets.title')}</span>
+      <div className={cn('border border-1 border-LightWhite w-full')} />
       <Spacer />
       {loading ? (
         <AssetSkeleton />
       ) : (
         <>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center text-sm md:text-base">
+          <div className={cn('flex items-center justify-between')}>
+            <div className={cn('flex items-center text-sm md:text-base')}>
               <DaiIcon />
               <Spacer times={0.5} />
               <span>{t('newCampaign.assets.dai')}</span>
             </div>
             <Spacer times={2} />
-            <span className="text-sm lg:text-base text-green">{DAI}</span>
+            <span className={cn('text-sm lg:text-base text-green')}>{DAI}</span>
           </div>
           <RenderIf condition={balanceError}>
-            <p className="text-red text-xs">{t('newCampaign.assets.notEnough')}</p>
+            <p className={cn('text-red text-xs')}>{t('newCampaign.assets.notEnough')}</p>
             <Spacer />
             <ul>
               {exploreUrls.map(item => (
                 <li key={item.url}>
                   <Link
-                    className="wallet-assets-link"
+                    className={cn('wallet-assets-link')}
                     href={item.url}
                     {...(item.url === '#' ? {} : {target: '_blank'})}
                   >

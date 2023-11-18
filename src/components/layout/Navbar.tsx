@@ -9,6 +9,7 @@ import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {PlusIcon, TableIcon} from '@heroicons/react/solid';
 import {useCurrentLocale, useScopedI18n} from '@forest-feed/locales/client';
 import {Locale} from '@forest-feed/languages';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export const links = [
   {
@@ -36,7 +37,7 @@ export function Navbar() {
         const isActive = pathname.startsWith(href);
 
         return (
-          <Link className="block mb-2 last:mb-0" key={link.href} href={href}>
+          <Link className={cn('block mb-2 last:mb-0')} key={link.href} href={href}>
             <Button text={t(link.name as any)} variant={isActive ? ButtonVariant.menu : ButtonVariant.text} />
           </Link>
         );

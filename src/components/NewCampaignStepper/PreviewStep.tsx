@@ -7,6 +7,7 @@ import {Spacer} from '@forest-feed/components/common/Spacer';
 import {HeyPostView} from '@forest-feed/components/HeyPostView/HeyPostView';
 import {GeneralInfoStepState} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
 import {useI18n} from '@forest-feed/locales/client';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type PreviewStepProps = {
   generalInfo: GeneralInfoStepState;
@@ -30,7 +31,7 @@ export function PreviewStep(props: PreviewStepProps) {
     <div>
       <HeyPostView activeProfile={activeProfile} content={generalInfo.content} image={generalInfo.image} />
       <Spacer times={5} />
-      <div className="flex items-end justify-end">
+      <div className={cn('flex items-end justify-end')}>
         <Button text={t('back')} onClick={handleBack} />
         <Spacer />
         <Button text={t('edit')} onClick={() => setActiveStep(0)} />

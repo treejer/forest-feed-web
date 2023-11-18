@@ -16,6 +16,7 @@ import {Uploader} from '@forest-feed/components/kit/Uploader';
 import {Checkbox} from '@forest-feed/components/kit/Checkbox/Checkbox';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Spacer} from '@forest-feed/components/common/Spacer';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type FormControllerRender = {
   field: ControllerRenderProps<FieldValues, string>;
@@ -117,7 +118,7 @@ export function FormController(props: FormControllerProps) {
   return (
     <div>
       <RenderIf condition={!hideLabel}>
-        <label htmlFor={name} className="text-lg md:text-xl font-bold">
+        <label htmlFor={name} className={cn('text-lg md:text-xl font-bold')}>
           {label}
         </label>
       </RenderIf>

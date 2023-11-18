@@ -10,6 +10,7 @@ import {TreeIcon} from '@forest-feed/components/kit/Icons/TreeIcon';
 import {Menu} from '@forest-feed/components/layout/Menu';
 import {useTabFocus} from '@forest-feed/hooks/useTabFocus';
 import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type UserWalletProps = {
   address: string;
@@ -54,17 +55,25 @@ export function UserWallet(props: UserWalletProps) {
   );
 
   return (
-    <div className="transition-all flex items-center drop-shadow-lg z-50">
+    <div className={cn('transition-all flex items-center drop-shadow-lg z-50')}>
       <div
         ref={dropdownRef}
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
-        className="flex items-center py-1 dropdown dropdown-hover dropdown-bottom"
+        className={cn('flex items-center py-1 dropdown dropdown-hover dropdown-bottom')}
       >
-        <div className="bg-primaryBg border-2 min-w-[150px] h-8 rounded-full border-white flex items-center justify-start pl-3 -mr-8 text-sm font-semibold cursor-pointer">
-          {handle ? <span className="text-green">{handle}</span> : shortenedString(address, 14, 4)}
+        <div
+          className={cn(
+            'bg-primaryBg border-2 min-w-[150px] h-8 rounded-full border-white flex items-center justify-start pl-3 -mr-8 text-sm font-semibold cursor-pointer',
+          )}
+        >
+          {handle ? <span className={cn('text-green')}>{handle}</span> : shortenedString(address, 14, 4)}
         </div>
-        <div className="border-2 w-[42px] h-[42px] rounded-full border-white relative bg-primaryBg overflow-hidden mb-30">
+        <div
+          className={cn(
+            'border-2 w-[42px] h-[42px] rounded-full border-white relative bg-primaryBg overflow-hidden mb-30',
+          )}
+        >
           <AssetIcon loggedIn={!!handle} avatar={avatar} />
         </div>
         <AnimatePresence>
@@ -78,7 +87,7 @@ export function UserWallet(props: UserWalletProps) {
           ) : null}
         </AnimatePresence>
       </div>
-      <div className="hidden md:block ml-3 z-10">
+      <div className={cn('hidden md:block ml-3 z-10')}>
         <TreeIcon />
       </div>
     </div>

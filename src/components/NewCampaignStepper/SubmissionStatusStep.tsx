@@ -22,6 +22,7 @@ import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTi
 import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {useScopedI18n} from '@forest-feed/locales/client';
 import {colors} from 'colors';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type SubmissionStatusStepProps = {
   createdPubId: string | null;
@@ -310,9 +311,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const stepIcon = useCallback(
     (step: number) => {
       return step < submissionActiveStep ? (
-        <CheckIcon className="w-3 h-3 md:w-5 md:h-5 text-green" />
+        <CheckIcon className={cn('w-3 h-3 md:w-5 md:h-5 text-green')} />
       ) : step === submissionActiveStep && submissionError ? (
-        <XIcon className="w-3 h-3 md:w-5 md:h-5 text-red" />
+        <XIcon className={cn('w-3 h-3 md:w-5 md:h-5 text-red')} />
       ) : (
         ''
       );
@@ -343,16 +344,16 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         !submissionLoading &&
         submissionActiveStep === SubmitCampaignSteps.Finalize &&
         step === SubmitCampaignSteps.Finalize ? (
-        <div className="flex flex-col relative">
+        <div className={cn('flex flex-col relative')}>
           <input
-            className="border border-border outline-none p-1 rounded-[5px] ml-2 text-green"
+            className={cn('border border-border outline-none p-1 rounded-[5px] ml-2 text-green')}
             type="text"
             value={title}
             onFocus={handleFocusInput}
             onChange={handleChangeTitle}
           />
           {titleError ? (
-            <span className="text-xs md:text-sm text-red ml-2 absolute -bottom-5 left-2">{t('titleError')}</span>
+            <span className={cn('text-xs md:text-sm text-red ml-2 absolute -bottom-5 left-2')}>{t('titleError')}</span>
           ) : null}
         </div>
       ) : null;
@@ -403,35 +404,42 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   return (
     <div>
-      <div className="mb-5">
-        <p className="text-lg md:text-xl font-bold">{t(pageTitle)}</p>
-        <p className={`text-sm font-light ${submissionError ? 'text-red' : 'text-secondary'}`}>{t(pageDesc)}</p>
+      <div className={cn('mb-5')}>
+        <p className={cn('text-lg md:text-xl font-bold')}>{t(pageTitle)}</p>
+        <p
+          className={cn('text-sm font-light text-secondary', {
+            'text-red': submissionError,
+          })}
+        >
+          {t(pageDesc)}
+        </p>
       </div>
-      <div className="flex flex-col md:flex-row md:items-center justify-between">
+      <div className={cn('flex flex-col md:flex-row md:items-center justify-between')}>
         <ul>
           {steps.map(step => (
-            <li key={step.key} className="flex items-center mb-2">
-              <div className="p-1">
+            <li key={step.key} className={cn('flex items-center mb-2')}>
+              <div className={cn('p-1')}>
                 <div
-                  className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex justify-center items-center border-2 ${stepDynamicClassNames(
-                    step.key,
-                  )}`}
+                  className={cn(
+                    'w-6 h-6 md:w-8 md:h-8 rounded-full flex justify-center items-center border-2',
+                    stepDynamicClassNames(step.key),
+                  )}
                 >
                   {stepIcon(step.key)}
                 </div>
               </div>
               <Spacer />
               <div>
-                <p className="text-sm md:text-base">{t(step.text as any)}</p>
-                <div className="flex items-center">
-                  <p className="text-xs md:text-sm text-secondary text-align">{t(step.desc as any)}</p>
+                <p className={cn('text-sm md:text-base')}>{t(step.text as any)}</p>
+                <div className={cn('flex items-center')}>
+                  <p className={cn('text-xs md:text-sm text-secondary text-align')}>{t(step.desc as any)}</p>
                   {titleCampaignInput(step.key)}
                 </div>
               </div>
             </li>
           ))}
         </ul>
-        <div className="flex justify-center mt-3 md:mt-0 md:block">
+        <div className={cn('flex justify-center mt-3 md:mt-0 md:block')}>
           <Circles
             height="80"
             width="80"
@@ -456,18 +464,18 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           ].includes(submissionActiveStep)
         }
       >
-        <div className="flex flex-col items-end justify-center">
+        <div className={cn('flex flex-col items-end justify-center')}>
           <Button
             text={t('continue')}
             onClick={() => handleStartCreateCampaign(true)}
             variant={ButtonVariant.secondary}
           />
-          <span className="text-right text-red text-xs md:text-sm">{t('pleaseReject')}</span>
+          <span className={cn('text-right text-red text-xs md:text-sm')}>{t('pleaseReject')}</span>
         </div>
       </RenderIf>
       <RenderIf condition={!submissionError && submissionActiveStep === SubmitCampaignSteps.CreatePost}>
         <Spacer times={5} />
-        <div className="flex justify-end items-center">
+        <div className={cn('flex justify-end items-center')}>
           <Button
             text={t('submit')}
             onClick={handleCreatePost}
@@ -481,7 +489,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         condition={!submissionError && submissionActiveStep === SubmitCampaignSteps.Finalize && !submissionLoading}
       >
         <Spacer times={5} />
-        <div className="flex justify-end items-center">
+        <div className={cn('flex justify-end items-center')}>
           <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
           <Spacer />
           <Button
@@ -495,7 +503,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       </RenderIf>
       <RenderIf condition={submissionError}>
         <Spacer times={5} />
-        <div className="flex justify-end items-center">
+        <div className={cn('flex justify-end items-center')}>
           <>
             <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
             <Spacer />

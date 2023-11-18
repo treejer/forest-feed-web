@@ -1,4 +1,5 @@
 import React from 'react';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export enum RepostsStatus {
   active = 'active',
@@ -25,7 +26,10 @@ export function RepostsBadge(props: RepostsBadgeProps) {
 
   return (
     <span
-      className={`block border rounded-md w-[56px] lg:w-[96px] h-[28px] text-lg font-semibold text-white text-center ${className[status]}`}
+      className={cn(
+        'block border rounded-md w-[56px] lg:w-[96px] h-[28px] text-lg font-semibold text-white text-center',
+        className[status],
+      )}
     >
       {min}/{max}
     </span>

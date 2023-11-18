@@ -4,6 +4,7 @@ import {Circles} from 'react-loader-spinner';
 import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {colors} from 'colors';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export enum ButtonVariant {
   primary = 'primary',
@@ -56,9 +57,11 @@ export function Button(props: ButtonProps) {
 
   return (
     <button
-      className={`rounded-[8px] flex items-center justify-center hover:shadow-lg transition-all text-sm md:text-base ${
-        classNames(autoSize)[variant]
-      } ${className}`}
+      className={cn(
+        'rounded-[8px] flex items-center justify-center hover:shadow-lg transition-all text-sm md:text-base',
+        classNames(autoSize)[variant],
+        className,
+      )}
       disabled={disabled}
       onClick={onClick}
       type={type}

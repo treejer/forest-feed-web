@@ -13,6 +13,7 @@ import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {useInit} from '@forest-feed/redux/module/init/init.slice';
 import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
 import './AuthWrapper.scss';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type AuthLoaderProps = {
   hideLoader: boolean;
@@ -21,8 +22,8 @@ export function AuthLoader(props: AuthLoaderProps) {
   const {hideLoader = false} = props;
 
   return (
-    <div className="loader absolute inset-0 z-20">
-      <div className="w-full h-full flex items-center justify-center">
+    <div className={cn('loader absolute inset-0 z-20')}>
+      <div className={cn('w-full h-full flex items-center justify-center')}>
         <RotatingLines
           strokeColor={colors.lightGreen}
           strokeWidth="5"
@@ -87,7 +88,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
   );
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={cn('relative', className)}>
       {renderLoader(loading, !!canAccessToApp && disabled)}
       {canAccessToApp ? children : <ConnectToUse />}
     </div>

@@ -10,6 +10,7 @@ import {RenderIf} from '@forest-feed/components/common/RenderIf';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {useScopedI18n} from '@forest-feed/locales/client';
 import {colors} from 'colors';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type UploaderProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -65,7 +66,7 @@ export function Uploader(props: UploaderProps) {
     <>
       <Modal visible={openPreviewModal} onClose={() => setOpenPreviewModal(false)}>
         <Image
-          className="rounded-sm mr-2"
+          className={cn('rounded-sm mr-2')}
           key="image-in-modal"
           draggable={false}
           src={previewFile}
@@ -76,9 +77,13 @@ export function Uploader(props: UploaderProps) {
       </Modal>
       <div
         onDragEnter={handleDrag}
-        className={`border border-border ${
-          dragActive && 'border-dashed'
-        } h-[88px] rounded-lg flex items-center justify-center cursor-pointer overflow-hidden transition-shadow hover:shadow-lg`}
+        className={cn(
+          'border border-border',
+          {
+            'border-dashed': dragActive,
+          },
+          'h-[88px] rounded-lg flex items-center justify-center cursor-pointer overflow-hidden transition-shadow hover:shadow-lg',
+        )}
       >
         <RenderIf condition={!!previewFile && !preview && !!onDetach}>
           <button type="button" onClick={onDetach}>
@@ -88,7 +93,7 @@ export function Uploader(props: UploaderProps) {
         </RenderIf>
         <RenderIf condition={!!previewFile}>
           <Image
-            className="rounded-sm mr-2 max-h-[70px]"
+            className={cn('rounded-sm mr-2 max-h-[70px]')}
             key="image-in-box"
             src={previewFile}
             alt="preview-photo"
@@ -97,7 +102,7 @@ export function Uploader(props: UploaderProps) {
             onClick={() => setOpenPreviewModal(true)}
           />
         </RenderIf>
-        <label className="flex items-center cursor-pointer" htmlFor="file-uploader">
+        <label className={cn('flex items-center cursor-pointer')} htmlFor="file-uploader">
           <input
             disabled={disabled}
             className="hidden"
@@ -111,8 +116,8 @@ export function Uploader(props: UploaderProps) {
           <RenderIf condition={!preview}>
             <AttachIcon color={colors.primaryGreen} />
           </RenderIf>
-          <p className="text-secondary md:text-lg font-medium ml-1 text-sm">
-            <span className="text-primaryGreen">
+          <p className={cn('text-secondary md:text-lg font-medium ml-1 text-sm')}>
+            <span className={cn('text-primaryGreen')}>
               {t(preview ? 'attachedPhoto' : previewFile ? 'changePhoto' : 'addPhoto')}
             </span>{' '}
             <RenderIf condition={!preview}>{t('dropPhoto')}</RenderIf>
@@ -120,7 +125,7 @@ export function Uploader(props: UploaderProps) {
         </label>
         <RenderIf condition={dragActive}>
           <div
-            className="absolute inset-0"
+            className={cn('absolute inset-0')}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}

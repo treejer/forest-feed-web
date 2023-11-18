@@ -9,6 +9,7 @@ import {useFetch} from '@forest-feed/hooks/useFetch';
 import {CampaignStatus} from '@forest-feed/types/campaigns';
 import {Spacer} from '@forest-feed/components/common/Spacer';
 import {useI18n} from '@forest-feed/locales/client';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type CampaignActivationProps = {
   campaignId: string;
@@ -58,10 +59,10 @@ export function CampaignActivation(props: CampaignActivationProps) {
   );
 
   return value === CampaignStatus.finished ? (
-    <span className="text-green font-bold flex items-center">
+    <span className={cn('text-green font-bold flex items-center')}>
       {t('finished')}
       <Spacer />
-      <CheckIcon className="w-5 h-5 text-green" />
+      <CheckIcon className={cn('w-5 h-5 text-green')} />
     </span>
   ) : (
     <Switch

@@ -1,11 +1,12 @@
 import Image from 'next/image';
 
 import {DaiToken} from 'public/assets/images';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export function DaiIcon() {
   return (
     <Image
-      className="w-[20px] h-[20px] lg:w-[30px] lg:h-[30px]"
+      className={cn('w-[20px] h-[20px] lg:w-[30px] lg:h-[30px]')}
       width={30}
       height={30}
       src={DaiToken}

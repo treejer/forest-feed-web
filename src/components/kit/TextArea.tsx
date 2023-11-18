@@ -1,4 +1,5 @@
 import React from 'react';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type TextAreaProps = {
   value: string;
@@ -12,11 +13,13 @@ export type TextAreaProps = {
 export function TextArea(props: TextAreaProps) {
   const {id, value, placeholder, disabled, onChange, onBlur} = props;
   return (
-    <div className="flex flex-col items-start">
+    <div className={cn('flex flex-col items-start')}>
       <textarea
         id={id}
         placeholder={placeholder}
-        className="border border-border w-[100%] h-[157px] p-3 rounded-lg font-normal text-sm md:text-lg bg-primaryBg outline-none transition-shadow hover:shadow-lg"
+        className={cn(
+          'border border-border w-[100%] h-[157px] p-3 rounded-lg font-normal text-sm md:text-lg bg-primaryBg outline-none transition-shadow hover:shadow-lg',
+        )}
         value={value}
         onChange={onChange}
         onBlur={onBlur}

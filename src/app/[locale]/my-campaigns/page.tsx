@@ -16,6 +16,7 @@ import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {useScopedI18n} from '@forest-feed/locales/client';
 import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
 import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
+import {cn} from '@forest-feed/utils/tailwind';
 
 function MyCampaigns() {
   const {
@@ -61,7 +62,7 @@ function MyCampaigns() {
         accessor: 'publicationId',
         disableSortBy: true,
         Cell: ({value}) => (
-          <Link href={`${heyPublicationUrl}/${value}`} target="_blank" className="font-bold underline">
+          <Link href={`${heyPublicationUrl}/${value}`} target="_blank" className={cn('font-bold underline')}>
             {value}
           </Link>
         ),
@@ -107,8 +108,8 @@ function MyCampaigns() {
   );
 
   return (
-    <AnimatedPage className="h-full">
-      <AuthWrapper className="h-full">
+    <AnimatedPage className={cn('h-full')}>
+      <AuthWrapper className={cn('h-full')}>
         <TableWrapper<Campaign>
           initialState={{sortBy: [{id: 'createdAt', desc: true}]}}
           data={myCampaigns?.result.campaignList}

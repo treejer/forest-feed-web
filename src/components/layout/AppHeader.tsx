@@ -14,6 +14,7 @@ import {useProfile} from '@forest-feed/redux/module/profile/profile';
 import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
 import {useI18n} from '@forest-feed/locales/client';
 import {useLensProfile} from '@forest-feed/hooks/useLensProfile';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export function AppHeader() {
   const {address, status} = useAccount();
@@ -30,20 +31,20 @@ export function AppHeader() {
   const t = useI18n();
 
   return (
-    <div className="py-4 px-2">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
+    <div className={cn('py-4 px-2')}>
+      <div className={cn('flex items-center justify-between')}>
+        <div className={cn('flex items-center')}>
           <Logo />
           <Spacer times={2} />
-          <p className="font-extrabold text-base lg:text-4xl">{t('forestFeed')}</p>
+          <p className={cn('font-extrabold text-base lg:text-4xl')}>{t('forestFeed')}</p>
         </div>
         {['connecting', 'reconnecting'].includes(status) ? (
           <AppHeaderSkeleton />
         ) : address && status === 'connected' ? (
-          <div className="flex items-center">
+          <div className={cn('flex items-center')}>
             {isSupportedNetwork && !lensProfile ? (
               <Button
-                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex"
+                className={cn('py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex')}
                 autoSize={false}
                 variant={ButtonVariant.secondary}
                 text={t('lens.login')}
@@ -55,7 +56,7 @@ export function AppHeader() {
             ) : null}
             {isSupportedNetwork && lensProfile && !forestProfile ? (
               <Button
-                className="py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex"
+                className={cn('py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex')}
                 autoSize={false}
                 variant={ButtonVariant.secondary}
                 text={t('signWithForest')}
@@ -79,8 +80,8 @@ export function AppHeader() {
           <ConnectButton />
         )}
       </div>
-      <div className="flex items-center justify-end mt-1">
-        {unknownError ? <p className="text-error text-sm">{t(`lens.errors.${unknownError}`)}</p> : null}
+      <div className={cn('flex items-center justify-end mt-1')}>
+        {unknownError ? <p className={cn('text-error text-sm')}>{t(`lens.errors.${unknownError}`)}</p> : null}
       </div>
     </div>
   );

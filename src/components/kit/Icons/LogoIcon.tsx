@@ -4,7 +4,7 @@ import {Logo as ForestLogo} from 'public/assets/images/index';
 import {cn} from '@forest-feed/utils/tailwind';
 
 export type LogoProps = {
-  small: boolean;
+  small?: boolean;
 };
 export function Logo(props: LogoProps) {
   const {small} = props;

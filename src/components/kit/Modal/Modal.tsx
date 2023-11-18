@@ -5,6 +5,7 @@ import React, {useRef} from 'react';
 import {AnimatePresence, motion} from 'framer-motion';
 
 import {Backdrop} from '@forest-feed/components/kit/Modal/Backdrop';
+import {cn} from '@forest-feed/utils/tailwind';
 
 const dropIn = {
   hidden: {
@@ -42,7 +43,7 @@ export function Modal(props: ModalProps) {
         <Backdrop onClick={onClose}>
           <motion.div
             key="modal"
-            className="h-full w-full flex justify-center items-center"
+            className={cn('h-full w-full flex justify-center items-center')}
             variants={dropIn}
             initial="hidden"
             animate="visible"

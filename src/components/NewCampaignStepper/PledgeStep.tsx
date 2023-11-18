@@ -11,6 +11,7 @@ import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
 import {usePersistState} from '@forest-feed/hooks/usePersistState';
 import {storageKeys} from '@forest-feed/config';
 import {useI18n} from '@forest-feed/locales/client';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type PledgeStepState = Pick<CampaignJourneyState, 'size' | 'reward' | 'settings'>;
 
@@ -91,32 +92,32 @@ export function PledgeStep(props: PledgeStepProps) {
 
   return (
     <div>
-      <p className="text-lg md:text-xl font-extrabold">{t('newCampaign.campaignSize')}</p>
-      <p className="text-sm text-secondary">{t('newCampaign.howManyWantsToPlant')}</p>
+      <p className={cn('text-lg md:text-xl font-extrabold')}>{t('newCampaign.campaignSize')}</p>
+      <p className={cn('text-sm text-secondary')}>{t('newCampaign.howManyWantsToPlant')}</p>
       <InputRange
         value={size}
         onChange={handleChangeCampaignSize}
         max={tokensLoading ? 100 : max}
         disabled={max === 0}
       />
-      <div className="flex items-start justify-between">
-        <span className="text-sm text-secondary">
+      <div className={cn('flex items-start justify-between')}>
+        <span className={cn('text-sm text-secondary')}>
           {t('countTrees', {
             count: 1,
           })}
         </span>
-        <span className="text-sm text-secondary">
+        <span className={cn('text-sm text-secondary')}>
           {t('countTrees', {
             count: !tokensLoading ? (max === 0 ? 100 : max) : '...',
           })}
         </span>
       </div>
       <Spacer times={4} />
-      <p className="text-lg md:text-xl font-extrabold">{t('newCampaign.postSettings')}</p>
+      <p className={cn('text-lg md:text-xl font-extrabold')}>{t('newCampaign.postSettings')}</p>
       <Spacer times={2} />
-      <div className="flex items-center">
+      <div className={cn('flex items-center')}>
         <Switch
-          containerClassName="mr-1"
+          containerClassName={cn('mr-1')}
           type="checkbox"
           name="canCollect"
           id="canCollect"
@@ -129,7 +130,7 @@ export function PledgeStep(props: PledgeStepProps) {
       <Spacer times={2} />
       <div className="flex items-center">
         <Switch
-          containerClassName="mr-1"
+          containerClassName={cn('mr-1')}
           type="checkbox"
           name="onlyFollowers"
           id="onlyFollowers"
@@ -140,18 +141,18 @@ export function PledgeStep(props: PledgeStepProps) {
         />
       </div>
       <Spacer times={4} />
-      <div className="flex items-center">
+      <div className={cn('flex items-center')}>
         <div>
-          <p className="text-lg md:text-xl font-extrabold mb-1">{t('newCampaign.rewardFilters')}</p>
-          <p className="text-sm text-secondary">{t('newCampaign.chooseMaxFollowers')}</p>
+          <p className={cn('text-lg md:text-xl font-extrabold mb-1')}>{t('newCampaign.rewardFilters')}</p>
+          <p className={cn('text-sm text-secondary')}>{t('newCampaign.chooseMaxFollowers')}</p>
         </div>
         <Spacer times={6} />
         <Counter count={values?.reward.minimumFollowerNumber} handleChangeCount={handleChangeMinFollowers} />
       </div>
       <Spacer times={2} />
-      <div className="flex items-center">
+      <div className={cn('flex items-center')}>
         <Switch
-          containerClassName="mr-1"
+          containerClassName={cn('mr-1')}
           type="checkbox"
           name="rewardFollowers"
           id="rewardFollowers"
@@ -162,7 +163,7 @@ export function PledgeStep(props: PledgeStepProps) {
         />
       </div>
       <Spacer times={5} />
-      <div className="flex items-end justify-end">
+      <div className={cn('flex items-end justify-end')}>
         <Button text={t('back')} onClick={handleBack} />
         <Spacer times={2} />
         <Button variant={ButtonVariant.secondary} text={t('proceed')} onClick={handleSubmit} />

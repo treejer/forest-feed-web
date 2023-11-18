@@ -6,6 +6,7 @@ import {AllTheProviders} from '@forest-feed/components/providers/AllTheProviders
 import {Layout} from '@forest-feed/components/layout/Layout';
 import {HandleOnComplete} from '@forest-feed/lib/router-events';
 import {getScopedI18n} from '@forest-feed/locales/server';
+import {cn} from '@forest-feed/utils/tailwind';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -30,7 +31,7 @@ export default async function LocaleLayout(props: RootLayoutProps) {
 
   return (
     <html lang={locale}>
-      <body className={`${inter.className} bg-primaryBg`} suppressHydrationWarning={true}>
+      <body className={cn(inter.className, 'bg-primaryBg')} suppressHydrationWarning={true}>
         <AllTheProviders locale={locale}>
           <Layout>{children}</Layout>
           <HandleOnComplete />

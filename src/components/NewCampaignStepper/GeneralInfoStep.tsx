@@ -13,6 +13,7 @@ import {FormController} from '@forest-feed/components/FormController/FormControl
 import {GeneralInfoForm, generalInfoYup} from '@forest-feed/validators/generalInfo';
 import {useDebounce} from '@forest-feed/hooks/useDebounce';
 import {useI18n} from '@forest-feed/locales/client';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type GeneralInfoStepState = Pick<CampaignJourneyState, 'content' | 'image' | 'termsConditionAgreed'>;
 
@@ -123,23 +124,23 @@ export function GeneralInfoStep(props: GeneralInfoStepProps) {
           resetField={resetField}
           disabled={isConfirm}
         />
-        <div className="hidden md:block">
+        <div className={cn('hidden md:block')}>
           <Spacer times={4} />
         </div>
-        <div className="block md:hidden">
+        <div className={cn('block md:hidden')}>
           <Spacer times={2} />
         </div>
       </RenderIf>
       <FormController
         control={control}
-        name="termsConditionAgreed"
+        name={cn('termsConditionAgreed')}
         type="checkbox"
         label={t('privacyPolicy.agreeAppTermsConditions')}
         disabled={isConfirm}
         hideLabel
       />
       <Spacer times={5} />
-      <div className="flex items-end justify-end">
+      <div className={cn('flex items-end justify-end')}>
         <Button text={t(isConfirm ? 'back' : 'learnMore')} disabled={loading} onClick={handleLearnMore} />
         <Spacer />
         <RenderIf condition={isConfirm}>

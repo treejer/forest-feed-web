@@ -37,7 +37,7 @@ const classNames: (autoSize: boolean) => VariantClassNames = autoSize => ({
   } bg-primaryGreen text-white text-lg font-medium disabled:bg-primaryGreen/60`,
   [ButtonVariant.menu]: `${
     autoSize ? 'h-10 w-[104px] lg:h-[48px] lg:w-[100%]' : ''
-  } bg-activeGray border-activeGray border-2 text-sm font-normal disabled:bg-activeGray/60`,
+  } bg-activeGray border-activeGray border-2 text-sm font-normal disabled:opacity-70`,
   [ButtonVariant.text]: `${autoSize ? 'w-[100%] h-10 lg:h-14' : ''} text-sm disabled:bg-opacity/50`,
 });
 

@@ -28,7 +28,7 @@ const dropIn = {
 
 export type ModalProps = React.PropsWithChildren<{
   visible: boolean;
-  onClose: () => void;
+  onClose?: () => void;
 }>;
 
 export function Modal(props: ModalProps) {

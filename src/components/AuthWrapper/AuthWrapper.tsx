@@ -68,6 +68,19 @@ export function AuthWrapper(props: AuthWrapperProps) {
     [forestLoading, initState.loading, isConnecting, loginLoading, switching],
   );
 
+  console.log(
+    {
+      initStateLoading: !initState.loading,
+      address,
+      lensProfile,
+      isConnected,
+      isSupportedNetwork,
+      forestProfile,
+    },
+    'I am here DUDE!',
+  );
+  // TODO: CHECK LOADING
+
   const canAccessToApp = useMemo(
     () => !initState.loading && address && lensProfile && isConnected && isSupportedNetwork && forestProfile,
     [address, forestProfile, initState.loading, isConnected, isSupportedNetwork, lensProfile],

@@ -13,6 +13,7 @@ export default {
   disconnect: 'Disconnect',
   copy: 'Copy',
   cancel: 'Cancel',
+  close: 'Close',
   copied: 'Copied to clipboard!',
   hello: 'hello world',
   proceed: 'Proceed',
@@ -156,5 +157,6 @@ export default {
   },
   selectLensProfile: {
     title: 'Select your profile',
+    emptyList: 'You have not any profile with this wallet',
   },
 } as const;

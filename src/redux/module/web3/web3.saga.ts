@@ -26,6 +26,8 @@ import {
   checkAccount,
   loginAccount,
   logoutAccount,
+  removeSelectedProfileId,
+  setLensProfile,
 } from '@forest-feed/redux/module/web3/web3.slice';
 import {AppStore} from '@forest-feed/redux/store';
 import {nonceActions, nonceActionTypes} from '@forest-feed/redux/module/nonce/nonce';
@@ -96,6 +98,8 @@ export function* watchLoginAccount() {
 export function* watchLogoutAccount() {
   try {
     yield put(setAccessToken({token: ''}));
+    yield put(removeSelectedProfileId());
+    yield put(setLensProfile({profile: null}));
     yield put(nonceActions.resetCache());
     yield put(signActions.resetCache());
     yield put(profileActions.resetCache());

@@ -7,11 +7,11 @@ export function useLensProfile() {
     web3: {selectedProfileId},
   } = useWeb3();
 
-  const {data: session} = useSession();
+  const {data: session, loading} = useSession();
 
   const profile = useProfile({
     forProfileId: selectedProfileId,
   });
 
-  return session?.authenticated ? profile : {data: undefined, loading: false, error: true};
+  return session?.authenticated ? profile : {data: undefined, loading, error: true};
 }

@@ -56,7 +56,7 @@ export function useAuthLens() {
       try {
         setUnknownError(null);
         if (address && isConnected) {
-          dispatchLogoutForest();
+          // dispatchLogoutForest();
           const {isSuccess, isFailure} = await login({
             address,
             profileId,

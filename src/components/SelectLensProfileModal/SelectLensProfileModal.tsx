@@ -10,6 +10,8 @@ import {Modal} from '@forest-feed/components/kit/Modal/Modal';
 import {LensProfileItem} from '@forest-feed/components/SelectLensProfileModal/LensProfileItem';
 import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
 import {LensProfileItemSkeleton} from '@forest-feed/components/SelectLensProfileModal/LensProfileItemSkeleton';
+import {Logo} from '@forest-feed/components/kit/Icons/LogoIcon';
+import {cn} from '@forest-feed/utils/tailwind';
 
 export type SelectLensProfileModalProps = {
   visible: boolean;
@@ -58,34 +60,37 @@ export function SelectLensProfileModal(props: SelectLensProfileModalProps) {
     }
   }, [disconnectAsync, dispatchSetShowSelectProfile]);
 
+  const renderProfiles = useCallback(() => {
+    if (loading) {
+      return Array.from(Array(2).keys()).map((_, index) => <LensProfileItemSkeleton key={index} />);
+    }
+    if (!profiles || profiles.length === 0) {
+      return <p className={cn('text-error text-center')}>{t('selectLensProfile.emptyList')}</p>;
+    } else {
+      return profiles?.map(profile => (
+        <LensProfileItem
+          key={profile.id}
+          profile={profile}
+          disabled={loginLoading}
+          loading={loginLoading && selectedProfileId === profile.id}
+          onClick={() => handleSelectLensProfile(profile.id)}
+        />
+      ));
+    }
+  }, [t, handleSelectLensProfile, loading, loginLoading, profiles, selectedProfileId]);
+
   return (
-    <Modal
-      visible={visible}
-      onClose={() => {
-        console.log('closed clicked');
-      }}
-    >
-      <div className="bg-primaryBg p-5 rounded-[8px] shadow-2xl w-screen max-w-lg">
-        <h3 className="mb-3 text-xl">{t('selectLensProfile.title')}</h3>
-        <ul className="mb-2">
-          {loading
-            ? Array(2)
-                .fill(2)
-                .map((_, index) => <LensProfileItemSkeleton key={index} />)
-            : profiles?.map(profile => (
-                <LensProfileItem
-                  key={profile.id}
-                  profile={profile}
-                  disabled={loginLoading}
-                  loading={loginLoading && selectedProfileId === profile.id}
-                  onClick={() => handleSelectLensProfile(profile.id)}
-                />
-              ))}
-        </ul>
-        <div className="flex jusify-end">
+    <Modal visible={visible}>
+      <div className={cn('bg-primaryBg p-5 rounded-[8px] shadow-2xl w-screen max-w-lg')}>
+        <div className={cn('flex items-center justify-between mb-3')}>
+          <h3 className={cn('text-2xl')}>{t('selectLensProfile.title')}</h3>
+          <Logo small />
+        </div>
+        <ul className={cn('mb-2')}>{renderProfiles()}</ul>
+        <div className={cn('flex justify-end')}>
           <Button
-            text={t('cancel')}
-            variant={ButtonVariant.secondary}
+            text={t('close')}
+            variant={ButtonVariant.menu}
             onClick={handleCancelSelectProfile}
             disabled={loginLoading}
           />

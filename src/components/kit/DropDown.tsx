@@ -71,7 +71,7 @@ export default function DropDown(props: DropDownProps) {
         >
           <div className={cn('flex items-center')}>
             <RenderIf condition={!!selected.image}>
-              <Image src={selected.image!} alt={String(selected.text)} {...imageStyles} />
+              <Image src={selected.image!} alt={String(selected.text)} {...imageStyles} loading="lazy" />
               <Spacer />
             </RenderIf>
             <RenderIf condition={!hideText}>
@@ -105,6 +105,7 @@ export default function DropDown(props: DropDownProps) {
                         {...imageStyles}
                         placeholder="blur"
                         blurDataURL={item.image as string}
+                        loading="lazy"
                       />
                     </RenderIf>
                     <span

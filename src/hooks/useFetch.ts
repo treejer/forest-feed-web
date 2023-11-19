@@ -5,7 +5,7 @@ import {AxiosRequestConfig} from 'axios';
 
 import fetch, {handleFetchError} from '@forest-feed/utils/fetch';
 import {showToast, ToastType} from '@forest-feed/utils/showToast';
-import {useAccessToken} from '@forest-feed/redux/module/web3/web3.slice';
+import useAccessToken from '@forest-feed/hooks/useAccessToken';
 
 type UseFetchOptions = {
   didMount?: boolean;

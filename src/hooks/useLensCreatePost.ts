@@ -21,9 +21,9 @@ import {
 
 import {lensProtocolAppId, NetworkConfig, storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {getHttpDownloadUrl, IPFSUploadResponse, upload, uploadContent} from '@forest-feed/utils/ipfs';
-import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import useCampaignJourney from '@forest-feed/hooks/useCampaignJourney';
 import usePersistState from '@forest-feed/hooks/usePersistState';
+import useConfig from '@forest-feed/hooks/useConfig';
 
 async function uploadLens({ipfsPostURL, ipfsGetURL}: NetworkConfig, data: any) {
   const dataJson = JSON.stringify(data);

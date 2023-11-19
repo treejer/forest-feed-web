@@ -7,7 +7,7 @@ import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@f
 
 const Nonce = new ReduxFetchState<NonceRes, null, string>('nonce');
 
-export function* watchNonce() {
+function* watchNonce() {
   try {
     const {address} = yield getAccount();
     const res: FetchResult<NonceRes> = yield sagaFetch(`/nonce/${address}`);
@@ -19,7 +19,7 @@ export function* watchNonce() {
   }
 }
 
-export function* nonceSagas() {
+export default function* nonceSagas() {
   yield takeEvery(Nonce.actionTypes.load, watchNonce);
 }
 

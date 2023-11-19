@@ -1,19 +1,19 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-export type TokensInitialState = {
+type TokensInitialState = {
   DAI: number | undefined;
   loading: boolean;
 };
 
-export const tokensInitialState: TokensInitialState = {
-  DAI: undefined,
-  loading: false,
-};
-
-export type TokensActions = {
+type TokensActions = {
   updateBalance: {
     DAI: number;
   };
+};
+
+const tokensInitialState: TokensInitialState = {
+  DAI: undefined,
+  loading: false,
 };
 
 const tokensSlice = createSlice({

@@ -5,7 +5,7 @@ import {NetworkConfig} from '@forest-feed/config';
 import {checkBalance, updateBalance} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {selectDaiTokenContract} from '@forest-feed/redux/selectors';
 
-export function* watchCheckBalance() {
+function* watchCheckBalance() {
   try {
     const {address: daiAddress}: NetworkConfig['contracts']['DAI'] = yield select(selectDaiTokenContract);
     const {address} = yield getAccount();
@@ -19,6 +19,6 @@ export function* watchCheckBalance() {
   }
 }
 
-export function* tokensSagas() {
+export default function* tokensSagas() {
   yield takeEvery(checkBalance.type, watchCheckBalance);
 }

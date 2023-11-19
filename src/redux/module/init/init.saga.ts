@@ -12,7 +12,7 @@ import {
   setImageFile,
 } from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 
-export function* watchInitApp({payload}: PayloadAction<InitAction['init']>) {
+function* watchInitApp({payload}: PayloadAction<InitAction['init']>) {
   try {
     console.log('init');
     const {lensLogout} = payload || {};
@@ -34,6 +34,6 @@ export function* watchInitApp({payload}: PayloadAction<InitAction['init']>) {
   }
 }
 
-export function* initSagas() {
+export default function* initSagas() {
   yield takeEvery(initApp.type, watchInitApp);
 }

@@ -8,7 +8,7 @@ import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@f
 
 const Profile = new ReduxFetchState<ProfileRes, null, string>('profile');
 
-export function* watchProfile() {
+function* watchProfile() {
   try {
     const res: FetchResult<ProfileRes> = yield sagaFetch<ProfileRes>('/users/me');
     yield put(Profile.actions.loadSuccess(res.result));
@@ -19,7 +19,7 @@ export function* watchProfile() {
   }
 }
 
-export function* profileSagas() {
+export default function* profileSagas() {
   yield takeEvery(Profile.actionTypes.load, watchProfile);
 }
 

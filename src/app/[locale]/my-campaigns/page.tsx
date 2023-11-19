@@ -12,11 +12,11 @@ import CampaignActivation from '@forest-feed/components/CampaignActivation/Campa
 import useMediaQuery from '@forest-feed/hooks/useMediaQuery';
 import type {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
 import useQueryFetch from '@forest-feed/hooks/useQueryFetch';
-import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {useScopedI18n} from '@forest-feed/locales/client';
 import AnimatedPage from '@forest-feed/components/kit/Animated/AnimatedPage';
 import AuthWrapper from '@forest-feed/components/AuthWrapper/AuthWrapper';
 import cn from '@forest-feed/utils/tailwind';
+import useConfig from '@forest-feed/hooks/useConfig';
 
 function MyCampaigns() {
   const {

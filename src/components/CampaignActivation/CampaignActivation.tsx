@@ -3,13 +3,13 @@ import React, {useCallback, useMemo, useState} from 'react';
 import {CheckIcon} from '@heroicons/react/solid';
 
 import {ActivationCampaignRes} from '@forest-feed/webServices/campaign/myCampaigns';
-import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import Switch from '@forest-feed/components/kit/Switch/Switch';
 import useFetch from '@forest-feed/hooks/useFetch';
 import {CampaignStatus} from '@forest-feed/types/campaigns';
 import Spacer from '@forest-feed/components/common/Spacer';
 import {useI18n} from '@forest-feed/locales/client';
 import cn from '@forest-feed/utils/tailwind';
+import useConfig from '@forest-feed/hooks/useConfig';
 
 export type CampaignActivationProps = {
   campaignId: string;

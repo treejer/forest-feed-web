@@ -10,6 +10,7 @@ export default function LensTree() {
       height={23}
       placeholder="blur"
       blurDataURL={LensTreeImage.blurDataURL}
+      loading="lazy"
     />
   );
 }

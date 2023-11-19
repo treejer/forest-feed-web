@@ -22,6 +22,7 @@ export default function LensProfileItem(props: LensProfileItemProps) {
           width={50}
           height={50}
           alt={`${profile.id}-profile-picture`}
+          loading="lazy"
         />
         <span className={cn('font-bold ml-2 text-secondary')}>@{profile.handle?.fullHandle}</span>
       </div>

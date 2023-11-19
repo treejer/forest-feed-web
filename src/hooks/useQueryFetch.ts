@@ -6,9 +6,10 @@ import {Method} from 'axios';
 
 import {FetchResult, queryFetch} from '@forest-feed/utils/fetch';
 import {paginationPageSize} from '@forest-feed/config';
-import {useAccessToken, useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import useForestProfile from '@forest-feed/hooks/useForestProfile';
 import {useRouter} from '@forest-feed/lib/router-events';
+import useConfig from '@forest-feed/hooks/useConfig';
+import useAccessToken from '@forest-feed/hooks/useAccessToken';
 
 export type UseQueryFetchParams<Form = any, Params = any> = {
   queryKey: string;

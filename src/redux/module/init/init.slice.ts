@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-export type InitState = {
+type InitState = {
   loading: boolean;
 };
 
@@ -8,11 +8,11 @@ export type InitAction = {
   init: {lensLogout: (isSaga?: boolean) => void};
 };
 
-export const initInitialState: InitState = {
+const initInitialState: InitState = {
   loading: true,
 };
 
-export const initSlice = createSlice({
+const initSlice = createSlice({
   name: 'init',
   initialState: initInitialState,
   reducers: {

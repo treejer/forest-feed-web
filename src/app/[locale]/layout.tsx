@@ -1,5 +1,6 @@
 import React from 'react';
 import {Inter} from 'next/font/google';
+import {Metadata} from 'next';
 
 import {Locale} from '@forest-feed/languages';
 import AllTheProviders from '@forest-feed/components/providers/AllTheProviders';
@@ -15,7 +16,7 @@ export type RootLayoutProps = {
   children: React.ReactNode;
 };
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getScopedI18n('metadata');
 
   return {

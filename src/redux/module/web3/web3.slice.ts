@@ -3,15 +3,6 @@ import {GetAccountResult} from '@wagmi/core';
 import {Profile, ProfileId} from '@lens-protocol/react-web';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
-import {
-  selectAccessToken,
-  selectConfig,
-  selectDaiTokenContract,
-  selectForestFeedContract,
-  selectRegularSaleContract,
-} from '@forest-feed/redux/selectors';
-import {useAppSelector} from '@forest-feed/hooks/redux';
-import {InitAction} from '@forest-feed/redux/module/init/init.slice';
 
 export type Web3State = {
   isConnected: boolean;
@@ -27,20 +18,22 @@ export type Web3State = {
   selectedProfileId: ProfileId | null;
 };
 
-export type SwitchNetworkAction = {
+type SwitchNetworkAction = {
   newNetwork: BlockchainNetwork;
   userInApp?: boolean;
   onSuccess?: () => void;
   inInit?: boolean;
 };
 
+type LensLogout = {lensLogout: (isSaga?: boolean) => void};
+
 export type Web3Action = {
-  switchNetwork: SwitchNetworkAction & Partial<InitAction['init']>;
+  switchNetwork: SwitchNetworkAction & Partial<LensLogout>;
   startConfiguration?: SwitchNetworkAction;
-  watchCurrentWeb3: InitAction['init'];
+  watchCurrentWeb3: {lensLogout: (isSaga?: boolean) => void};
   updateNetwork: {newConfig: NetworkConfig};
   connectedWallet: {address?: `0x${string}`};
-  checkAccount: {account: GetAccountResult} & InitAction['init'];
+  checkAccount: {account: GetAccountResult} & Partial<LensLogout>;
   setLensLoading: {loading: boolean};
   setAccessToken: {token: string};
   setLensProfile: {profile: Profile | null | undefined};
@@ -48,7 +41,7 @@ export type Web3Action = {
   setSelectedProfileId: ProfileId;
 };
 
-export const web3InitialState: Web3State = {
+const web3InitialState: Web3State = {
   isConnected: false,
   config: configs[BlockchainNetwork.Mumbai],
   switching: false,
@@ -62,7 +55,7 @@ export const web3InitialState: Web3State = {
   selectedProfileId: null,
 };
 
-export const web3Slice = createSlice({
+const web3Slice = createSlice({
   name: 'web3',
   initialState: web3InitialState,
   reducers: {
@@ -139,9 +132,3 @@ export const {
   removeSelectedProfileId,
 } = web3Slice.actions;
 export default web3Slice.reducer;
-
-export const useConfig = () => useAppSelector(selectConfig);
-export const useRegularSaleContract = () => useAppSelector(selectRegularSaleContract);
-export const useForestFeedContract = () => useAppSelector(selectForestFeedContract);
-export const useDaiTokenContract = () => useAppSelector(selectDaiTokenContract);
-export const useAccessToken = () => useAppSelector(selectAccessToken);

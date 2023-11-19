@@ -7,7 +7,7 @@ import {FetchResult, handleFetchError, handleSagaFetchError, sagaFetch} from '@f
 
 const Sign = new ReduxFetchState<SignRes, SignPayload, string>('sign');
 
-export function* watchSign({payload}: SignAction) {
+function* watchSign({payload}: SignAction) {
   try {
     const {signature} = payload || {};
 
@@ -27,7 +27,7 @@ export function* watchSign({payload}: SignAction) {
   }
 }
 
-export function* signSagas() {
+export default function* signSagas() {
   yield takeEvery(Sign.actionTypes.load, watchSign);
 }
 

@@ -13,6 +13,7 @@ export default function DaiIcon() {
       alt="Dai"
       placeholder="blur"
       blurDataURL="/assets/images/daiToken.svg"
+      loading="lazy"
     />
   );
 }

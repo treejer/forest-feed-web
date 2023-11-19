@@ -11,8 +11,8 @@ import {
 } from '@lens-protocol/react-web';
 import {bindings as wagmiBindings} from '@lens-protocol/wagmi';
 
-import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
 import {lensProtocolAppId} from '@forest-feed/config';
+import useConfig from '@forest-feed/hooks/useConfig';
 
 export type LensProviderProps = React.PropsWithChildren;
 export default function LensProvider(props: LensProviderProps) {

@@ -36,6 +36,7 @@ export default function ChevronIcon(props: ChevronIconProps) {
       height={size}
       placeholder="blur"
       blurDataURL={ChevronRight.blurDataURL}
+      loading="lazy"
     />
   );
 }

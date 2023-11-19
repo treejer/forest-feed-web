@@ -18,6 +18,7 @@ export default function Logo(props: LogoProps) {
       height={small ? 43 : 54}
       placeholder="blur"
       blurDataURL={ForestLogo.blurDataURL}
+      loading="lazy"
     />
   );
 }

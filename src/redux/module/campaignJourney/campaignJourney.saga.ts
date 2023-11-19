@@ -10,10 +10,10 @@ import {
   setImageFile,
 } from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import photoToBase64 from '@forest-feed/utils/photoToBase64';
-import {selectCampaignJourney} from '@forest-feed/redux/selectors';
 import getCroppedImg from '@forest-feed/utils/cropImage';
+import {selectCampaignJourney} from '@forest-feed/redux/selectors';
 
-export function* watchApproveGeneralInfo({payload}: PayloadAction<CampaignJourneyAction['approveGeneralInfo']>) {
+function* watchApproveGeneralInfo({payload}: PayloadAction<CampaignJourneyAction['approveGeneralInfo']>) {
   try {
     const {image} = payload || {};
     if (image) {
@@ -27,7 +27,7 @@ export function* watchApproveGeneralInfo({payload}: PayloadAction<CampaignJourne
   }
 }
 
-export function* watchCheckBase64Exist() {
+function* watchCheckBase64Exist() {
   try {
     const {imageBase64}: CampaignJourneyState = yield select(selectCampaignJourney);
     if (imageBase64) {
@@ -41,7 +41,7 @@ export function* watchCheckBase64Exist() {
   }
 }
 
-export function* campaignJourneySagas() {
+export default function* campaignJourneySagas() {
   yield takeEvery(approveGeneralInfo.type, watchApproveGeneralInfo);
   yield takeEvery(checkBase64Exist.type, watchCheckBase64Exist);
 }

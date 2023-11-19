@@ -38,6 +38,8 @@ export default function ConnectToUse() {
         placeholder="blur"
         blurDataURL={Trees.blurDataURL}
         draggable={false}
+        loading="lazy"
+        quality={50}
       />
       <p className={cn('my-4 text-secondary drop-shadow max-w-2xl text-center')}>{t('connectToUse.text')}</p>
       {address && status === 'connected' ? (

@@ -3,8 +3,7 @@ import {useMemo} from 'react';
 import {useContractRead} from 'wagmi';
 import {Abi} from 'viem';
 import {BigNumberish} from 'ethers';
-
-import {useRegularSaleContract} from '@forest-feed/redux/module/web3/web3.slice';
+import useRegularSaleContract from '@forest-feed/hooks/useRegularSaleContract';
 
 export default function useRegularSale() {
   const {address, abi} = useRegularSaleContract();

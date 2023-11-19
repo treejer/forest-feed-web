@@ -73,6 +73,7 @@ export default function Uploader(props: UploaderProps) {
           alt="preview-photo"
           width={800}
           height={900}
+          loading="lazy"
         />
       </Modal>
       <div
@@ -100,6 +101,7 @@ export default function Uploader(props: UploaderProps) {
             width={90}
             height={70}
             onClick={() => setOpenPreviewModal(true)}
+            loading="lazy"
           />
         </RenderIf>
         <label className={cn('flex items-center cursor-pointer')} htmlFor="file-uploader">

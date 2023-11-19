@@ -41,7 +41,7 @@ export type CampaignJourneyAction = {
   removeTermsAndConditions?: boolean;
 };
 
-export const campaignJourneyInitialState: CampaignJourneyState = {
+const campaignJourneyInitialState: CampaignJourneyState = {
   disableForm: false,
   content: '',
   image: null,
@@ -62,7 +62,7 @@ export const campaignJourneyInitialState: CampaignJourneyState = {
   submissionError: false,
 };
 
-export const campaignJourneySlice = createSlice({
+const campaignJourneySlice = createSlice({
   name: 'campaignJourney',
   initialState: campaignJourneyInitialState,
   reducers: {

@@ -1,9 +1,14 @@
 import React from 'react';
 
+import dynamic from 'next/dynamic';
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
-import Logo from '@forest-feed/components/kit/Icons/LogoIcon';
+const Logo = dynamic(() => import('@forest-feed/components/kit/Icons/LogoIcon'), {
+  loading: () => <p>loading is here</p>,
+  ssr: false,
+});
+
 import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
 import LensIcon from '@forest-feed/components/kit/Icons/LensIcon';
 import Spacer from '@forest-feed/components/common/Spacer';

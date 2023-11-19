@@ -1,12 +1,17 @@
 import React, {useCallback, useMemo} from 'react';
 
+import dynamic from 'next/dynamic';
 import {useAccount} from 'wagmi';
 import {RotatingLines} from 'react-loader-spinner';
+import {Hearts} from 'react-loader-spinner';
 
 import useWeb3 from '@forest-feed/hooks/useWeb3';
 import RenderIf from '@forest-feed/components/common/RenderIf';
 import useAuthLens from '@forest-feed/hooks/useAuthLens';
-import ConnectToUse from '@forest-feed/components/AuthWrapper/ConnectToUse';
+const ConnectToUse = dynamic(() => import('@forest-feed/components/AuthWrapper/ConnectToUse'), {
+  loading: () => <Hearts />,
+  ssr: false,
+});
 import useLensProfile from '@forest-feed/hooks/useLensProfile';
 import useInit from '@forest-feed/hooks/useInit';
 import useForestProfile from '@forest-feed/hooks/useForestProfile';

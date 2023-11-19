@@ -34,6 +34,7 @@ export default function HeyPostView(props: HeyPostViewProps) {
           width={40}
           height={40}
           className={cn('rounded-full border border-tGray-200')}
+          loading="lazy"
         />
         <Spacer times={1.5} />
         <div>
@@ -59,7 +60,14 @@ export default function HeyPostView(props: HeyPostViewProps) {
         </div>
         {previewImage && image ? (
           <div className={cn('mt-3 w-2/3 relative')}>
-            <Image className={cn('rounded-lg')} src={previewImage} alt="image" width={1000} height={1000} />
+            <Image
+              className={cn('rounded-lg')}
+              src={previewImage}
+              alt="image"
+              width={1000}
+              height={1000}
+              loading="lazy"
+            />
           </div>
         ) : null}
         <div className={cn('mt-3 flex gap-x-6 gap-y-1 items-center')}>
@@ -80,6 +88,7 @@ export default function HeyPostView(props: HeyPostViewProps) {
               height={20}
               className={cn('w-[15px] sm:w-[18px] select-none')}
               draggable={false}
+              loading="lazy"
             />
           </div>
         </div>
@@ -92,7 +101,15 @@ export default function HeyPostView(props: HeyPostViewProps) {
               {t('impactMirror', {
                 appName: <span className={cn('text-tBlue-300 ml-1')}> {t('forestFeed')}</span>,
               })}
-              <Image className={cn('ml-1')} src={ForestTree} alt="lesnter" width={20} height={20} draggable={false} />
+              <Image
+                className={cn('ml-1')}
+                src={ForestTree}
+                alt="lesnter"
+                width={20}
+                height={20}
+                draggable={false}
+                loading="lazy"
+              />
             </p>
           </div>
         </div>

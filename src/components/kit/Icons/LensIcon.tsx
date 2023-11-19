@@ -11,6 +11,7 @@ export default function LensIcon() {
       height={50}
       placeholder="blur"
       blurDataURL={LensLogo.blurDataURL}
+      loading="lazy"
     />
   );
 }

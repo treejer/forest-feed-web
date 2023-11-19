@@ -2,15 +2,15 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const {version} = require('../../../../package.json');
 
-export type AppInfoState = {
+type AppInfoState = {
   version: string;
 };
 
-export const appInfoInitialState: AppInfoState = {
+const appInfoInitialState: AppInfoState = {
   version,
 };
 
-export const appInfoSlice = createSlice({
+const appInfoSlice = createSlice({
   name: 'appInfo',
   initialState: appInfoInitialState,
   reducers: {

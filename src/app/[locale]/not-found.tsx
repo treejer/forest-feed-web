@@ -20,7 +20,7 @@ export default function NotFound() {
 
   return (
     <div className={cn('flex justify-center items-center flex-col')}>
-      <Image src={NotFoundSvg} alt="404" width={500} height={300} />
+      <Image src={NotFoundSvg} alt="404" width={500} height={300} loading="lazy" />
       <h2 className={cn('text-2xl mb-10')}>{t('notFound.title')}</h2>
       <button className={cn('text-sm text-green underline')} onClick={handleBack}>
         {t('notFound.backToApp')}

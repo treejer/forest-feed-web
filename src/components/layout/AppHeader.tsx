@@ -3,10 +3,11 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import {useAccount} from 'wagmi';
 import {ConnectButton} from '@rainbow-me/rainbowkit';
+import {Hearts} from 'react-loader-spinner';
 
 const Logo = dynamic(() => import('@forest-feed/components/kit/Icons/LogoIcon'), {
-  loading: () => <p>loading is here</p>,
-  ssr: false,
+  loading: () => <Hearts />,
+  ssr: true,
 });
 
 import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';

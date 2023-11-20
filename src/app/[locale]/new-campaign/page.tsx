@@ -2,9 +2,18 @@
 
 import React, {useCallback, useMemo} from 'react';
 
+import dynamic from 'next/dynamic';
 import {motion} from 'framer-motion';
+import {Hearts} from 'react-loader-spinner';
 
-import AnimatedPage from '@forest-feed/components/kit/Animated/AnimatedPage';
+const AnimatedPage = dynamic(() => import('@forest-feed/components/kit/Animated/AnimatedPage'), {
+  loading: () => (
+    <div className={cn('flex w-full h-full justify-center items-center')}>
+      <Hearts />
+    </div>
+  ),
+  ssr: true,
+});
 import Stepper from '@forest-feed/components/kit/Stepper';
 import TreeCost from '@forest-feed/components/TreeCost/TreeCost';
 import GeneralInfoStep from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';

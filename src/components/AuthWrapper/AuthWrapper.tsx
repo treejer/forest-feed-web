@@ -10,7 +10,7 @@ import RenderIf from '@forest-feed/components/common/RenderIf';
 import useAuthLens from '@forest-feed/hooks/useAuthLens';
 const ConnectToUse = dynamic(() => import('@forest-feed/components/AuthWrapper/ConnectToUse'), {
   loading: () => <Hearts />,
-  ssr: false,
+  ssr: true,
 });
 import useLensProfile from '@forest-feed/hooks/useLensProfile';
 import useInit from '@forest-feed/hooks/useInit';

@@ -1,3 +1,5 @@
+'use client';
+
 import React, {useEffect, useMemo, useState} from 'react';
 
 import Link from 'next/link';
@@ -61,7 +63,7 @@ export default function WalletAssets(props: WalletAssetsProps) {
   return (
     <div>
       <span className={cn('text-sm md:text-base')}>{t('newCampaign.assets.title')}</span>
-      <div className={cn('border border-1 border-LightWhite w-full')} />
+      <div className={cn('h-0.5 bg-lightWhite w-full')} />
       <Spacer />
       {loading ? (
         <AssetSkeleton />

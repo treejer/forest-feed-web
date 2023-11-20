@@ -29,7 +29,7 @@ export default function HeyPostView(props: HeyPostViewProps) {
     <div className={cn('bg-white shadow p-5 rounded-xl')}>
       <div className={cn('flex items-center pb-4')}>
         <Image
-          src={(activeProfile?.metadata?.picture as ProfilePictureSet).optimized?.uri || NoPicture}
+          src={(activeProfile?.metadata?.picture as ProfilePictureSet)?.optimized?.uri || NoPicture}
           alt="profile-picture"
           width={40}
           height={40}
@@ -39,7 +39,7 @@ export default function HeyPostView(props: HeyPostViewProps) {
         <Spacer times={1.5} />
         <div>
           <p>{activeProfile?.metadata?.displayName || activeProfile?.handle?.fullHandle}</p>
-          <div className={cn('rounded-full border border-tGray-200')}>
+          <div className={cn('flex items-center')}>
             <p
               className={cn(
                 'from-brand-600 dark:from-brand-400 bg-gradient-to-r to-pink-600 bg-clip-text text-transparent dark:to-pink-400 text-sm font-bold',

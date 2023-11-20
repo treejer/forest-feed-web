@@ -33,10 +33,9 @@ export default function Stepper(props: StepperProps) {
             >
               <div
                 className={cn(
-                  'transition-all w-[24px] h-[24px] rounded-[50%] flex items-center justify-center border text-sm font-bold',
+                  'transition-all w-[24px] h-[24px] rounded-[50%] flex items-center justify-center border text-sm font-bold border-border',
                   {
                     'bg-primaryGreen text-white border-primaryGreen': activeStep >= index,
-                    'border-border': activeStep < index,
                   },
                 )}
               >

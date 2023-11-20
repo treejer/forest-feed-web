@@ -18,7 +18,7 @@ export default function LensProfileItem(props: LensProfileItemProps) {
       <div className={cn('flex items-center')}>
         <Image
           className={cn('rounded-full')}
-          src={(profile.metadata?.picture as ProfilePictureSet).optimized?.uri || NoPicture}
+          src={(profile.metadata?.picture as ProfilePictureSet)?.optimized?.uri || NoPicture}
           width={50}
           height={50}
           alt={`${profile.id}-profile-picture`}

@@ -1,17 +1,12 @@
 import React, {useCallback, useMemo} from 'react';
 
-import dynamic from 'next/dynamic';
 import {useAccount} from 'wagmi';
 import {RotatingLines} from 'react-loader-spinner';
-import {Hearts} from 'react-loader-spinner';
 
-import useWeb3 from '@forest-feed/hooks/useWeb3';
 import RenderIf from '@forest-feed/components/common/RenderIf';
+import ConnectToUse from '@forest-feed/components/AuthWrapper/ConnectToUse';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
 import useAuthLens from '@forest-feed/hooks/useAuthLens';
-const ConnectToUse = dynamic(() => import('@forest-feed/components/AuthWrapper/ConnectToUse'), {
-  loading: () => <Hearts />,
-  ssr: true,
-});
 import useLensProfile from '@forest-feed/hooks/useLensProfile';
 import useInit from '@forest-feed/hooks/useInit';
 import useForestProfile from '@forest-feed/hooks/useForestProfile';
@@ -22,6 +17,7 @@ import './AuthWrapper.scss';
 export type AuthLoaderProps = {
   hideLoader: boolean;
 };
+
 function AuthLoader(props: AuthLoaderProps) {
   const {hideLoader = false} = props;
 
@@ -72,19 +68,6 @@ export default function AuthWrapper(props: AuthWrapperProps) {
     () => initState.loading || isConnecting || switching || loginLoading || forestLoading,
     [forestLoading, initState.loading, isConnecting, loginLoading, switching],
   );
-
-  console.log(
-    {
-      initStateLoading: !initState.loading,
-      address,
-      lensProfile,
-      isConnected,
-      isSupportedNetwork,
-      forestProfile,
-    },
-    'I am here DUDE!',
-  );
-  // TODO: CHECK LOADING
 
   const canAccessToApp = useMemo(
     () => !initState.loading && address && lensProfile && isConnected && isSupportedNetwork && forestProfile,

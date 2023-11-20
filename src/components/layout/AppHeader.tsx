@@ -26,7 +26,7 @@ export default function AppHeader() {
   const {address, status} = useAccount();
   const {lensLoading, unknownError} = useAuthLens();
   const {dispatchLogoutAccount, profile: forestProfile} = useForestProfile();
-  const {data: lensProfile} = useLensProfile();
+  const {data: lensProfile, loading: profileLoading} = useLensProfile();
 
   const {
     web3: {forestLoading, isSupportedNetwork},
@@ -48,7 +48,7 @@ export default function AppHeader() {
           <AppHeaderSkeleton />
         ) : address && status === 'connected' ? (
           <div className={cn('flex items-center')}>
-            {isSupportedNetwork && !lensProfile ? (
+            {isSupportedNetwork && !lensProfile && !profileLoading ? (
               <Button
                 className={cn('py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex')}
                 autoSize={false}
@@ -60,7 +60,7 @@ export default function AppHeader() {
                 onClick={() => dispatchSetShowSelectProfile(true)}
               />
             ) : null}
-            {isSupportedNetwork && lensProfile && !forestProfile ? (
+            {isSupportedNetwork && lensProfile && !forestProfile && !profileLoading ? (
               <Button
                 className={cn('py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg hidden md:flex')}
                 autoSize={false}

@@ -31,7 +31,7 @@ export default function InputRange(props: InputRangeProps) {
     <div onMouseDown={handleShow} onMouseUp={handleHide} className={cn('group wrapper transition-all')}>
       <div className={cn('input-wrapper')}>
         <input
-          className="input"
+          className={cn('input')}
           type="range"
           value={value}
           min={min}
@@ -43,7 +43,7 @@ export default function InputRange(props: InputRangeProps) {
       </div>
 
       <div className={cn('control-wrapper')}>
-        <div className={cn('control-wrapper')}>
+        <div className={cn('rail overflow-hidden')}>
           <div className={cn('inner-rail')} style={{left: `${minPos}%`, right: `${100 - maxPos}%`}} />
         </div>
         <div className={cn('control relative')} style={{left: `${maxPos}%`}}>

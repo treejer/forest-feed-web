@@ -17,8 +17,8 @@ import cn from '@forest-feed/utils/tailwind';
 export default function ConnectToUse() {
   const {address, status} = useAccount();
   const {lensLoading} = useAuthLens();
-  const {profile} = useForestProfile();
-  const {data: lensProfile} = useLensProfile();
+  const {profile: forestProfile, loading: forestProfileLoading} = useForestProfile();
+  const {data: lensProfile, loading: lensProfileLoading} = useLensProfile();
   const {
     web3: {forestLoading, isSupportedNetwork},
     dispatchSignWithForest,
@@ -45,7 +45,7 @@ export default function ConnectToUse() {
       {address && status === 'connected' ? (
         <>
           {isSupportedNetwork ? (
-            !lensProfile ? (
+            !lensProfile && !lensProfileLoading ? (
               <Button
                 className={cn('py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-2')}
                 autoSize={false}
@@ -56,7 +56,7 @@ export default function ConnectToUse() {
                 loading={lensLoading}
                 onClick={() => dispatchSetShowSelectProfile(true)}
               />
-            ) : !profile ? (
+            ) : !forestProfile && !forestProfileLoading ? (
               <Button
                 className={cn('py-0 text-sm w-40 h-10 disabled:bg-primaryGreen shadow-lg mb-2')}
                 autoSize={false}

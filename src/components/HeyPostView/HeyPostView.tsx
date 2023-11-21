@@ -2,10 +2,12 @@ import React, {useMemo} from 'react';
 
 import Image from 'next/image';
 import {Profile, ProfilePictureSet} from '@lens-protocol/react-web';
+import ChatBubbleLeftRightIcon from '@heroicons/react/24/outline/ChatBubbleLeftRightIcon';
+import ArrowsRightLeftIcon from '@heroicons/react/24/outline/ArrowsRightLeftIcon';
+import HeartIcon from '@heroicons/react/24/outline/HeartIcon';
 
 import {CampaignJourneyState} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import Spacer from '@forest-feed/components/common/Spacer';
-import {HeartIcon, SwitchHorizontalIcon, ChatAlt2Icon} from '@heroicons/react/outline';
 import {ForestTree, NoPicture, TreeSvg} from 'public/assets/images';
 import {useI18n} from '@forest-feed/locales/client';
 import cn from '@forest-feed/utils/tailwind';
@@ -40,13 +42,7 @@ export default function HeyPostView(props: HeyPostViewProps) {
         <div>
           <p>{activeProfile?.metadata?.displayName || activeProfile?.handle?.fullHandle}</p>
           <div className={cn('flex items-center')}>
-            <p
-              className={cn(
-                'from-brand-600 dark:from-brand-400 bg-gradient-to-r to-pink-600 bg-clip-text text-transparent dark:to-pink-400 text-sm font-bold',
-              )}
-            >
-              {activeProfile?.handle?.fullHandle}
-            </p>
+            <p className={cn('text-tGray-500 text-sm')}>@{activeProfile?.handle?.fullHandle}</p>
             <div className={cn('w-[3px] h-[3px] rounded-full bg-tGray-500 mx-1.5')} />
             <span className={cn('text-xs text-tGray-500')}>{t('now')}</span>
           </div>
@@ -72,13 +68,13 @@ export default function HeyPostView(props: HeyPostViewProps) {
         ) : null}
         <div className={cn('mt-3 flex gap-x-6 gap-y-1 items-center')}>
           <div className={pQA1}>
-            <ChatAlt2Icon className={cn('mt-3 flex gap-x-6 gap-y-1 items-center')} />
+            <ChatBubbleLeftRightIcon className={cn('w-[15px] sm:w-[18px] text-tGray-500')} />
           </div>
           <div className={pQA1}>
-            <SwitchHorizontalIcon className={cn('w-[15px] sm:w-[18px] text-brand-500')} />
+            <ArrowsRightLeftIcon className={cn('w-[15px] sm:w-[18px] text-tGray-500')} />
           </div>
           <div className={pQA1}>
-            <HeartIcon className={cn('w-[15px] sm:w-[18px] text-pink-500')} />
+            <HeartIcon className={cn('w-[15px] sm:w-[18px] text-tGray-500')} />
           </div>
           <div className={pQA1}>
             <Image
@@ -97,7 +93,7 @@ export default function HeyPostView(props: HeyPostViewProps) {
         <div>
           <p className={cn('text-sm font-bold')}>{t('impact')}</p>
           <div className={cn('flex items-center')}>
-            <p className={cn('text-[10px] font-thin  flex items-center')}>
+            <p className={cn('text-[10px] flex items-center')}>
               {t('impactMirror', {
                 appName: <span className={cn('text-tBlue-300 ml-1')}> {t('forestFeed')}</span>,
               })}

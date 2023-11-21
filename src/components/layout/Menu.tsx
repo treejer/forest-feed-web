@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {motion} from 'framer-motion';
-import {ArrowLeftIcon} from '@heroicons/react/solid';
+import ArrowLeftIcon from '@heroicons/react/24/solid/ArrowLeftIcon';
 
 import shortenedString from '@forest-feed/utils/string';
 import Spacer from '@forest-feed/components/common/Spacer';

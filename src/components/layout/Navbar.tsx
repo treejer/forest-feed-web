@@ -6,7 +6,8 @@ import {usePathname} from 'next/navigation';
 import {Link} from '@forest-feed/lib/router-events';
 
 import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
-import {PlusIcon, TableIcon} from '@heroicons/react/solid';
+import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
+import TableCellsIcon from '@heroicons/react/24/solid/TableCellsIcon';
 import {useCurrentLocale, useScopedI18n} from '@forest-feed/locales/client';
 import {Locale} from '@forest-feed/languages';
 import cn from '@forest-feed/utils/tailwind';
@@ -20,7 +21,7 @@ export const links = [
   {
     href: `/my-campaigns`,
     name: 'myCampaigns',
-    icon: <TableIcon className="w-8 h-8" />,
+    icon: <TableCellsIcon className="w-8 h-8" />,
   },
 ];
 

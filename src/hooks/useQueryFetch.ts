@@ -6,9 +6,10 @@ import {Method} from 'axios';
 
 import {FetchResult, queryFetch} from '@forest-feed/utils/fetch';
 import {paginationPageSize} from '@forest-feed/config';
-import {useAccessToken, useConfig} from '@forest-feed/redux/module/web3/web3.slice';
-import {useProfile} from '@forest-feed/redux/module/profile/profile';
+import useForestProfile from '@forest-feed/hooks/useForestProfile';
 import {useRouter} from '@forest-feed/lib/router-events';
+import useConfig from '@forest-feed/hooks/useConfig';
+import useAccessToken from '@forest-feed/hooks/useAccessToken';
 
 export type UseQueryFetchParams<Form = any, Params = any> = {
   queryKey: string;
@@ -52,7 +53,7 @@ export function queryFn<Data, Form = any>({
   });
 }
 
-export function useQueryFetch<Data, Form = any, Params = any>(params: UseQueryFetchParams<Form, Params>) {
+export default function useQueryFetch<Data, Form = any, Params = any>(params: UseQueryFetchParams<Form, Params>) {
   const {queryKey, limit = paginationPageSize, endpoint, method = 'get', params: fetchParams, data: fetchData} = params;
 
   const [mounted, setMounted] = useState(false);
@@ -62,7 +63,7 @@ export function useQueryFetch<Data, Form = any, Params = any>(params: UseQueryFe
 
   const urlParamPage = useMemo(() => (searchParams.get('page') ? Number(searchParams.get('page')) : 1), [searchParams]);
 
-  const {profile} = useProfile();
+  const {profile} = useForestProfile();
   const {forestFeedApiUrl} = useConfig();
   const accessToken = useAccessToken();
 

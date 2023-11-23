@@ -1,9 +1,10 @@
 import {useAccount, useContractRead} from 'wagmi';
 
-import {useDaiTokenContract, useForestFeedContract} from '@forest-feed/redux/module/web3/web3.slice';
 import {Abi} from 'viem';
 import {BigNumberish} from 'ethers';
 import {useMemo} from 'react';
+import useDaiTokenContract from '@forest-feed/hooks/useDaiTokenContract';
+import useForestFeedContract from '@forest-feed/hooks/useForestFeedContract';
 
 export type UseAllowanceDaiInForestFeedParams = {
   enabled?: boolean;
@@ -11,7 +12,7 @@ export type UseAllowanceDaiInForestFeedParams = {
   onError?: (err: Error) => void;
 };
 
-export function useAllowanceDaiInForestFeed(params: UseAllowanceDaiInForestFeedParams = {}) {
+export default function useAllowanceDaiInForestFeed(params: UseAllowanceDaiInForestFeedParams = {}) {
   const {enabled = true, onError, onSuccess} = params;
 
   const {address: walletAddress} = useAccount();

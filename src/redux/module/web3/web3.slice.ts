@@ -1,23 +1,8 @@
-import {useCallback} from 'react';
-
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {GetAccountResult} from '@wagmi/core';
-import {ProfileOwnedByMe} from '@lens-protocol/react-web';
+import {Profile, ProfileId} from '@lens-protocol/react-web';
 
 import {BlockchainNetwork, config as configs, NetworkConfig} from '@forest-feed/config';
-import {
-  selectAccessToken,
-  selectConfig,
-  selectDaiTokenContract,
-  selectForestFeedContract,
-  selectRegularSaleContract,
-  selectWeb3,
-} from '@forest-feed/redux/selectors';
-import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
-import {profileActions} from '@forest-feed/redux/module/profile/profile';
-import {nonceActions} from '@forest-feed/redux/module/nonce/nonce';
-import {signActions} from '@forest-feed/redux/module/sign/sign';
-import {InitAction} from '@forest-feed/redux/module/init/init.slice';
 
 export type Web3State = {
   isConnected: boolean;
@@ -28,29 +13,35 @@ export type Web3State = {
   accessToken: string;
   lensLoading: boolean;
   forestLoading: boolean;
-  lensProfile: ProfileOwnedByMe | null | undefined;
+  lensProfile: Profile | null | undefined;
+  showSelectProfile: boolean;
+  selectedProfileId: ProfileId | null;
 };
 
-export type SwitchNetworkAction = {
+type SwitchNetworkAction = {
   newNetwork: BlockchainNetwork;
   userInApp?: boolean;
   onSuccess?: () => void;
   inInit?: boolean;
 };
 
+type LensLogout = {lensLogout: (isSaga?: boolean) => void};
+
 export type Web3Action = {
-  switchNetwork: SwitchNetworkAction & Partial<InitAction['init']>;
+  switchNetwork: SwitchNetworkAction & Partial<LensLogout>;
   startConfiguration?: SwitchNetworkAction;
-  watchCurrentWeb3: InitAction['init'];
+  watchCurrentWeb3: {lensLogout: (isSaga?: boolean) => void};
   updateNetwork: {newConfig: NetworkConfig};
   connectedWallet: {address?: `0x${string}`};
-  checkAccount: {account: GetAccountResult} & InitAction['init'];
+  checkAccount: {account: GetAccountResult} & Partial<LensLogout>;
   setLensLoading: {loading: boolean};
   setAccessToken: {token: string};
-  setLensProfile: {profile: ProfileOwnedByMe | null | undefined};
+  setLensProfile: {profile: Profile | null | undefined};
+  setShowSelectProfile?: boolean;
+  setSelectedProfileId: ProfileId;
 };
 
-export const web3InitialState: Web3State = {
+const web3InitialState: Web3State = {
   isConnected: false,
   config: configs[BlockchainNetwork.Mumbai],
   switching: false,
@@ -60,9 +51,11 @@ export const web3InitialState: Web3State = {
   lensLoading: false,
   forestLoading: false,
   lensProfile: null,
+  showSelectProfile: false,
+  selectedProfileId: null,
 };
 
-export const web3Slice = createSlice({
+const web3Slice = createSlice({
   name: 'web3',
   initialState: web3InitialState,
   reducers: {
@@ -89,7 +82,10 @@ export const web3Slice = createSlice({
     },
     connectedWallet: (state, action: PayloadAction<Web3Action['connectedWallet']>) => {
       state.isConnected = !!action.payload.address;
+      state.selectedProfileId = !action.payload.address ? null : state.selectedProfileId;
+      state.lensProfile = !action.payload.address ? null : state.lensProfile;
       state.address = action.payload.address || null;
+      state.showSelectProfile = !state.lensProfile && !state.selectedProfileId && !!action.payload.address;
     },
     setLensLoading: (state, action: PayloadAction<Web3Action['setLensLoading']>) => {
       state.lensLoading = action.payload.loading;
@@ -100,6 +96,18 @@ export const web3Slice = createSlice({
     },
     setLensProfile: (state, action: PayloadAction<Web3Action['setLensProfile']>) => {
       state.lensProfile = action.payload.profile;
+    },
+    setShowSelectProfile: (state, action: PayloadAction<Web3Action['setShowSelectProfile']>) => {
+      state.showSelectProfile = !!action.payload;
+    },
+    toggleShowSelectProfile: state => {
+      state.showSelectProfile = !state.showSelectProfile;
+    },
+    setSelectedProfileId: (state, action: PayloadAction<Web3Action['setSelectedProfileId']>) => {
+      state.selectedProfileId = action.payload;
+    },
+    removeSelectedProfileId: state => {
+      state.selectedProfileId = null;
     },
   },
 });
@@ -118,68 +126,9 @@ export const {
   setLensLoading,
   setAccessToken,
   setLensProfile,
+  toggleShowSelectProfile,
+  setShowSelectProfile,
+  setSelectedProfileId,
+  removeSelectedProfileId,
 } = web3Slice.actions;
 export default web3Slice.reducer;
-
-export function useWeb3() {
-  const web3 = useAppSelector(selectWeb3);
-  const dispatch = useAppDispatch();
-
-  const dispatchSwitchNetwork = useCallback(
-    (payload: Web3Action['switchNetwork']) => {
-      dispatch(switchNetwork(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchNotSupportedNetwork = useCallback(() => {
-    dispatch(notSupportedNetwork());
-  }, [dispatch]);
-
-  const dispatchSetLensLoading = useCallback(
-    (payload: Web3Action['setLensLoading']) => {
-      dispatch(setLensLoading(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchRemoveAccessToken = useCallback(() => {
-    dispatch(setAccessToken({token: ''}));
-  }, [dispatch]);
-
-  const dispatchLogoutForest = useCallback(() => {
-    // dispatchRemoveAccessToken();
-    // dispatch(profileActions.resetCache());
-    // dispatch(nonceActions.resetCache());
-    // dispatch(signActions.resetCache());
-    dispatch(logoutAccount());
-  }, [dispatch]);
-
-  const dispatchSignWithForest = useCallback(() => {
-    dispatch(loginAccount());
-  }, [dispatch]);
-
-  const dispatchSetLensProfile = useCallback(
-    (payload: Web3Action['setLensProfile']) => {
-      dispatch(setLensProfile(payload));
-    },
-    [dispatch],
-  );
-
-  return {
-    web3,
-    dispatchSwitchNetwork,
-    dispatchNotSupportedNetwork,
-    dispatchSetLensLoading,
-    dispatchRemoveAccessToken,
-    dispatchSignWithForest,
-    dispatchLogoutForest,
-    dispatchSetLensProfile,
-  };
-}
-
-export const useConfig = () => useAppSelector(selectConfig);
-export const useRegularSaleContract = () => useAppSelector(selectRegularSaleContract);
-export const useForestFeedContract = () => useAppSelector(selectForestFeedContract);
-export const useDaiTokenContract = () => useAppSelector(selectDaiTokenContract);
-export const useAccessToken = () => useAppSelector(selectAccessToken);

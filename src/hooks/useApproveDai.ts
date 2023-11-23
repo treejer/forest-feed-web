@@ -2,8 +2,8 @@ import {useEffect, useState} from 'react';
 
 import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 import {PrepareWriteContractResult, WriteContractResult} from '@wagmi/core';
-
-import {useDaiTokenContract, useForestFeedContract} from '@forest-feed/redux/module/web3/web3.slice';
+import useDaiTokenContract from '@forest-feed/hooks/useDaiTokenContract';
+import useForestFeedContract from '@forest-feed/hooks/useForestFeedContract';
 
 export type UseApproveDaiParams = {
   onTxSuccess?: () => void;
@@ -17,7 +17,7 @@ export type UseApproveDaiParams = {
 
 export type UseApproveDaiReturnType = [(() => void) | undefined, boolean, boolean];
 
-export function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnType {
+export default function useApproveDai(params: UseApproveDaiParams): UseApproveDaiReturnType {
   const {
     amount,
     enabled = true,

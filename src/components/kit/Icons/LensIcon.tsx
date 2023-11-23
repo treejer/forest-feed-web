@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import {LensLogo} from 'public/assets/images';
 
-export function LensIcon() {
+export default function LensIcon() {
   return (
     <Image
       src={LensLogo}
@@ -11,6 +11,7 @@ export function LensIcon() {
       height={50}
       placeholder="blur"
       blurDataURL={LensLogo.blurDataURL}
+      loading="lazy"
     />
   );
 }

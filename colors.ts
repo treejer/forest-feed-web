@@ -23,7 +23,7 @@ export type Colors = {
   [key in Color]: string;
 };
 
-export const colors: Colors = {
+const colors: Colors = {
   khakiDark: '#E5E7DB',
   tableBorder: '#BDBDBD',
   lightGreen: '#D3E4D0',
@@ -43,3 +43,5 @@ export const colors: Colors = {
   primaryBg: '#faf8f1',
   black: '#000000',
 };
+
+export default colors;

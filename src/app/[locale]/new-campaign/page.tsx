@@ -2,24 +2,32 @@
 
 import React, {useCallback, useMemo} from 'react';
 
+import dynamic from 'next/dynamic';
 import {motion} from 'framer-motion';
-import {ProfileOwnedByMe, useActiveProfile} from '@lens-protocol/react-web';
+import {Hearts} from 'react-loader-spinner';
 
-import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
-import {Stepper} from '@forest-feed/components/kit/Stepper';
-import {TreeCost} from '@forest-feed/components/TreeCost/TreeCost';
-import {GeneralInfoStep} from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
-import {PledgeStep} from '@forest-feed/components/NewCampaignStepper/PledgeStep';
-import {
-  CampaignJourneyAction,
-  useCampaignJourney,
-} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
-import {useLensCreatePost} from '@forest-feed/hooks/useLensCreatePost';
-import {SubmissionStatusStep} from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
-import {PreviewStep} from '@forest-feed/components/NewCampaignStepper/PreviewStep';
-import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
+const AnimatedPage = dynamic(() => import('@forest-feed/components/kit/Animated/AnimatedPage'), {
+  loading: () => (
+    <div className={cn('flex w-full h-full justify-center items-center')}>
+      <Hearts />
+    </div>
+  ),
+  ssr: true,
+});
+import Stepper from '@forest-feed/components/kit/Stepper';
+import TreeCost from '@forest-feed/components/TreeCost/TreeCost';
+import GeneralInfoStep from '@forest-feed/components/NewCampaignStepper/GeneralInfoStep';
+import PledgeStep from '@forest-feed/components/NewCampaignStepper/PledgeStep';
+import type {CampaignJourneyAction} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import useCampaignJourney from '@forest-feed/hooks/useCampaignJourney';
+import AuthWrapper from '@forest-feed/components/AuthWrapper/AuthWrapper';
+import useLensCreatePost from '@forest-feed/hooks/useLensCreatePost';
+import SubmissionStatusStep from '@forest-feed/components/NewCampaignStepper/SubmissionStatusStep';
+import PreviewStep from '@forest-feed/components/NewCampaignStepper/PreviewStep';
+import useTokens from '@forest-feed/hooks/useToken';
 import {useScopedI18n} from '@forest-feed/locales/client';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import cn from '@forest-feed/utils/tailwind';
 
 function NewCampaignPage() {
   const {
@@ -35,11 +43,11 @@ function NewCampaignPage() {
     dispatchSetCampaignSize,
   } = useCampaignJourney();
 
-  const {data: activeProfile} = useActiveProfile();
+  const {
+    web3: {lensProfile},
+  } = useWeb3();
 
-  const {createLensPost, allLoading: createPostLoading} = useLensCreatePost({
-    publisher: activeProfile as ProfileOwnedByMe,
-  });
+  const {createLensPost, allLoading: createPostLoading, createdPubId, setCreatedPubId} = useLensCreatePost();
 
   const t = useScopedI18n('newCampaign.stepper');
 
@@ -104,9 +112,9 @@ function NewCampaignPage() {
   );
 
   return (
-    <AnimatedPage className="h-full">
-      <AuthWrapper className="grid grid-cols-6 gap-y-5 md:gap-10 h-full">
-        <div className="col-span-6 md:col-span-5">
+    <AnimatedPage className={cn('h-full')}>
+      <AuthWrapper className={cn('grid grid-cols-6 gap-y-5 md:gap-10 h-full')}>
+        <div className={cn('col-span-6 md:col-span-5')}>
           <Stepper
             isDependent
             disabled={disabledStepper}
@@ -144,7 +152,7 @@ function NewCampaignPage() {
               {
                 content: (
                   <PreviewStep
-                    activeProfile={activeProfile}
+                    activeProfile={lensProfile}
                     generalInfo={generalInfoState}
                     activeStep={campaignJourney.currentStep}
                     setActiveStep={dispatchSetCurrentStep}
@@ -159,7 +167,8 @@ function NewCampaignPage() {
                   <SubmissionStatusStep
                     onCreatePost={createLensPost}
                     createPostLoading={createPostLoading}
-                    activeProfile={activeProfile as ProfileOwnedByMe}
+                    createdPubId={createdPubId}
+                    setCreatedPubId={setCreatedPubId}
                   />
                 ),
                 title: t('finalize'),
@@ -172,7 +181,7 @@ function NewCampaignPage() {
           animate={{x: 0, opacity: 1}}
           exit={{x: 100, opacity: 0}}
           transition={{duration: 0.5}}
-          className="row-start-1 md:row-auto col-span-6 md:col-span-1"
+          className={cn('row-start-1 md:row-auto col-span-6 md:col-span-1')}
         >
           <TreeCost treeCount={campaignJourney.size} />
         </motion.div>

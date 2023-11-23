@@ -2,9 +2,7 @@
 
 import {ImageProps} from 'next/image';
 
-import {formatUrl} from '@forest-feed/utils/fotmatUrl';
-import {myCampaignsActions} from '@forest-feed/redux/module/campaign/myCampaigns';
-import {PaginationName} from '@forest-feed/redux/module/pagination/pagination.slice';
+import formatUrl from '@forest-feed/utils/fotmatUrl';
 
 export const projectName = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_NAME || '';
 export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID || '';
@@ -16,9 +14,7 @@ export const defaultChainId = 80001;
 
 export const paginationPageSize = 7;
 
-export const PaginationNameFetcher = {
-  [PaginationName.MyCampaigns]: myCampaignsActions.load,
-};
+export const PaginationNameFetcher = {};
 export enum ContractType {
   DAI = 'DAI',
   REGULAR_SALE = 'REGULAR_SALE',
@@ -68,8 +64,6 @@ export interface Config {
   [BlockchainNetwork.Polygon]: NetworkConfig;
   [BlockchainNetwork.Mumbai]: NetworkConfig;
 }
-
-export const isProd = process.env.NODE_ENV?.toLowerCase() === 'production';
 
 export const config: Config = {
   [BlockchainNetwork.Polygon]: {
@@ -184,11 +178,11 @@ export const storageKeys = {
   CAMPAIGN_DEPOSIT_SUCCEED: 'FOREST_FEED_STORAGE_CAMPAIGN_DEPOSIT_SUCCEED',
   CAMPAIGN_APPROVE_SUCCEED: 'FOREST_FEED_STORAGE_CAMPAIGN_APPROVE_SUCCEED',
   PUBLICATION_STATE: 'FOREST_FEED_STORAGE_PUBLICATION_STATE',
+  CREATED_PUBLICATION_ID: 'FOREST_FEED_CREATED_PUBLICATION_ID',
 };
 
 export enum SubmitCampaignSteps {
   CreatePost,
-  CheckPost,
   CheckAllowance,
   PrepareApprove,
   Approve,

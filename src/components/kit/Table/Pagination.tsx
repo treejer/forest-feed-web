@@ -1,8 +1,9 @@
 import React, {useMemo} from 'react';
 
-import {ChevronIcon, ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
+import ChevronIcon, {ChevronIconDirection} from '@forest-feed/components/kit/Icons/ChevronIcon';
+import RenderIf from '@forest-feed/components/common/RenderIf';
 import {paginationPageSize} from '@forest-feed/config';
+import cn from '@forest-feed/utils/tailwind';
 
 export type PaginationProps = {
   count?: number;
@@ -26,7 +27,7 @@ function range(start: number, end: number) {
   return Array.from({length}, (_, idx) => idx + start);
 }
 
-export function Pagination(props: PaginationProps) {
+export default function Pagination(props: PaginationProps) {
   const {count, currentPage, disabled, hidePrev, siblingCount = 1, onPrevPage, onNextPage, onLoadPage} = props;
 
   const paginationRange = useMemo(() => {
@@ -92,10 +93,10 @@ export function Pagination(props: PaginationProps) {
     'border rounded-full w-[32px] h-[32px] md:w-[36px] md:h-[36px] border-border flex items-center justify-center mx-2 first:ml-0 last:mr-0 text-sm md:text-lg';
 
   return (
-    <div className="flex items-end justify-end mt-5">
+    <div className={cn('flex items-end justify-end mt-5')}>
       <RenderIf condition={!hidePrev}>
         <RenderIf condition={currentPage !== 1}>
-          <button className={itemClassName} onClick={onPrevPage} disabled={disabled}>
+          <button className={cn(itemClassName)} onClick={onPrevPage} disabled={disabled}>
             <ChevronIcon direction={ChevronIconDirection.left} />
           </button>
         </RenderIf>
@@ -108,9 +109,10 @@ export function Pagination(props: PaginationProps) {
 
           return (
             <button
-              className={`${itemClassName} ${
-                pageNumber === currentPage ? 'bg-green/70 text-white disabled:opacity-100' : ' disabled:opacity-50'
-              }`}
+              className={cn(itemClassName, {
+                'bg-green/70 text-white disabled:opacity-100': pageNumber === currentPage,
+                'disabled:opacity-50': pageNumber !== currentPage,
+              })}
               key={`${pageNumber}-${index}-page`}
               onClick={() => onLoadPage(+pageNumber)}
               disabled={disabled || pageNumber === currentPage}
@@ -123,7 +125,7 @@ export function Pagination(props: PaginationProps) {
         <div className={itemClassName}>{currentPage}</div>
       )}
       <RenderIf condition={!count ? true : currentPage !== Math.ceil(count / paginationPageSize)}>
-        <button disabled={disabled} className={itemClassName} onClick={onNextPage}>
+        <button disabled={disabled} className={cn(itemClassName)} onClick={onNextPage}>
           <ChevronIcon direction={ChevronIconDirection.right} />
         </button>
       </RenderIf>

@@ -1,23 +1,26 @@
+'use client';
+
 import React, {useEffect, useMemo, useState} from 'react';
 
 import Link from 'next/link';
 
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {DaiIcon} from '@forest-feed/components/kit/Icons/DaiIcon';
-import {AssetSkeleton} from '@forest-feed/components/WalletAssets/AssetSkeleton';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {notEnoughBalance} from '@forest-feed/utils/sweetalert';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
-import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
+import Spacer from '@forest-feed/components/common/Spacer';
+import DaiIcon from '@forest-feed/components/kit/Icons/DaiIcon';
+import AssetSkeleton from '@forest-feed/components/WalletAssets/AssetSkeleton';
+import notEnoughBalance from '@forest-feed/utils/sweetalert';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import useCampaignJourney from '@forest-feed/hooks/useCampaignJourney';
+import useTokens from '@forest-feed/hooks/useToken';
 import {mumbaiBuyDaiUrl, mumbaiSwapDaiUrl, polygonBuyDaiUrl, polygonSwapDaiUrl} from '@forest-feed/config';
 import {useI18n} from '@forest-feed/locales/client';
+import cn from '@forest-feed/utils/tailwind';
+import useConfig from '@forest-feed/hooks/useConfig';
 
 export type WalletAssetsProps = {
   salePrice: number;
 };
 
-export function WalletAssets(props: WalletAssetsProps) {
+export default function WalletAssets(props: WalletAssetsProps) {
   const {salePrice} = props;
 
   const [balanceError, setBalanceError] = useState(false);
@@ -59,30 +62,30 @@ export function WalletAssets(props: WalletAssetsProps) {
 
   return (
     <div>
-      <span className="text-sm md:text-base">{t('newCampaign.assets.title')}</span>
-      <div className="border border-1 border-LightWhite w-full" />
+      <span className={cn('text-sm md:text-base')}>{t('newCampaign.assets.title')}</span>
+      <div className={cn('h-0.5 bg-lightWhite w-full')} />
       <Spacer />
       {loading ? (
         <AssetSkeleton />
       ) : (
         <>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center text-sm md:text-base">
+          <div className={cn('flex items-center justify-between')}>
+            <div className={cn('flex items-center text-sm md:text-base')}>
               <DaiIcon />
               <Spacer times={0.5} />
               <span>{t('newCampaign.assets.dai')}</span>
             </div>
             <Spacer times={2} />
-            <span className="text-sm lg:text-base text-green">{DAI}</span>
+            <span className={cn('text-sm lg:text-base text-green')}>{DAI}</span>
           </div>
           <RenderIf condition={balanceError}>
-            <p className="text-red text-xs">{t('newCampaign.assets.notEnough')}</p>
+            <p className={cn('text-red text-xs')}>{t('newCampaign.assets.notEnough')}</p>
             <Spacer />
             <ul>
               {exploreUrls.map(item => (
                 <li key={item.url}>
                   <Link
-                    className="wallet-assets-link"
+                    className={cn('wallet-assets-link')}
                     href={item.url}
                     {...(item.url === '#' ? {} : {target: '_blank'})}
                   >

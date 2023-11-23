@@ -3,7 +3,7 @@ import {Dispatch, SetStateAction, useCallback, useEffect, useMemo, useState} fro
 import {OperationVariables, useQuery} from '@apollo/client';
 import {paginationPageSize} from '@forest-feed/config';
 
-export function useQueryPagination<TQueryData, TVariables extends OperationVariables, TPersistedData>(
+export default function useQueryPagination<TQueryData, TVariables extends OperationVariables, TPersistedData>(
   Query: any,
   variables: TVariables,
   dataKey: string,

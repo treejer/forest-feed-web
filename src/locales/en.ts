@@ -12,6 +12,8 @@ export default {
   Mumbai: 'Mumbai',
   disconnect: 'Disconnect',
   copy: 'Copy',
+  cancel: 'Cancel',
+  close: 'Close',
   copied: 'Copied to clipboard!',
   hello: 'hello world',
   proceed: 'Proceed',
@@ -152,5 +154,9 @@ export default {
     notEnoughBalance: {
       title: "Your DAI balance isn't enough to create a campaign.",
     },
+  },
+  selectLensProfile: {
+    title: 'Select your profile',
+    emptyList: 'You have not any profile with this wallet',
   },
 } as const;

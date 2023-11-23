@@ -1,11 +1,13 @@
 import React from 'react';
 import {Inter} from 'next/font/google';
+import {Metadata} from 'next';
 
 import {Locale} from '@forest-feed/languages';
-import {AllTheProviders} from '@forest-feed/components/providers/AllTheProviders';
-import {Layout} from '@forest-feed/components/layout/Layout';
-import {HandleOnComplete} from '@forest-feed/lib/router-events';
+import AllTheProviders from '@forest-feed/components/providers/AllTheProviders';
+import Layout from '@forest-feed/components/layout/Layout';
+import HandleOnComplete from '@forest-feed/lib/router-events/wrapper';
 import {getScopedI18n} from '@forest-feed/locales/server';
+import cn from '@forest-feed/utils/tailwind';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -14,7 +16,7 @@ export type RootLayoutProps = {
   children: React.ReactNode;
 };
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   const t = await getScopedI18n('metadata');
 
   return {
@@ -30,7 +32,7 @@ export default async function LocaleLayout(props: RootLayoutProps) {
 
   return (
     <html lang={locale}>
-      <body className={`${inter.className} bg-primaryBg`} suppressHydrationWarning={true}>
+      <body className={cn(inter.className, 'bg-primaryBg')} suppressHydrationWarning={true}>
         <AllTheProviders locale={locale}>
           <Layout>{children}</Layout>
           <HandleOnComplete />

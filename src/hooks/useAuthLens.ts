@@ -4,9 +4,8 @@ import {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useAccount} from 'wagmi';
 
-import {useActiveProfile, useWalletLogin, useWalletLogout} from '@lens-protocol/react-web';
-import {showToast, ToastType} from '@forest-feed/utils/showToast';
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
+import {ProfileId, useLazyProfile, useLogin, useLogout} from '@lens-protocol/react-web';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
 
 export type LensStatus = {
   isSuccess: boolean;
@@ -17,7 +16,7 @@ export enum LensUnknownErrors {
   NoAccount = 1, // when login return success but profile is null
 }
 
-export function useAuthLens() {
+export default function useAuthLens() {
   const [loginStatus, setLoginStatus] = useState<LensStatus | null>(null);
   const [logoutStatus, setLogoutStatus] = useState<LensStatus | null>(null);
   const [unknownError, setUnknownError] = useState<LensUnknownErrors | null>(null);
@@ -34,20 +33,13 @@ export function useAuthLens() {
   } = useWeb3();
 
   const {address, isConnected} = useAccount();
-  const {execute: login, isPending: loginIsPending} = useWalletLogin();
-  const {execute: logout, isPending: logoutIsPending} = useWalletLogout();
-  const {data: lensProfile, loading: lensProfileLoading, error: lensProfileError} = useActiveProfile();
 
-  useEffect(() => {
-    if (!lensProfileLoading) {
-      dispatchSetLensProfile({profile: lensProfile});
-    }
-  }, [lensProfile]);
+  const {execute: login, loading: loginLoading} = useLogin();
+  const {execute: logout, loading: logoutLoading} = useLogout();
 
-  const loading = useMemo(
-    () => loginIsPending || logoutIsPending || lensProfileLoading,
-    [loginIsPending, logoutIsPending, lensProfileLoading],
-  );
+  const {execute: fetchProfile} = useLazyProfile();
+
+  const loading = useMemo(() => loginLoading || logoutLoading, [loginLoading, logoutLoading]);
 
   useEffect(() => {
     if (lensLoading !== loading) {
@@ -59,43 +51,36 @@ export function useAuthLens() {
     setUnknownError(null);
   }, [address, chainId]);
 
-  useEffect(() => {
-    if (!lensProfile && loginStatus?.isSuccess) {
-      setUnknownError(LensUnknownErrors.NoAccount);
-      showToast({
-        message: `lens.errors.${LensUnknownErrors.NoAccount}`,
-        translate: true,
-        type: ToastType.error,
-      });
-    }
-
-    return () => {
-      setUnknownError(null);
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loginStatus]);
-
-  const handleLensLogin = useCallback(async () => {
-    try {
-      setUnknownError(null);
-      if (address && isConnected) {
-        dispatchLogoutForest();
-        const {isSuccess, isFailure} = await login({
-          address,
-        });
-        const isSuccessValue = isSuccess();
-        const isFailureValue = isFailure();
-        setLoginStatus({isSuccess: isSuccessValue, isFailure: isFailureValue});
-        if (isSuccessValue) {
-          setLogoutStatus(null);
-          dispatchSignWithForest();
+  const handleLensLogin = useCallback(
+    async (profileId: ProfileId) => {
+      try {
+        setUnknownError(null);
+        if (address && isConnected) {
+          // dispatchLogoutForest();
+          const {isSuccess, isFailure} = await login({
+            address,
+            profileId,
+          });
+          const isSuccessValue = isSuccess();
+          const isFailureValue = isFailure();
+          setLoginStatus({isSuccess: isSuccessValue, isFailure: isFailureValue});
+          if (isSuccessValue) {
+            setLogoutStatus(null);
+            const result = await fetchProfile({
+              forProfileId: profileId,
+            });
+            if (result.isSuccess()) {
+              dispatchSetLensProfile({profile: result.value});
+              dispatchSignWithForest();
+            }
+          }
         }
+      } catch (e: any) {
+        console.log(e, 'error in login with lens');
       }
-    } catch (e: any) {
-      console.log(e, 'error in login with lens');
-    }
-  }, [address, isConnected, dispatchLogoutForest, login, dispatchSignWithForest]);
+    },
+    [address, isConnected, dispatchLogoutForest, login, fetchProfile, dispatchSetLensProfile, dispatchSignWithForest],
+  );
 
   const handleLensLogout = useCallback(
     async (inSaga?: boolean) => {
@@ -119,15 +104,12 @@ export function useAuthLens() {
   );
 
   return {
-    lensProfile,
-    lensProfileLoading,
-    lensProfileError,
     handleLensLogin,
     handleLensLogout,
     loginStatus,
     logoutStatus,
-    loginIsPending,
-    logoutIsPending,
+    loginLoading,
+    logoutLoading,
     unknownError,
     lensLoading,
   };

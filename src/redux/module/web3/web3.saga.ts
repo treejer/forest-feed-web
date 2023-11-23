@@ -1,4 +1,4 @@
-import {PayloadAction} from '@reduxjs/toolkit';
+import type {PayloadAction} from '@reduxjs/toolkit';
 import {put, select, take, takeEvery} from 'redux-saga/effects';
 import {
   getAccount,
@@ -8,7 +8,7 @@ import {
   watchAccount,
   watchNetwork,
 } from '@wagmi/core';
-import {ProfileOwnedByMe} from '@lens-protocol/react-web';
+import type {Profile} from '@lens-protocol/react-web';
 
 import {config as configs, defaultChainId, NetworkConfig, storageKeys} from '@forest-feed/config';
 import {selectConfig, selectLensProfile, selectWeb3} from '@forest-feed/redux/selectors';
@@ -26,6 +26,8 @@ import {
   checkAccount,
   loginAccount,
   logoutAccount,
+  removeSelectedProfileId,
+  setLensProfile,
 } from '@forest-feed/redux/module/web3/web3.slice';
 import {AppStore} from '@forest-feed/redux/store';
 import {nonceActions, nonceActionTypes} from '@forest-feed/redux/module/nonce/nonce';
@@ -36,7 +38,7 @@ import {resetCampaignJourney} from '@forest-feed/redux/module/campaignJourney/ca
 import {resetTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
 import {reactQueryClient} from '@forest-feed/components/providers/AllTheProviders';
 
-export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['startConfiguration']>) {
+function* watchStartConfiguration({payload}: PayloadAction<Web3Action['startConfiguration']>) {
   try {
     const {newNetwork, userInApp, onSuccess} = payload || {};
     let config: NetworkConfig = yield select(selectConfig);
@@ -56,9 +58,9 @@ export function* watchStartConfiguration({payload}: PayloadAction<Web3Action['st
   }
 }
 
-export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchNetwork']>) {
+function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchNetwork']>) {
   const {newNetwork, userInApp, onSuccess, lensLogout, inInit} = payload || {};
-  const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
+  const lensProfile: Profile = yield select(selectLensProfile);
   try {
     if (!userInApp && lensProfile && !inInit) {
       yield lensLogout?.(true);
@@ -69,12 +71,12 @@ export function* watchSwitchNetwork({payload}: PayloadAction<Web3Action['switchN
   }
 }
 
-export function* watchLoginAccount() {
+function* watchLoginAccount() {
   try {
     yield put(resetCampaignJourney(true));
     yield reactQueryClient.invalidateQueries();
-    yield reactQueryClient.removeQueries();
-    yield reactQueryClient.clear();
+    reactQueryClient.removeQueries();
+    reactQueryClient.clear();
     for (let key in storageKeys) {
       window.localStorage.removeItem(storageKeys[key]);
     }
@@ -93,17 +95,19 @@ export function* watchLoginAccount() {
   }
 }
 
-export function* watchLogoutAccount() {
+function* watchLogoutAccount() {
   try {
     yield put(setAccessToken({token: ''}));
+    yield put(removeSelectedProfileId());
+    yield put(setLensProfile({profile: null}));
     yield put(nonceActions.resetCache());
     yield put(signActions.resetCache());
     yield put(profileActions.resetCache());
     yield put(resetCampaignJourney(true));
     yield put(resetTokens());
     yield reactQueryClient.invalidateQueries();
-    yield reactQueryClient.removeQueries();
-    yield reactQueryClient.clear();
+    reactQueryClient.removeQueries();
+    reactQueryClient.clear();
     for (let key in storageKeys) {
       window.localStorage.removeItem(storageKeys[key]);
     }
@@ -112,13 +116,13 @@ export function* watchLogoutAccount() {
   }
 }
 
-export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAccount']>) {
+function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAccount']>) {
   const {account, lensLogout} = payload || {};
   const {address, accessToken}: Web3State = yield select(selectWeb3);
-  const lensProfile: ProfileOwnedByMe = yield select(selectLensProfile);
+  const lensProfile: Profile = yield select(selectLensProfile);
   try {
     if (!accessToken || address?.toLowerCase() !== account?.address?.toLowerCase()) {
-      if (lensProfile) yield lensLogout(true);
+      if (lensProfile) yield lensLogout?.(true);
       yield put(logoutAccount());
     }
     yield put(connectedWallet({address: account.address}));
@@ -127,7 +131,7 @@ export function* watchCheckAccount({payload}: PayloadAction<Web3Action['checkAcc
   }
 }
 
-export function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Action['watchCurrentWeb3']>) {
+function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Action['watchCurrentWeb3']>) {
   try {
     const {lensLogout} = payload || {};
     const config = yield select(selectConfig);
@@ -157,7 +161,7 @@ export function* watchWatchWeb3(store: AppStore, {payload}: PayloadAction<Web3Ac
   }
 }
 
-export function* web3Sagas(store: AppStore) {
+export default function* web3Sagas(store: AppStore) {
   yield takeEvery(startConfiguration.type, watchStartConfiguration);
   yield takeEvery(switchNetwork.type, watchSwitchNetwork);
   yield takeEvery(checkAccount.type, watchCheckAccount);

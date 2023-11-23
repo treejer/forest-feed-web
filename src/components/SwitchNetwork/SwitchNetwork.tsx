@@ -2,15 +2,16 @@ import React, {useCallback, useMemo} from 'react';
 
 import {ConnectButton} from '@rainbow-me/rainbowkit';
 
-import {DropDown, DropDownItem} from '@forest-feed/components/kit/DropDown';
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
+import DropDown, {DropDownItem} from '@forest-feed/components/kit/DropDown';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import useAuthLens from '@forest-feed/hooks/useAuthLens';
 import {BlockchainNetwork, networks} from '@forest-feed/config';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
+import useCampaignJourney from '@forest-feed/hooks/useCampaignJourney';
 import {useI18n} from '@forest-feed/locales/client';
+import cn from '@forest-feed/utils/tailwind';
 import {Color} from 'colors';
 
-export function SwitchNetwork() {
+export default function SwitchNetwork() {
   const {
     web3: {config, switching, isSupportedNetwork},
     dispatchSwitchNetwork,
@@ -42,7 +43,7 @@ export function SwitchNetwork() {
       {
         id: networks[BlockchainNetwork.Mumbai].network,
         text: t(`switchNetwork.${networks[BlockchainNetwork.Mumbai].title}` as any, {
-          text: <span className="ml-1 text-red">{t('switchNetwork.testnet')}</span>,
+          text: <span className={cn('ml-1 text-red')}>{t('switchNetwork.testnet')}</span>,
         }),
         image: networks[BlockchainNetwork.Mumbai].logo,
       },
@@ -57,7 +58,7 @@ export function SwitchNetwork() {
 
   return isSupportedNetwork ? (
     <DropDown
-      className="w-full"
+      className={cn('w-full')}
       bgColor={Color.primaryBg}
       selected={currentNetwork!}
       items={networksList}

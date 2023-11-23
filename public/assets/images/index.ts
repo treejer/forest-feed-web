@@ -15,7 +15,7 @@ import OriginalLensLogo from './originalLensLogo.png';
 import PolygonMatic from './Polygon-MATIC.svg';
 import TreePng from './tree.png';
 import TreeSvg from './tree.svg';
-import Trees from './trees.svg';
+import Trees from './trees.png';
 import NotFoundSvg from './404.svg';
 
 export {

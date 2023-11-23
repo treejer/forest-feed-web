@@ -10,15 +10,13 @@ import {
   CreateCampaignPayload,
   CreateCampaignRes,
 } from '@forest-feed/webServices/campaign/createCampaign';
-import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
-import {selectCreateCampaign} from '@forest-feed/redux/selectors';
 import {resetCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
 import {showSagaToast, ToastType} from '@forest-feed/utils/showToast';
 import {storageKeys} from '@forest-feed/config';
 
 const CreateCampaign = new ReduxFetchState<CreateCampaignRes, CreateCampaignPayload, string>('createCampaign');
 
-export function* watchCreateCampaign({payload}: CreateCampaignAction) {
+function* watchCreateCampaign({payload}: CreateCampaignAction) {
   try {
     const {campaignSize, title, isFollowerOnly, minFollower, publicationId, onSuccess} = payload || {};
     const res: FetchResult<CreateCampaignRes> = yield sagaFetch<CreateCampaignRes, CreateCampaignForm>('/campaign', {
@@ -50,31 +48,8 @@ export function* watchCreateCampaign({payload}: CreateCampaignAction) {
   }
 }
 
-export function* createCampaignSagas() {
+export default function* createCampaignSagas() {
   yield takeEvery(CreateCampaign.actionTypes.load, watchCreateCampaign);
-}
-
-export function useCreateCampaign() {
-  const {data: createCampaign, ...createCampaignState} = useAppSelector(selectCreateCampaign);
-  const dispatch = useAppDispatch();
-
-  const dispatchCreateCampaign = useCallback(
-    (payload: CreateCampaignPayload) => {
-      dispatch(CreateCampaign.actions.load(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchResetCreateCampaign = useCallback(() => {
-    dispatch(CreateCampaign.actions.resetCache());
-  }, [dispatch]);
-
-  return {
-    createCampaign,
-    ...createCampaignState,
-    dispatchCreateCampaign,
-    dispatchResetCreateCampaign,
-  };
 }
 
 export const {

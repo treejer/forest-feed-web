@@ -1,16 +1,14 @@
 'use client';
 
 import {configureChains, createConfig} from 'wagmi';
-import {GetAccountResult} from '@wagmi/core';
+import type {GetAccountResult} from '@wagmi/core';
 import {polygonMumbai, polygon} from 'wagmi/chains';
 import {getDefaultWallets, lightTheme} from '@rainbow-me/rainbowkit';
 import {publicProvider} from 'wagmi/providers/public';
 import {infuraProvider} from 'wagmi/providers/infura';
 
 import {infuraKey, projectId, projectName} from '@forest-feed/config';
-import {colors} from 'colors';
-
-export type ConnectionStatus = GetAccountResult['status'];
+import colors from 'colors';
 
 export const {chains, publicClient, webSocketPublicClient} = configureChains(
   [polygon, polygonMumbai],

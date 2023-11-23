@@ -3,13 +3,13 @@ import {useEffect, useState} from 'react';
 import {useContractWrite, usePrepareContractWrite, useWaitForTransaction} from 'wagmi';
 
 import {UseApproveDaiParams, UseApproveDaiReturnType} from '@forest-feed/hooks/useApproveDai';
-import {useForestFeedContract} from '@forest-feed/redux/module/web3/web3.slice';
+import useForestFeedContract from '@forest-feed/hooks/useForestFeedContract';
 
 export type UseDepositToForestFeedParams = UseApproveDaiParams;
 
 export type UseDepositToForestFeedReturnType = UseApproveDaiReturnType;
 
-export function useDepositToForestFeed(params: UseDepositToForestFeedParams): UseDepositToForestFeedReturnType {
+export default function useDepositToForestFeed(params: UseDepositToForestFeedParams): UseDepositToForestFeedReturnType {
   const {
     amount,
     enabled = true,

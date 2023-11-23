@@ -2,7 +2,7 @@ import {useEffect, RefObject} from 'react';
 
 type Handler = (event: MouseEvent | TouchEvent) => void;
 
-export function useOnClickOutSide<T extends Node>(ref: RefObject<T>, handler: Handler): void {
+export default function useOnClickOutSide<T extends Node>(ref: RefObject<T>, handler: Handler): void {
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent): void => {
       // Do nothing if clicking ref's element or descendent elements

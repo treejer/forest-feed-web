@@ -2,20 +2,30 @@
 
 import React, {useMemo} from 'react';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import moment from 'moment';
+import {Hearts} from 'react-loader-spinner';
 
-import {TableWrapper} from '@forest-feed/components/kit/Table/TableWrapper';
-import {RepostsBadge, RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
+const AnimatedPage = dynamic(() => import('@forest-feed/components/kit/Animated/AnimatedPage'), {
+  loading: () => (
+    <div className={cn('flex w-full h-full justify-center items-center')}>
+      <Hearts />
+    </div>
+  ),
+  ssr: true,
+});
+import TableWrapper from '@forest-feed/components/kit/Table/TableWrapper';
+import RepostsBadge, {RepostsStatus} from '@forest-feed/components/RepostsBadge/RepostsBadge';
 import {Campaign, CampaignStatus} from '@forest-feed/types/campaigns';
-import {CampaignActivation} from '@forest-feed/components/CampaignActivation/CampaignActivation';
-import {useMediaQuery} from '@forest-feed/hooks/useMediaQuery';
-import {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
-import {useQueryFetch} from '@forest-feed/hooks/useQueryFetch';
-import {useConfig} from '@forest-feed/redux/module/web3/web3.slice';
+import CampaignActivation from '@forest-feed/components/CampaignActivation/CampaignActivation';
+import useMediaQuery from '@forest-feed/hooks/useMediaQuery';
+import type {MyCampaignsRes} from '@forest-feed/webServices/campaign/myCampaigns';
+import useQueryFetch from '@forest-feed/hooks/useQueryFetch';
 import {useScopedI18n} from '@forest-feed/locales/client';
-import {AnimatedPage} from '@forest-feed/components/kit/Animated/AnimatedPage';
-import {AuthWrapper} from '@forest-feed/components/AuthWrapper/AuthWrapper';
+import AuthWrapper from '@forest-feed/components/AuthWrapper/AuthWrapper';
+import cn from '@forest-feed/utils/tailwind';
+import useConfig from '@forest-feed/hooks/useConfig';
 
 function MyCampaigns() {
   const {
@@ -61,7 +71,7 @@ function MyCampaigns() {
         accessor: 'publicationId',
         disableSortBy: true,
         Cell: ({value}) => (
-          <Link href={`${heyPublicationUrl}/${value}`} target="_blank" className="font-bold underline">
+          <Link href={`${heyPublicationUrl}/${value}`} target="_blank" className={cn('font-bold underline')}>
             {value}
           </Link>
         ),
@@ -107,8 +117,8 @@ function MyCampaigns() {
   );
 
   return (
-    <AnimatedPage className="h-full">
-      <AuthWrapper className="h-full">
+    <AnimatedPage className={cn('h-full')}>
+      <AuthWrapper className={cn('h-full')}>
         <TableWrapper<Campaign>
           initialState={{sortBy: [{id: 'createdAt', desc: true}]}}
           data={myCampaigns?.result.campaignList}

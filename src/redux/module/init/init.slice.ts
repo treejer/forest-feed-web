@@ -1,11 +1,6 @@
-import {useCallback} from 'react';
-
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {selectInit} from '@forest-feed/redux/selectors';
-import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
-
-export type InitState = {
+type InitState = {
   loading: boolean;
 };
 
@@ -13,11 +8,11 @@ export type InitAction = {
   init: {lensLogout: (isSaga?: boolean) => void};
 };
 
-export const initInitialState: InitState = {
+const initInitialState: InitState = {
   loading: true,
 };
 
-export const initSlice = createSlice({
+const initSlice = createSlice({
   name: 'init',
   initialState: initInitialState,
   reducers: {
@@ -32,25 +27,3 @@ export const initSlice = createSlice({
 
 export const {initApp, initAppCompleted} = initSlice.actions;
 export default initSlice.reducer;
-
-export function useInit() {
-  const initState = useAppSelector(selectInit);
-  const dispatch = useAppDispatch();
-
-  const dispatchInit = useCallback(
-    (payload: InitAction['init']) => {
-      dispatch(initApp(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchInitCompleted = useCallback(() => {
-    dispatch(initAppCompleted());
-  }, [dispatch]);
-
-  return {
-    initState,
-    dispatchInit,
-    dispatchInitCompleted,
-  };
-}

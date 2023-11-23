@@ -1,4 +1,4 @@
-export function photoToBase64(image: File): Promise<string | ArrayBuffer> {
+export default function photoToBase64(image: File): Promise<string | ArrayBuffer> {
   return new Promise((resolve, reject) => {
     try {
       const reader = new FileReader();

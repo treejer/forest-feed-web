@@ -8,7 +8,7 @@ export type ExitBeforeEnterProps = React.PropsWithChildren<{
   direction?: 'x' | 'y';
 }>;
 
-export function ExitBeforeEnter(props: ExitBeforeEnterProps) {
+export default function ExitBeforeEnter(props: ExitBeforeEnterProps) {
   const {animateKey, direction = 'y', initial = true, children} = props;
 
   return (

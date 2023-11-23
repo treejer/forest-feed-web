@@ -1,3 +1,5 @@
+'use client';
+
 import {Suspense, useEffect} from 'react';
 
 import {usePathname, useSearchParams} from 'next/navigation';
@@ -10,7 +12,7 @@ function HandleOnCompleteChild() {
   return null;
 }
 
-export function HandleOnComplete() {
+export default function HandleOnComplete() {
   return (
     <Suspense>
       <HandleOnCompleteChild />

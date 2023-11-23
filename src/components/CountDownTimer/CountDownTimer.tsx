@@ -3,6 +3,7 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import moment from 'moment/moment';
 
 import {checkTime, DAY, diffTimeInSec, HOUR, MINUTE, SECOND} from '@forest-feed/utils/time';
+import cn from '@forest-feed/utils/tailwind';
 
 export type CountDownTimerProps = {
   start?: string;
@@ -17,7 +18,7 @@ export type TimeState = {
   seconds: number;
 };
 
-export function CountDownTimer(props: CountDownTimerProps) {
+export default function CountDownTimer(props: CountDownTimerProps) {
   const {start, deadline, onEndTime} = props;
 
   const diffSec = useMemo(() => {
@@ -76,16 +77,16 @@ export function CountDownTimer(props: CountDownTimerProps) {
 
   return (
     <div>
-      <div className="flex items-center">
+      <div className={cn('flex items-center')}>
         {Object.entries(time).map(([label, value]) => {
           return hideCounter[label] ? null : (
             <React.Fragment key={label}>
-              <div className="col-4 flex items-center">
+              <div className={cn('col-4 flex items-center')}>
                 <div>
-                  <p className="text-white">{`${Math.floor(value)}`.padStart(2, '0')}</p>
+                  <p className={cn('text-white')}>{`${Math.floor(value)}`.padStart(2, '0')}</p>
                 </div>
               </div>
-              <span className="last:hidden mx-0.5">:</span>
+              <span className={cn('last:hidden mx-0.5')}>:</span>
             </React.Fragment>
           );
         })}

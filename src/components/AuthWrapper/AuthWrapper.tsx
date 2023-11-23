@@ -3,25 +3,27 @@ import React, {useCallback, useMemo} from 'react';
 import {useAccount} from 'wagmi';
 import {RotatingLines} from 'react-loader-spinner';
 
-import {useWeb3} from '@forest-feed/redux/module/web3/web3.slice';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {colors} from 'colors';
-
-import {useAuthLens} from '@forest-feed/hooks/useAuthLens';
-import {ConnectToUse} from '@forest-feed/components/AuthWrapper/ConnectToUse';
-import {useProfile} from '@forest-feed/redux/module/profile/profile';
-import {useInit} from '@forest-feed/redux/module/init/init.slice';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import ConnectToUse from '@forest-feed/components/AuthWrapper/ConnectToUse';
+import useWeb3 from '@forest-feed/hooks/useWeb3';
+import useAuthLens from '@forest-feed/hooks/useAuthLens';
+import useLensProfile from '@forest-feed/hooks/useLensProfile';
+import useInit from '@forest-feed/hooks/useInit';
+import useForestProfile from '@forest-feed/hooks/useForestProfile';
+import cn from '@forest-feed/utils/tailwind';
+import colors from 'colors';
 import './AuthWrapper.scss';
 
 export type AuthLoaderProps = {
   hideLoader: boolean;
 };
-export function AuthLoader(props: AuthLoaderProps) {
+
+function AuthLoader(props: AuthLoaderProps) {
   const {hideLoader = false} = props;
 
   return (
-    <div className="loader absolute inset-0 z-20">
-      <div className="w-full h-full flex items-center justify-center">
+    <div className={cn('loader absolute inset-0 z-20')}>
+      <div className={cn('w-full h-full flex items-center justify-center')}>
         <RotatingLines
           strokeColor={colors.lightGreen}
           strokeWidth="5"
@@ -39,7 +41,7 @@ export type AuthWrapperProps = React.PropsWithChildren<{
   disabled?: boolean;
 }>;
 
-export function AuthWrapper(props: AuthWrapperProps) {
+export default function AuthWrapper(props: AuthWrapperProps) {
   const {className, children, disabled} = props;
 
   const {address, isConnected, isConnecting} = useAccount();
@@ -47,9 +49,10 @@ export function AuthWrapper(props: AuthWrapperProps) {
     web3: {isSupportedNetwork, switching, forestLoading},
   } = useWeb3();
 
-  const {profile: forestProfile} = useProfile();
+  const {profile: forestProfile} = useForestProfile();
 
-  const {lensProfile, lensProfileLoading} = useAuthLens();
+  const {loginLoading} = useAuthLens();
+  const {data: lensProfile} = useLensProfile();
 
   const {initState} = useInit();
 
@@ -62,8 +65,8 @@ export function AuthWrapper(props: AuthWrapperProps) {
   }, []);
 
   const loading = useMemo(
-    () => initState.loading || isConnecting || switching || lensProfileLoading || forestLoading,
-    [forestLoading, initState.loading, isConnecting, lensProfileLoading, switching],
+    () => initState.loading || isConnecting || switching || loginLoading || forestLoading,
+    [forestLoading, initState.loading, isConnecting, loginLoading, switching],
   );
 
   const canAccessToApp = useMemo(
@@ -72,7 +75,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
   );
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={cn('relative', className)}>
       {renderLoader(loading, !!canAccessToApp && disabled)}
       {canAccessToApp ? children : <ConnectToUse />}
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from '@forest-feed/utils/tailwind';
 
 export enum RepostsStatus {
   active = 'active',
@@ -20,12 +21,15 @@ const className: VariantClassNames = {
   [RepostsStatus.stopped]: 'bg-red',
 };
 
-export function RepostsBadge(props: RepostsBadgeProps) {
+export default function RepostsBadge(props: RepostsBadgeProps) {
   const {min, max, status} = props;
 
   return (
     <span
-      className={`block border rounded-md w-[56px] lg:w-[96px] h-[28px] text-lg font-semibold text-white text-center ${className[status]}`}
+      className={cn(
+        'block border rounded-md w-[56px] lg:w-[96px] h-[28px] text-lg font-semibold text-white text-center',
+        className[status],
+      )}
     >
       {min}/{max}
     </span>

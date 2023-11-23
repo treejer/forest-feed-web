@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 
-import {useDebounce} from '@forest-feed/hooks/useDebounce';
+import useDebounce from '@forest-feed/hooks/useDebounce';
 
-export function usePersistState<T>(
+export default function usePersistState<T>(
   value: T,
   key: string,
   debounceTimer?: number,

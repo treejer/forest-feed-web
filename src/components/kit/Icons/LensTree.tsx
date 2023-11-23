@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import {LensTree as LensTreeImage} from 'public/assets/images/index';
 
-export function LensTree() {
+export default function LensTree() {
   return (
     <Image
       src={LensTreeImage}
@@ -10,6 +10,7 @@ export function LensTree() {
       height={23}
       placeholder="blur"
       blurDataURL={LensTreeImage.blurDataURL}
+      loading="lazy"
     />
   );
 }

@@ -9,8 +9,6 @@ import tokensReducer from '@forest-feed/redux/module/tokens/tokens.slice';
 import {nonceReducer} from '@forest-feed/redux/module/nonce/nonce';
 import {signReducer} from '@forest-feed/redux/module/sign/sign';
 import {profileReducer} from '@forest-feed/redux/module/profile/profile';
-import paginationReducer from '@forest-feed/redux/module/pagination/pagination.slice';
-import {myCampaignsReducer} from '@forest-feed/redux/module/campaign/myCampaigns';
 import {createCampaignReducer} from '@forest-feed/redux/module/campaign/createCampaign';
 
 export const combinedReducers = combineReducers({
@@ -21,8 +19,6 @@ export const combinedReducers = combineReducers({
   sign: signReducer,
   appInfo: appInfoReducer,
   profile: profileReducer,
-  pagination: paginationReducer,
-  myCampaigns: myCampaignsReducer,
   createCampaign: createCampaignReducer,
   tokens: tokensReducer,
 });

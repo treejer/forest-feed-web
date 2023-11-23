@@ -1,5 +1,6 @@
-import {ToastType} from '@forest-feed/utils/showToast';
+import type {ToastType} from '@forest-feed/utils/showToast';
 import {useI18n} from '@forest-feed/locales/client';
+import cn from '@forest-feed/utils/tailwind';
 
 export type CustomToastProps<T = any, V = any> = {
   title?: string;
@@ -14,7 +15,7 @@ export type CustomToastProps<T = any, V = any> = {
 
 const possibleColors = ['text-error', 'text-success'];
 
-export function CustomToast<T = any, V = any>(props: CustomToastProps<T, V>) {
+export default function CustomToast<T = any, V = any>(props: CustomToastProps<T, V>) {
   const {title, message, type, translate, variables} = props;
 
   const t = useI18n();
@@ -22,9 +23,13 @@ export function CustomToast<T = any, V = any>(props: CustomToastProps<T, V>) {
   return (
     <div>
       {title ? (
-        <p className={`text-md text-${type}`}>{translate ? t(title as any, variables?.title || {}) : title}</p>
+        <p className={cn(`text-md text-${type}`)}>{translate ? t(title as any, variables?.title || {}) : title}</p>
       ) : null}
-      <p className={`text-sm ${!title ? `text-${type}` : ''}`}>
+      <p
+        className={cn('text-sm', {
+          [`text-${type}`]: !title,
+        })}
+      >
         {translate ? t(message as any, variables?.message || {}) : message}
       </p>
     </div>

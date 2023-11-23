@@ -1,9 +1,10 @@
 import React from 'react';
 import {Circles} from 'react-loader-spinner';
 
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {colors} from 'colors';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import Spacer from '@forest-feed/components/common/Spacer';
+import cn from '@forest-feed/utils/tailwind';
+import colors from 'colors';
 
 export enum ButtonVariant {
   primary = 'primary',
@@ -37,11 +38,11 @@ const classNames: (autoSize: boolean) => VariantClassNames = autoSize => ({
   } bg-primaryGreen text-white text-lg font-medium disabled:bg-primaryGreen/60`,
   [ButtonVariant.menu]: `${
     autoSize ? 'h-10 w-[104px] lg:h-[48px] lg:w-[100%]' : ''
-  } bg-activeGray border-activeGray border-2 text-sm font-normal disabled:bg-activeGray/60`,
+  } bg-activeGray border-activeGray border-2 text-sm font-normal disabled:opacity-70`,
   [ButtonVariant.text]: `${autoSize ? 'w-[100%] h-10 lg:h-14' : ''} text-sm disabled:bg-opacity/50`,
 });
 
-export function Button(props: ButtonProps) {
+export default function Button(props: ButtonProps) {
   const {
     variant = ButtonVariant.primary,
     autoSize = true,
@@ -56,9 +57,11 @@ export function Button(props: ButtonProps) {
 
   return (
     <button
-      className={`rounded-[8px] flex items-center justify-center hover:shadow-lg transition-all text-sm md:text-base ${
-        classNames(autoSize)[variant]
-      } ${className}`}
+      className={cn(
+        'rounded-[8px] flex items-center justify-center hover:shadow-lg transition-all text-sm md:text-base',
+        classNames(autoSize)[variant],
+        className,
+      )}
       disabled={disabled}
       onClick={onClick}
       type={type}

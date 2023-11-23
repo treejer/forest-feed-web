@@ -1,10 +1,11 @@
 import React, {useCallback, useTransition} from 'react';
 
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
 import {languages, Locale} from '@forest-feed/languages';
 import {useChangeLocale, useCurrentLocale} from '@forest-feed/locales/client';
+import cn from '@forest-feed/utils/tailwind';
 
-export function ChangeLanguage() {
+export default function ChangeLanguage() {
   const [isPending, startTransition] = useTransition();
 
   const locale = useCurrentLocale();
@@ -20,14 +21,14 @@ export function ChangeLanguage() {
   );
 
   return (
-    <div className="flex items-center">
+    <div className={cn('flex items-center')}>
       {languages.map(language => {
         return (
           <Button
             key={language.locale}
-            className={`rounded-none first:rounded-l-[8px] last:rounded-r-[8px] w-[48px] ${
-              locale === language.locale ? 'bg-primaryGreen text-white' : ''
-            }`}
+            className={cn('rounded-none first:rounded-l-[8px] last:rounded-r-[8px] w-[48px]', {
+              'bg-primaryGreen text-white': locale === language.locale,
+            })}
             disabled={isPending}
             text={language.locale}
             variant={ButtonVariant.menu}

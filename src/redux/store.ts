@@ -70,4 +70,5 @@ export const wrapper = createWrapper(() => makeStore().store, {
   deserializeState: state => JSON.parse(state),
 });
 
-export const {store, persistor} = makeStore();
+const redux = makeStore();
+export default redux;

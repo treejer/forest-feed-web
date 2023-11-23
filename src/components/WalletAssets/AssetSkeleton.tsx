@@ -1,21 +1,22 @@
 import Skeleton, {SkeletonTheme} from 'react-loading-skeleton';
+import cn from '@forest-feed/utils/tailwind';
 
 export type AssetSkeletonProps = {
   count?: number;
 };
 
-export function AssetSkeleton(props: AssetSkeletonProps) {
+export default function AssetSkeleton(props: AssetSkeletonProps) {
   const {count = 1} = props;
 
   return (
     <SkeletonTheme>
       <div>
         {Array.from(Array(count).keys()).map(item => (
-          <div key={item} className="flex items-center justify-between">
-            <div className="flex items-center">
+          <div key={item} className={cn('flex items-center justify-between')}>
+            <div className={cn('flex items-center')}>
               <Skeleton width={64} height={30} />
             </div>
-            <div className="flex items-center">
+            <div className={cn('flex items-center')}>
               <Skeleton width={32} height={30} />
             </div>
           </div>

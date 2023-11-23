@@ -1,5 +1,6 @@
 import React from 'react';
 
+import cn from '@forest-feed/utils/tailwind';
 import './Checkbox.css';
 
 export type CheckBoxProps = {
@@ -11,14 +12,14 @@ export type CheckBoxProps = {
   label?: string;
 };
 
-export function Checkbox(props: CheckBoxProps) {
+export default function Checkbox(props: CheckBoxProps) {
   const {text, checked, disabled, onChange, onBlur} = props;
 
   return (
-    <label className="container-checkbox">
-      <span className="text-sm md:text-lg">{text}</span>
+    <label className={cn('container-checkbox')}>
+      <span className={cn('text-sm md:text-lg')}>{text}</span>
       <input type="checkbox" checked={checked} onChange={onChange} onBlur={onBlur} disabled={disabled} />
-      <span className="checkmark"></span>
+      <span className={cn('checkmark')}></span>
     </label>
   );
 }

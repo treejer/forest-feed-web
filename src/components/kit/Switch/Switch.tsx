@@ -1,6 +1,7 @@
 import React from 'react';
 
 import './Switch.css';
+import cn from '@forest-feed/utils/tailwind';
 
 export type SwitchProps = {
   id: string;
@@ -10,16 +11,16 @@ export type SwitchProps = {
   containerClassName?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-export function Switch(props: SwitchProps) {
+export default function Switch(props: SwitchProps) {
   const {id, label, labelClassName, containerClassName, className, loading, disabled, ...restProps} = props;
 
   return (
-    <div className={`flex items-center ${disabled ? 'opacity-50' : ''}`}>
-      <div className={`switch ${containerClassName} ${loading ? 'loading-switch' : ''}`}>
+    <div className={cn('flex items-center', {'opacity-50': disabled})}>
+      <div className={cn('switch', containerClassName, {'loading-switch': loading})}>
         <input {...restProps} disabled={loading || disabled} type="checkbox" id={id} />
         <label htmlFor={id} />
       </div>
-      {label ? <span className={`text-sm md:text-base ${labelClassName}`}>{label}</span> : null}
+      {label ? <span className={cn('text-sm md:text-base', labelClassName)}>{label}</span> : null}
     </div>
   );
 }

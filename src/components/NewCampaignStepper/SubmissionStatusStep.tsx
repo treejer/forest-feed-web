@@ -2,43 +2,37 @@
 
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {useQuery} from '@apollo/client';
-import {ProfileId, ProfileOwnedByMe} from '@lens-protocol/react-web';
 import {CheckIcon, XIcon} from '@heroicons/react/solid';
 import {Circles} from 'react-loader-spinner';
 import {BigNumberish} from 'ethers';
 
 import {useRouter} from '@forest-feed/lib/router-events';
-import {useApproveDai} from '@forest-feed/hooks/useApproveDai';
-import {useDepositToForestFeed} from '@forest-feed/hooks/useDepositToForestFeed';
-import {useRegularSale} from '@forest-feed/hooks/useRegularSale';
-import {useCreateCampaign} from '@forest-feed/redux/module/campaign/createCampaign';
-import {useTokens} from '@forest-feed/redux/module/tokens/tokens.slice';
-import {usePersistState} from '@forest-feed/hooks/usePersistState';
-import {useAllowanceDaiInForestFeed} from '@forest-feed/hooks/useAllowanceDaiInForestFeed';
-import {useCampaignJourney} from '@forest-feed/redux/module/campaignJourney/campaignJourney.slice';
-import {Button, ButtonVariant} from '@forest-feed/components/kit/Button';
-import {Spacer} from '@forest-feed/components/common/Spacer';
-import {RenderIf} from '@forest-feed/components/common/RenderIf';
-import {publicationIds, publicationIdsVariables} from '@forest-feed/constants/graphQl/publicationIds';
-import {CountDownTimer} from '@forest-feed/components/CountDownTimer/CountDownTimer';
+import useApproveDai from '@forest-feed/hooks/useApproveDai';
+import useDepositToForestFeed from '@forest-feed/hooks/useDepositToForestFeed';
+import useRegularSale from '@forest-feed/hooks/useRegularSale';
+import usePersistState from '@forest-feed/hooks/usePersistState';
+import useAllowanceDaiInForestFeed from '@forest-feed/hooks/useAllowanceDaiInForestFeed';
+import Button, {ButtonVariant} from '@forest-feed/components/kit/Button';
+import Spacer from '@forest-feed/components/common/Spacer';
+import RenderIf from '@forest-feed/components/common/RenderIf';
+import CountDownTimer from '@forest-feed/components/CountDownTimer/CountDownTimer';
+import useCampaignJourney from '@forest-feed/hooks/useCampaignJourney';
+import useTokens from '@forest-feed/hooks/useToken';
+import useCreateCampaign from '@forest-feed/hooks/useCreateCampaign';
+import cn from '@forest-feed/utils/tailwind';
+import colors from 'colors';
 import {storageKeys, SubmitCampaignSteps} from '@forest-feed/config';
 import {useScopedI18n} from '@forest-feed/locales/client';
-import {colors} from 'colors';
-
-export type TPublicationState = {
-  publicationId: string;
-  succeed: boolean;
-};
 
 export type SubmissionStatusStepProps = {
-  activeProfile: ProfileOwnedByMe;
+  createdPubId: string | null;
+  setCreatedPubId: React.Dispatch<React.SetStateAction<string | null>>;
   onCreatePost: () => void;
   createPostLoading: boolean;
 };
 
-export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
-  const {onCreatePost, createPostLoading, activeProfile} = props;
+export default function SubmissionStatusStep(props: SubmissionStatusStepProps) {
+  const {createPostLoading, createdPubId, setCreatedPubId, onCreatePost} = props;
 
   const {
     campaignJourney: {submissionLoading, submissionError, submissionActiveStep, ...campaignJourney},
@@ -56,22 +50,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const [depositTime, setDepositTime] = usePersistState<Date | null>(null, storageKeys.CAMPAIGN_DEPOSIT_SUCCEED);
   const [delay, setDelay] = usePersistState<boolean>(true, storageKeys.CAMPAIGN_DELAY);
 
-  const [checkTime, setCheckTime] = useState(0);
-
-  const [publicationState, setPublicationState] = usePersistState<TPublicationState>(
-    {
-      publicationId: '',
-      succeed: false,
-    },
-    storageKeys.PUBLICATION_STATE,
-  );
-
   const router = useRouter();
-
-  const {data: publicationQueryData, refetch} = useQuery(publicationIds, {
-    variables: publicationIdsVariables(activeProfile?.id as ProfileId, 1),
-    context: {clientName: 'lens'},
-  });
 
   const {dispatchCheckBalance} = useTokens({
     didMount: false,
@@ -155,12 +134,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDepositTime(null);
     setApproveSucceed(false);
     setSubmitPressed(false);
-    setPublicationState({
-      publicationId: '',
-      succeed: false,
-    });
+    setCreatedPubId(null);
     router.push('/my-campaigns');
-  }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, setPublicationState, router]);
+  }, [setTitle, setDelay, setTitleError, setDepositTime, setApproveSucceed, setCreatedPubId, router]);
 
   useAllowanceDaiInForestFeed({
     onSuccess: handleSuccessAllowance,
@@ -187,7 +163,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   });
 
   const handleConfirmTitle = useCallback(() => {
-    if (!title) {
+    if (!title || !createdPubId) {
       setTitleError(true);
       return;
     }
@@ -200,7 +176,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       minFollower: campaignJourney.reward.minimumFollowerNumber,
       isFollowerOnly: campaignJourney.reward.onlyFollowers,
       campaignSize: campaignJourney.size,
-      publicationId: publicationState.publicationId,
+      publicationId: createdPubId,
       onSuccess: handleSuccessCreateCampaign,
       onFailure: handleErrorInProcess,
     });
@@ -211,7 +187,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     campaignJourney.reward.minimumFollowerNumber,
     campaignJourney.reward.onlyFollowers,
     campaignJourney.size,
-    publicationState.publicationId,
+    createdPubId,
     handleSuccessCreateCampaign,
     handleErrorInProcess,
     setTitleError,
@@ -221,52 +197,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setSubmitPressed(true);
     onCreatePost();
   }, [onCreatePost]);
-
-  const handleCheckPublication = useCallback(async () => {
-    try {
-      const checkWith = publicationQueryData?.publications?.items?.[0]?.id;
-      console.log({
-        oldID: publicationState.publicationId,
-        newID: checkWith,
-      });
-      if (!publicationState.publicationId || !checkWith) {
-        await refetch();
-        setPublicationState(prevState => ({
-          ...prevState,
-          publicationId: checkWith || prevState.publicationId,
-        }));
-        if (!publicationState.publicationId) setCheckTime(prevState => prevState + 1);
-      } else {
-        setSubmitPressed(true);
-        if (publicationState.publicationId === checkWith) {
-          await refetch();
-          setPublicationState(prevState => ({
-            ...prevState,
-            succeed: false,
-          }));
-          setCheckTime(prevState => prevState + 1);
-        } else {
-          setPublicationState({
-            publicationId: checkWith,
-            succeed: true,
-          });
-          dispatchSetSubmissionState({
-            activeStep: SubmitCampaignSteps.CheckAllowance,
-            error: false,
-            loading: true,
-          });
-        }
-      }
-    } catch (e: any) {
-      console.log(e, 'error in check publication');
-      setSubmitPressed(false);
-      dispatchSetSubmissionState({
-        error: true,
-        loading: false,
-        activeStep: SubmitCampaignSteps.CheckPost,
-      });
-    }
-  }, [publicationQueryData, publicationState.publicationId, refetch, setPublicationState, dispatchSetSubmissionState]);
 
   const handleStartCreateCampaign = useCallback(
     (byUser: boolean = false) => {
@@ -283,9 +213,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           handleConfirmTitle();
         }
       }
-      if (submissionActiveStep === SubmitCampaignSteps.CheckPost) {
-        (async () => await handleCheckPublication())();
-      }
       if (submissionActiveStep === SubmitCampaignSteps.Approve) {
         approveDaiMethod?.();
       }
@@ -297,7 +224,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       submissionActiveStep,
       dispatchSetSubmissionState,
       onCreatePost,
-      handleCheckPublication,
       handleConfirmTitle,
       approveDaiMethod,
       depositMethod,
@@ -320,16 +246,6 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (
-      (submissionActiveStep < SubmitCampaignSteps.CheckAllowance && !publicationState.publicationId) ||
-      submissionActiveStep === SubmitCampaignSteps.CheckPost
-    ) {
-      (async () => await handleCheckPublication())();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkTime]);
-
   const handleCancelSubmission = useCallback(() => {
     dispatchCancelCampaignCreation();
     setTitle('');
@@ -338,10 +254,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDepositTime(null);
     setApproveSucceed(false);
     setSubmitPressed(false);
-    setPublicationState({
-      publicationId: '',
-      succeed: false,
-    });
+    setCreatedPubId(null);
   }, [
     dispatchCancelCampaignCreation,
     setTitle,
@@ -349,7 +262,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
     setDelay,
     setDepositTime,
     setApproveSucceed,
-    setPublicationState,
+    setCreatedPubId,
   ]);
 
   const handleChangeTitle = useCallback(
@@ -398,9 +311,9 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
   const stepIcon = useCallback(
     (step: number) => {
       return step < submissionActiveStep ? (
-        <CheckIcon className="w-3 h-3 md:w-5 md:h-5 text-green" />
+        <CheckIcon className={cn('w-3 h-3 md:w-5 md:h-5 text-green')} />
       ) : step === submissionActiveStep && submissionError ? (
-        <XIcon className="w-3 h-3 md:w-5 md:h-5 text-red" />
+        <XIcon className={cn('w-3 h-3 md:w-5 md:h-5 text-red')} />
       ) : (
         ''
       );
@@ -431,16 +344,16 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         !submissionLoading &&
         submissionActiveStep === SubmitCampaignSteps.Finalize &&
         step === SubmitCampaignSteps.Finalize ? (
-        <div className="flex flex-col relative">
+        <div className={cn('flex flex-col relative')}>
           <input
-            className="border border-border outline-none p-1 rounded-[5px] ml-2 text-green"
+            className={cn('border border-border outline-none p-1 rounded-[5px] ml-2 text-green')}
             type="text"
             value={title}
             onFocus={handleFocusInput}
             onChange={handleChangeTitle}
           />
           {titleError ? (
-            <span className="text-xs md:text-sm text-red ml-2 absolute -bottom-5 left-2">{t('titleError')}</span>
+            <span className={cn('text-xs md:text-sm text-red ml-2 absolute -bottom-5 left-2')}>{t('titleError')}</span>
           ) : null}
         </div>
       ) : null;
@@ -491,35 +404,42 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
 
   return (
     <div>
-      <div className="mb-5">
-        <p className="text-lg md:text-xl font-bold">{t(pageTitle)}</p>
-        <p className={`text-sm font-light ${submissionError ? 'text-red' : 'text-secondary'}`}>{t(pageDesc)}</p>
+      <div className={cn('mb-5')}>
+        <p className={cn('text-lg md:text-xl font-bold')}>{t(pageTitle)}</p>
+        <p
+          className={cn('text-sm font-light text-secondary', {
+            'text-red': submissionError,
+          })}
+        >
+          {t(pageDesc)}
+        </p>
       </div>
-      <div className="flex flex-col md:flex-row md:items-center justify-between">
+      <div className={cn('flex flex-col md:flex-row md:items-center justify-between')}>
         <ul>
           {steps.map(step => (
-            <li key={step.key} className="flex items-center mb-2">
-              <div className="p-1">
+            <li key={step.key} className={cn('flex items-center mb-2')}>
+              <div className={cn('p-1')}>
                 <div
-                  className={`w-6 h-6 md:w-8 md:h-8 rounded-full flex justify-center items-center border-2 ${stepDynamicClassNames(
-                    step.key,
-                  )}`}
+                  className={cn(
+                    'w-6 h-6 md:w-8 md:h-8 rounded-full flex justify-center items-center border-2',
+                    stepDynamicClassNames(step.key),
+                  )}
                 >
                   {stepIcon(step.key)}
                 </div>
               </div>
               <Spacer />
               <div>
-                <p className="text-sm md:text-base">{t(step.text as any)}</p>
-                <div className="flex items-center">
-                  <p className="text-xs md:text-sm text-secondary text-align">{t(step.desc as any)}</p>
+                <p className={cn('text-sm md:text-base')}>{t(step.text as any)}</p>
+                <div className={cn('flex items-center')}>
+                  <p className={cn('text-xs md:text-sm text-secondary text-align')}>{t(step.desc as any)}</p>
                   {titleCampaignInput(step.key)}
                 </div>
               </div>
             </li>
           ))}
         </ul>
-        <div className="flex justify-center mt-3 md:mt-0 md:block">
+        <div className={cn('flex justify-center mt-3 md:mt-0 md:block')}>
           <Circles
             height="80"
             width="80"
@@ -544,18 +464,18 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
           ].includes(submissionActiveStep)
         }
       >
-        <div className="flex flex-col items-end justify-center">
+        <div className={cn('flex flex-col items-end justify-center')}>
           <Button
             text={t('continue')}
             onClick={() => handleStartCreateCampaign(true)}
             variant={ButtonVariant.secondary}
           />
-          <span className="text-right text-red text-xs md:text-sm">{t('pleaseReject')}</span>
+          <span className={cn('text-right text-red text-xs md:text-sm')}>{t('pleaseReject')}</span>
         </div>
       </RenderIf>
       <RenderIf condition={!submissionError && submissionActiveStep === SubmitCampaignSteps.CreatePost}>
         <Spacer times={5} />
-        <div className="flex justify-end items-center">
+        <div className={cn('flex justify-end items-center')}>
           <Button
             text={t('submit')}
             onClick={handleCreatePost}
@@ -569,7 +489,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
         condition={!submissionError && submissionActiveStep === SubmitCampaignSteps.Finalize && !submissionLoading}
       >
         <Spacer times={5} />
-        <div className="flex justify-end items-center">
+        <div className={cn('flex justify-end items-center')}>
           <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
           <Spacer />
           <Button
@@ -583,7 +503,7 @@ export function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       </RenderIf>
       <RenderIf condition={submissionError}>
         <Spacer times={5} />
-        <div className="flex justify-end items-center">
+        <div className={cn('flex justify-end items-center')}>
           <>
             <Button text={t('cancel')} onClick={handleCancelSubmission} variant={ButtonVariant.primary} />
             <Spacer />

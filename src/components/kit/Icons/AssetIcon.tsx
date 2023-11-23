@@ -9,7 +9,7 @@ export type AssetIconProps = {
   avatar?: string;
 };
 
-export function AssetIcon(props: AssetIconProps) {
+export default function AssetIcon(props: AssetIconProps) {
   const {loggedIn, avatar} = props;
 
   const src = useMemo(() => (loggedIn ? avatar || NoPicture : Asset), [avatar, loggedIn]);

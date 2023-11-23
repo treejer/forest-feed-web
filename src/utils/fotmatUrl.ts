@@ -1,3 +1,3 @@
-export function formatUrl(url?: string) {
+export default function formatUrl(url?: string) {
   return url ? url?.replace(/\/$/, '') : '';
 }

@@ -1,6 +1,6 @@
 import {toast} from 'react-toastify';
 
-import {CustomToast} from '@forest-feed/components/kit/CustomToast';
+import CustomToast from '@forest-feed/components/kit/CustomToast';
 
 export enum ToastType {
   success = 'success',

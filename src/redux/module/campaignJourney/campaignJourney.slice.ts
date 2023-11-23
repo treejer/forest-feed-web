@@ -1,9 +1,4 @@
-import {useCallback} from 'react';
-
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-
-import {useAppDispatch, useAppSelector} from '@forest-feed/hooks/redux';
-import {selectCampaignJourney} from '@forest-feed/redux/selectors';
 import {SubmitCampaignSteps} from '@forest-feed/config';
 
 export type CampaignJourneyState = {
@@ -46,7 +41,7 @@ export type CampaignJourneyAction = {
   removeTermsAndConditions?: boolean;
 };
 
-export const campaignJourneyInitialState: CampaignJourneyState = {
+const campaignJourneyInitialState: CampaignJourneyState = {
   disableForm: false,
   content: '',
   image: null,
@@ -67,7 +62,7 @@ export const campaignJourneyInitialState: CampaignJourneyState = {
   submissionError: false,
 };
 
-export const campaignJourneySlice = createSlice({
+const campaignJourneySlice = createSlice({
   name: 'campaignJourney',
   initialState: campaignJourneyInitialState,
   reducers: {
@@ -163,105 +158,5 @@ export const {
   setSubmissionState,
   approveReview,
 } = campaignJourneySlice.actions;
-
-export const useCampaignJourney = () => {
-  const campaignJourney = useAppSelector(selectCampaignJourney);
-  const dispatch = useAppDispatch();
-
-  const dispatchApproveGeneralInfo = useCallback(
-    (payload: CampaignJourneyAction['approveGeneralInfo']) => {
-      dispatch(approveGeneralInfo(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchApprovePledge = useCallback(() => {
-    dispatch(setCurrentStep(2));
-  }, [dispatch]);
-
-  const dispatchSetCurrentStep = useCallback(
-    (payload: CampaignJourneyAction['setCurrentStep']) => {
-      dispatch(setCurrentStep(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchSetCanBeCollected = useCallback(() => {
-    dispatch(setCanBeCollected());
-  }, [dispatch]);
-
-  const dispatchSetCanBeCollectedOnlyFollowers = useCallback(() => {
-    dispatch(setCanBeCollectedOnlyFollowers());
-  }, [dispatch]);
-
-  const dispatchSetOnlyFollowers = useCallback(() => {
-    dispatch(setOnlyFollowers());
-  }, [dispatch]);
-
-  const dispatchSetMinimumFollowerNumber = useCallback(
-    (payload: CampaignJourneyAction['setMinimumFollowerNumber']) => {
-      dispatch(setMinimumFollowerNumber(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchResetCampaignJourney = useCallback(
-    (payload?: CampaignJourneyAction['removeTermsAndConditions']) => {
-      dispatch(resetCampaignJourney(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchSetDisableForm = useCallback(
-    (payload: CampaignJourneyAction['setDisableForm']) => {
-      dispatch(setDisableForm(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchSetCampaignSize = useCallback(
-    (payload: CampaignJourneyAction['setCampaignSize']) => {
-      dispatch(setCampaignSize(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchSetSubmissionState = useCallback(
-    (payload: CampaignJourneyAction['setSubmissionState']) => {
-      dispatch(setSubmissionState(payload));
-    },
-    [dispatch],
-  );
-
-  const dispatchApproveReview = useCallback(() => {
-    dispatch(approveReview());
-  }, [dispatch]);
-
-  const dispatchCancelCampaignCreation = useCallback(() => {
-    dispatchSetCurrentStep(0);
-    dispatchSetSubmissionState({
-      error: false,
-      loading: false,
-      activeStep: SubmitCampaignSteps.CreatePost,
-    });
-  }, [dispatchSetCurrentStep, dispatchSetSubmissionState]);
-
-  return {
-    campaignJourney,
-    dispatchApproveGeneralInfo,
-    dispatchApprovePledge,
-    dispatchSetCurrentStep,
-    dispatchSetCanBeCollected,
-    dispatchSetCanBeCollectedOnlyFollowers,
-    dispatchSetOnlyFollowers,
-    dispatchSetMinimumFollowerNumber,
-    dispatchResetCampaignJourney,
-    dispatchSetDisableForm,
-    dispatchSetCampaignSize,
-    dispatchSetSubmissionState,
-    dispatchApproveReview,
-    dispatchCancelCampaignCreation,
-  };
-};
 
 export default campaignJourneySlice.reducer;

@@ -2,7 +2,7 @@
 
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {CheckIcon, XIcon} from '@heroicons/react/solid';
+import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
 import {Circles} from 'react-loader-spinner';
 import {BigNumberish} from 'ethers';
 
@@ -313,7 +313,7 @@ export default function SubmissionStatusStep(props: SubmissionStatusStepProps) {
       return step < submissionActiveStep ? (
         <CheckIcon className={cn('w-3 h-3 md:w-5 md:h-5 text-green')} />
       ) : step === submissionActiveStep && submissionError ? (
-        <XIcon className={cn('w-3 h-3 md:w-5 md:h-5 text-red')} />
+        <XMarkIcon className={cn('w-3 h-3 md:w-5 md:h-5 text-red')} />
       ) : (
         ''
       );

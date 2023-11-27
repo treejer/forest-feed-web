@@ -1840,35 +1840,35 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/connect-kit-loader/-/connect-kit-loader-1.1.2.tgz#d550e3c1f046e4c796f32a75324b03606b7e226a"
   integrity sha512-mscwGroSJQrCTjtNGBu+18FQbZYA4+q6Tyx6K7CXHl6AwgZKbWfZYdgP2F+fyZcRUdGRsMX8QtvU61VcGGtO1A==
 
-"@lens-protocol/api-bindings@0.11.0-alpha.17":
-  version "0.11.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/api-bindings/-/api-bindings-0.11.0-alpha.17.tgz#fe9b2d7713137853f611594e3ade622670abea1a"
-  integrity sha512-hmE8T9huTW68HmieUzA28HqD/mrKuA4Wr25AnbGfcCoBeYQTbGBwlX5ncB5zvAVLLf6jN8c6w0nHudxNqdrP9Q==
+"@lens-protocol/api-bindings@0.11.0-alpha.19":
+  version "0.11.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/api-bindings/-/api-bindings-0.11.0-alpha.19.tgz#78bdd739413fc9c77435de8f223e52474549407a"
+  integrity sha512-G9oCUGkc0gycDvFccqfXUNdF3vASX6gYL5340PIpk3U6EvwGGjKrY2QyU9MEUtYJqnpBNk+sZ0Y+/MvCSIXTig==
   dependencies:
-    "@lens-protocol/domain" "0.11.0-alpha.12"
-    "@lens-protocol/shared-kernel" "0.11.0-alpha.7"
+    "@lens-protocol/domain" "0.11.0-alpha.14"
+    "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
     graphql "^16.6.0"
     graphql-tag "^2.12.6"
     tslib "^2.6.2"
 
-"@lens-protocol/blockchain-bindings@0.10.0-alpha.12":
-  version "0.10.0-alpha.12"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/blockchain-bindings/-/blockchain-bindings-0.10.0-alpha.12.tgz#6684d559ba70ac0eb36fa86a7d584cb020a9e77c"
-  integrity sha512-h5byqtCR9rB0qU4e7O//geNXFVvvKUHk0gPgUqM52FtVIzXXuGopNR6ubAG9BdUxWASAQA0qozJsULWMoTAjtA==
+"@lens-protocol/blockchain-bindings@0.10.0-alpha.14":
+  version "0.10.0-alpha.14"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/blockchain-bindings/-/blockchain-bindings-0.10.0-alpha.14.tgz#dbc9ab4eec7f96ea2b367e710329ff6d4c983eb5"
+  integrity sha512-AVEUUWu1FqO2B8wsKvDyfxIueDgNSYXb1pq9lHhZSB2GWzzbM+lUXt93TnqjrjXDlbb6EH13TBJEY9zRBevxCg==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
-    "@lens-protocol/domain" "0.11.0-alpha.12"
-    "@lens-protocol/shared-kernel" "0.11.0-alpha.7"
+    "@lens-protocol/domain" "0.11.0-alpha.14"
+    "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
     ethers "^5.7.2"
     tslib "^2.6.2"
 
-"@lens-protocol/domain@0.11.0-alpha.12":
-  version "0.11.0-alpha.12"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/domain/-/domain-0.11.0-alpha.12.tgz#d192106bdc81d10650e8176f8a02eb3ac8584de6"
-  integrity sha512-NgQUae1Zvp0K8JaAwQBIhPbE2myU7859Klcb8Av3RlZDmjpeEIoeISW86QrizfipIW4iBErZo+mnFP5/siLSoQ==
+"@lens-protocol/domain@0.11.0-alpha.14":
+  version "0.11.0-alpha.14"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/domain/-/domain-0.11.0-alpha.14.tgz#739273dd1194c02d2caeb4165334323e9476c66c"
+  integrity sha512-8NKQ52nY5VSaDIdi3aQk/WonEsgsY6aqs+B1IN29Fsw0b/+dtLjf4Vk66Z7yHwwlC3hhB6rSw2AFLjkUvSvnUw==
   dependencies:
-    "@lens-protocol/shared-kernel" "0.11.0-alpha.7"
+    "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
     tslib "^2.6.2"
 
 "@lens-protocol/metadata@^1.0.5":
@@ -1878,22 +1878,22 @@
   dependencies:
     uuid "^9.0.1"
 
-"@lens-protocol/react-web@2.0.0-alpha.19":
-  version "2.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/react-web/-/react-web-2.0.0-alpha.19.tgz#f4cd3947cae4a685b6312bdbc2cd7ecba26920d3"
-  integrity sha512-YqJqvS1X3gacKjheQy+pr+q/ig34i7MUb2AxC/PXhsYPHEoZ7msbLLl97sN3Pm3dCwUsbu0NfN/jJiSzBjqU/g==
+"@lens-protocol/react-web@2.0.0-alpha.22":
+  version "2.0.0-alpha.22"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/react-web/-/react-web-2.0.0-alpha.22.tgz#1320be2ac176e01ba1abdcf67a823e66e4c3d3a2"
+  integrity sha512-MpXJdgym7nK+zfwS7L44eYElfgJ437jx48u2u4WcQFQARsdZFmOLODfqSU42LQPoUOfEgPpvhVVm6VBmq2J6tg==
   dependencies:
-    "@lens-protocol/api-bindings" "0.11.0-alpha.17"
-    "@lens-protocol/domain" "0.11.0-alpha.12"
-    "@lens-protocol/react" "2.0.0-alpha.19"
-    "@lens-protocol/shared-kernel" "0.11.0-alpha.7"
-    "@lens-protocol/storage" "0.7.5-alpha.5"
+    "@lens-protocol/api-bindings" "0.11.0-alpha.19"
+    "@lens-protocol/domain" "0.11.0-alpha.14"
+    "@lens-protocol/react" "2.0.0-alpha.22"
+    "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
+    "@lens-protocol/storage" "0.7.5-alpha.6"
     tslib "^2.6.2"
 
-"@lens-protocol/react@2.0.0-alpha.19":
-  version "2.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/react/-/react-2.0.0-alpha.19.tgz#8acab98128115d5e5dd79006c2388bc21bbaeb82"
-  integrity sha512-kqtqrmNMrgaryQnhlOPaL4kjjULh2g0JWLhIep6dcPqx8MktZYBR3BK66gC1TV9f+GLkml3YZ03uEdOO/QfO/g==
+"@lens-protocol/react@2.0.0-alpha.22":
+  version "2.0.0-alpha.22"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/react/-/react-2.0.0-alpha.22.tgz#ebb826cd6ee819c679fc06f441c626caa0b04c7a"
+  integrity sha512-h7+KW3xCh2IQUzIcvMPF7wdOGhEQLtrclI6jXyvXemzGU+B6XBsAnuoV7ehJjMMaNQaEfpG8grA8o1QPtrCBug==
   dependencies:
     "@apollo/client" "^3.8.5"
     "@ethersproject/abstract-signer" "^5.7.0"
@@ -1903,11 +1903,11 @@
     "@ethersproject/hash" "^5.7.0"
     "@ethersproject/providers" "^5.7.2"
     "@ethersproject/wallet" "^5.7.0"
-    "@lens-protocol/api-bindings" "0.11.0-alpha.17"
-    "@lens-protocol/blockchain-bindings" "0.10.0-alpha.12"
-    "@lens-protocol/domain" "0.11.0-alpha.12"
-    "@lens-protocol/shared-kernel" "0.11.0-alpha.7"
-    "@lens-protocol/storage" "0.7.5-alpha.5"
+    "@lens-protocol/api-bindings" "0.11.0-alpha.19"
+    "@lens-protocol/blockchain-bindings" "0.10.0-alpha.14"
+    "@lens-protocol/domain" "0.11.0-alpha.14"
+    "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
+    "@lens-protocol/storage" "0.7.5-alpha.6"
     graphql "^16.6.0"
     jwt-decode "^3.1.2"
     lodash "^4.17.21"
@@ -1915,31 +1915,30 @@
     uuid "^9.0.0"
     zod "^3.22.0"
 
-"@lens-protocol/shared-kernel@0.11.0-alpha.7":
-  version "0.11.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/shared-kernel/-/shared-kernel-0.11.0-alpha.7.tgz#bd0b0e6439bbfc13c4a33fd459322333cefba734"
-  integrity sha512-FrC4n1G5HrN63KQw9ivxkPME2f/eDrImzMFqyMuppMzPzW3DWmTnDi+Zd5r2XOdqlmEfd/CiUJfaMtyYkqUKCg==
+"@lens-protocol/shared-kernel@0.11.0-alpha.8":
+  version "0.11.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/shared-kernel/-/shared-kernel-0.11.0-alpha.8.tgz#dca7deffbdb1eac9c2ce504485298b81dcdb7ba6"
+  integrity sha512-/hL8ChEc8QimdMrOVSzZO9qWBB5aYsUYUBBwU8ac4+N+OrxO90tcyesTQHN+8Ks4CDb/ZDZiBMs/dNWnn0uybw==
   dependencies:
     decimal.js "^10.4.3"
     lodash "^4.17.21"
     tslib "^2.6.2"
-    uuid "^9.0.0"
 
-"@lens-protocol/storage@0.7.5-alpha.5":
-  version "0.7.5-alpha.5"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/storage/-/storage-0.7.5-alpha.5.tgz#3cd6cf93d8ff74764c80cd9d1653afb9f3ecc9c9"
-  integrity sha512-plyJwRg/eMyKBzhsGgGtRSo+7ZY9MxXpon8qEwC2LgZMYGWuJchtBw3BN2BdXYtaJCJBlq9y9S/wr6PCgj1jbQ==
+"@lens-protocol/storage@0.7.5-alpha.6":
+  version "0.7.5-alpha.6"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/storage/-/storage-0.7.5-alpha.6.tgz#2c356c9a81904830cf4b5213dd1dc7c0fc7d5ac7"
+  integrity sha512-abWddiHZBOVxRcLrdNxJ3atD4g/bGCsMs0T31FHc4yYxwj38cOoBqTT01wRfcgCmuq8Tg+2dA2GlKKu2eeO8kA==
   dependencies:
-    "@lens-protocol/shared-kernel" "0.11.0-alpha.7"
+    "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
     tslib "^2.6.2"
     zod "^3.22.0"
 
-"@lens-protocol/wagmi@3.0.0-alpha.16":
-  version "3.0.0-alpha.16"
-  resolved "https://registry.yarnpkg.com/@lens-protocol/wagmi/-/wagmi-3.0.0-alpha.16.tgz#42f73ecf3ae2172cf7755bb5564c021b63141144"
-  integrity sha512-NCDd3t1UaHXyjlLbvGPvNkDhG5GRCqdtO3K6sY50EpoAfzZH4sN1DKYuJ5Bxs76NJJWXUC731vDG6aKlVkCPuQ==
+"@lens-protocol/wagmi@3.0.0-alpha.19":
+  version "3.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/@lens-protocol/wagmi/-/wagmi-3.0.0-alpha.19.tgz#b8d17b95c4b53739f69a9ec01879e1684fe35c26"
+  integrity sha512-tRtNuALrSQ4IA0hrnzg1Bt7ySMZuZKAHUeEoBQFlttyv7l3/sUCC/3UJQA5hm3gbIy/wZspg/qo5y/Aa4rcwzw==
   dependencies:
-    "@lens-protocol/shared-kernel" "0.11.0-alpha.7"
+    "@lens-protocol/shared-kernel" "0.11.0-alpha.8"
 
 "@lit-labs/ssr-dom-shim@^1.0.0", "@lit-labs/ssr-dom-shim@^1.1.0":
   version "1.1.2"

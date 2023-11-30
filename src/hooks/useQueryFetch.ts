@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {useQuery} from '@tanstack/react-query';
+import {useQuery, keepPreviousData} from '@tanstack/react-query';
 import {useSearchParams} from 'next/navigation';
 import {Method} from 'axios';
 
@@ -88,15 +88,9 @@ export default function useQueryFetch<Data, Form = any, Params = any>(params: Us
         data: fetchData,
         params: fetchParams,
       }),
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
     enabled: !!accessToken && !!profile?.walletAddress,
   });
-
-  useEffect(() => {
-    if (!accessToken) {
-      query.remove();
-    }
-  }, [accessToken]);
 
   useEffect(() => {
     if (profile?.walletAddress && accessToken) {
@@ -106,7 +100,7 @@ export default function useQueryFetch<Data, Form = any, Params = any>(params: Us
 
   useEffect(() => {
     if (mounted) {
-      const href = `/my-campaigns?${page !== 1 ? `page=${page}` : ''}`;
+      const href = `${page !== 1 ? `?page=${page}` : ''}`;
       router.push(href, {
         scroll: false,
       });

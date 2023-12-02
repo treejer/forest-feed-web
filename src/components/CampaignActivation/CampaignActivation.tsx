@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 
-import {CheckIcon} from '@heroicons/react/solid';
+import CheckIcon from '@heroicons/react/24/solid/CheckIcon';
 
 import {ActivationCampaignRes} from '@forest-feed/webServices/campaign/myCampaigns';
 import Switch from '@forest-feed/components/kit/Switch/Switch';

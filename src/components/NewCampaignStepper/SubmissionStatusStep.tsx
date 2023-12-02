@@ -2,7 +2,8 @@
 
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {CheckIcon, XMarkIcon} from '@heroicons/react/24/solid';
+import CheckIcon from '@heroicons/react/24/solid/CheckIcon';
+import XMarkIcon from '@heroicons/react/24/solid/XMarkIcon';
 import {Circles} from 'react-loader-spinner';
 import {BigNumberish} from 'ethers';
 

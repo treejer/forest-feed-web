@@ -60,8 +60,6 @@ export default function useQueryFetch<Data, Form = any, Params = any>(params: Us
 
   const pathname = usePathname();
 
-  console.log(pathname, 'pathaneme');
-
   const router = useRouter();
   const searchParams = useSearchParams();
 

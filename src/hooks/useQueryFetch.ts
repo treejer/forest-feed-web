@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {useQuery, keepPreviousData} from '@tanstack/react-query';
-import {useSearchParams} from 'next/navigation';
+import {usePathname, useSearchParams} from 'next/navigation';
 import {Method} from 'axios';
 
 import {FetchResult, queryFetch} from '@forest-feed/utils/fetch';
@@ -58,6 +58,10 @@ export default function useQueryFetch<Data, Form = any, Params = any>(params: Us
 
   const [mounted, setMounted] = useState(false);
 
+  const pathname = usePathname();
+
+  console.log(pathname, 'pathaneme');
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -100,7 +104,7 @@ export default function useQueryFetch<Data, Form = any, Params = any>(params: Us
 
   useEffect(() => {
     if (mounted) {
-      const href = `${page !== 1 ? `?page=${page}` : ''}`;
+      const href = `${pathname}/?${page !== 1 ? `?page=${page}` : ''}`;
       router.push(href, {
         scroll: false,
       });

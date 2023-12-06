@@ -102,7 +102,7 @@ export default function useQueryFetch<Data, Form = any, Params = any>(params: Us
 
   useEffect(() => {
     if (mounted) {
-      const href = `${pathname}/?${page !== 1 ? `?page=${page}` : ''}`;
+      const href = `${pathname}${page !== 1 ? `/?page=${page}` : ''}`;
       router.push(href, {
         scroll: false,
       });
